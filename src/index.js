@@ -1,42 +1,18 @@
 'use strict';
 
 const parseArgs = require('minimist');
-const util = require('@carnesen/util');
 
-module.exports = function createCli(name, commands) {
+const makeExecute = require('./makeExecute');
+const makeFail = require('./makeFail');
 
-  util.throwIfNotString(name, 'name');
-  util.throwIfNotArray(commands, 'commands');
+module.exports = function cli(name, commands) {
 
+  const args = process.argv.slice(2);
+  const passed = parseArgs(args);
+  const commandNames = [name];
 
+  const fail = makeFail(name, args);
 
-
-
-  function validate(parameters, options) {
-    if (parameters.positional) {
-
-    }
-    return parameters.every(parameter => {
-
-    });
-  }
-
-  function makeExecute(commandNames, commands) {
-
-    return function execute(passed) {
-      const commandName = passed._[0];
-      passed._.splice(0, 1);
-      const command = commands.find(command => command.name === commandName);
-      if (command) {
-        if (command.execute) {
-
-          command.execute(passed)
-        }
-      } else {
-
-      }
-    }
-
-  }
+  makeExecute(commandNames, commands, fail)(passed);
 
 };
