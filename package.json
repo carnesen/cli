@@ -2,6 +2,7 @@
   "name": "@carnesen/cli",
   "description": "A command-line remote procedure call (RPC) client for Bitcoin Core",
   "version": "0.0.1",
+  "main": "./src/index.js",
   "scripts": {
     "lint": "eslint src --config carnesen",
     "lint:fix": "npm run lint -- --fix",
@@ -11,7 +12,7 @@
   "dependencies": {
     "@carnesen/util": "0.0.1",
     "co": "4.6.0",
-    "expand-home-dir": "0.0.3",
+    "debug": "2.2.0",
     "minimist": "1.2.0"
   },
   "devDependencies": {

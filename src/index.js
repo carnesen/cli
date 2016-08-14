@@ -2,17 +2,22 @@
 
 const parseArgs = require('minimist');
 
-const makeExecute = require('./makeExecute');
-const makeFail = require('./makeFail');
+const debug = require('./debug');
+const run = require('./run');
+const validateCommand = require('./validateCommand');
 
-module.exports = function cli(name, commands) {
+module.exports = function cli(command) {
 
-  const args = process.argv.slice(2);
-  const passed = parseArgs(args);
-  const commandNames = [name];
+  debug('validateCommand');
+  validateCommand(command);
 
-  const fail = makeFail(name, args);
+  command.args = process.argv.slice(2);
+  command.path = [];
+  command.parameters = command.parameters || [];
 
-  makeExecute(commandNames, commands, fail)(passed);
+  debug('parseArgs', command.args);
+  const parsed = parseArgs(command.args);
+
+  run(command, parsed);
 
 };
