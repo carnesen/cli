@@ -1,7 +1,7 @@
 'use strict';
 
-const debugModule = require('debug');
+const debug = require('debug');
 
-module.exports = function debug(...args) {
-  return debugModule('carnesen:cli')(...args);
-};
+const { name } = require('../package.json');
+
+module.exports = debug(name);

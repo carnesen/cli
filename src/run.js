@@ -39,7 +39,7 @@ module.exports = function run(command, parsed) {
       parsed._.splice(0, 1);
       subcommand.args = command.args;
       subcommand.path = command.path;
-      subcommand.parameters = [...command.parameters, ...subcommand.parameters];
+      subcommand.parameters = [...command.parameters, ...(subcommand.parameters || [])];
       run(subcommand, parsed);
     } else {
       // no matching subcommand
