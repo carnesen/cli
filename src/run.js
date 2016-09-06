@@ -2,7 +2,7 @@
 
 const co = require('co');
 
-const debug = require('./debug');
+const { debug } = require('./log');
 const usage = require('./usage');
 const parsedToPassed = require('./parsedToPassed');
 

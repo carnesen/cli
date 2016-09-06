@@ -2,7 +2,7 @@
 
 const parseArgs = require('minimist');
 
-const debug = require('./debug');
+const { debug } = require('./log');
 const run = require('./run');
 const validateCommand = require('./validateCommand');
 
