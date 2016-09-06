@@ -2,7 +2,7 @@
 
 const { isDefined, isUndefined } = require('@carnesen/util');
 
-const debug = require('./debug');
+const { debug } = require('./log');
 const usage = require('./usage');
 
 module.exports = function parsedToPassed(command, parsed) {
