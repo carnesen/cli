@@ -52,7 +52,7 @@ module.exports = function usage(command, badCommand = false) {
     let whereLine = `${ INDENT }${ parameter.name } (${ parameter.type }) is ${ parameter.description }`;
 
     if (parameter.default) {
-      whereLine = `${ whereLine} (default: ${ parameter.default })`;
+      whereLine = `${ whereLine } (default: ${ parameter.default })`;
     }
 
     whereLines.push(whereLine);
