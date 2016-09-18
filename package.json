@@ -1,6 +1,6 @@
 {
   "name": "@carnesen/cli",
-  "description": "A command-line remote procedure call (RPC) client for Bitcoin Core",
+  "description": "A library for writing Node.js command-line utilities",
   "version": "0.0.1",
   "main": "./src/index.js",
   "scripts": {
