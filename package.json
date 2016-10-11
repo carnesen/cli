@@ -10,17 +10,17 @@
     "test:unit": "cross-env NODE_ENV=test mocha src/**/__tests__/**/*.test.js"
   },
   "dependencies": {
-    "@carnesen/util": "0.0.2",
+    "@carnesen/util": "0.0.3",
     "co": "4.6.0",
     "debug": "2.2.0",
     "minimist": "1.2.0"
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "cross-env": "2.0.1",
-    "eslint": "3.5.0",
+    "cross-env": "3.0.0",
+    "eslint": "3.6.1",
     "eslint-config-carnesen": "1.0.3",
-    "mocha": "3.0.2"
+    "mocha": "3.1.0"
   },
   "author": {
     "name": "Chris Arnesen",
