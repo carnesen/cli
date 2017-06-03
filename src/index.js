@@ -1,23 +1,27 @@
-'use strict';
+'use strict'
+const {print2} = require('@carnesen/util')
 
-const parseArgs = require('minimist');
+const plan = require('./plan')
+const {FIELD_TYPES, REJECTION_EXIT_STATUS} = require('./constants')
 
-const { debug } = require('./log');
-const run = require('./run');
-const validateCommand = require('./validateCommand');
+function cli (command) {
+  const steps = plan(command)
 
-module.exports = function cli(command) {
+  async function doSteps () {
+    for (let step of steps) {
+      await step()
+    }
+    process.exit(0)
+  }
 
-  debug('validateCommand');
-  validateCommand(command);
+  function handleRejection (ex) {
+    print2(ex)
+    process.exit(REJECTION_EXIT_STATUS)
+  }
 
-  command.args = process.argv.slice(2);
-  command.path = [];
-  command.parameters = command.parameters || [];
+  doSteps().catch(handleRejection)
+}
 
-  debug('parseArgs', command.args);
-  const parsed = parseArgs(command.args);
+cli.FIELD_TYPES = FIELD_TYPES
 
-  run(command, parsed);
-
-};
+module.exports = cli
