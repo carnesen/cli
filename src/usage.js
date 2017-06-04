@@ -1,73 +1,67 @@
-'use strict';
+'use strict'
 
-const { isString } = require('@carnesen/util');
+const chalk = require('chalk')
+const {isDefined, print2} = require('@carnesen/util')
+const {EXIT_STATUSES, TYPES} = require('./constants')
 
-const INDENT = '   ';
+const PARAMETERS_STRING = '<parameters>'
+const SUBCOMMAND_STRING = '<subcommand>'
 
-module.exports = function usage(command, badCommand = false) {
+function createVersionString ({name, fieldType, description, defaultValue}) {
+  const valuePlaceholder = fieldType === TYPES.boolean ? '' : '<value> '
+  const defaultValueString = isDefined(defaultValue) ? `(default: ${defaultValue})` : ''
+  return `--${name} ${valuePlaceholder}: ${description} ${defaultValueString}`
+}
 
-  let arr = [''];
+function indent (strings) {
+  return strings.map(string => `   ${string}`).join('\n')
+}
 
-  if (badCommand) {
-    arr = arr.concat([
-      [
-        'Error: Bad command:',
-        command.path[0],
-        ...command.args.map(arg => arg.includes(' ') ? `'${ arg }'` : arg)
-      ],
-      ''
-    ]);
+function getName ({name}) {
+  return name
+}
+
+function getParameters (commands) {
+  const parameters = []
+  commands.forEach(function (command) {
+    if (command.parameters) {
+      parameters.push(...command.parameters)
+    }
+  })
+  return parameters
+}
+
+module.exports = function usage ({commands, errorMessage}) {
+  const lastCommand = commands.slice(-1)[0]
+  const {subcommands = [], description} = lastCommand
+
+  const paragraphs = []
+  function push (text) {
+    paragraphs.push(text)
   }
 
-  arr = arr.concat(['Usage:', '']);
+  if (errorMessage) push(chalk.red(`Error: ${errorMessage}`))
 
-  const commandLine = [INDENT, ...command.path];
-  const whereLines = [];
+  push(`Usage: ${commands.map(getName).join(' ')} ${subcommands.length > 0 ? SUBCOMMAND_STRING : ''} ${PARAMETERS_STRING}`)
 
-  command.parameters.forEach(parameter => {
+  if (description) push(description)
 
-    // command subcommand [ --flag-param ] [ --string-param <string> ] [ <positional-opt> ]
-    let commandLineString;
+  let whereOrAnd
+  if (subcommands.length > 0) {
+    push(`Where ${SUBCOMMAND_STRING} is one of`)
+    push(indent(subcommands.map(getName)))
+    whereOrAnd = 'and'
+  } else {
+    whereOrAnd = 'Where'
+  }
 
-    if (parameter.positional) {
-      // positional parameter
-      commandLineString = `<${ parameter.name }>`;
-    } else {
-      // named parameter
-      commandLineString = `--${ parameter.name } <${ parameter.type }>`;
-    }
+  const parameters = getParameters(commands)
+  if (parameters.length > 0) {
+    push(`${whereOrAnd} ${PARAMETERS_STRING} include`)
+    push(indent(parameters.map(createVersionString)))
+  }
 
-    if (parameter.default) {
-      commandLineString = `[ ${ commandLineString } ]`;
-    }
-
-    /*
-     flag-param (boolean) is ...
-     string-param (string) is ...
-     positional-param (string) is ... (default: 'foo')
-     */
-
-    commandLine.push(commandLineString);
-
-    let whereLine = `${ INDENT }${ parameter.name } (${ parameter.type }) is ${ parameter.description }`;
-
-    if (parameter.default) {
-      whereLine = `${ whereLine } (default: ${ parameter.default })`;
-    }
-
-    whereLines.push(whereLine);
-
-  });
-
-  arr = arr.concat([commandLine, '', 'where', '', ...whereLines, '']);
-
-  arr.forEach(item => {
-    if (isString(item)) {
-      item = [item];
-    }
-    console.error(item.join(' ')); // eslint-disable-line no-console
-  });
-
-  process.exit(1);
-
-};
+  const text = `\n${paragraphs.join('\n\n')}\n`
+  print2(text)
+  process.exit(EXIT_STATUSES.USAGE)
+}

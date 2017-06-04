@@ -1,23 +1,12 @@
-'use strict';
+'use strict'
 
-const parseArgs = require('minimist');
+const {EXIT_STATUSES, TYPES} = require('./constants')
+const runCommand = require('./run-command')
+const assertCommand = require('./assert-command')
 
-const { debug } = require('./log');
-const run = require('./run');
-const validateCommand = require('./validateCommand');
-
-module.exports = function cli(command) {
-
-  debug('validateCommand');
-  validateCommand(command);
-
-  command.args = process.argv.slice(2);
-  command.path = [];
-  command.parameters = command.parameters || [];
-
-  debug('parseArgs', command.args);
-  const parsed = parseArgs(command.args);
-
-  run(command, parsed);
-
-};
+module.exports = {
+  EXIT_STATUSES,
+  TYPES,
+  runCommand,
+  assertCommand,
+}
