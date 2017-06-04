@@ -1,10 +1,13 @@
-const {print} = require('@carnesen/util')
-const {FIELD_TYPES} = require('../constants')
+#!/usr/bin/env node
 
-const MESSAGE_OPTION = {
+const {print} = require('@carnesen/util')
+
+const {TYPES, runCommand} = require('../index')
+
+const PARAMETER = {
   name: 'message',
   description: 'the message',
-  fieldType: FIELD_TYPES.STRING,
+  type: TYPES.string,
 }
 
 const _print = {
@@ -13,7 +16,7 @@ const _print = {
     print(message)
   },
   description: 'Prints the provided message to stdout',
-  options: [MESSAGE_OPTION],
+  parameters: [PARAMETER],
 }
 
 const fail = {
@@ -22,11 +25,17 @@ const fail = {
   execute ({message}) {
     throw new Error(message)
   },
-  options: [MESSAGE_OPTION],
+  parameters: [PARAMETER],
 }
 
-module.exports = {
+const command = {
   name: 'test-cli',
   description: 'A test cli',
   subcommands: [_print, fail],
 }
+
+if (require.main === module) {
+  runCommand(command, process.argv.slice(2))
+}
+
+module.exports = command

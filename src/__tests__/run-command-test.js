@@ -1,10 +1,10 @@
 const path = require('path')
 const {execFile} = require('@carnesen/child_process')
 
-const {REJECTION_EXIT_STATUS, USAGE_EXIT_STATUS} = require('../constants')
+const {EXIT_STATUSES} = require('../constants')
 
-function callTestCli (...args) {
-  return execFile(path.join(__dirname, 'test-cli.js'), args)
+function callCli (...args) {
+  return execFile(path.join(__dirname, 'cli.js'), args)
 }
 
 function throwDummyError () {
@@ -16,23 +16,23 @@ const MESSAGE = 'foo bar baz'
 describe(__filename, function () {
   it('Prints usage if no subcommand is provided', async function () {
     try {
-      await callTestCli()
+      await callCli()
       throwDummyError()
     } catch (ex) {
       const {code, stderr, stdout} = ex
-      code.should.equal(USAGE_EXIT_STATUS)
+      code.should.equal(EXIT_STATUSES.USAGE)
       stdout.should.equal('')
       stderr.should.match(/Usage/)
     }
   })
   it('Calls execute and exits 0 if it succeeds', async function () {
-    const {stdout, stderr} = await callTestCli('print', '--message', MESSAGE)
+    const {stdout, stderr} = await callCli('print', '--message', MESSAGE)
     stderr.should.equal('')
     stdout.should.match(new RegExp(MESSAGE))
   })
-  it(`Calls execute and exits ${REJECTION_EXIT_STATUS} if it fails`, async function () {
+  it(`Calls execute and exits ${EXIT_STATUSES.REJECTED} if it fails`, async function () {
     try {
-      await callTestCli('fail', '--message', MESSAGE)
+      await callCli('fail', '--message', MESSAGE)
       throwDummyError()
     } catch (ex) {
       const {stdout, stderr} = ex

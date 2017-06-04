@@ -1,14 +1,20 @@
 'use strict'
 const keyMirror = require('keymirror')
 
-const FIELD_TYPES = keyMirror({
-  BOOLEAN: null,
-  STRING: null,
-  NUMBER: null,
+const EXIT_STATUSES = {
+  SUCCESS: 0,
+  REJECTED: 1,
+  USAGE: 2,
+}
+
+const TYPES = keyMirror({
+  array: null,
+  boolean: null,
+  number: null,
+  string: null,
 })
 
 module.exports = {
-  FIELD_TYPES,
-  USAGE_EXIT_STATUS: 2,
-  REJECTION_EXIT_STATUS: 1,
+  EXIT_STATUSES,
+  TYPES,
 }

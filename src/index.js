@@ -1,27 +1,12 @@
 'use strict'
-const {print2} = require('@carnesen/util')
 
-const plan = require('./plan')
-const {FIELD_TYPES, REJECTION_EXIT_STATUS} = require('./constants')
+const {EXIT_STATUSES, TYPES} = require('./constants')
+const runCommand = require('./run-command')
+const assertCommand = require('./assert-command')
 
-function cli (command) {
-  const steps = plan(command)
-
-  async function doSteps () {
-    for (let step of steps) {
-      await step()
-    }
-    process.exit(0)
-  }
-
-  function handleRejection (ex) {
-    print2(ex)
-    process.exit(REJECTION_EXIT_STATUS)
-  }
-
-  doSteps().catch(handleRejection)
+module.exports = {
+  EXIT_STATUSES,
+  TYPES,
+  runCommand,
+  assertCommand,
 }
-
-cli.FIELD_TYPES = FIELD_TYPES
-
-module.exports = cli
