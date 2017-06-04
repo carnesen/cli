@@ -10,7 +10,7 @@
     "test:unit": "mocha --opts test/mocha.opts"
   },
   "dependencies": {
-    "@carnesen/util": "0.4.2",
+    "@carnesen/util": "^0.4.3",
     "chalk": "1.1.3",
     "keymirror": "0.1.1"
   },
