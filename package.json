@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli",
   "description": "A library for writing Node.js command-line interfaces",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./src/index.js",
   "scripts": {
     "lint": "eslint src --config carnesen",
