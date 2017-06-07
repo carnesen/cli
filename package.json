@@ -6,6 +6,8 @@
   "scripts": {
     "lint": "eslint src --config carnesen",
     "lint:fix": "npm run lint -- --fix",
+    "preversion": "npm test",
+    "postversion": "git push && git push --tags && npm publish",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "mocha --opts test/mocha.opts"
   },
