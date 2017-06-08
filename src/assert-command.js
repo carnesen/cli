@@ -4,18 +4,19 @@ const {
   assertArray,
   assertNumber,
   assertFunction,
+  assertNonEmptyArray,
   assertNonEmptyString,
   assertNonEmptyObject,
   assertString,
   assertUndefined,
   createTypeError,
   isDefined,
+  isUndefined,
 } = require('@carnesen/util')
 
 const {TYPES} = require('./constants')
 
-function assertParameter (parameter, commandNamesString) {
-  const commandString = `command ${commandNamesString}`
+function assertParameter (parameter, commandString) {
   assertNonEmptyObject(parameter, `each parameter of ${commandString}`)
   const {name, description, type, itemType, defaultValue} = parameter
   const parameterString = `parameter "${name}" of ${commandString}`
@@ -64,23 +65,31 @@ function assertParameter (parameter, commandNamesString) {
   }
 }
 
-module.exports = function assertCommand (command, commandNamesString = '') {
-  assertNonEmptyObject(command)
+module.exports = function assertCommand (command, parentCommands = []) {
+  assertNonEmptyObject(command, 'command')
   const {name, description, execute, parameters, subcommands} = command
-  const commandString = `command ${commandNamesString}'s`
-  assertNonEmptyString(name, `${commandString} name`)
-  assertNonEmptyString(description, `${commandString} description`)
-  if (isDefined(execute)) assertFunction(execute, `${commandString} execute`)
+  let commandString
+  if (parentCommands.length === 0) {
+    commandString = 'command'
+  } else {
+    commandString = `subcommand ${parentCommands.map(command => command.name).join('.')}`
+  }
+  assertNonEmptyString(name, `"name" of ${commandString}`)
+  assertNonEmptyString(description, `"description" of ${commandString}`)
+  if (isDefined(execute)) assertFunction(execute, `"execute" ${commandString}`)
   if (isDefined(parameters)) {
-    assertArray(parameters, `${commandString} parameters`)
+    assertArray(parameters, `"parameters" of ${commandString}`)
     parameters.forEach(function (parameter) {
-      assertParameter(parameter, commandNamesString)
+      assertParameter(parameter, commandString)
     })
   }
+  if (isUndefined(subcommands) && isUndefined(execute)) {
+    throw createTypeError(`"execute" or "subcommands" of ${commandString}`, 'defined')
+  }
   if (isDefined(subcommands)) {
-    assertArray(subcommands, `${commandString} subcommands`)
+    assertNonEmptyArray(subcommands, `"subcommands" of ${commandString}`)
     subcommands.forEach(function (subcommand) {
-      assertCommand(subcommand, `${commandNamesString}.${name}`)
+      assertCommand(subcommand, [...parentCommands, command])
     })
   }
 }

@@ -5,7 +5,7 @@ const {print2} = require('@carnesen/util')
 const {EXIT_STATUSES} = require('./constants')
 const createSteps = require('./create-steps')
 
-module.exports = async function runCommand (rootCommand, args) {
+module.exports = async function runCommand (rootCommand, args = process.argv.slice(2)) {
   try {
     const steps = createSteps(rootCommand, args)
     for (let step of steps) {
