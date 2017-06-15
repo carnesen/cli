@@ -1,6 +1,6 @@
 'use strict'
 
-const {isNumber, isUndefined, stripWhitespace} = require('@carnesen/util')
+const {isNumber, isUndefined, camelCase, stripWhitespace} = require('@carnesen/util')
 
 const {TYPES} = require('./constants')
 const parseArgs = require('./parse-args')
@@ -41,6 +41,7 @@ module.exports = function createSteps (rootCommand, args) {
   commands.forEach(function (command) {
     const {execute, parameters = []} = command
     parameters.forEach(function (parameter) {
+      const inputName = camelCase(parameter.name)
       const index = parameterArgs.findIndex(function (parameterArg) {
         return parameterArg.name === parameter.name
       })
@@ -60,7 +61,7 @@ module.exports = function createSteps (rootCommand, args) {
           }
           defaultValue = parameter.defaultValue
         }
-        input[parameter.name] = defaultValue
+        input[inputName] = defaultValue
       } else {
         // Parameter was provided as command-line argument
         let rawValues = parameterArgs.splice(index, 1)[0].rawValues
@@ -94,7 +95,7 @@ module.exports = function createSteps (rootCommand, args) {
             value = rawValues[0]
             break
           case TYPES.array:
-            if (rawValues.length <= 1) {
+            if (rawValues.length === 0) {
               usage({
                 commands,
                 errorMessage: `Expected parameter "${parameter.name}" to be one or more ${parameter.itemType}s`,
@@ -114,7 +115,7 @@ module.exports = function createSteps (rootCommand, args) {
           default:
             throw new Error(`Parameter "${parameter.name}" has invalid type "${parameter.type}"`)
         }
-        input[parameter.name] = value
+        input[inputName] = value
       }
 
       function convertToNumber (rawValue) {
