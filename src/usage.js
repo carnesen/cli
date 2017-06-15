@@ -1,16 +1,28 @@
 'use strict'
 
 const chalk = require('chalk')
-const {isDefined, print2} = require('@carnesen/util')
+const {isArray, isDefined, print2} = require('@carnesen/util')
 const {EXIT_STATUSES, TYPES} = require('./constants')
 
 const PARAMETERS_STRING = '<parameters>'
 const SUBCOMMAND_STRING = '<subcommand>'
 
-function createVersionString ({name, fieldType, description, defaultValue}) {
-  const valuePlaceholder = fieldType === TYPES.boolean ? '' : '<value> '
-  const defaultValueString = isDefined(defaultValue) ? `(default: ${defaultValue})` : ''
-  return `--${name} ${valuePlaceholder}: ${description} ${defaultValueString}`
+function createVersionString ({name, type, description, defaultValue}) {
+  let valuePlaceholder
+  switch (type) {
+    case TYPES.boolean:
+      valuePlaceholder = ''
+      break
+    case TYPES.array:
+      valuePlaceholder = '<value1> [<value2 ...]'
+      break
+    default:
+      valuePlaceholder = '<value> '
+  }
+  const defaultValueString = isDefined(defaultValue)
+    ? `(default: ${isArray(defaultValue) ? defaultValue.join(' ') : defaultValue})`
+    : ''
+  return `--${name} ${valuePlaceholder} : ${description} ${defaultValueString}`
 }
 
 function indent (strings) {
@@ -42,7 +54,7 @@ module.exports = function usage ({commands, errorMessage}) {
 
   if (errorMessage) push(chalk.red(`Error: ${errorMessage}`))
 
-  push(`Usage: ${commands.map(getName).join(' ')} ${subcommands.length > 0 ? SUBCOMMAND_STRING : ''} ${PARAMETERS_STRING}`)
+  push(`Usage: ${commands.map(getName).join(' ')} ${subcommands.length > 0 ? SUBCOMMAND_STRING + ' ' : ''}${PARAMETERS_STRING}`)
 
   if (description) push(description)
 
