@@ -1,5 +1,5 @@
 import { option, command, cli } from '..';
-import { Option, Command, Options } from '../types';
+import { Option, Command } from '../types';
 import { rootCommand } from '../example';
 
 jest.mock('@carnesen/run-and-exit');
