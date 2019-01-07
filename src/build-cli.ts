@@ -1,18 +1,18 @@
-import { runAndExit } from '@carnesen/run-and-exit';
 import { Command, CommandStack } from './types';
 import { accumulateSteps } from './accumulate-steps';
 import { accumulateCommandStack } from './accumulate-command-stack';
 import { accumulateArgv } from './accumulate-argv';
-import { USAGE } from './util';
+import { USAGE } from './usage-error';
 import { getUsageString } from './get-usage-string';
 
-export function cli(rootCommand: Command<any>, argv = process.argv.slice(2)) {
-  runAndExit(async () => {
+export function buildCli(rootCommand: Command<any>) {
+  return async (argv: string[]) => {
     const commandStack: CommandStack = [rootCommand];
     try {
       const { maybeCommandNames, rawNamedArgs, foundHelpArg } = accumulateArgv(argv);
       accumulateCommandStack(commandStack, maybeCommandNames);
-      // ^^ This mutates commandStack
+      // ^^ This mutates commandStack so that we don't have to include it explicity
+      // if accumulateCommandStack or the functions that it calls throws a UsageError.
       if (foundHelpArg) {
         throw getUsageString(commandStack);
       }
@@ -28,5 +28,5 @@ export function cli(rootCommand: Command<any>, argv = process.argv.slice(2)) {
       }
       throw ex;
     }
-  });
+  };
 }

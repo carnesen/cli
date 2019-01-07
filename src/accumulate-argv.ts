@@ -1,5 +1,5 @@
 import { AccumulatedArgv } from './types';
-import { UsageError } from './util';
+import { UsageError } from './usage-error';
 
 export function accumulateArgv(argv: string[]) {
   const accumulatedArgv: AccumulatedArgv = {
@@ -19,7 +19,7 @@ export function accumulateArgv(argv: string[]) {
       const kebabCasedOptionName = matches[1].trim();
       const existingOption = accumulatedArgv.rawNamedArgs[kebabCasedOptionName];
       if (existingOption) {
-        throw new UsageError('Each option can be provided at most one time');
+        throw new UsageError(`Option "${kebabCasedOptionName}" was provided twice`);
       } else {
         accumulator = [];
         accumulatedArgv.rawNamedArgs[kebabCasedOptionName] = accumulator;

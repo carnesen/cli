@@ -1,12 +1,10 @@
 import kebabCase = require('lodash.kebabcase');
 import { TypeName, Value, Option, RawNamedArgs } from './types';
-import { UsageError } from './util';
+import { UsageError } from './usage-error';
 
 function convertToNumber(rawValue: string) {
-  let value: number;
-  if (rawValue.length === 0) {
-    value = NaN;
-  } else {
+  let value: number = NaN;
+  if (rawValue.length > 0) {
     value = Number(rawValue);
   }
   if (isNaN(value)) {
@@ -25,10 +23,11 @@ export function getOptionValue(
   const rawValues = rawNamedArgs[kebabCasedOptionName];
   if (!rawValues) {
     // option was NOT provided as command-line argument
-    if (typeof option.defaultValue === 'undefined') {
+    const defaultValue = option.typeName === 'boolean' ? false : option.defaultValue;
+    if (typeof defaultValue === 'undefined') {
       throw new UsageError(`option "${kebabCasedOptionName}" is required`);
     }
-    value = option.defaultValue;
+    value = defaultValue;
   } else {
     // option WAS provided as command-line argument
     switch (option.typeName) {
@@ -64,7 +63,6 @@ export function getOptionValue(
         }
         value = [...rawValues];
         break;
-
       case 'number[]':
         if (rawValues.length === 0) {
           throw new UsageError(
@@ -73,7 +71,6 @@ export function getOptionValue(
         }
         value = [...rawValues].map(convertToNumber);
         break;
-
       default:
         throw new Error(
           `Option "${kebabCasedOptionName}" has invalid type "${option.typeName}"`,

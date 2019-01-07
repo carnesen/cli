@@ -1,34 +1,37 @@
-import { createOption, createCommand } from './util';
-import { cli } from './cli';
+import { option, command, cli } from '.';
 
-const messageOption = createOption({
+const messageOption = option({
   typeName: 'string',
   description: 'a message',
 });
 
-const printCommand = createCommand({
-  commandName: 'print',
+const echoCommand = command({
+  commandName: 'echo',
   description: 'Print a message to the console',
   options: {
     message: messageOption,
+    appendBar: option({
+      description: 'Append "foo" to the message',
+      typeName: 'boolean',
+    }),
   },
-  async execute({ message }) {
-    return message;
+  async action({ message, appendBar }) {
+    return appendBar ? `${message}bar` : message;
   },
 });
 
-const throwCommand = createCommand({
+const throwCommand = command({
   commandName: 'throw',
   description: 'Throw a message to the console',
   options: {
     message: messageOption,
-    includeStack: createOption({
+    includeStack: option({
       typeName: 'boolean',
       description: 'Include a stack trace',
       defaultValue: false,
     }),
   },
-  async execute({ message, includeStack }) {
+  async action({ message, includeStack }) {
     if (includeStack) {
       throw new Error(message);
     }
@@ -36,34 +39,62 @@ const throwCommand = createCommand({
   },
 });
 
-const math = createCommand({
+const mathOptions = {
+  numbers: option({
+    typeName: 'number[]',
+    description: 'The numbers to sum',
+  }),
+};
+
+const concatCommand = command({
+  commandName: 'concat',
+  options: {
+    strings: option({
+      typeName: 'string[]',
+      description: 'Strings to concat',
+    }),
+  },
+  async action({ strings }) {
+    return strings.reduce((a, b) => a + b, '');
+  },
+});
+
+const mathCommand = command({
   commandName: 'math',
   description: 'Do mathematical operations',
-  options: {},
   subcommands: [
-    createCommand({
-      commandName: 'sum',
-      description: 'Add numbers',
+    command({
+      commandName: 'multiply',
+      description: 'Multiply numbers',
+      options: mathOptions,
+      async action({ numbers }) {
+        return numbers.reduce((a, b) => a * b, 1);
+      },
+    }),
+    command({
+      commandName: 'square',
+      description: 'Square a number',
       options: {
-        numbers: createOption({
-          typeName: 'number[]',
-          description: 'The numbers to sum',
+        number: option({
+          description: 'A number to square',
+          typeName: 'number',
         }),
       },
-      async execute({ numbers }) {
-        return numbers.reduce((a, b) => a + b, 0);
+      async action({ number }) {
+        return number * number;
       },
     }),
   ],
 });
 
-const rootCommand = createCommand({
+export const rootCommand = command({
   commandName: 'example-cli',
   description: `
     This is an example command-line interface (CLI).
     Its only purpose is to demonstrate features.`,
-  options: {},
-  subcommands: [math, printCommand, throwCommand],
+  subcommands: [mathCommand, concatCommand, echoCommand, throwCommand],
 });
 
-cli(rootCommand);
+if (module === require.main) {
+  cli(rootCommand);
+}

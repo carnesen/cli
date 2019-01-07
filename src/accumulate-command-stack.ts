@@ -1,5 +1,5 @@
 import { Command, Options } from './types';
-import { UsageError } from './util';
+import { UsageError } from './usage-error';
 
 export function accumulateCommandStack(
   accumulator: Command<Options>[],

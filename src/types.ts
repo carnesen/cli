@@ -24,9 +24,9 @@ export type NamedArgs<O extends Options> = { [K in keyof O]: Value<O[K]['typeNam
 
 export type Command<O extends Options> = {
   commandName: string;
-  description: string;
-  options: O;
-  execute?: (namedArgs: NamedArgs<O>) => Promise<any>;
+  description?: string;
+  options?: O;
+  action?: (namedArgs: NamedArgs<O>) => Promise<any>;
   subcommands?: Command<any>[];
 };
 

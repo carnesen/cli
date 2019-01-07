@@ -1,6 +1,6 @@
 import { NamedArgs, Command, Options, RawNamedArgs, Step } from './types';
 import { getOptionValue } from './get-option-value';
-import { UsageError } from './util';
+import { UsageError } from './usage-error';
 
 export function accumulateSteps(
   commandStack: Command<Options>[],
@@ -12,13 +12,15 @@ export function accumulateSteps(
   }
   const steps: Step[] = [];
   for (const command of commandStack) {
-    const { execute, options } = command;
-    if (execute) {
+    const { action, options } = command;
+    if (action) {
       const namedArgs: NamedArgs<Options> = {};
-      for (const [optionName, option] of Object.entries(options)) {
-        namedArgs[optionName] = getOptionValue(optionName, option, rawNamedArgs);
+      if (options) {
+        for (const [optionName, option] of Object.entries(options)) {
+          namedArgs[optionName] = getOptionValue(optionName, option, rawNamedArgs);
+        }
       }
-      steps.push(() => execute(namedArgs));
+      steps.push(() => action(namedArgs));
     }
   }
   return steps;

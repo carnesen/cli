@@ -69,7 +69,9 @@ export function getUsageString(commandStack: CommandStack, errorMessage?: string
 
   pushParagraph(`Usage: ${commandNamesString} ${subcommandString}${OPTIONS}`);
 
-  pushParagraph(redent(description, 3).replace(/^\n/, ''));
+  if (description) {
+    pushParagraph(redent(description, 3).replace(/^\n/, ''));
+  }
 
   if (subcommands.length > 0) {
     pushParagraph('Subcommands:');
