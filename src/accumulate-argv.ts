@@ -1,23 +1,28 @@
-import camelCase = require('lodash.camelcase');
 import { AccumulatedArgv } from './types';
+import { UsageError } from './util';
 
 export function accumulateArgv(argv: string[]) {
   const accumulatedArgv: AccumulatedArgv = {
     maybeCommandNames: [],
     rawNamedArgs: {},
+    foundHelpArg: false,
   };
   let accumulator = accumulatedArgv.maybeCommandNames;
   for (const arg of argv) {
+    if (['-h', '--help', '-help'].includes(arg)) {
+      accumulatedArgv.foundHelpArg = true;
+      continue;
+    }
     const rawValue = arg.trim();
     const matches = rawValue.match(/^--(.*)/);
     if (matches) {
-      const parameterName = camelCase(matches[1].trim());
-      const existingOption = accumulatedArgv.rawNamedArgs[parameterName];
+      const kebabCasedOptionName = matches[1].trim();
+      const existingOption = accumulatedArgv.rawNamedArgs[kebabCasedOptionName];
       if (existingOption) {
-        throw new Error('Each parameter can be provided at most one time');
+        throw new UsageError('Each option can be provided at most one time');
       } else {
         accumulator = [];
-        accumulatedArgv.rawNamedArgs[parameterName] = accumulator;
+        accumulatedArgv.rawNamedArgs[kebabCasedOptionName] = accumulator;
       }
     } else {
       accumulator.push(rawValue);
