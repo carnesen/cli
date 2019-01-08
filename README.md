@@ -19,7 +19,7 @@ const { readFile } = require('fs');
 // ^^ In TypeScript replace "const ... require" with "import ... from".
 // Other than that the remainder of this example is the same in TypeScript.
 
-// A "leaf" command is one that defines an "action" function
+// A "leaf" command defines an "action" function
 const multiplyCommand = leaf({
   commandName: 'multiply',
   description: 'Multiply numbers',
@@ -101,12 +101,12 @@ Options:
    --numbers <num0> [<num1> ...]
    --square-the-result
 ```
-Here is an examples of successful invocation of a command with a synchronous `action`:
+Here is an example of successful invocation of a command with a synchronous `action`:
 ```
 $ readme-cli multiply --numbers 1 2 3 --square-the-result
 36
 ```
-All `boolean` options default to `false` and can be enabled (set to `true`) as above. From this last example we can also see that [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case) "option" arguments are converted to [camelCased](https://en.wikipedia.org/wiki/Camel_case) property names before being passed into the `action` function. The "subcommand" arguments however are left as-is.
+All `boolean` options default to `false` and can be enabled (set to `true`) as in the example above. From this last example we can also see that [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case) "option" arguments are converted to [camelCased](https://en.wikipedia.org/wiki/Camel_case) property names when passed into the `action` function. The "subcommand" arguments however are left as-is.
 
 Here's an example of a command with an asynchronous `action` and an option with a `defaultValue`:
 ```
@@ -147,7 +147,7 @@ const notOkOption = option({
 ```
 
 ### leaf({commandName, description, options, action})
-Similar to `option`, `leaf` is a factory for creating commands that comprise a CLI. It returns the passed object with an additional property `commandType` set to a unique identifier. The `commandType` property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on discriminated unions.
+A factory for creating commands that comprise a CLI. It returns the passed object with an additional property `commandType` set to a unique identifier. The `commandType` property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on discriminated unions.
 
 #### commandName
 If this "leaf" is a subcommand, `commandName` is the string that the user will pass as the "subcommand" argument to invoke this action. If this "leaf" is the root command (i.e. the thing passed into `cli`), `commandName` should be the CLI's name. It's recommended that `commandName` be [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case), but no such restriction is imposed.
@@ -174,7 +174,7 @@ The `options` property is used to derive the type of the `namedArgs` passed into
 A function that defines your command logic. `action` can return a value synchronously like in the "multiply" example above, or it can be an `async` function that returns a `Promise` like in the "read-file" example. If `action` returns/resolves a value, that value is `console.log`ged before the CLI exits. If `action` throws/rejects, the exception is `console.log`ged before the CLI exits. That means that if you don't want the user to see a stack trace, your `action` should throw a `string` instead of an `Error` object.
 
 ### branch({commandName, description, subcommands})
-A factory function similar to `leaf`. Returns the passed object with an additional property `commandType` set to a unique identifier for "branch" commands.
+A factory function similar to `leaf`. Returns the passed object with an additional property `commandType` set to a unique identifier.
 
 #### commandName
 If this "branch" is not the root command, `commandName` is the string that the user will pass as the "subcommand" argument to invoke actions in this part of the command tree. If this "branch" command is the root command, `commandName` should be the CLI's name.
