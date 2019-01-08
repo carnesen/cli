@@ -1,5 +1,5 @@
-import { option, command, cli } from '..';
-import { Option, Command } from '../types';
+import { option, leaf, cli, branch } from '..';
+import { Option } from '../types';
 import { rootCommand } from '../example';
 
 jest.mock('@carnesen/run-and-exit');
@@ -15,12 +15,20 @@ describe('index', () => {
     expect(returnValue).toBe(opt);
   });
 
-  it('exports a "command" factory function that returns the input', () => {
-    const cmd: Command<{}> = {
+  it('exports a "leaf" command factory function', () => {
+    const returnValue = leaf({
       commandName: 'some command',
-    };
-    const returnValue = command(cmd);
-    expect(returnValue).toBe(cmd);
+      action: () => {},
+    });
+    expect(returnValue.commandName).toBe('some command');
+  });
+
+  it('exports a "branch" command factory function', () => {
+    const returnValue = branch({
+      commandName: 'some command',
+      subcommands: [],
+    });
+    expect(returnValue.commandName).toBe('some command');
   });
 
   it('exports a function "cli" that invokes "buildCli" then calls "runAndExit"', () => {
