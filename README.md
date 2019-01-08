@@ -1,6 +1,6 @@
 # @carnesen/cli [![Build Status](https://travis-ci.org/carnesen/cli.svg?branch=master)](https://travis-ci.org/carnesen/cli)
 
-A library for writing Node.js command-line interfaces (CLIs)
+A library for building Node.js command-line interfaces (CLIs)
 
 ## Install
 
@@ -13,7 +13,6 @@ This package includes runtime JavaScript files suitable for Node.js >=8 as well 
 ## Usage
 
 ```js
-// readme-cli.js
 const { option, leaf, branch, cli } = require('@carnesen/cli');
 const { promisify } = require('util');
 const { readFile } = require('fs');
@@ -28,8 +27,17 @@ const multiplyCommand = leaf({
     numbers: option({
       typeName: 'number[]',
     }),
+    squareTheResult: option({
+      typeName: 'boolean',
+    }),
   },
-  action: ({ numbers }) => numbers.reduce((a, b) => a * b, 1),
+  action: ({ numbers, squareTheResult }) => {
+    const multiplied = numbers.reduce((a, b) => a * b, 1);
+    if (squareTheResult) {
+      return multiplied * multiplied;
+    }
+    return multiplied;
+  }
 });
 
 const readFileCommand = leaf({
@@ -73,7 +81,11 @@ Subcommands:
 
    multiply, read-file
 ```
-The usage of an `@carnesen/cli` CLI is always `<program> [<subcommand0> ...] [--option-name <val0> ...]`. The CLI arguments up to the first one starting with `--` are command/subcommand names. Starting with the first `--` argument, all remaining arguments are either option names or option values.
+The usage of an `@carnesen/cli` CLI is always:
+```
+<program> [<subcommand0> ...] [--option0 <val0> ...] [...]
+```
+The CLI arguments up to the first one starting with `--` are command/subcommand names. Starting with the first `--` argument, all remaining arguments are either option names or option values.
 
 If a subcommand is invoked without its required arguments, the CLI prints usage for the subcommand:
 ```
@@ -87,33 +99,44 @@ Usage: readme-cli multiply <options>
 Options:
 
    --numbers <num0> [<num1> ...]
+   --square-the-result
 ```
 Here is an examples of successful invocation of a command with a synchronous "action":
 ```
-$ readme-cli multiply --numbers 1 2 3 4
-24
+$ readme-cli multiply --numbers 1 2 3 --square-the-result
+36
 ```
-And a command with an asynchronous "action":
+All `boolean` options default to `false` and can be enabled (set to `true`) as above. From this last example we can also see that [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case) "option" arguments are converted to [camelCased](https://en.wikipedia.org/wiki/Camel_case) property names before being passed into the "action" function. The "subcommand" arguments however are left as-is.
+
+Here's an example of a command with an asynchronous "action" and an option with a `defaultValue`:
 ```
-$ readme-cli read-file --file-path readme-cli.js
-// readme-cli.js
-const { option, command, cli } = require('@carnesen/cli');
+$ readme-cli read-file
+const { option, leaf, branch, cli } = require('@carnesen/cli');
+const { promisify } = require('util');
 ...
 ```
-From this last example we can see that [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case) command-line "option" arguments are converted to [camelCased](https://en.wikipedia.org/wiki/Camel_case) property names before being passed into the "action" function. The command line "subcommand" arguments however are left as-is.
 
 ## API
 
 ### option({typeName, description, defaultValue})
-A factory function for creating "option" arguments for a CLI. Returns the passed object. In a JavaScript application, strictly speaking the `option` factory isn't necessary since the compiled .js code is just `const option = opt => opt`. It's still highly recommended though for readability and also because it may become be required in a future version of this library.
+A factory function for creating "option" arguments for a CLI. Returns the passed object. In a JavaScript application, strictly speaking the `option` factory isn't necessary since the compiled .js code is just `const option = opt => opt`. It's still highly recommended though for readability and also because it may be required in a future version of this library.
 
 #### typeName
 One of `'string' | 'string[]' | 'boolean' | 'number' | 'number[]'`
 
 #### description
-(Optional) A string that will be included in the `Usage:` output if present.
+(Optional) A string that will be included in `Usage:` if present.
+
 #### defaultValue
-(Optional) A value consistent with `typeName`. For example, TypeScript would complain if you tried to do this:
+(Optional) A value consistent with `typeName`. For example:
+```ts
+// OK
+const okOption = option({
+  typeName: 'number',
+  defaultValue: 3,
+})
+```
+TypeScript would complain though if you tried to do this:
 ```ts
 // NOT OK
 const notOkOption = option({
@@ -124,12 +147,13 @@ const notOkOption = option({
 ```
 
 ### leaf({commandName, description, options, action})
-Similar to `option`, `leaf` is a factory function for creating commands that comprise a CLI. It returns the passed object with an additional property "commandType" set to a unique identifier. The "commandType" property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on "discriminated unions".
+Similar to `option`, `leaf` is a factory for creating commands that comprise a CLI. It returns the passed object with an additional property `commandType` set to a unique identifier. The `commandType` property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on discriminated unions.
+
 #### commandName
-If this leaf is a subcommand, "commandName" is the string that the user will pass as the "subcommand" argument to invoke this action. If this leaf is the root command, "commandName" should be the CLI's name. It's recommended that `commandName` be [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case), but no such restriction is imposed.
+If this leaf is a subcommand, `commandName` is the string that the user will pass as the "subcommand" argument to invoke this action. If this leaf is the root command (i.e. the thing passed into `cli`), `commandName` should be the CLI's name. It's recommended that `commandName` be [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case), but no such restriction is imposed.
 
 #### description
-(Optional) A string that will be included in the `Usage:` output if present.
+(Optional) A string that will be included in `Usage:` if present.
 
 #### options 
 (Optional) An object whose keys are [camelCased](https://en.wikipedia.org/wiki/Camel_case) option names and whose values are created by the `option` factory, for example:
@@ -141,28 +165,28 @@ const options = {
   }),
 }
 ```
-The `options` property is used to derive the type of `namedArgs` passed to the `action` function. In this example, `NamedArgs<O>` would look like
+The `options` property is used to derive the type of the `namedArgs` passed into the `action` function. In this example, `namedArgs` would look like
 ```ts
 { filePath: string }
 ```
 
 #### action
-A function that defines your command logic. `action` can return a value synchronously like in the "multiply" example above, or it can be an `async` function that returns a `Promise` like in the "read-file" example. If `action` returns a (resolved) value, that value is `console.log`ged before the CLI `process.exit(0)`'s. If `action` throws (rejects), the exception is `console.log`ged before the CLI `process.exit(1)`'s. That means that if you don't want the user to see a stack trace, your `action` should throw a `string` instead of an `Error` object.
+A function that defines your command logic. `action` can return a value synchronously like in the "multiply" example above, or it can be an `async` function that returns a `Promise` like in the "read-file" example. If `action` returns/resolves a value, that value is `console.log`ged before the CLI exits. If `action` throws/rejects, the exception is `console.log`ged before the CLI exits. That means that if you don't want the user to see a stack trace, your `action` should throw a `string` instead of an `Error` object.
 
 ### branch({commandName, description, subcommands})
-A factory function similar to `leaf`. Returns the passed object with an additional property "commandType" set to a unique identifier for "branch" commands.
+A factory function similar to `leaf`. Returns the passed object with an additional property `commandType` set to a unique identifier for "branch" commands.
 
 #### commandName
-If this "branch" is a subcommand, "commandName" is the string that the user will pass as the "subcommand" argument to invoke actions in this part of the command tree. If this "branch" command is the root command, "commandName" should be the CLI's name.
+If this "branch" is not the root command, `commandName` is the string that the user will pass as the "subcommand" argument to invoke actions in this part of the command tree. If this "branch" command is the root command, `commandName` should be the CLI's name.
 
 #### description
-(Optional) A string that will be included in the `Usage:` output if present.
+(Optional) A string that will be included in `Usage:` if present.
 
 #### subcommands
 An array of `branch` and/or `leaf` objects.
 
 ### cli(rootCommand, argv)
-Invokes an `action` indicated by command-line args `argv`, `console.log`'s the returned value or exception,and exits.
+Invokes an `action`, `console.log`s the returned/resolved value or exception, and exits.
 
 #### rootCommand
 A `leaf` or `branch`.
@@ -175,10 +199,10 @@ The body of the `cli` function described above is a single statement:
 ```ts
 runAndExit(assembleCli(rootCommand), argv);
 ```
-`assembleCli` is exported separately because it's much easier to unit test the `async` function that it returns than it is to unit test the `runAndExit`-wrapped `cli`. See [src/__tests__/cli.test.ts](src/__tests__/cli.test.ts) for an example of how to unit test a `@carnesen/cli` CLI.
+`assembleCli` is exported separately to make it easier for users to write unit tests for their CLI. See [src/__tests__/cli.test.ts](src/__tests__/cli.test.ts) for an example of how to unit test a `@carnesen/cli` CLI.
 
 ## More information
-This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [the tests](src/__tests__) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
+This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/__tests__) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
 
 ## Related
 - [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run an async function, `console.log` the resolved/rejected value, and `process.exit`
