@@ -1,3 +1,4 @@
+import { LEAF, BRANCH } from './constants';
 export type TypeName = 'string' | 'string[]' | 'boolean' | 'number' | 'number[]';
 
 export type Value<T extends TypeName> = T extends 'string'
@@ -12,7 +13,7 @@ export type DefaultValue<T extends TypeName> = T extends 'boolean' ? false : Val
 
 export type Option<T extends TypeName> = {
   typeName: T;
-  description: string;
+  description?: string;
   defaultValue?: DefaultValue<T>;
 };
 
@@ -22,24 +23,23 @@ export type Options = {
 
 export type NamedArgs<O extends Options> = { [K in keyof O]: Value<O[K]['typeName']> };
 
-export type Command<O extends Options> = {
+export type Command = Branch | Leaf<Options>;
+
+export type Branch = {
+  commandType: typeof BRANCH;
+  commandName: string;
+  description?: string;
+  subcommands: (Branch | Leaf<any>)[];
+};
+
+export type Leaf<O extends Options> = {
+  commandType: typeof LEAF;
   commandName: string;
   description?: string;
   options?: O;
-  action?: (namedArgs: NamedArgs<O>) => Promise<any>;
-  subcommands?: Command<any>[];
+  action: (namedArgs: NamedArgs<O>) => any;
 };
 
 export type RawNamedArgs = {
   [optionName: string]: string[] | undefined;
 };
-
-export type AccumulatedArgv = {
-  maybeCommandNames: string[];
-  rawNamedArgs: RawNamedArgs;
-  foundHelpArg: boolean;
-};
-
-export type Step = () => Promise<any>;
-
-export type CommandStack = Command<Options>[];

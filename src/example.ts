@@ -1,37 +1,41 @@
-import { option, command, cli } from '.';
+import { promisify } from 'util';
+import { option, leaf, cli, branch } from '.';
+import { readFile } from 'fs';
 
-const messageOption = option({
-  typeName: 'string',
-  description: 'a message',
-});
+const messageOptions = {
+  message: option({
+    typeName: 'string',
+    description: 'a message',
+  }),
+};
 
-const echoCommand = command({
+const echoCommand = leaf({
   commandName: 'echo',
   description: 'Print a message to the console',
   options: {
-    message: messageOption,
+    ...messageOptions,
     appendBar: option({
       description: 'Append "foo" to the message',
       typeName: 'boolean',
     }),
   },
-  async action({ message, appendBar }) {
+  action({ message, appendBar }) {
     return appendBar ? `${message}bar` : message;
   },
 });
 
-const throwCommand = command({
+const throwCommand = leaf({
   commandName: 'throw',
   description: 'Throw a message to the console',
   options: {
-    message: messageOption,
+    ...messageOptions,
     includeStack: option({
       typeName: 'boolean',
       description: 'Include a stack trace',
       defaultValue: false,
     }),
   },
-  async action({ message, includeStack }) {
+  action({ message, includeStack }) {
     if (includeStack) {
       throw new Error(message);
     }
@@ -42,11 +46,10 @@ const throwCommand = command({
 const mathOptions = {
   numbers: option({
     typeName: 'number[]',
-    description: 'The numbers to sum',
   }),
 };
 
-const concatCommand = command({
+const concatCommand = leaf({
   commandName: 'concat',
   options: {
     strings: option({
@@ -54,24 +57,24 @@ const concatCommand = command({
       description: 'Strings to concat',
     }),
   },
-  async action({ strings }) {
+  action({ strings }) {
     return strings.reduce((a, b) => a + b, '');
   },
 });
 
-const mathCommand = command({
+const mathBranch = branch({
   commandName: 'math',
   description: 'Do mathematical operations',
   subcommands: [
-    command({
+    leaf({
       commandName: 'multiply',
       description: 'Multiply numbers',
       options: mathOptions,
-      async action({ numbers }) {
+      action({ numbers }) {
         return numbers.reduce((a, b) => a * b, 1);
       },
     }),
-    command({
+    leaf({
       commandName: 'square',
       description: 'Square a number',
       options: {
@@ -80,19 +83,35 @@ const mathCommand = command({
           typeName: 'number',
         }),
       },
-      async action({ number }) {
+      action({ number }) {
         return number * number;
       },
     }),
   ],
 });
 
-export const rootCommand = command({
+const readFileCommand = leaf({
+  commandName: 'read-file',
+  description: 'Read file from disk',
+  options: {
+    path: option({
+      typeName: 'string',
+      description: 'An absolute or relative path',
+      defaultValue: __filename,
+    }),
+  },
+  action: async ({ path }) => {
+    const contents = await promisify(readFile)(path, { encoding: 'utf8' });
+    return contents;
+  },
+});
+
+export const rootCommand = branch({
   commandName: 'example-cli',
   description: `
     This is an example command-line interface (CLI).
     Its only purpose is to demonstrate features.`,
-  subcommands: [mathCommand, concatCommand, echoCommand, throwCommand],
+  subcommands: [readFileCommand, mathBranch, concatCommand, echoCommand, throwCommand],
 });
 
 if (module === require.main) {

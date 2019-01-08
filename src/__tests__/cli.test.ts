@@ -1,7 +1,7 @@
-import { buildCli } from '../build-cli';
+import { assembleCli } from '../assemble-cli';
 import { rootCommand } from '../example';
 
-const exampleAsyncFunc = buildCli(rootCommand);
+const exampleAsyncFunc = assembleCli(rootCommand);
 
 const example = (str?: string) => {
   const argv = str ? str.split(' ') : [];
@@ -18,7 +18,7 @@ const catchExample = async (str?: string) => {
   }
 };
 
-describe(`async function returned by ${buildCli.name}`, () => {
+describe(`async function returned by ${assembleCli.name}`, () => {
   it("runs the provided command's execute function if proper args are provided", async () => {
     const returnValue = await example('echo --message foo');
     expect(returnValue).toBe('foo');
@@ -43,6 +43,10 @@ describe(`async function returned by ${buildCli.name}`, () => {
     expect(await catchExample('echo --message foo --help')).toMatch(/^Usage:/);
   });
 
+  it('throws an "Usage" option string with default value if there is one', async () => {
+    expect(await catchExample('read-file --help')).toMatch('(default:');
+  });
+
   it('throws "Error" and "Usage" if required option is not passed', async () => {
     const ex = await catchExample('echo');
     expect(ex).toMatch(/^Error: option "message" is required/);
@@ -56,6 +60,12 @@ describe(`async function returned by ${buildCli.name}`, () => {
 
   it('properly handles options of type "number[]"', async () => {
     expect(await example('math multiply --numbers 1 2 3 4')).toBe(24);
+  });
+
+  it('properly handles async actions', async () => {
+    expect(await example(`read-file --path ${__filename}`)).toMatch(
+      'properly handles async actions',
+    );
   });
 
   it('properly handles options of type "string[]"', async () => {
@@ -96,6 +106,12 @@ describe(`async function returned by ${buildCli.name}`, () => {
 
   it('throws string "Bad command" if there is a unknown subcommand', async () => {
     expect(await catchExample('math squire')).toMatch('Error: Bad command "squire"');
+  });
+
+  it('throws string "Unknown option" if there is a unknown subcommand', async () => {
+    expect(await catchExample('echo --message foo --carl')).toMatch(
+      'Unknown option "--carl"',
+    );
   });
 
   it('throws string "Expected ... to be one or more strings"', async () => {

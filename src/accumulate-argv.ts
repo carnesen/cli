@@ -1,5 +1,11 @@
-import { AccumulatedArgv } from './types';
+import { RawNamedArgs } from './types';
 import { UsageError } from './usage-error';
+
+export type AccumulatedArgv = {
+  maybeCommandNames: string[];
+  rawNamedArgs: RawNamedArgs;
+  foundHelpArg: boolean;
+};
 
 export function accumulateArgv(argv: string[]) {
   const accumulatedArgv: AccumulatedArgv = {

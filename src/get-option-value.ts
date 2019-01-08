@@ -1,4 +1,3 @@
-import kebabCase = require('lodash.kebabcase');
 import { TypeName, Value, Option, RawNamedArgs } from './types';
 import { UsageError } from './usage-error';
 
@@ -13,17 +12,22 @@ function convertToNumber(rawValue: string) {
   return value;
 }
 
+export function getOptionDefaultValue(
+  option: Pick<Option<TypeName>, 'typeName' | 'defaultValue'>,
+) {
+  const defaultValue = option.typeName === 'boolean' ? false : option.defaultValue;
+  return defaultValue;
+}
+
 export function getOptionValue(
-  optionName: string,
-  option: Option<TypeName>,
-  rawNamedArgs: RawNamedArgs,
+  kebabCasedOptionName: string,
+  option: Pick<Option<TypeName>, 'typeName' | 'defaultValue'>,
+  rawValues: RawNamedArgs[string],
 ) {
   let value: Value<TypeName>;
-  const kebabCasedOptionName = kebabCase(optionName);
-  const rawValues = rawNamedArgs[kebabCasedOptionName];
   if (!rawValues) {
     // option was NOT provided as command-line argument
-    const defaultValue = option.typeName === 'boolean' ? false : option.defaultValue;
+    const defaultValue = getOptionDefaultValue(option);
     if (typeof defaultValue === 'undefined') {
       throw new UsageError(`option "${kebabCasedOptionName}" is required`);
     }
