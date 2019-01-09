@@ -1,4 +1,4 @@
-import { CodedError } from '@carnesen/coded-error';
+import CodedError = require('@carnesen/coded-error');
 
 export const USAGE = 'USAGE';
 
