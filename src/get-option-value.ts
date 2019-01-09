@@ -20,7 +20,7 @@ export function getOptionDefaultValue(
 }
 
 export function getOptionValue(
-  kebabCasedOptionName: string,
+  optionName: string,
   option: Pick<Option<TypeName>, 'typeName' | 'defaultValue'>,
   rawValues: RawNamedArgs[string],
 ) {
@@ -29,7 +29,7 @@ export function getOptionValue(
     // option was NOT provided as command-line argument
     const defaultValue = getOptionDefaultValue(option);
     if (typeof defaultValue === 'undefined') {
-      throw new UsageError(`option "${kebabCasedOptionName}" is required`);
+      throw new UsageError(`option "${optionName}" is required`);
     }
     value = defaultValue;
   } else {
@@ -37,32 +37,28 @@ export function getOptionValue(
     switch (option.typeName) {
       case 'number':
         if (rawValues.length !== 1) {
-          throw new UsageError(
-            `Expected option "${kebabCasedOptionName}" to be a single number`,
-          );
+          throw new UsageError(`Expected option "${optionName}" to be a single number`);
         }
         value = convertToNumber(rawValues[0]);
         break;
       case 'boolean':
         if (rawValues.length !== 0) {
           throw new UsageError(
-            `Boolean options have default "false" and can be set to true as simply "--${kebabCasedOptionName}"`,
+            `Boolean options have default "false" and can be set to true as simply "--${optionName}"`,
           );
         }
         value = true;
         break;
       case 'string':
         if (rawValues.length !== 1) {
-          throw new UsageError(
-            `Expected option "${kebabCasedOptionName}" to be a single string`,
-          );
+          throw new UsageError(`Expected option "${optionName}" to be a single string`);
         }
         value = rawValues[0];
         break;
       case 'string[]':
         if (rawValues.length === 0) {
           throw new UsageError(
-            `Expected option "${kebabCasedOptionName}" to be one or more strings`,
+            `Expected option "${optionName}" to be one or more strings`,
           );
         }
         value = [...rawValues];
@@ -70,15 +66,13 @@ export function getOptionValue(
       case 'number[]':
         if (rawValues.length === 0) {
           throw new UsageError(
-            `Expected option "${kebabCasedOptionName}" to be one or more numbers`,
+            `Expected option "${optionName}" to be one or more numbers`,
           );
         }
         value = [...rawValues].map(convertToNumber);
         break;
       default:
-        throw new Error(
-          `Option "${kebabCasedOptionName}" has invalid type "${option.typeName}"`,
-        );
+        throw new Error(`Option "${optionName}" has invalid type "${option.typeName}"`);
     }
   }
   return value;

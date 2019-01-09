@@ -1,15 +1,12 @@
-import kebabCase = require('lodash.kebabcase');
-
 import { Option, TypeName } from './types';
 import { getOptionDefaultValue } from './get-option-value';
 
 export function getOptionString(optionName: string, option: Option<TypeName>) {
   const { typeName, description } = option;
-  const kebabCasedOptionName = kebabCase(optionName);
-  let optionString = `--${kebabCasedOptionName}`;
+  let optionString = `--${optionName}`;
   switch (typeName) {
     case 'boolean':
-      // booleans are false by default, set to true as simply "--option-name"
+      // booleans are false by default, set to true as simply "--optionName"
       break;
     case 'string':
       optionString += ' <str>';

@@ -22,13 +22,13 @@ export function accumulateArgv(argv: string[]) {
     const rawValue = arg.trim();
     const matches = rawValue.match(/^--(.*)/);
     if (matches) {
-      const kebabCasedOptionName = matches[1].trim();
-      const existingOption = accumulatedArgv.rawNamedArgs[kebabCasedOptionName];
+      const optionName = matches[1].trim();
+      const existingOption = accumulatedArgv.rawNamedArgs[optionName];
       if (existingOption) {
-        throw new UsageError(`Option "${kebabCasedOptionName}" was provided twice`);
+        throw new UsageError(`Option "${optionName}" was provided twice`);
       } else {
         accumulator = [];
-        accumulatedArgv.rawNamedArgs[kebabCasedOptionName] = accumulator;
+        accumulatedArgv.rawNamedArgs[optionName] = accumulator;
       }
     } else {
       accumulator.push(rawValue);

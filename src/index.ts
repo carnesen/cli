@@ -1,4 +1,4 @@
-import { runAndExit } from '@carnesen/run-and-exit';
+import runAndExit = require('@carnesen/run-and-exit');
 
 import { TypeName, Option, Options, Leaf, Branch, Command } from './types';
 import { assembleCli } from './assemble-cli';

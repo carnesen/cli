@@ -44,7 +44,7 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   });
 
   it('throws an "Usage" option string with default value if there is one', async () => {
-    expect(await catchExample('read-file --help')).toMatch('(default:');
+    expect(await catchExample('cat --help')).toMatch('(default:');
   });
 
   it('throws "Error" and "Usage" if required option is not passed', async () => {
@@ -53,9 +53,9 @@ describe(`async function returned by ${assembleCli.name}`, () => {
     expect(ex).toMatch(/^Usage/m);
   });
 
-  it('boolean options default to false, can be enabled with --option-name', async () => {
+  it('boolean options default to false, can be enabled with --optionName', async () => {
     expect(await example('echo --message foo')).toBe('foo');
-    expect(await example('echo --message foo --append-bar')).toBe('foobar');
+    expect(await example('echo --message foo --appendBar')).toBe('foobar');
   });
 
   it('properly handles options of type "number[]"', async () => {
@@ -63,7 +63,7 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   });
 
   it('properly handles async actions', async () => {
-    expect(await example(`read-file --path ${__filename}`)).toMatch(
+    expect(await example(`cat --path ${__filename}`)).toMatch(
       'properly handles async actions',
     );
   });
@@ -131,13 +131,13 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   });
 
   it('throws string "Boolean options have default "false"" if boolean has value', async () => {
-    expect(await catchExample('echo --message foo --append-bar true')).toMatch(
+    expect(await catchExample('echo --message foo --appendBar true')).toMatch(
       'Boolean options have default "false"',
     );
   });
 
   it('re-throws the full Error object if one is thrown in the action', async () => {
-    const ex = await catchExample('throw --message foo --include-stack');
+    const ex = await catchExample('throw --message foo --includeStack');
     expect(ex.stack).toMatch('src/example.ts');
   });
 });

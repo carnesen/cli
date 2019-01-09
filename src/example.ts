@@ -91,8 +91,8 @@ const mathBranch = branch({
 });
 
 const readFileCommand = leaf({
-  commandName: 'read-file',
-  description: 'Read file from disk',
+  commandName: 'cat',
+  description: "Print a file's contents",
   options: {
     path: option({
       typeName: 'string',
