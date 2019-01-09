@@ -4,10 +4,14 @@ export type TypeName = 'string' | 'string[]' | 'boolean' | 'number' | 'number[]'
 export type Value<T extends TypeName> = T extends 'string'
   ? string
   : T extends 'boolean'
-    ? boolean
-    : T extends 'number'
-      ? number
-      : T extends 'string[]' ? string[] : T extends 'number[]' ? number[] : never;
+  ? boolean
+  : T extends 'number'
+  ? number
+  : T extends 'string[]'
+  ? string[]
+  : T extends 'number[]'
+  ? number[]
+  : never;
 
 export type DefaultValue<T extends TypeName> = T extends 'boolean' ? false : Value<T>;
 

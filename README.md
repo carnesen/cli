@@ -40,9 +40,9 @@ const multiplyCommand = leaf({
   }
 });
 
-const readFileCommand = leaf({
-  commandName: 'read-file',
-  description: 'Read a file from disk',
+const catCommand = leaf({
+  commandName: 'cat',
+  description: 'Print the contents of a file',
   options: {
     filePath: option({
       typeName: 'string',
@@ -63,11 +63,16 @@ const rootCommand = branch({
   description: `
     This is an example command-line interface (CLI).
     Its only purpose is to demonstrate features.`,
-  subcommands: [multiplyCommand, readFileCommand],
+  subcommands: [multiplyCommand, catCommand],
 });
 
-cli(rootCommand);
+if (require.main === module) {
+  cli(rootCommand);
+}
+
+module.exports = rootCommand;
 ```
+The `cli(rootCommand)` statement near the end is the one that does the heavy lifting of parsing the command-line arguments and running the appropriate command. It's wrapped in the `require.main === module` conditional so that it will only be called [if this file has been run directly](https://nodejs.org/api/modules.html). That makes it easier to unit test `rootCommand` separately.
 
 Here's how that behaves as a CLI. If no arguments are passed, it prints the top-level usage:
 ```
@@ -79,7 +84,7 @@ Usage: readme-cli <subcommand> <options>
 
 Subcommands:
 
-   multiply, read-file
+   multiply, cat
 ```
 The usage of a `@carnesen/cli` CLI is always:
 ```
@@ -99,14 +104,14 @@ Usage: readme-cli multiply <options>
 Options:
 
    --numbers <num0> [<num1> ...]
-   --square-the-result
+   --squareTheResult
 ```
 Here is an example of successful invocation of a command with a synchronous `action`:
 ```
-$ readme-cli multiply --numbers 1 2 3 --square-the-result
+$ readme-cli multiply --numbers 1 2 3 --squareTheResult
 36
 ```
-All `boolean` options default to `false` and can be enabled (set to `true`) as in the example above. From this last example we can also see that [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case) "option" arguments are converted to [camelCased](https://en.wikipedia.org/wiki/Camel_case) property names when passed into the `action` function. The "subcommand" arguments however are left as-is.
+All `boolean` options default to `false` and can be enabled (set to `true`) as in the example above.
 
 Here's an example of a command with an asynchronous `action` and an option with a `defaultValue`:
 ```
@@ -150,13 +155,13 @@ const notOkOption = option({
 A factory for creating commands that comprise a CLI. It returns the passed object with an additional property `commandType` set to a unique identifier. The `commandType` property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on discriminated unions.
 
 #### commandName
-If this "leaf" is a subcommand, `commandName` is the string that the user will pass as the "subcommand" argument to invoke this action. If this "leaf" is the root command (i.e. the thing passed into `cli`), `commandName` should be the CLI's name. It's recommended that `commandName` be [kebab-cased](https://en.wikipedia.org/wiki/Kebab_case), but no such restriction is imposed.
+If this "leaf" is a subcommand, `commandName` is the string that the user will pass as the "subcommand" argument to invoke this action. If this "leaf" is the root command (i.e. the thing passed into `cli`), `commandName` should be the CLI's name.
 
 #### description
 (Optional) A string that will be included in `Usage:` if present.
 
 #### options 
-(Optional) An object whose keys are [camelCased](https://en.wikipedia.org/wiki/Camel_case) option names and whose values are created by the `option` factory, for example:
+(Optional) An object whose keys option names and whose values are created by the `option` factory, for example:
 ```ts
 const options = {
   filePath: option({
@@ -171,7 +176,7 @@ The `options` property is used to derive the type of the `namedArgs` passed into
 ```
 
 #### action
-A function that defines your command logic. `action` can return a value synchronously like in the "multiply" example above, or it can be an `async` function that returns a `Promise` like in the "read-file" example. If `action` returns/resolves a value, that value is `console.log`ged before the CLI exits. If `action` throws/rejects, the exception is `console.log`ged before the CLI exits. That means that if you don't want the user to see a stack trace, your `action` should throw a `string` instead of an `Error` object.
+A function that defines your command logic. `action` can return a value synchronously like in the "multiply" example above, or it can be an `async` function that returns a `Promise` like in the `catCommand` example. If `action` returns/resolves a value, that value is `console.log`ged before the CLI exits. If `action` throws/rejects, the exception is `console.log`ged before the CLI exits. That means that if you don't want the user to see a stack trace, your `action` should throw a `string` instead of an `Error` object.
 
 ### branch({commandName, description, subcommands})
 A factory function similar to `leaf`. Returns the passed object with an additional property `commandType` set to a unique identifier.
@@ -205,5 +210,11 @@ runAndExit(assembleCli(rootCommand), argv);
 This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/__tests__) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
 
 ## Related
-- [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run an async function, `console.log` the resolved/rejected value, and `process.exit`
+- [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the returned/resolved/thrown/rejected value, and `process.exit`
 - [@carnesen/coded-error](https://github.com/carnesen/coded-error): An enhanced `Error` class with additional properties "code" and "data"
+- [@carnesen/tslint-config](https://github.com/carnesen/tslint-config): TSLint configurations for `@carnesen` projects
+- [@carnesen/tsconfig](https://github.com/carnesen/tsconfig): TypeScript configurations for `@carnesen` projects
+
+## License
+
+MIT © [Chris Arnesen](https://www.carnesen.com)

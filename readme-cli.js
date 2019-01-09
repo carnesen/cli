@@ -26,9 +26,9 @@ const multiplyCommand = leaf({
   }
 });
 
-const readFileCommand = leaf({
-  commandName: 'read-file',
-  description: 'Read a file from disk',
+const catCommand = leaf({
+  commandName: 'cat',
+  description: 'Print the contents of a file',
   options: {
     filePath: option({
       typeName: 'string',
@@ -49,7 +49,11 @@ const rootCommand = branch({
   description: `
     This is an example command-line interface (CLI).
     Its only purpose is to demonstrate features.`,
-  subcommands: [multiplyCommand, readFileCommand],
+  subcommands: [multiplyCommand, catCommand],
 });
 
-cli(rootCommand);
+if (require.main === module) {
+  cli(rootCommand);
+}
+
+module.exports = rootCommand;
