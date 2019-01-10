@@ -5,7 +5,7 @@ const { readFile } = require('fs');
 // ^^ In TypeScript replace "const ... require" with "import ... from".
 // Other than that the remainder of this example is the same in TypeScript.
 
-// A "leaf" command is one that defines an "action" function
+// A "leaf" command defines an "action" function
 const multiplyCommand = leaf({
   commandName: 'multiply',
   description: 'Multiply numbers',
