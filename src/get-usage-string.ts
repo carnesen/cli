@@ -16,8 +16,9 @@ export function getUsageString(commandStack: Command[], errorMessage?: string) {
     .map(command => command.commandName)
     .join(' ')}`;
 
+  const leadingNewlineRegExp = /^\r?\n/;
   const descriptionParagraphs = command.description
-    ? [redent(command.description.replace(/^\n/, ''), 3)]
+    ? [redent(command.description.replace(leadingNewlineRegExp, ''), 3)]
     : [];
 
   const finalParagraphs: string[] = [];

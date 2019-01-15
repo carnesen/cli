@@ -20,7 +20,7 @@ export function assembleCli(rootCommand: Command) {
 
       return await callAction(commandStack, rawNamedArgs);
     } catch (ex) {
-      if (ex.code === USAGE) {
+      if (ex && ex.code === USAGE) {
         throw getUsageString(commandStack, ex.message);
       }
       throw ex;
