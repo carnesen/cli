@@ -44,7 +44,7 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   });
 
   it('throws an "Usage" option string with default value if there is one', async () => {
-    expect(await catchExample('cat --help')).toMatch('(default:');
+    expect(await catchExample('cat --help')).toMatch('(Default:');
   });
 
   it('throws "Error" and "Usage" if required option is not passed', async () => {

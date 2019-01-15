@@ -27,3 +27,4 @@ export const cli = (rootCommand: Command, argv = process.argv.slice(2)) => {
 };
 
 export { assembleCli } from './assemble-cli';
+export { UsageError } from './usage-error';
