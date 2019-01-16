@@ -40,7 +40,11 @@ export function getOptionString(optionName: string, option: Option<TypeName>) {
   if (typeof defaultValue !== 'undefined' && defaultValue !== false) {
     descriptionWithDefaultString += redent(
       `\n(Default: ${
-        Array.isArray(defaultValue) ? defaultValue.join(' ') : defaultValue
+        Array.isArray(defaultValue)
+          ? defaultValue.join(' ')
+          : typeof defaultValue === 'string'
+          ? `"${defaultValue}"`
+          : defaultValue
       })`,
       optionUsage.length + 3,
     );
