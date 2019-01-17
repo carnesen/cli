@@ -127,7 +127,7 @@ const { promisify } = require('util');
 A factory function for creating "option" arguments for a CLI. Returns the passed object. In a JavaScript application, strictly speaking the `option` factory isn't necessary since the compiled .js code is just `const option = opt => opt`. It's still highly recommended though for readability and also because it may be required in a future version of this library.
 
 #### typeName
-One of `'string' | 'string[]' | 'boolean' | 'number' | 'number[]'`
+One of `'string' | 'string[]' | 'boolean' | 'number' | 'number[]' | 'json'`
 
 #### description
 (Optional) A string that will be included in `Usage:` if present.
@@ -174,6 +174,8 @@ The `options` property is used to derive the type of the `namedArgs` passed into
 ```ts
 { filePath: string }
 ```
+
+The value of a `'json'` option is a string that gets parsed using `JSON.parse` when included in the `namedArgs`.
 
 #### action
 A function that defines your command logic. `action` can return a value synchronously like in the "multiply" example above, or it can be an `async` function that returns a `Promise` like in the `catCommand` example. If `action` returns/resolves a value, that value is `console.log`ged before the CLI exits. If `action` throws/rejects, the exception is `console.log`ged before the CLI exits. That means that if you don't want the user to see a stack trace, your `action` should throw a `string` instead of an `Error` object.
