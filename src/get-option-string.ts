@@ -5,10 +5,10 @@ import redent = require('redent');
 const singleQuote = (str: string) => `'${str}'`;
 
 function convertDefaultValueToString(defaultValue: any) {
-  if (typeof defaultValue === 'undefined') {
+  if (typeof defaultValue === 'undefined' || defaultValue === false) {
     return '';
   }
-  return `Default ${
+  return `(Default = ${
     Array.isArray(defaultValue)
       ? defaultValue.join(' ')
       : typeof defaultValue === 'string'
@@ -16,7 +16,7 @@ function convertDefaultValueToString(defaultValue: any) {
       : typeof defaultValue === 'object'
       ? singleQuote(JSON.stringify(defaultValue))
       : defaultValue
-  }`;
+  })`;
 }
 
 export function getOptionString(optionName: string, option: Option<TypeName>) {
