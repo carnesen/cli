@@ -71,6 +71,16 @@ export function getOptionValue(
         }
         value = [...rawValues].map(convertToNumber);
         break;
+      case 'json':
+        if (rawValues.length !== 1) {
+          throw new UsageError(`Expected option "${optionName}" to be a json string`);
+        }
+        try {
+          value = JSON.parse(rawValues[0]);
+        } catch (ex) {
+          throw new UsageError(`Failed to parse json ${rawValues[0]}`);
+        }
+        break;
       default:
         throw new Error(`Option "${optionName}" has invalid type "${option.typeName}"`);
     }

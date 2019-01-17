@@ -2,8 +2,28 @@ import { Option, TypeName } from './types';
 import { getOptionDefaultValue } from './get-option-value';
 import redent = require('redent');
 
+const singleQuote = (str: string) => `'${str}'`;
+
+function convertDefaultValueToString(defaultValue: any) {
+  if (typeof defaultValue === 'undefined') {
+    return '';
+  }
+  return `Default ${
+    Array.isArray(defaultValue)
+      ? defaultValue.join(' ')
+      : typeof defaultValue === 'string'
+      ? singleQuote(defaultValue)
+      : typeof defaultValue === 'object'
+      ? singleQuote(JSON.stringify(defaultValue))
+      : defaultValue
+  }`;
+}
+
 export function getOptionString(optionName: string, option: Option<TypeName>) {
   const { typeName, description } = option;
+  const descriptionLines = description
+    ? redent(description.replace(/^\n/g, ''), 0).split('\n')
+    : [];
   let optionUsage = `--${optionName}`;
   switch (typeName) {
     case 'boolean':
@@ -21,33 +41,27 @@ export function getOptionString(optionName: string, option: Option<TypeName>) {
     case 'number[]':
       optionUsage += ' <num0> [<num1> ...]';
       break;
+    case 'json':
+      optionUsage += ' <json>';
+      break;
     default:
       // In this code block `typeName` should have type `never`.
       throw new Error(`Unexpected option type "${typeName}"`);
   }
-  let descriptionWithDefaultString = !description
-    ? ''
-    : description
-        .split('\n')
-        .map((lineIn, index) => {
-          if (index === 0) {
-            return `${optionUsage} : ${lineIn.trim()}`;
-          }
-          return redent(lineIn, optionUsage.length + 3);
-        })
-        .join('\n');
-  const defaultValue = getOptionDefaultValue(option);
-  if (typeof defaultValue !== 'undefined' && defaultValue !== false) {
-    descriptionWithDefaultString += redent(
-      `\n(Default: ${
-        Array.isArray(defaultValue)
-          ? defaultValue.join(' ')
-          : typeof defaultValue === 'string'
-          ? `"${defaultValue}"`
-          : defaultValue
-      })`,
-      optionUsage.length + 3,
-    );
+  const defaultValueString = convertDefaultValueToString(getOptionDefaultValue(option));
+  if (defaultValueString) {
+    descriptionLines.unshift(defaultValueString);
   }
-  return descriptionWithDefaultString;
+  let firstLine = optionUsage;
+  const restLines: string[] = [];
+  let index = 0;
+  for (const descriptionLine of descriptionLines) {
+    if (index === 0) {
+      firstLine += ` : ${descriptionLine}`;
+    } else {
+      restLines.push(redent(descriptionLine, optionUsage.length + 3));
+    }
+    index = index + 1;
+  }
+  return [firstLine, ...restLines].join('\n');
 }

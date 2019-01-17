@@ -106,12 +106,36 @@ const readFileCommand = leaf({
   },
 });
 
+const getFoo = leaf({
+  commandName: 'get-foo',
+  options: {
+    json: option({
+      typeName: 'json',
+      description: `
+        An object with a foo property.
+        This is an example of a multi-line option description.`,
+      defaultValue: { foo: 'bar' },
+    }),
+  },
+  action({ json }) {
+    return json.foo;
+  },
+});
+
 export const rootCommand = branch({
   commandName: 'example-cli',
   description: `
     This is an example command-line interface (CLI).
-    Its only purpose is to demonstrate features.`,
-  subcommands: [readFileCommand, mathBranch, concatCommand, echoCommand, throwCommand],
+    Its only purpose is to demonstrate features.
+    This is an example of a multi-line command description.`,
+  subcommands: [
+    getFoo,
+    readFileCommand,
+    mathBranch,
+    concatCommand,
+    echoCommand,
+    throwCommand,
+  ],
 });
 
 if (module === require.main) {

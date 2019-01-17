@@ -44,7 +44,7 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   });
 
   it('throws an "Usage" option string with default value if there is one', async () => {
-    expect(await catchExample('cat --help')).toMatch('(Default:');
+    expect(await catchExample('cat --help')).toMatch('Default');
   });
 
   it('throws "Error" and "Usage" if required option is not passed', async () => {
@@ -60,6 +60,14 @@ describe(`async function returned by ${assembleCli.name}`, () => {
 
   it('properly handles options of type "number[]"', async () => {
     expect(await example('math multiply --numbers 1 2 3 4')).toBe(24);
+  });
+
+  it('properly handles options of type "json"', async () => {
+    expect(await example(`get-foo --json {"foo":"baz"}`)).toBe('baz');
+  });
+
+  it('properly handles options of type "json" with default value', async () => {
+    expect(await example(`get-foo`)).toBe('bar');
   });
 
   it('properly handles async actions', async () => {
@@ -79,6 +87,22 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   it('throws string "Option was provided twice" if option was provided twice', async () => {
     expect(await catchExample('math square --number 4 --number 3')).toMatch(
       'Option "number" was provided twice',
+    );
+  });
+
+  it('throws string "Failed to parse" if json option parse fails', async () => {
+    expect(await catchExample('get-foo --json boo')).toMatch('Failed to parse');
+  });
+
+  it('throws string "to be a json string" if json option string is not provided', async () => {
+    expect(await catchExample('get-foo --json')).toMatch('to be a json string');
+  });
+
+  it('throws string "Failed to parse" if json option parse fails', async () => {
+    const caught = await catchExample('get-foo --help');
+    expect(caught).toMatch('                   An object with a foo property.');
+    expect(caught).toMatch(
+      '                   This is an example of a multi-line option description.',
     );
   });
 
