@@ -1,6 +1,6 @@
 import runAndExit = require('@carnesen/run-and-exit');
 
-import { TypeName, Option, Options, Leaf, Branch, Command } from './types';
+import { TypeName, Option, Options, Leaf, Branch } from './types';
 import { assembleCli } from './assemble-cli';
 import { LEAF, BRANCH } from './constants';
 
@@ -21,7 +21,7 @@ export const branch = (cmd: ExcludeCommandType<Branch>): Branch => ({
   commandType: BRANCH,
 });
 
-export const cli = (rootCommand: Command, argv = process.argv.slice(2)) => {
+export const cli = (rootCommand: Branch | Leaf<any>, argv = process.argv.slice(2)) => {
   const asyncFunc = assembleCli(rootCommand);
   runAndExit(asyncFunc, argv);
 };

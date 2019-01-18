@@ -10,7 +10,9 @@ function convertDefaultValueToString(defaultValue: any) {
   }
   return `(Default = ${
     Array.isArray(defaultValue)
-      ? defaultValue.join(' ')
+      ? `[${defaultValue
+          .map(item => (typeof item === 'string' ? singleQuote(item) : item))
+          .join(', ')}]`
       : typeof defaultValue === 'string'
       ? singleQuote(defaultValue)
       : typeof defaultValue === 'object'
@@ -50,7 +52,7 @@ export function getOptionString(optionName: string, option: Option<TypeName>) {
   }
   const defaultValueString = convertDefaultValueToString(getOptionDefaultValue(option));
   if (defaultValueString) {
-    descriptionLines.unshift(defaultValueString);
+    descriptionLines.push(defaultValueString);
   }
   let firstLine = optionUsage;
   const restLines: string[] = [];

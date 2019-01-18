@@ -100,7 +100,7 @@ describe(`async function returned by ${assembleCli.name}`, () => {
 
   it('throws string "Failed to parse" if json option parse fails', async () => {
     const caught = await catchExample('get-foo --help');
-    expect(caught).toMatch('                   An object with a foo property.');
+    expect(caught).toMatch('   --json <json> : An object with a foo property.');
     expect(caught).toMatch(
       '                   This is an example of a multi-line option description.',
     );
