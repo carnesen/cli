@@ -98,6 +98,10 @@ describe(`async function returned by ${assembleCli.name}`, () => {
     expect(await catchExample('get-foo --json')).toMatch('to be a json string');
   });
 
+  it('usage for a json option has its defaultValue JSON.stringified', async () => {
+    expect(await catchExample('get-foo --help')).toMatch(`'{"foo":"bar"}'`);
+  });
+
   it('throws string "Failed to parse" if json option parse fails', async () => {
     const caught = await catchExample('get-foo --help');
     expect(caught).toMatch('   --json <json> : An object with a foo property.');
@@ -163,5 +167,34 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   it('re-throws the full Error object if one is thrown in the action', async () => {
     const ex = await catchExample('throw --message foo --includeStack');
     expect(ex.stack).toMatch('src/example.ts');
+  });
+
+  it('usage "is not allowed" if provided value is not one of allowedValues', async () => {
+    const ex = await catchExample('echoFooOrBar --fooOrBar baz');
+    expect(ex).toMatch('is not allowed');
+  });
+
+  it('throws "unexpected typeName" if an option has an invalid typeName', async () => {
+    const ex = await catchExample('invalidTypeName');
+    expect(ex.message).toMatch('unexpected typeName');
+  });
+
+  it('usage string contains allowedValues if there are any', async () => {
+    const ex = await catchExample('echoFooOrBar --help');
+    expect(ex).toMatch('Allowed values { foo, bar }');
+  });
+
+  it('does not throw if supplied value is one of allowedValues', async () => {
+    expect(await example('echoFooOrBar --fooOrBar bar')).toBe('bar');
+  });
+
+  it('shows proper usage for typeName string[] with defaultValue', async () => {
+    expect(await catchExample('echoWords --help')).toMatch(
+      "Default = ['foo', 'bar', 'baz']",
+    );
+  });
+
+  it('can use a defaultValue that is an array', async () => {
+    expect(await example('echoWords')).toBe('foo bar baz');
   });
 });

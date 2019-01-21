@@ -24,6 +24,44 @@ const echoCommand = leaf({
   },
 });
 
+const echoFooOrBarCommand = leaf({
+  commandName: 'echoFooOrBar',
+  options: {
+    fooOrBar: option({
+      typeName: 'string',
+      allowedValues: ['foo', 'bar'],
+    }),
+  },
+  action({ fooOrBar }) {
+    return fooOrBar;
+  },
+});
+
+const echoWordsCommand = leaf({
+  commandName: 'echoWords',
+  options: {
+    words: option({
+      typeName: 'string[]',
+      defaultValue: ['foo', 'bar', 'baz'],
+    }),
+  },
+  action({ words }) {
+    return words.join(' ');
+  },
+});
+
+const invalidTypeNameCommand = leaf({
+  commandName: 'invalidTypeName',
+  options: {
+    foo: option({
+      typeName: 'lenny' as 'string',
+    }),
+  },
+  action({ foo }) {
+    return foo;
+  },
+});
+
 const throwCommand = leaf({
   commandName: 'throw',
   description: 'Throw a message to the console',
@@ -106,7 +144,7 @@ const readFileCommand = leaf({
   },
 });
 
-const getFoo = leaf({
+export const getFoo = leaf({
   commandName: 'get-foo',
   options: {
     json: option({
@@ -129,6 +167,9 @@ export const rootCommand = branch({
     Its only purpose is to demonstrate features.
     This is an example of a multi-line command description.`,
   subcommands: [
+    echoFooOrBarCommand,
+    echoWordsCommand,
+    invalidTypeNameCommand,
     getFoo,
     readFileCommand,
     mathBranch,

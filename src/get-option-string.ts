@@ -48,7 +48,10 @@ export function getOptionString(optionName: string, option: Option<TypeName>) {
       break;
     default:
       // In this code block `typeName` should have type `never`.
-      throw new Error(`Unexpected option type "${typeName}"`);
+      throw new Error(`Option "${optionName}" has unexpected typeName "${typeName}"`);
+  }
+  if (typeof option.allowedValues !== 'undefined') {
+    descriptionLines.push(`Allowed values { ${option.allowedValues.join(', ')} }`);
   }
   const defaultValueString = convertDefaultValueToString(getOptionDefaultValue(option));
   if (defaultValueString) {
