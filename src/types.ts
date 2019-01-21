@@ -17,10 +17,15 @@ export type Value<T extends TypeName> = T extends 'string'
 
 export type DefaultValue<T extends TypeName> = T extends 'boolean' ? false : Value<T>;
 
+type AllowedValues<T extends TypeName> = T extends 'number' | 'string'
+  ? Value<T>[]
+  : never;
+
 export type Option<T extends TypeName> = {
   typeName: T;
   description?: string;
   defaultValue?: DefaultValue<T>;
+  allowedValues?: AllowedValues<T>;
 };
 
 export type Options = {

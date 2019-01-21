@@ -21,7 +21,7 @@ export function getOptionDefaultValue(
 
 export function getOptionValue(
   optionName: string,
-  option: Pick<Option<TypeName>, 'typeName' | 'defaultValue'>,
+  option: Pick<Option<TypeName>, 'typeName' | 'defaultValue' | 'allowedValues'>,
   rawValues: RawNamedArgs[string],
 ) {
   let value: Value<TypeName>;
@@ -83,6 +83,11 @@ export function getOptionValue(
         break;
       default:
         throw new Error(`Option "${optionName}" has invalid type "${option.typeName}"`);
+    }
+  }
+  if (typeof option.allowedValues !== 'undefined') {
+    if (!(option.allowedValues.includes as any)(value)) {
+      throw new UsageError(`Option "${optionName}" value "${value}" is not allowed`);
     }
   }
   return value;
