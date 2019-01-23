@@ -1,6 +1,6 @@
 import { NamedArgs, Options, RawNamedArgs, Command } from './types';
 import { getOptionValue } from './get-option-value';
-import { UsageError } from './usage-error';
+import { UsageError } from '@carnesen/usage-error';
 import { LEAF } from './constants';
 
 export function callAction(commandStack: Command[], rawNamedArgs: RawNamedArgs) {
