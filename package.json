@@ -24,11 +24,11 @@
   },
   "dependencies": {
     "@carnesen/run-and-exit": "0.1.0",
+    "@carnesen/usage-error": "0.0.0",
     "@types/redent": "2.0.0",
     "redent": "2.0.0"
   },
   "devDependencies": {
-    "@carnesen/coded-error": "0.0.0",
     "@carnesen/tsconfig": "0.1.0",
     "@carnesen/tslint-config": "0.1.2",
     "@types/jest": "23.3.12",

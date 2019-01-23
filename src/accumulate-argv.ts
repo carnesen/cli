@@ -1,5 +1,5 @@
+import { UsageError } from '@carnesen/usage-error';
 import { RawNamedArgs } from './types';
-import { UsageError } from './usage-error';
 
 export type AccumulatedArgv = {
   maybeCommandNames: string[];

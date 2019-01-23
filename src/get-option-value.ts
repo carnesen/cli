@@ -1,5 +1,5 @@
 import { TypeName, Value, Option, RawNamedArgs } from './types';
-import { UsageError } from './usage-error';
+import { UsageError } from '@carnesen/usage-error';
 
 function convertToNumber(rawValue: string) {
   let value: number = NaN;

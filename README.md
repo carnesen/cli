@@ -123,7 +123,7 @@ const { promisify } = require('util');
 
 ## API
 
-### option({typeName, description, defaultValue, allowedValue})
+### option({typeName, description, defaultValue, allowedValues})
 A factory function for creating "option" arguments for a CLI. Returns the passed object. In a JavaScript application, strictly speaking the `option` factory isn't necessary since the compiled .js code is just `const option = opt => opt`. It's still highly recommended though for readability and also because it may be required in a future version of this library.
 
 #### typeName
@@ -152,7 +152,7 @@ const notOkOption = option({
 ```
 
 #### allowedValues
-(Optional) Only available for `typeName = 'string' | 'number'`. An array of values that are valid for this option. If any other value is supplied, the CLI prints an error message and usage text.
+(Optional) Only available for `typeName = 'string' | 'number'`. An array of values that are valid for this option. If any other value is supplied, the CLI prints an error message and usage text. Currently the TypeScript type of named argument passed to `action` is not constrained by `allowedValues`.
 
 ### leaf({commandName, description, options, action})
 A factory for creating commands that comprise a CLI. It returns the passed object with an additional property `commandType` set to a unique identifier. The `commandType` property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on discriminated unions.

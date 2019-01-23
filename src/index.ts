@@ -27,4 +27,4 @@ export const cli = (rootCommand: Branch | Leaf<any>, argv = process.argv.slice(2
 };
 
 export { assembleCli } from './assemble-cli';
-export { UsageError } from './usage-error';
+export { UsageError } from '@carnesen/usage-error';
