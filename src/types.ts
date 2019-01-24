@@ -21,11 +21,18 @@ type AllowedValues<T extends TypeName> = T extends 'number' | 'string'
   ? Value<T>[]
   : never;
 
+type ValidationMessage = string | undefined;
+
+export type Validate<T extends TypeName> = (
+  value: Value<T>,
+) => Promise<ValidationMessage> | ValidationMessage;
+
 export type Option<T extends TypeName> = {
   typeName: T;
   description?: string;
   defaultValue?: DefaultValue<T>;
   allowedValues?: AllowedValues<T>;
+  validate?: Validate<T>;
 };
 
 export type Options = {

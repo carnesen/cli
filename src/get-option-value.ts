@@ -1,5 +1,5 @@
 import { TypeName, Value, Option, RawNamedArgs } from './types';
-import { UsageError } from '@carnesen/usage-error';
+import { UsageError } from './usage-error';
 
 function convertToNumber(rawValue: string) {
   let value: number = NaN;
@@ -21,7 +21,7 @@ export function getOptionDefaultValue(
 
 export function getOptionValue(
   optionName: string,
-  option: Pick<Option<TypeName>, 'typeName' | 'defaultValue' | 'allowedValues'>,
+  option: Option<TypeName>,
   rawValues: RawNamedArgs[string],
 ) {
   let value: Value<TypeName>;
@@ -85,9 +85,9 @@ export function getOptionValue(
         throw new Error(`Option "${optionName}" has invalid type "${option.typeName}"`);
     }
   }
-  if (typeof option.allowedValues !== 'undefined') {
+  if (Array.isArray(option.allowedValues)) {
     if (!(option.allowedValues.includes as any)(value)) {
-      throw new UsageError(`Option "${optionName}" value "${value}" is not allowed`);
+      throw new UsageError(`Value "${value}" is not allowed for option "${optionName}"`);
     }
   }
   return value;

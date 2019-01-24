@@ -197,4 +197,14 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   it('can use a defaultValue that is an array', async () => {
     expect(await example('echoWords')).toBe('foo bar baz');
   });
+
+  it('throws usage if validate returns a truthy string', async () => {
+    expect(await catchExample('absolute-cat --path foo')).toMatch('must be absolute');
+  });
+
+  it('does not throw usage if validate does not return a truthy string', async () => {
+    expect(await example(`absolute-cat --path ${__filename}`)).toMatch(
+      'does not throw usage',
+    );
+  });
 });

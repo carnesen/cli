@@ -1,6 +1,7 @@
 import { promisify } from 'util';
 import { option, leaf, cli, branch } from '.';
 import { readFile } from 'fs';
+import { isAbsolute } from 'path';
 
 const messageOptions = {
   message: option({
@@ -144,6 +145,28 @@ const readFileCommand = leaf({
   },
 });
 
+const absoluteCat = leaf({
+  commandName: 'absolute-cat',
+  description: "Print a file's contents",
+  options: {
+    path: option({
+      typeName: 'string',
+      description: 'An absolute path',
+      defaultValue: __filename,
+      validate(str) {
+        if (!isAbsolute(str)) {
+          return 'path must be absolute';
+        }
+        return '';
+      },
+    }),
+  },
+  action: async ({ path }) => {
+    const contents = await promisify(readFile)(path, { encoding: 'utf8' });
+    return contents;
+  },
+});
+
 export const getFoo = leaf({
   commandName: 'get-foo',
   options: {
@@ -167,6 +190,7 @@ export const rootCommand = branch({
     Its only purpose is to demonstrate features.
     This is an example of a multi-line command description.`,
   subcommands: [
+    absoluteCat,
     echoFooOrBarCommand,
     echoWordsCommand,
     invalidTypeNameCommand,

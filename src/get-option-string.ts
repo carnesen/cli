@@ -38,10 +38,10 @@ export function getOptionString(optionName: string, option: Option<TypeName>) {
       optionUsage += ' <num>';
       break;
     case 'string[]':
-      optionUsage += ' <str0> [<str1> ...]';
+      optionUsage += ' <str0> [...]';
       break;
     case 'number[]':
-      optionUsage += ' <num0> [<num1> ...]';
+      optionUsage += ' <num0> [...]';
       break;
     case 'json':
       optionUsage += ' <json>';
