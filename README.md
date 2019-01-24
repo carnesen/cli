@@ -224,9 +224,6 @@ runAndExit(assembleCli(rootCommand), argv);
 ```
 `assembleCli` is exported separately to make it easier for users to write unit tests for their CLI. See [src/\_\_tests\_\_/cli.test.ts](src/__tests__/cli.test.ts) for an example of how to unit test a `@carnesen/cli` CLI.
 
-## Validation
-This library automatically validates that the passed command-line arguments can be cast to the types specified by the options' `typeName`s. Additional validation can be implemented in the bodies of your `action`s. 
-
 ## More information
 This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/__tests__) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
 
