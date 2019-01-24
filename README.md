@@ -12,15 +12,19 @@ This package includes runtime JavaScript files suitable for Node.js >=8 as well 
 
 ## Usage
 
+Here is an example of a Node.js CLI written in JavaScript:
+
 ```js
+// readme-cli.js
 const { option, leaf, branch, cli } = require('@carnesen/cli');
 const { promisify } = require('util');
 const { readFile } = require('fs');
+const { isAbsolute } = require('path');
 // ^^ In TypeScript replace "const ... require" with "import ... from".
 // Other than that the remainder of this example is the same in TypeScript.
 
 // A "leaf" command defines an "action" function
-const multiplyCommand = leaf({
+const multiply = leaf({
   commandName: 'multiply',
   description: 'Multiply numbers',
   options: {
@@ -31,7 +35,7 @@ const multiplyCommand = leaf({
       typeName: 'boolean',
     }),
   },
-  action: ({ numbers, squareTheResult }) => {
+  action({ numbers, squareTheResult }) {
     const multiplied = numbers.reduce((a, b) => a * b, 1);
     if (squareTheResult) {
       return multiplied * multiplied;
@@ -40,17 +44,23 @@ const multiplyCommand = leaf({
   }
 });
 
-const catCommand = leaf({
+const cat = leaf({
   commandName: 'cat',
   description: 'Print the contents of a file',
   options: {
     filePath: option({
       typeName: 'string',
-      description: 'An absolute or relative path',
+      description: 'An absolute path',
       defaultValue: __filename,
+      validate(value) {
+        if (isAbsolute(value)) {
+          return;
+        }
+        return 'File path must be absolute'
+      }
     }),
   },
-  action: async ({ filePath }) => {
+  async action({ filePath }) {
     const contents = await promisify(readFile)(filePath, { encoding: 'utf8' });
     return contents;
   },
@@ -63,7 +73,7 @@ const rootCommand = branch({
   description: `
     This is an example command-line interface (CLI).
     Its only purpose is to demonstrate features.`,
-  subcommands: [multiplyCommand, catCommand],
+  subcommands: [multiply, cat],
 });
 
 if (require.main === module) {
@@ -123,7 +133,7 @@ const { promisify } = require('util');
 
 ## API
 
-### option({typeName, description, defaultValue, allowedValues})
+### option({typeName, description, defaultValue, allowedValues, validate})
 A factory function for creating "option" arguments for a CLI. Returns the passed object. In a JavaScript application, strictly speaking the `option` factory isn't necessary since the compiled .js code is just `const option = opt => opt`. It's still highly recommended though for readability and also because it may be required in a future version of this library.
 
 #### typeName
@@ -153,6 +163,9 @@ const notOkOption = option({
 
 #### allowedValues
 (Optional) Only available for `typeName = 'string' | 'number'`. An array of values that are valid for this option. If any other value is supplied, the CLI prints an error message and usage text. Currently the TypeScript type of named argument passed to `action` is not constrained by `allowedValues`.
+
+#### validate
+(Optional) `(value) => Promise<string | undefined> | string | undefined`. This function receives the parsed value of the option and must return a `string` or `undefined` or a `Promise` that resolves to a `string` or `undefined`. If the returned/resolved value is a string, it's printed to the console as an error message along with the proper usage for that command.
 
 ### leaf({commandName, description, options, action})
 A factory for creating commands that comprise a CLI. It returns the passed object with an additional property `commandType` set to a unique identifier. The `commandType` property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on discriminated unions.
@@ -211,10 +224,14 @@ runAndExit(assembleCli(rootCommand), argv);
 ```
 `assembleCli` is exported separately to make it easier for users to write unit tests for their CLI. See [src/\_\_tests\_\_/cli.test.ts](src/__tests__/cli.test.ts) for an example of how to unit test a `@carnesen/cli` CLI.
 
+## Validation
+This library automatically validates that the passed command-line arguments can be cast to the types specified by the options' `typeName`s. Additional validation can be implemented in the bodies of your `action`s. 
+
 ## More information
 This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/__tests__) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
 
 ## Related
+- [@carnesen/usage-error](https://github.com/carnesen/usage-error): An `Error` class with property "code" set to `'USAGE'`
 - [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the returned/resolved/thrown/rejected value, and `process.exit`
 - [@carnesen/coded-error](https://github.com/carnesen/coded-error): An enhanced `Error` class with additional properties "code" and "data"
 - [@carnesen/tslint-config](https://github.com/carnesen/tslint-config): TSLint configurations for `@carnesen` projects

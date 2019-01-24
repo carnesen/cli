@@ -1,4 +1,4 @@
-import { UsageError } from '@carnesen/usage-error';
+import { UsageError } from './usage-error';
 import { RawNamedArgs } from './types';
 
 export type AccumulatedArgv = {

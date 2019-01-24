@@ -1,7 +1,5 @@
-import { UsageError } from '@carnesen/usage-error';
-
 import { Leaf, Branch } from './types';
-import { callAction } from './call-action';
+import { createCallAction } from './create-call-action';
 import { accumulateCommandStack } from './accumulate-command-stack';
 import { accumulateArgv } from './accumulate-argv';
 import { getUsageString } from './get-usage-string';
@@ -19,9 +17,10 @@ export function assembleCli(rootCommand: Branch | Leaf<any>) {
         throw getUsageString(commandStack);
       }
 
-      return await callAction(commandStack, rawNamedArgs);
+      const callAction = createCallAction(commandStack, rawNamedArgs);
+      return await callAction();
     } catch (ex) {
-      if (ex && ex.code === UsageError.USAGE) {
+      if (ex && ex.code === 'USAGE') {
         throw getUsageString(commandStack, ex.message);
       }
       throw ex;

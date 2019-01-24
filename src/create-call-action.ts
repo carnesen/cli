@@ -1,9 +1,11 @@
-import { NamedArgs, Options, RawNamedArgs, Command } from './types';
+import { NamedArgs, Options, RawNamedArgs, Command, Validate, TypeName } from './types';
 import { getOptionValue } from './get-option-value';
-import { UsageError } from '@carnesen/usage-error';
+import { UsageError } from './usage-error';
 import { LEAF } from './constants';
 
-export function callAction(commandStack: Command[], rawNamedArgs: RawNamedArgs) {
+type CallValidate = () => ReturnType<Validate<TypeName>>;
+
+export function createCallAction(commandStack: Command[], rawNamedArgs: RawNamedArgs) {
   const command = commandStack.slice(-1)[0];
   if (command.commandType !== LEAF) {
     // At this point we've processed all "command name" args,
@@ -13,16 +15,29 @@ export function callAction(commandStack: Command[], rawNamedArgs: RawNamedArgs) 
   const { action, options } = command;
   const namedArgs: NamedArgs<Options> = {};
   const restRawNamedArgs = { ...rawNamedArgs };
+  const callValidates: CallValidate[] = [];
   if (options) {
     for (const [optionName, option] of Object.entries(options)) {
       const rawValues = restRawNamedArgs[optionName];
       delete restRawNamedArgs[optionName];
-      namedArgs[optionName] = getOptionValue(optionName, option, rawValues);
+      const optionValue = getOptionValue(optionName, option, rawValues);
+      namedArgs[optionName] = optionValue;
+      if (typeof option.validate === 'function') {
+        callValidates.push(() => option.validate!(optionValue));
+      }
     }
   }
   const restOptionNames = Object.keys(restRawNamedArgs);
   if (restOptionNames.length > 0) {
     throw new UsageError(`Unknown option "--${restOptionNames[0]}"`);
   }
-  return action(namedArgs);
+  return async function callAction() {
+    for (const callValidate of callValidates) {
+      const message = await callValidate();
+      if (message) {
+        throw new UsageError(message);
+      }
+    }
+    return action(namedArgs);
+  };
 }

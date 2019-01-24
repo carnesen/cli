@@ -1,12 +1,13 @@
-// example-cli.js
+// readme-cli.js
 const { option, leaf, branch, cli } = require('./lib');
 const { promisify } = require('util');
 const { readFile } = require('fs');
+const { isAbsolute } = require('path');
 // ^^ In TypeScript replace "const ... require" with "import ... from".
 // Other than that the remainder of this example is the same in TypeScript.
 
 // A "leaf" command defines an "action" function
-const multiplyCommand = leaf({
+const multiply = leaf({
   commandName: 'multiply',
   description: 'Multiply numbers',
   options: {
@@ -17,7 +18,7 @@ const multiplyCommand = leaf({
       typeName: 'boolean',
     }),
   },
-  action: ({ numbers, squareTheResult }) => {
+  action({ numbers, squareTheResult }) {
     const multiplied = numbers.reduce((a, b) => a * b, 1);
     if (squareTheResult) {
       return multiplied * multiplied;
@@ -26,17 +27,23 @@ const multiplyCommand = leaf({
   }
 });
 
-const catCommand = leaf({
+const cat = leaf({
   commandName: 'cat',
   description: 'Print the contents of a file',
   options: {
     filePath: option({
       typeName: 'string',
-      description: 'An absolute or relative path',
+      description: 'An absolute path',
       defaultValue: __filename,
+      validate(value) {
+        if (isAbsolute(value)) {
+          return;
+        }
+        return 'File path must be absolute'
+      }
     }),
   },
-  action: async ({ filePath }) => {
+  async action({ filePath }) {
     const contents = await promisify(readFile)(filePath, { encoding: 'utf8' });
     return contents;
   },
@@ -49,7 +56,7 @@ const rootCommand = branch({
   description: `
     This is an example command-line interface (CLI).
     Its only purpose is to demonstrate features.`,
-  subcommands: [multiplyCommand, catCommand],
+  subcommands: [multiply, cat],
 });
 
 if (require.main === module) {
