@@ -204,5 +204,5 @@ export const rootCommand = branch({
 });
 
 if (module === require.main) {
-  cli(rootCommand);
+  cli(rootCommand)();
 }

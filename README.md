@@ -68,7 +68,7 @@ const cat = leaf({
 
 // A "branch" command is a container for subcommands which can
 // themselves be either "branch" commands or "leaf" commands
-const rootCommand = branch({
+const root = branch({
   commandName: 'readme-cli',
   description: `
     This is an example command-line interface (CLI).
@@ -77,12 +77,12 @@ const rootCommand = branch({
 });
 
 if (require.main === module) {
-  cli(rootCommand);
+  cli(root)();
 }
 
-module.exports = rootCommand;
+module.exports = { root, cat, multiply };
 ```
-The `cli(rootCommand)` statement near the end is the one that does the heavy lifting of parsing the command-line arguments and running the appropriate command. It's wrapped in the `require.main === module` conditional so that it will only be called [if this file has been run directly](https://nodejs.org/api/modules.html). That makes it easier to unit test `rootCommand` separately.
+The `cli(root)` statement near the end is the one that does the heavy lifting of parsing the command-line arguments and running the appropriate command. It's wrapped in the `require.main === module` conditional so that it will only be called [if this file has been run directly](https://nodejs.org/api/modules.html). That makes it easier to unit test the commands separately.
 
 Here's how that behaves as a CLI. If no arguments are passed, it prints the top-level usage:
 ```
@@ -133,11 +133,11 @@ const { promisify } = require('util');
 
 ## API
 
-### option({typeName, description, defaultValue, allowedValues, validate})
-A factory function for creating "option" arguments for a CLI. Returns the passed object. In a JavaScript application, strictly speaking the `option` factory isn't necessary since the compiled .js code is just `const option = opt => opt`. It's still highly recommended though for readability and also because it may be required in a future version of this library.
+### option({typeName, description?, defaultValue?, allowedValues?, validate?})
+A factory function for CLI parameters. Returns the passed object.
 
 #### typeName
-One of `'string' | 'string[]' | 'boolean' | 'number' | 'number[]' | 'json'`
+`'string' | 'string[]' | 'boolean' | 'number' | 'number[]' | 'json'`
 
 #### description
 (Optional) A string that will be included in `Usage:` if present.
@@ -167,7 +167,7 @@ const notOkOption = option({
 #### validate
 (Optional) `(value) => Promise<string | undefined> | string | undefined`. This function receives the parsed value of the option and must return a `string` or `undefined` or a `Promise` that resolves to a `string` or `undefined`. If the returned/resolved value is a string, it's printed to the console as an error message along with the proper usage for that command.
 
-### leaf({commandName, description, options, action})
+### leaf({commandName, description?, options?, action})
 A factory for creating commands that comprise a CLI. It returns the passed object with an additional property `commandType` set to a unique identifier. The `commandType` property is used internally to discriminate between "leaf" and "branch" commands. See the [advanced TypeScript docs](https://www.typescriptlang.org/docs/handbook/advanced-types.html) for more information on discriminated unions.
 
 #### commandName
@@ -208,16 +208,19 @@ If this "branch" is not the root command, `commandName` is the string that the u
 #### subcommands
 An array of `branch` and/or `leaf` objects.
 
-### cli(rootCommand, argv)
-Invokes an `action`, `console.log`s the returned/resolved value or exception, and exits.
+### cli(root): asyncFunc
+Returns a function that invokes an `action`, `console.log`s the result, and exits
 
-#### rootCommand
-A `leaf` or `branch`.
+#### root
+A `leaf` or `branch`
 
-#### argv
+#### asyncFunc
+`(argv?) => Promise<void>`: Typically `cli` and the function it returns are invoked all in one line as `cli(root)()`.
+
+##### argv
 (Optional) A `string[]` array of command-line arguments. Defaults to `process.argv.slice(2)`.
 
-### assembleCli(command)
+### testCli(command)
 The body of the `cli` function described above is a single statement:
 ```ts
 runAndExit(assembleCli(rootCommand), argv);
@@ -228,8 +231,7 @@ runAndExit(assembleCli(rootCommand), argv);
 This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/__tests__) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
 
 ## Related
-- [@carnesen/usage-error](https://github.com/carnesen/usage-error): An `Error` class with property "code" set to `'USAGE'`
-- [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the returned/resolved/thrown/rejected value, and `process.exit`
+- [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the result, and `process.exit`
 - [@carnesen/coded-error](https://github.com/carnesen/coded-error): An enhanced `Error` class with additional properties "code" and "data"
 - [@carnesen/tslint-config](https://github.com/carnesen/tslint-config): TSLint configurations for `@carnesen` projects
 - [@carnesen/tsconfig](https://github.com/carnesen/tsconfig): TypeScript configurations for `@carnesen` projects
