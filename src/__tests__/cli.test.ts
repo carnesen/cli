@@ -1,22 +1,10 @@
 import { assembleCli } from '../assemble-cli';
 import { rootCommand } from '../example';
+import { testCli, testCliThrows } from '../factories';
 
-const exampleAsyncFunc = assembleCli(rootCommand);
+const example = testCli(rootCommand);
 
-const example = (str?: string) => {
-  const argv = str ? str.split(' ') : [];
-  return exampleAsyncFunc(argv);
-};
-
-const catchExample = async (str?: string) => {
-  try {
-    await example(str);
-    throw Symbol();
-    // ^^ This line is never meant to be reached
-  } catch (ex) {
-    return ex;
-  }
-};
+const catchExample = testCliThrows(rootCommand);
 
 describe(`async function returned by ${assembleCli.name}`, () => {
   it("runs the provided command's execute function if proper args are provided", async () => {
