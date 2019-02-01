@@ -1,5 +1,5 @@
-import { root } from '..';
-import { testCli, testCliThrows } from '../../factories';
+import { root } from '.';
+import { testCli, testCliThrows } from '..';
 
 const example = testCli(root);
 

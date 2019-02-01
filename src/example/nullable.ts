@@ -8,17 +8,14 @@ export const nullable = leaf({
       description: 'An option with "nullable" set to true',
       nullable: true,
     }),
-    notNullable: option({
-      typeName: 'string',
-      description: 'An option with "nullable" set to false',
-      nullable: false,
-    }),
   },
-  action({ nullable, notNullable }) {
+  action({ nullable }) {
     if (nullable === null) {
-      return nullable;
+      // $ExpectType null
+      nullable;
+      return 'the nullable arg is null';
     }
-    return notNullable;
+    return nullable;
   },
 });
 
