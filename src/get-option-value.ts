@@ -13,7 +13,7 @@ function convertToNumber(rawValue: string) {
 }
 
 export function getOptionDefaultValue(
-  option: Pick<Option<TypeName>, 'typeName' | 'defaultValue'>,
+  option: Pick<Option<TypeName, boolean>, 'typeName' | 'defaultValue'>,
 ) {
   const defaultValue = option.typeName === 'boolean' ? false : option.defaultValue;
   return defaultValue;
@@ -21,17 +21,21 @@ export function getOptionDefaultValue(
 
 export function getOptionValue(
   optionName: string,
-  option: Option<TypeName>,
+  option: Option<TypeName, boolean>,
   rawValues: RawNamedArgs[string],
 ) {
-  let value: Value<TypeName>;
+  let value: Value<TypeName> | null;
   if (!rawValues) {
     // option was NOT provided as command-line argument
     const defaultValue = getOptionDefaultValue(option);
-    if (typeof defaultValue === 'undefined') {
-      throw new UsageError(`option "${optionName}" is required`);
+    if (typeof defaultValue !== 'undefined') {
+      value = defaultValue;
+    } else {
+      if (option.nullable !== true) {
+        throw new UsageError(`Option "${optionName}" is required`);
+      }
+      value = null;
     }
-    value = defaultValue;
   } else {
     // option WAS provided as command-line argument
     switch (option.typeName) {

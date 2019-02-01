@@ -4,8 +4,9 @@ import { TypeName, Option, Options, Leaf, Branch } from './types';
 import { assembleCli } from './assemble-cli';
 import { LEAF, BRANCH } from './constants';
 
-export const option = <T extends TypeName>(opt: Option<T>) => opt;
+export const option = <T extends TypeName, U extends boolean>(opt: Option<T, U>) => opt;
 
+// The "commandType" field is assigned internally by the framework
 type ExcludeCommandType<T extends { commandType: any }> = Pick<
   T,
   Exclude<keyof T, 'commandType'>
