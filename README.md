@@ -30,9 +30,11 @@ const multiply = leaf({
   options: {
     numbers: option({
       typeName: 'number[]',
+      nullable: false,
     }),
     squareTheResult: option({
       typeName: 'boolean',
+      nullable: false,
     }),
   },
   action({ numbers, squareTheResult }) {
@@ -50,6 +52,7 @@ const cat = leaf({
   options: {
     filePath: option({
       typeName: 'string',
+      nullable: false,
       description: 'An absolute path',
       defaultValue: __filename,
       validate(value) {
@@ -133,11 +136,14 @@ const { promisify } = require('util');
 
 ## API
 
-### option({typeName, description?, defaultValue?, allowedValues?, validate?})
+### option({typeName, nullable, description?, defaultValue?, allowedValues?, validate?})
 A factory function for CLI parameters. Returns the passed object.
 
 #### typeName
 `'string' | 'string[]' | 'boolean' | 'number' | 'number[]' | 'json'`
+
+#### nullable
+`boolean`. If `true`, `null` will be supplied to `action` if this option has neither a default value nor has a value been passed. If `false`, all options must have a default value or be passed as an argument.
 
 #### description
 (Optional) A string that will be included in `Usage:` if present.
