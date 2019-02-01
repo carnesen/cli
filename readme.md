@@ -12,19 +12,16 @@ This package includes runtime JavaScript files suitable for Node.js >=8 as well 
 
 ## Usage
 
-Here is an example of a Node.js CLI written in JavaScript:
+Here is an example of a Node.js CLI written in TypeScript:
 
-```js
-// readme-cli.js
-const { option, leaf, branch, cli } = require('@carnesen/cli');
-const { promisify } = require('util');
-const { readFile } = require('fs');
-const { isAbsolute } = require('path');
-// ^^ In TypeScript replace "const ... require" with "import ... from".
-// Other than that the remainder of this example is the same in TypeScript.
+```ts
+import { option, leaf, branch, cli } from '@carnesen/cli';
+import { promisify } from 'util';
+import { readFile } from 'fs';
+import { isAbsolute } = from 'path';
 
 // A "leaf" command defines an "action" function
-const multiply = leaf({
+export const multiply = leaf({
   commandName: 'multiply',
   description: 'Multiply numbers',
   options: {
@@ -46,7 +43,7 @@ const multiply = leaf({
   }
 });
 
-const cat = leaf({
+export const cat = leaf({
   commandName: 'cat',
   description: 'Print the contents of a file',
   options: {
@@ -71,7 +68,7 @@ const cat = leaf({
 
 // A "branch" command is a container for subcommands which can
 // themselves be either "branch" commands or "leaf" commands
-const root = branch({
+export const root = branch({
   commandName: 'readme-cli',
   description: `
     This is an example command-line interface (CLI).
@@ -82,10 +79,8 @@ const root = branch({
 if (require.main === module) {
   cli(root)();
 }
-
-module.exports = { root, cat, multiply };
 ```
-The `cli(root)` statement near the end is the one that does the heavy lifting of parsing the command-line arguments and running the appropriate command. It's wrapped in the `require.main === module` conditional so that it will only be called [if this file has been run directly](https://nodejs.org/api/modules.html). That makes it easier to unit test the commands separately.
+The `cli(root)` statement near the end is the one that does the heavy lifting of parsing the command-line arguments and running the appropriate command. It's wrapped in the `require.main === module` conditional so that it will only be called [if this file has been run directly](https://nodejs.org/api/modules.html). That makes it easier to unit test the exported leaf commands separately.
 
 Here's how that behaves as a CLI. If no arguments are passed, it prints the top-level usage:
 ```
@@ -133,9 +128,7 @@ const { option, leaf, branch, cli } = require('@carnesen/cli');
 const { promisify } = require('util');
 ...
 ```
-
 ## API
-
 ### option({typeName, nullable, description?, defaultValue?, allowedValues?, validate?})
 A factory function for CLI parameters. Returns the passed object.
 
@@ -234,7 +227,7 @@ runAndExit(assembleCli(rootCommand), argv);
 `assembleCli` is exported separately to make it easier for users to write unit tests for their CLI. See [src/\_\_tests\_\_/cli.test.ts](src/__tests__/cli.test.ts) for an example of how to unit test a `@carnesen/cli` CLI.
 
 ## More information
-This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/__tests__) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
+This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/example) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
 
 ## Related
 - [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the result, and `process.exit`
