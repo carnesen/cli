@@ -1,29 +1,28 @@
-import { assembleCli } from '../assemble-cli';
-import { rootCommand } from '../example';
-import { testCli, testCliThrows } from '../factories';
+import { root } from '..';
+import { testCli, testCliThrows } from '../../factories';
 
-const example = testCli(rootCommand);
+const example = testCli(root);
 
-const catchExample = testCliThrows(rootCommand);
+const catchExample = testCliThrows(root);
 
-describe(`async function returned by ${assembleCli.name}`, () => {
+describe(`root command`, () => {
   it("runs the provided command's execute function if proper args are provided", async () => {
     const returnValue = await example('echo --message foo');
     expect(returnValue).toBe('foo');
   });
 
-  it('throws a "Usage" string with rootCommand.commandName', async () => {
-    const regExp = new RegExp(`^Usage: ${rootCommand.commandName} <subcommand>`);
+  it('throws a "Usage" string with root.commandName', async () => {
+    const regExp = new RegExp(`^Usage: ${root.commandName} <subcommand>`);
     expect(await catchExample()).toMatch(regExp);
   });
 
   it('throws a "Usage" string for a subcommand tree if no sub-subcommand', async () => {
-    const regExp = new RegExp(`^Usage: ${rootCommand.commandName} math <subcommand>`);
+    const regExp = new RegExp(`^Usage: ${root.commandName} math <subcommand>`);
     expect(await catchExample('math')).toMatch(regExp);
   });
 
   it('throws a "Usage" string for a subcommand tree if sub-subcommand is help', async () => {
-    const regExp = new RegExp(`^Usage: ${rootCommand.commandName} math <subcommand>`);
+    const regExp = new RegExp(`^Usage: ${root.commandName} math <subcommand>`);
     expect(await catchExample('math help')).toMatch(regExp);
   });
 
@@ -37,7 +36,7 @@ describe(`async function returned by ${assembleCli.name}`, () => {
 
   it('throws "Error" and "Usage" if required option is not passed', async () => {
     const ex = await catchExample('echo');
-    expect(ex).toMatch(/^Error: option "message" is required/);
+    expect(ex).toMatch(/^Error: Option "message" is required/);
     expect(ex).toMatch(/^Usage/m);
   });
 
@@ -153,8 +152,8 @@ describe(`async function returned by ${assembleCli.name}`, () => {
   });
 
   it('re-throws the full Error object if one is thrown in the action', async () => {
-    const ex = await catchExample('throw --message foo --includeStack');
-    expect(ex.stack).toMatch('src/example.ts');
+    const ex = await catchExample('fail --message foo --includeStack');
+    expect(ex.stack).toMatch('src');
   });
 
   it('usage "is not allowed" if provided value is not one of allowedValues', async () => {

@@ -27,8 +27,9 @@ export type Validate<T extends TypeName> = (
   value: Value<T>,
 ) => Promise<ValidationMessage> | ValidationMessage;
 
-export type Option<T extends TypeName> = {
+export type Option<T extends TypeName, U extends boolean> = {
   typeName: T;
+  nullable: U;
   description?: string;
   defaultValue?: DefaultValue<T>;
   allowedValues?: AllowedValues<T>;
@@ -36,10 +37,16 @@ export type Option<T extends TypeName> = {
 };
 
 export type Options = {
-  [optionName: string]: Option<TypeName>;
+  [optionName: string]: Option<TypeName, boolean>;
 };
 
-export type NamedArgs<O extends Options> = { [K in keyof O]: Value<O[K]['typeName']> };
+export type NamedArg<T extends TypeName, U extends boolean> =
+  | Value<T>
+  | (U extends true ? null : never);
+
+export type NamedArgs<O extends Options> = {
+  [K in keyof O]: NamedArg<O[K]['typeName'], O[K]['nullable']>
+};
 
 export type Command = Branch | Leaf<Options>;
 

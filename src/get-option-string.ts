@@ -21,9 +21,9 @@ function convertDefaultValueToString(defaultValue: any) {
   })`;
 }
 
-export function getOptionString(optionName: string, option: Option<TypeName>) {
+export function getOptionString(optionName: string, option: Option<TypeName, boolean>) {
   const { typeName, description } = option;
-  const descriptionLines = description
+  const blocks = description
     ? redent(description.replace(/^\n/g, ''), 0).split('\n')
     : [];
   let optionUsage = `--${optionName}`;
@@ -50,17 +50,20 @@ export function getOptionString(optionName: string, option: Option<TypeName>) {
       // In this code block `typeName` should have type `never`.
       throw new Error(`Option "${optionName}" has unexpected typeName "${typeName}"`);
   }
+  if (option.nullable === true) {
+    optionUsage = `[${optionUsage}]`;
+  }
   if (typeof option.allowedValues !== 'undefined') {
-    descriptionLines.push(`Allowed values { ${option.allowedValues.join(', ')} }`);
+    blocks.push(`Allowed values { ${option.allowedValues.join(', ')} }`);
   }
   const defaultValueString = convertDefaultValueToString(getOptionDefaultValue(option));
   if (defaultValueString) {
-    descriptionLines.push(defaultValueString);
+    blocks.push(defaultValueString);
   }
   let firstLine = optionUsage;
   const restLines: string[] = [];
   let index = 0;
-  for (const descriptionLine of descriptionLines) {
+  for (const descriptionLine of blocks) {
     if (index === 0) {
       firstLine += ` : ${descriptionLine}`;
     } else {
