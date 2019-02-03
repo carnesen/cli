@@ -54,8 +54,11 @@ export function getOptionString(optionName: string, option: Option<TypeName, boo
     optionUsage = `[${optionUsage}]`;
   }
   if (typeof option.allowedValues !== 'undefined') {
-    const { allowedValues } = option;
-    const allowedValuesString = (allowedValues as string[])
+    const allAllowedValues = [...option.allowedValues];
+    if (typeof option.defaultValue !== 'undefined') {
+      allAllowedValues.unshift(option.defaultValue);
+    }
+    const allowedValuesString = ([...new Set(allAllowedValues)] as string[])
       .map(maybeStr => {
         return typeof maybeStr === 'string' ? singleQuote(maybeStr) : maybeStr;
       })

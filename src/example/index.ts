@@ -9,8 +9,11 @@ import { concat } from './concat';
 import { nullable } from './nullable';
 import { fail } from './fail';
 
+const pkg = require('../../package.json');
+
 export const root = branch({
   commandName: 'example-cli',
+  version: pkg.version,
   description: `
     This is an example command-line interface (CLI).
     Its only purpose is to demonstrate features.
