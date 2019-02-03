@@ -54,7 +54,13 @@ export function getOptionString(optionName: string, option: Option<TypeName, boo
     optionUsage = `[${optionUsage}]`;
   }
   if (typeof option.allowedValues !== 'undefined') {
-    blocks.push(`Allowed values { ${option.allowedValues.join(', ')} }`);
+    const { allowedValues } = option;
+    const allowedValuesString = (allowedValues as string[])
+      .map(maybeStr => {
+        return typeof maybeStr === 'string' ? singleQuote(maybeStr) : maybeStr;
+      })
+      .join(', ');
+    blocks.push(`Allowed values {${allowedValuesString}}`);
   }
   const defaultValueString = convertDefaultValueToString(getOptionDefaultValue(option));
   if (defaultValueString) {

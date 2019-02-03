@@ -1,6 +1,7 @@
 import { option, leaf } from '..';
 
 import { messageOptions } from './message-options';
+import { cli } from '../factories';
 
 export const echo = leaf({
   commandName: 'echo',
@@ -45,3 +46,7 @@ export const echoWordsCommand = leaf({
     return words.join(' ');
   },
 });
+
+if (module === require.main) {
+  cli(echo)();
+}

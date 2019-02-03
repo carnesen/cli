@@ -90,7 +90,14 @@ export function getOptionValue(
     }
   }
   if (Array.isArray(option.allowedValues)) {
-    if (!(option.allowedValues.includes as any)(value)) {
+    const allAllowedValues: (string | number | null)[] = [...option.allowedValues];
+    if (typeof option.defaultValue !== 'undefined') {
+      allAllowedValues.push(option.defaultValue);
+    }
+    if (option.nullable === true) {
+      allAllowedValues.push(null);
+    }
+    if (!(allAllowedValues.includes as any)(value)) {
       throw new UsageError(`Value "${value}" is not allowed for option "${optionName}"`);
     }
   }

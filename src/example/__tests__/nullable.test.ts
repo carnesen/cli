@@ -1,5 +1,5 @@
-import { nullable } from './nullable';
-import { testCli, testCliThrows } from '..';
+import { nullable } from '../nullable';
+import { testCli, testCliThrows } from '../../factories';
 
 const cli = testCli(nullable);
 const cliThrows = testCliThrows(nullable);

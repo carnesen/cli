@@ -1,5 +1,5 @@
-import { root } from '.';
-import { testCli, testCliThrows } from '..';
+import { root } from '..';
+import { testCli, testCliThrows } from '../../factories';
 
 const example = testCli(root);
 
@@ -168,7 +168,7 @@ describe(`root command`, () => {
 
   it('usage string contains allowedValues if there are any', async () => {
     const ex = await catchExample('echoFooOrBar --help');
-    expect(ex).toMatch('Allowed values { foo, bar }');
+    expect(ex).toMatch("Allowed values {'foo', 'bar'}");
   });
 
   it('does not throw if supplied value is one of allowedValues', async () => {
