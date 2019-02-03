@@ -7,9 +7,6 @@ export function accumulateCommandStack(
   maybeCommandNames: string[],
 ) {
   for (const maybeCommandName of maybeCommandNames) {
-    if (maybeCommandName === 'help') {
-      throw new UsageError();
-    }
     const command = commandStack.slice(-1)[0];
     // ^^ Last item in the "commandStack" array
     switch (command.commandType) {
