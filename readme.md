@@ -227,7 +227,7 @@ runAndExit(assembleCli(rootCommand), argv);
 `assembleCli` is exported separately to make it easier for users to write unit tests for their CLI. See [src/\_\_tests\_\_/cli.test.ts](src/__tests__/cli.test.ts) for an example of how to unit test a `@carnesen/cli` CLI.
 
 ## More information
-This library has a couple dozen unit tests with >98% coverage. If you want to see more examples of how it works, [those tests](src/example) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
+This library has a couple dozen unit tests with >90% coverage. If you want to see more examples of how it works, [those tests](src/example) would be a good place to start. If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.
 
 ## Related
 - [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the result, and `process.exit`
