@@ -7,6 +7,7 @@ export const nullable = leaf({
       typeName: 'string',
       description: 'An option with "nullable" set to true',
       nullable: true,
+      allowedValues: ['foo', 'bar'],
     }),
   },
   action({ nullable }) {
