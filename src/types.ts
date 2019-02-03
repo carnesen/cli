@@ -54,6 +54,7 @@ export type Branch = {
   commandType: typeof BRANCH;
   commandName: string;
   description?: string;
+  version?: string;
   subcommands: (Branch | Leaf<any>)[];
 };
 
@@ -62,6 +63,7 @@ export type Leaf<O extends Options> = {
   commandName: string;
   description?: string;
   options?: O;
+  version?: string;
   action: (namedArgs: NamedArgs<O>) => any;
 };
 
