@@ -25,6 +25,8 @@ export function accumulateCommandStack(
         throw new UsageError(
           `Command "${command.commandName}" does not have subcommands`,
         );
+      default:
+        throw new Error('Unexpected command type');
     }
   }
 }
