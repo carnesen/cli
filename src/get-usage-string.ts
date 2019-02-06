@@ -45,10 +45,10 @@ export function getUsageString(commandStack: Command[], errorMessage?: string) {
   }
 
   const paragraphs = [
-    ...errorParagraphs,
     usageParagraph,
     ...descriptionParagraphs,
     ...finalParagraphs,
+    ...errorParagraphs,
   ];
 
   return `${paragraphs.join('\n\n')}\n`;

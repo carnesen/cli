@@ -36,7 +36,7 @@ describe(`root command`, () => {
 
   it('throws "Error" and "Usage" if required option is not passed', async () => {
     const ex = await catchExample('echo');
-    expect(ex).toMatch(/^Error: Option "message" is required/);
+    expect(ex).toMatch(/^Error: Option "message" is required/m);
     expect(ex).toMatch(/^Usage/m);
   });
 
