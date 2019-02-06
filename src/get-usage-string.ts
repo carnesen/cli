@@ -40,6 +40,8 @@ export function getUsageString(commandStack: Command[], errorMessage?: string) {
         }
       }
       break;
+    default:
+      throw new Error('Unexpected command type');
   }
 
   const paragraphs = [
