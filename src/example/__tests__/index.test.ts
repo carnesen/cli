@@ -26,8 +26,10 @@ describe(`root command`, () => {
     expect(await catchExample('math help')).toMatch(regExp);
   });
 
-  it('throws a "Usage" string if --help is passed to an otherwise ok command', async () => {
-    expect(await catchExample('echo --message foo --help')).toMatch(/^Usage:/);
+  it('throws a "Usage" string but no "Error" if --help is passed to an otherwise ok command', async () => {
+    const output = await catchExample('echo --message foo --help');
+    expect(output).toMatch(/^Usage:/);
+    expect(output).not.toMatch(/^Error:/m);
   });
 
   it('throws an "Usage" option string with default value if there is one', async () => {

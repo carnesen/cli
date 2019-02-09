@@ -25,7 +25,9 @@ export function assembleCli(rootCommand: Branch | Leaf<any>) {
           slicedCommandNames = slicedCommandNames.slice(0, indexOfH);
         }
       }
-
+      if (rawNamedArgs['help']) {
+        foundHelp = true;
+      }
       accumulateCommandStack(commandStack, slicedCommandNames);
       // ^^ This mutates commandStack so that we don't have to include it explicity
       // if accumulateCommandStack or the functions that it calls throws a UsageError.
