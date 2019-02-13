@@ -3,7 +3,7 @@ import { getOptionDefaultValue } from './get-option-value';
 import redent = require('redent');
 
 const singleQuote = (str: string) => `'${str}'`;
-
+const stripLeadingNewline = (str: string) => str.replace(/^\n/, '');
 function convertDefaultValueToString(defaultValue: any) {
   if (typeof defaultValue === 'undefined' || defaultValue === false) {
     return '';
@@ -23,8 +23,8 @@ function convertDefaultValueToString(defaultValue: any) {
 
 export function getOptionString(optionName: string, option: Option<TypeName, boolean>) {
   const { typeName, description } = option;
-  const blocks = description
-    ? redent(description.replace(/^\n/g, ''), 0).split('\n')
+  const descriptionLines = description
+    ? redent(stripLeadingNewline(description), 0).split('\n')
     : [];
   let optionUsage = `--${optionName}`;
   switch (typeName) {
@@ -63,22 +63,19 @@ export function getOptionString(optionName: string, option: Option<TypeName, boo
         return typeof maybeStr === 'string' ? singleQuote(maybeStr) : maybeStr;
       })
       .join(', ');
-    blocks.push(`Allowed values {${allowedValuesString}}`);
+    descriptionLines.push(`Allowed values {${allowedValuesString}}`);
   }
   const defaultValueString = convertDefaultValueToString(getOptionDefaultValue(option));
   if (defaultValueString) {
-    blocks.push(defaultValueString);
+    descriptionLines.push(defaultValueString);
   }
   let firstLine = optionUsage;
-  const restLines: string[] = [];
-  let index = 0;
-  for (const descriptionLine of blocks) {
-    if (index === 0) {
-      firstLine += ` : ${descriptionLine}`;
-    } else {
-      restLines.push(redent(descriptionLine, optionUsage.length + 3));
-    }
-    index = index + 1;
+  if (descriptionLines[0]) {
+    firstLine += ` : ${descriptionLines[0]}`;
   }
+  const restLines = redent(
+    descriptionLines.slice(1).join('\n'),
+    optionUsage.length + 3,
+  ).split('\n');
   return [firstLine, ...restLines].join('\n');
 }
