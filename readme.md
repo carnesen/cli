@@ -1,14 +1,6 @@
-# @carnesen/cli [![Build Status](https://travis-ci.org/carnesen/cli.svg?branch=master)](https://travis-ci.org/carnesen/cli)
+# @carnesen/cli [![npm version](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://badge.fury.io/js/%40carnesen%2Fcli) [![Build Status](https://travis-ci.org/carnesen/cli.svg?branch=master)](https://travis-ci.org/carnesen/cli)
 
-A library for building Node.js command-line interfaces (CLIs)
-
-## Install
-
-```
-$ npm install @carnesen/cli
-```
-
-This package includes runtime JavaScript files suitable for Node.js >=8 as well as the corresponding TypeScript type declarations.
+A library for building Node.js command-line interfaces (CLIs). This package includes runtime JavaScript files suitable for Node.js >=8 as well as the corresponding TypeScript type declarations.
 
 ## Usage
 
