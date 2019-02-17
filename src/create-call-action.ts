@@ -22,7 +22,7 @@ export function createCallAction(commandStack: Command[], rawNamedArgs: RawNamed
       delete restRawNamedArgs[optionName];
       const optionValue = getOptionValue(optionName, option, rawValues);
       namedArgs[optionName] = optionValue;
-      if (typeof option.validate === 'function') {
+      if (typeof option.validate === 'function' && optionValue !== null) {
         callValidates.push(() => option.validate!(optionValue));
       }
     }
