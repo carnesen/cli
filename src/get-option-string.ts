@@ -50,7 +50,7 @@ export function getOptionString(optionName: string, option: Option<TypeName, boo
       // In this code block `typeName` should have type `never`.
       throw new Error(`Option "${optionName}" has unexpected typeName "${typeName}"`);
   }
-  if (option.nullable === true) {
+  if (option.nullable === true || typeof option.defaultValue !== 'undefined') {
     optionUsage = `[${optionUsage}]`;
   }
   if (typeof option.allowedValues !== 'undefined') {
@@ -70,12 +70,14 @@ export function getOptionString(optionName: string, option: Option<TypeName, boo
     descriptionLines.push(defaultValueString);
   }
   let firstLine = optionUsage;
-  if (descriptionLines[0]) {
-    firstLine += ` : ${descriptionLines[0]}`;
+  const firstDescriptionLine = descriptionLines[0];
+  if (firstDescriptionLine) {
+    firstLine += ` : ${firstDescriptionLine}`;
   }
-  const restLines = redent(
-    descriptionLines.slice(1).join('\n'),
-    optionUsage.length + 3,
-  ).split('\n');
+  const restDescriptionLines = descriptionLines.slice(1);
+  const restLines =
+    restDescriptionLines.length > 0
+      ? redent(restDescriptionLines.join('\n'), optionUsage.length + 3).split('\n')
+      : [];
   return [firstLine, ...restLines].join('\n');
 }
