@@ -1,72 +1,66 @@
-import { LEAF, BRANCH } from './constants';
-export type TypeName = 'string' | 'string[]' | 'boolean' | 'number' | 'number[]' | 'json';
+import { CLI_BRANCH, CLI_LEAF } from './constants';
 
-export type Value<T extends TypeName> = T extends 'string'
-  ? string
-  : T extends 'boolean'
-  ? boolean
-  : T extends 'number'
-  ? number
-  : T extends 'string[]'
+type ArgvForGetValue<TRequired extends boolean> = TRequired extends true
   ? string[]
-  : T extends 'number[]'
-  ? number[]
-  : T extends 'json'
-  ? any
-  : never;
+  : string[] | undefined;
 
-export type DefaultValue<T extends TypeName> = T extends 'boolean' ? false : Value<T>;
-
-type AllowedValues<T extends TypeName> = T extends 'number' | 'string'
-  ? Value<T>[]
-  : never;
-
-type ValidationMessage = string | undefined;
-
-export type Validate<T extends TypeName> = (
-  value: Value<T>,
-) => Promise<ValidationMessage> | ValidationMessage;
-
-export type Option<T extends TypeName, U extends boolean> = {
-  typeName: T;
-  nullable: U;
+export type CliInput<TValue, TRequired extends boolean = boolean> = {
+  placeholder: string;
+  getValue:
+    | ((argv: ArgvForGetValue<TRequired>) => TValue)
+    | ((argv: ArgvForGetValue<TRequired>) => Promise<TValue>);
   description?: string;
-  defaultValue?: DefaultValue<T>;
-  allowedValues?: AllowedValues<T>;
-  validate?: Validate<T>;
+  required?: TRequired;
+  hidden?: boolean;
 };
 
-export type Options = {
-  [optionName: string]: Option<TypeName, boolean>;
+export type AnyInput = CliInput<any>;
+
+export type ValueFromInput<TInput> = TInput extends CliInput<infer U, any> ? U : never;
+
+export type AnyNamedInputs = {
+  [name: string]: AnyInput;
 };
 
-export type NamedArg<T extends TypeName, U extends boolean> =
-  | Value<T>
-  | (U extends true ? null : never);
-
-export type NamedArgs<O extends Options> = {
-  [K in keyof O]: NamedArg<O[K]['typeName'], O[K]['nullable']>
+export type NamedValues<TNamedInputs extends AnyNamedInputs> = {
+  [K in keyof TNamedInputs]: ValueFromInput<TNamedInputs[K]>;
 };
 
-export type Command = Branch | Leaf<Options>;
-
-export type Branch = {
-  commandType: typeof BRANCH;
-  commandName: string;
+export type CliBranch = {
+  commandType: typeof CLI_BRANCH;
+  name: string;
   description?: string;
-  version?: string;
-  subcommands: (Branch | Leaf<any>)[];
+  hidden?: boolean;
+  subcommands: (CliBranch | CliLeaf<any, any, any>)[];
+  next?: CliBranch | CliLeaf<any, any, any>;
 };
 
-export type Leaf<O extends Options> = {
-  commandType: typeof LEAF;
-  commandName: string;
+export type CliLeaf<
+  TPositionalInput extends AnyInput,
+  TNamedInputs extends AnyNamedInputs,
+  TEscapedInput extends AnyInput
+> = {
+  commandType: typeof CLI_LEAF;
+  name: string;
+  action: (
+    positionalValue: ValueFromInput<TPositionalInput>,
+    namedValues: NamedValues<TNamedInputs>,
+    escapedValue: ValueFromInput<TEscapedInput>,
+  ) => any;
+  positionalInput?: TPositionalInput;
+  namedInputs?: TNamedInputs;
+  escapedInput?: TEscapedInput;
   description?: string;
-  options?: O;
-  version?: string;
-  action: (namedArgs: NamedArgs<O>) => any;
+  hidden?: boolean;
 };
 
-export type RawNamedArgs = {
-  [optionName: string]: string[] | undefined;
-};
+export type Command = CliBranch | CliLeaf<AnyInput, AnyNamedInputs, AnyInput>;
+export type AnyCommand = CliBranch | CliLeaf<any, any, any>;
+
+// The "commandType" field is assigned internally by the framework.
+// This helper function is used to remove that field for the input
+// type of the createLeaf and CliBranch factories.
+export type ExcludeCommandType<T extends { commandType: any }> = Pick<
+  T,
+  Exclude<keyof T, 'commandType'>
+>;
