@@ -15,8 +15,8 @@ describe(CliStringInput.name, () => {
   });
 
   it('returns defaultValue if argv is `undefined` and defaultValue has been provided', () => {
-    const input = CliStringInput({ defaultValue: '0' });
-    expect(input.getValue(undefined)).toBe('0');
+    const input2 = CliStringInput({ defaultValue: '0' });
+    expect(input2.getValue(undefined)).toBe('0');
   });
 
   it('getValue returns the zeroth element of argv', () => {

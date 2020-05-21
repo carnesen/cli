@@ -19,6 +19,7 @@ export const dummyInput: CliInput<string, false> = {
       throw new Error(DUMMY_INPUT_THROWN_INTENTIONALLY);
     }
     if (argv[0] === DUMMY_INPUT_THROW_NON_TRUTHY) {
+      // eslint-disable-next-line no-throw-literal
       throw '';
     }
     return argv[0];

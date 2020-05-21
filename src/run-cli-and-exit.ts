@@ -1,10 +1,11 @@
 import { CliLeaf, CliBranch } from './types';
-
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import { CLI_TERSE_ERROR } from './cli-terse-error';
 import { RED_ERROR } from './constants';
 import { CliArgvInterface, CliEnhancer } from './cli-argv-interface';
 import { UsageString } from './usage-string';
+
+/* eslint-disable no-console */
 
 export async function runCliAndExit(
   rootCommand: CliBranch | CliLeaf<any, any, any>,

@@ -1,5 +1,5 @@
-import { CliNumberArrayInput } from './cli-number-array-input';
 import { runAndCatch } from '@carnesen/run-and-catch';
+import { CliNumberArrayInput } from './cli-number-array-input';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const description = 'foo bar baz';

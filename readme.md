@@ -16,7 +16,7 @@ import {
   CliFlagInput,
   CliNumberArrayInput,
   runCliAndExit,
-} from '@alwaysai/alwayscli';
+} from '@carnesen/cli';
 
 export const root = CliLeaf({
   name: 'multiply',
@@ -24,7 +24,7 @@ export const root = CliLeaf({
   positionalInput: CliNumberArrayInput({ required: true }),
   namedInputs: {
     squared: CliFlagInput({
-      description: 'Square the result before printing it',
+      description: 'Square the multiplication product too',
     }),
   },
   action(args, { squared }) {
@@ -109,7 +109,7 @@ The function that defines your command logic. `action` can return a value synchr
 (Optional) `boolean`
 
 #### version
-(Optional) `string`. If provided, this string will be printed when the user does `cli --version` or `cli -v`. If this value is not provided, alwaysCLI will attempt to find a version string in your package.json file.
+(Optional) `string`. If provided, this string will be printed when the user does `cli --version` or `cli -v`. If this value is not provided, `@carnesen/cli` will attempt to find a version string in your package.json file.
 
 ### CliBranch({name, description, subcommands, hidden?})
 A factory function similar to `CliLeaf`. Returns the newly-created `Branch` object.

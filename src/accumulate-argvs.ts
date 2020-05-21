@@ -8,10 +8,10 @@ const HELP_ARGS = ['--help', '-h', 'help'];
 export function accumulateArgvs(argv: string[]) {
   const commandNamesAndPositionalArgv: string[] = [];
   const namedArgvs: NamedArgvs = {};
-  let escapedArgv: string[] | undefined = undefined;
+  let escapedArgv: string[] | undefined;
   let foundHelp = false;
   let currentArgv = commandNamesAndPositionalArgv;
-  for (let i = 0; i < argv.length; i = i + 1) {
+  for (let i = 0; i < argv.length; i += 1) {
     const str = argv[i];
 
     if (HELP_ARGS.includes(str)) {

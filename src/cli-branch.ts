@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 import { CliBranch, ExcludeCommandType } from './types';
 import { CLI_BRANCH } from './constants';
 
