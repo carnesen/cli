@@ -1,20 +1,20 @@
-import { AnyNamedInputs, NamedValues } from './types';
+import { AnyNamedArgParsers, NamedValues } from './types';
 import { NamedArgvs } from './accumulate-argvs';
 import { callGetValue } from './call-get-value';
 import { CliUsageError } from './cli-usage-error';
 
 export async function accumulateNamedValues(
-  namedInputs: AnyNamedInputs,
+  namedArgParsers: AnyNamedArgParsers,
   namedArgvs: NamedArgvs,
 ) {
-  const namedValues: NamedValues<AnyNamedInputs> = {};
+  const namedValues: NamedValues<AnyNamedArgParsers> = {};
   const restNamedArgvs = { ...namedArgvs };
   const asyncFuncs: (() => Promise<void>)[] = [];
-  for (const [name, input] of Object.entries(namedInputs)) {
+  for (const [name, argParser] of Object.entries(namedArgParsers)) {
     const argv = restNamedArgvs[name];
     delete restNamedArgvs[name];
     asyncFuncs.push(async () => {
-      const value = await callGetValue(input, argv, `--${name}`);
+      const value = await callGetValue(argParser, argv, `--${name}`);
       namedValues[name] = value;
     });
   }

@@ -3,47 +3,47 @@ import { runAndCatch } from '@carnesen/run-and-catch';
 import { callGetValue } from './call-get-value';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import {
-  dummyInput,
-  dummyRequiredInput,
-  DUMMY_INPUT_THROWN_INTENTIONALLY,
-  DUMMY_INPUT_THROW,
-  DUMMY_INPUT_THROW_NON_TRUTHY,
-} from './dummy-inputs-for-testing';
+  dummyArgParser,
+  dummyRequiredArgParser,
+  DUMMY_ARG_PARSER_THROWN_INTENTIONALLY,
+  DUMMY_ARG_PARSER_THROW,
+  DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
+} from './dummy-arg-parsers-for-testing';
 
 describe(callGetValue.name, () => {
   it(`returns getValue(argv) if an argv with length >= 1 is passed`, async () => {
     const argv = ['foo'];
-    expect(await callGetValue(dummyInput, argv)).toBe(dummyInput.getValue(argv));
-    expect(await callGetValue(dummyRequiredInput, argv)).toBe(
-      dummyRequiredInput.getValue(argv),
+    expect(await callGetValue(dummyArgParser, argv)).toBe(dummyArgParser.getValue(argv));
+    expect(await callGetValue(dummyRequiredArgParser, argv)).toBe(
+      dummyRequiredArgParser.getValue(argv),
     );
   });
 
   it(`if not required, returns getValue(argv) if argv is an empty array or undefined`, async () => {
-    expect(await callGetValue(dummyInput, [])).toBe(dummyInput.getValue([]));
-    expect(await callGetValue(dummyInput, undefined)).toBe(
-      dummyInput.getValue(undefined),
+    expect(await callGetValue(dummyArgParser, [])).toBe(dummyArgParser.getValue([]));
+    expect(await callGetValue(dummyArgParser, undefined)).toBe(
+      dummyArgParser.getValue(undefined),
     );
   });
 
-  it(`if required, throws usage error "input is required" if argv is an empty array or undefined`, async () => {
+  it(`if required, throws usage error "argParser is required" if argv is an empty array or undefined`, async () => {
     for (const argv of [undefined, [] as string[]]) {
-      const exception = await runAndCatch(callGetValue, dummyRequiredInput, argv);
+      const exception = await runAndCatch(callGetValue, dummyRequiredArgParser, argv);
       expect(exception.code).toBe(CLI_USAGE_ERROR);
-      expect(exception.message).toMatch(/input is required/i);
-      expect(exception.message).toMatch(dummyRequiredInput.placeholder);
+      expect(exception.message).toMatch(/ArgParser is required/i);
+      expect(exception.message).toMatch(dummyRequiredArgParser.placeholder);
     }
   });
 
-  it(`if throws "input is required", expect message to match snapshot`, async () => {
-    const exception = await runAndCatch(callGetValue, dummyRequiredInput);
+  it(`if throws "argParser is required", expect message to match snapshot`, async () => {
+    const exception = await runAndCatch(callGetValue, dummyRequiredArgParser);
     expect(exception.message).toMatchSnapshot();
   });
 
-  it(`if throws "input is required" with context, expect message to match snapshot`, async () => {
+  it(`if throws "argParser is required" with context, expect message to match snapshot`, async () => {
     const exception = await runAndCatch(
       callGetValue,
-      dummyRequiredInput,
+      dummyRequiredArgParser,
       undefined,
       'context',
     );
@@ -51,15 +51,17 @@ describe(callGetValue.name, () => {
   });
 
   it(`throws if getValue does with a context/placeholder enhanced message`, async () => {
-    const exception = await runAndCatch(callGetValue, dummyInput, [DUMMY_INPUT_THROW]);
-    expect(exception.message).toMatch(DUMMY_INPUT_THROWN_INTENTIONALLY);
-    expect(exception.message).toMatch(dummyInput.placeholder);
+    const exception = await runAndCatch(callGetValue, dummyArgParser, [
+      DUMMY_ARG_PARSER_THROW,
+    ]);
+    expect(exception.message).toMatch(DUMMY_ARG_PARSER_THROWN_INTENTIONALLY);
+    expect(exception.message).toMatch(dummyArgParser.placeholder);
     expect(exception.message).toMatchSnapshot();
   });
 
   it(`just re-throws exception if getValue throws a non-truthy exception`, async () => {
-    const exception = await runAndCatch(callGetValue, dummyInput, [
-      DUMMY_INPUT_THROW_NON_TRUTHY,
+    const exception = await runAndCatch(callGetValue, dummyArgParser, [
+      DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
     ]);
     expect(exception).not.toBeTruthy();
   });

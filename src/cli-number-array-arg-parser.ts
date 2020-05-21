@@ -1,4 +1,4 @@
-import { CliInput } from './types';
+import { CliArgParser } from './types';
 import { convertToNumber } from './util';
 import { CliUsageError } from './cli-usage-error';
 
@@ -9,18 +9,20 @@ type Config = Partial<{
   hidden: boolean;
 }>;
 
-function CliNumberArrayInput(
+function CliNumberArrayArgParser(
   config: Config & { required: true },
-): CliInput<number[], true>;
-function CliNumberArrayInput(config?: Config): CliInput<number[] | undefined, boolean>;
-function CliNumberArrayInput(config: Config = {}) {
+): CliArgParser<number[], true>;
+function CliNumberArrayArgParser(
+  config?: Config,
+): CliArgParser<number[] | undefined, boolean>;
+function CliNumberArrayArgParser(config: Config = {}) {
   const {
     required = false,
     description,
     placeholder = '<num0> [...]',
     hidden = false,
   } = config;
-  const input: CliInput<number[] | undefined> = {
+  const argParser: CliArgParser<number[] | undefined> = {
     required,
     hidden,
     getValue(argv) {
@@ -37,7 +39,7 @@ function CliNumberArrayInput(config: Config = {}) {
     description,
     placeholder,
   };
-  return input;
+  return argParser;
 }
 
-export { CliNumberArrayInput };
+export { CliNumberArrayArgParser };

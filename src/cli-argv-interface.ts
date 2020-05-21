@@ -66,7 +66,7 @@ export function CliArgvInterface(
     }
 
     let argsValue: any;
-    if (lastCommand.positionalInput) {
+    if (lastCommand.positionalArgParser) {
       // Note that for named and escaped argvs, we distinguish between
       // `undefined` and `[]`. For example, "cli" gives an escaped argv
       // `undefined` whereas "cli --" gives an escaped argv `[]`. For the
@@ -77,7 +77,7 @@ export function CliArgvInterface(
         restCommandNamesAndPositionalArgv.length > 0
           ? restCommandNamesAndPositionalArgv
           : undefined;
-      argsValue = await callGetValue(lastCommand.positionalInput, positionalArgv);
+      argsValue = await callGetValue(lastCommand.positionalArgParser, positionalArgv);
     } else if (restCommandNamesAndPositionalArgv.length > 0) {
       throw new CliUsageError(
         `Unexpected argument "${restCommandNamesAndPositionalArgv[0]}" : Command "${lastCommand.name}" does not accept positional arguments`,
@@ -85,13 +85,13 @@ export function CliArgvInterface(
     }
 
     const namedValues = await accumulateNamedValues(
-      lastCommand.namedInputs || {},
+      lastCommand.namedArgParsers || {},
       namedArgvs,
     );
 
     let escapedValue: any;
-    if (lastCommand.escapedInput) {
-      escapedValue = await callGetValue(lastCommand.escapedInput, escapedArgv, '--');
+    if (lastCommand.escapedArgParser) {
+      escapedValue = await callGetValue(lastCommand.escapedArgParser, escapedArgv, '--');
     } else if (escapedArgv) {
       throw new CliUsageError(
         `Command "${lastCommand.name}" does not allow "--" as an argument`,

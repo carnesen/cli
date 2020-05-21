@@ -1,5 +1,5 @@
 // Arg type for custom arg types
-export { CliInput } from './types';
+export { CliArgParser } from './types';
 
 // Command factories:
 export { CliBranch } from './cli-branch';
@@ -11,14 +11,14 @@ export { runCliAndExit } from './run-cli-and-exit';
 // CliArgvInterface
 export { CliArgvInterface, CliEnhancer } from './cli-argv-interface';
 
-// Input factories:
-export { CliFlagInput } from './cli-flag-input';
-export { CliJsonInput } from './cli-json-input';
-export { CliNumberArrayInput } from './cli-number-array-input';
-export { CliNumberInput } from './cli-number-input';
-export { CliOneOfInput } from './cli-one-of-input';
-export { CliStringArrayInput } from './cli-string-array-input';
-export { CliStringInput } from './cli-string-input';
+// CliArgParser factories:
+export { CliFlagArgParser } from './cli-flag-arg-parser';
+export { CliJsonArgParser } from './cli-json-arg-parser';
+export { CliNumberArgParser } from './cli-number-arg-parser';
+export { CliNumberArrayArgParser } from './cli-number-array-arg-parser';
+export { CliOneOfArgParser } from './cli-one-of-arg-parser';
+export { CliStringArgParser } from './cli-string-arg-parser';
+export { CliStringArrayArgParser } from './cli-string-array-arg-parser';
 
 // Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';

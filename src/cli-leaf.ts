@@ -1,11 +1,17 @@
 /* eslint-disable no-redeclare */
-import { AnyNamedInputs, CliLeaf, ExcludeCommandType, AnyInput, CliInput } from './types';
+import {
+  AnyNamedArgParsers,
+  CliLeaf,
+  ExcludeCommandType,
+  AnyArgParser,
+  CliArgParser,
+} from './types';
 import { CLI_LEAF } from './constants';
 
 export function CliLeaf<
-  TPositional extends AnyInput = CliInput<undefined, false>,
-  TNamed extends AnyNamedInputs = {},
-  TEscaped extends AnyInput = CliInput<undefined, false>
+  TPositional extends AnyArgParser = CliArgParser<undefined, false>,
+  TNamed extends AnyNamedArgParsers = {},
+  TEscaped extends AnyArgParser = CliArgParser<undefined, false>
 >(config: ExcludeCommandType<CliLeaf<TPositional, TNamed, TEscaped>>) {
   const cliLeaf: CliLeaf<TPositional, TNamed, TEscaped> = {
     ...config,

@@ -1,6 +1,6 @@
 import parseJson = require('parse-json');
 
-import { CliInput } from './types';
+import { CliArgParser } from './types';
 import { CliUsageError } from './cli-usage-error';
 
 type Config = Partial<{
@@ -10,17 +10,17 @@ type Config = Partial<{
   hidden: boolean;
 }>;
 
-// Because a JSON input value has type `any`, we don't need to do anything fancy
+// Because a JSON argParser value has type `any`, we don't need to do anything fancy
 // with function overloads to handle the "required" field like we do for other
-// input factories.
-export function CliJsonInput(config: Config = {}) {
+// argParser factories.
+export function CliJsonArgParser(config: Config = {}) {
   const {
     placeholder = '<json>',
     required = false,
     description,
     hidden = false,
   } = config;
-  const input: CliInput<any> = {
+  const argParser: CliArgParser<any> = {
     required,
     placeholder,
     hidden,
@@ -40,5 +40,5 @@ export function CliJsonInput(config: Config = {}) {
     },
     description,
   };
-  return input;
+  return argParser;
 }
