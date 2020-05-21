@@ -1,32 +1,32 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliLeaf } from './cli-leaf';
-import { dummyInput } from './dummy-inputs-for-testing';
+import { dummyArgParser } from './dummy-arg-parsers-for-testing';
 import { CliArgvInterface, CliEnhancer } from './cli-argv-interface';
 import { findVersion } from './find-version';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
-const leafWithNamedInputs = CliLeaf({
-  name: 'leaf-with-named-inputs',
-  namedInputs: {
-    foo: dummyInput,
+const leafWithNamedArgParsers = CliLeaf({
+  name: 'leaf-with-named-args',
+  namedArgParsers: {
+    foo: dummyArgParser,
   },
   action(...args) {
     return args;
   },
 });
 
-const leafWithPositionalInput = CliLeaf({
-  name: 'leaf-with-positional-input',
-  positionalInput: dummyInput,
+const leafWithPositionalArgParser = CliLeaf({
+  name: 'leaf-with-positional-args',
+  positionalArgParser: dummyArgParser,
   action(...args) {
     return args;
   },
 });
 
-const leafWithEscapedInput = CliLeaf({
-  name: 'leaf-with-escaped-input',
-  escapedInput: dummyInput,
+const leafWithEscapedArgParser = CliLeaf({
+  name: 'leaf-with-escaped-arg-parser',
+  escapedArgParser: dummyArgParser,
   action(...args) {
     return args;
   },
@@ -34,7 +34,11 @@ const leafWithEscapedInput = CliLeaf({
 
 const root = CliBranch({
   name: 'cli',
-  subcommands: [leafWithPositionalInput, leafWithNamedInputs, leafWithEscapedInput],
+  subcommands: [
+    leafWithPositionalArgParser,
+    leafWithNamedArgParsers,
+    leafWithEscapedArgParser,
+  ],
 });
 
 const argvInterface = CliArgvInterface(root);
@@ -46,7 +50,9 @@ describe(CliArgvInterface.name, () => {
       spy(...argv);
       await innerArgvInterface(...argv);
     };
-    const enhancedArgvInterface = CliArgvInterface(leafWithPositionalInput, { enhancer });
+    const enhancedArgvInterface = CliArgvInterface(leafWithPositionalArgParser, {
+      enhancer,
+    });
     await enhancedArgvInterface('foo', 'bar');
     expect(spy.mock.calls).toEqual([['foo', 'bar']]);
   });
@@ -76,44 +82,55 @@ describe(CliArgvInterface.name, () => {
     expect(exception.message).toMatchSnapshot();
   });
 
-  it('throws USAGE error "positional arguments" if last command is a leaf without positionalInput property and additional argv is present', async () => {
-    const exception = await runAndCatch(argvInterface, leafWithNamedInputs.name, 'oops');
+  it('throws USAGE error "positional arguments" if last command is a leaf without positionalArgParser property and additional argv is present', async () => {
+    const exception = await runAndCatch(
+      argvInterface,
+      leafWithNamedArgParsers.name,
+      'oops',
+    );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch('Unexpected argument "oops"');
-    expect(exception.message).toMatch(leafWithNamedInputs.name);
+    expect(exception.message).toMatch(leafWithNamedArgParsers.name);
     expect(exception.message).toMatch(/positional arguments/i);
     expect(exception.message).toMatchSnapshot();
   });
 
   it('Passes parsed positional value as first argument of the "action" function', async () => {
     const positionalArgv = ['foo', 'bar'];
-    const result = await argvInterface(leafWithPositionalInput.name, ...positionalArgv);
-    expect(result).toEqual([dummyInput.getValue(positionalArgv), {}, undefined]);
+    const result = await argvInterface(
+      leafWithPositionalArgParser.name,
+      ...positionalArgv,
+    );
+    expect(result).toEqual([dummyArgParser.getValue(positionalArgv), {}, undefined]);
   });
 
   it('Passes parsed named values as second argument of the "action" function', async () => {
     const namedArgv = ['--foo', 'bar'];
-    const result = await argvInterface(leafWithNamedInputs.name, ...namedArgv);
-    expect(result).toEqual([undefined, { foo: dummyInput.getValue(['bar']) }, undefined]);
+    const result = await argvInterface(leafWithNamedArgParsers.name, ...namedArgv);
+    expect(result).toEqual([
+      undefined,
+      { foo: dummyArgParser.getValue(['bar']) },
+      undefined,
+    ]);
   });
 
   it(`Throws USAGE error 'does not allow "--"' if leaf does not have an "escaped" property`, async () => {
     const exception = await runAndCatch(
       argvInterface,
-      leafWithPositionalInput.name,
+      leafWithPositionalArgParser.name,
       '--',
     );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
-    expect(exception.message).toMatch(leafWithPositionalInput.name);
+    expect(exception.message).toMatch(leafWithPositionalArgParser.name);
     expect(exception.message).toMatch('does not allow "--"');
   });
 
   it('Passes parsed escaped value as third argument of the "action" function', async () => {
-    const result = await argvInterface(leafWithEscapedInput.name, '--');
+    const result = await argvInterface(leafWithEscapedArgParser.name, '--');
     expect(result).toEqual([
       undefined,
       {},
-      leafWithEscapedInput.escapedInput!.getValue([]),
+      leafWithEscapedArgParser.escapedArgParser!.getValue([]),
     ]);
   });
 });

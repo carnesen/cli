@@ -1,6 +1,6 @@
 import redent = require('redent');
 
-import { Command, AnyInput } from './types';
+import { Command, AnyArgParser } from './types';
 import { CLI_BRANCH, RED_ERROR } from './constants';
 import { createTextList } from './create-text-list';
 import { regularizeText, wrapInSquareBrackets } from './util';
@@ -17,9 +17,9 @@ export function UsageString(rootCommand: Command, errorMessage?: string) {
   let firstParagraph = `Usage: ${commandPathString}`;
   const otherParagraphs: string[] = [];
 
-  function appendInputUsage(input?: AnyInput, prefix?: string) {
-    if (input && !input.hidden) {
-      const { placeholder, description, required } = input;
+  function appendArgParserUsage(argParser?: AnyArgParser, prefix?: string) {
+    if (argParser && !argParser.hidden) {
+      const { placeholder, description, required } = argParser;
       if (prefix) {
         firstParagraph += ` ${prefix}`;
       }
@@ -46,28 +46,30 @@ export function UsageString(rootCommand: Command, errorMessage?: string) {
     otherParagraphs.push(subcommandsParagraph);
   } else {
     // LEAF
-    const { positionalInput, namedInputs, escapedInput } = lastCommand;
+    const { positionalArgParser, namedArgParsers, escapedArgParser } = lastCommand;
 
-    appendInputUsage(positionalInput);
+    appendArgParserUsage(positionalArgParser);
 
-    if (namedInputs) {
-      const entries = Object.entries(namedInputs).filter(([_, input]) => !input.hidden);
+    if (namedArgParsers) {
+      const entries = Object.entries(namedArgParsers).filter(
+        ([_, argParser]) => !argParser.hidden,
+      );
       if (entries.length > 0) {
         const optionsNotRequired = entries.every(
-          ([_, namedInput]) => !namedInput.required,
+          ([_, namedArgParser]) => !namedArgParser.required,
         );
         firstParagraph += optionsNotRequired ? ' [<options>]' : ' <options>';
         otherParagraphs.push('Options:');
         const items: Parameters<typeof createTextList> = entries.map(
-          ([inputName, input]) => {
-            let name = `--${inputName}`;
-            if (input.placeholder) {
-              name += ` ${input.placeholder}`;
+          ([argParserName, argParser]) => {
+            let name = `--${argParserName}`;
+            if (argParser.placeholder) {
+              name += ` ${argParser.placeholder}`;
             }
-            if (!input.required) {
+            if (!argParser.required) {
               name = wrapInSquareBrackets(name);
             }
-            const text = input.description;
+            const text = argParser.description;
             return { name, text };
           },
         );
@@ -76,7 +78,7 @@ export function UsageString(rootCommand: Command, errorMessage?: string) {
       }
     }
 
-    appendInputUsage(escapedInput, '--');
+    appendArgParserUsage(escapedArgParser, '--');
   }
 
   const paragraphs = [firstParagraph];

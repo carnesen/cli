@@ -1,11 +1,11 @@
-import { CliInput } from './types';
+import { CliArgParser } from './types';
 import { CliUsageError } from './cli-usage-error';
 
 type Config = Partial<{ description: string; hidden: boolean }>;
 
-export function CliFlagInput(config: Config = {}) {
+export function CliFlagArgParser(config: Config = {}) {
   const { description, hidden = false } = config;
-  const input: CliInput<boolean, false> = {
+  const argParser: CliArgParser<boolean, false> = {
     placeholder: '',
     required: false,
     hidden,
@@ -20,5 +20,5 @@ export function CliFlagInput(config: Config = {}) {
     },
     description,
   };
-  return input;
+  return argParser;
 }

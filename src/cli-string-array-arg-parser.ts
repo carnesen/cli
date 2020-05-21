@@ -1,4 +1,4 @@
-import { CliInput } from './types';
+import { CliArgParser } from './types';
 import { CliUsageError } from './cli-usage-error';
 
 type Config = Partial<{
@@ -8,18 +8,20 @@ type Config = Partial<{
   placeholder: string;
 }>;
 
-function CliStringArrayInput(
+function CliStringArrayArgParser(
   config: Config & { required: true },
-): CliInput<string[], true>;
-function CliStringArrayInput(config?: Config): CliInput<string[] | undefined, boolean>;
-function CliStringArrayInput(config: Config = {}) {
+): CliArgParser<string[], true>;
+function CliStringArrayArgParser(
+  config?: Config,
+): CliArgParser<string[] | undefined, boolean>;
+function CliStringArrayArgParser(config: Config = {}) {
   const {
     required = false,
     description,
     placeholder = '<str0> [...]',
     hidden = false,
   } = config;
-  const input: CliInput<string[] | undefined> = {
+  const argParser: CliArgParser<string[] | undefined> = {
     required,
     hidden,
     placeholder,
@@ -36,7 +38,7 @@ function CliStringArrayInput(config: Config = {}) {
     },
     description,
   };
-  return input;
+  return argParser;
 }
 
-export { CliStringArrayInput };
+export { CliStringArrayArgParser };

@@ -1,4 +1,4 @@
-import { CliInput } from './types';
+import { CliArgParser } from './types';
 import { CliUsageError } from './cli-usage-error';
 import { wrapInCurlyBrackets, regularizeText } from './util';
 
@@ -10,16 +10,16 @@ type Config<TValues extends string[]> = {
   hidden?: boolean;
 };
 
-function CliOneOfInput<U extends string[]>(
+function CliOneOfArgParser<U extends string[]>(
   config: Config<U> & { defaultValue: U },
-): CliInput<U[number], false>;
-function CliOneOfInput<U extends string[]>(
+): CliArgParser<U[number], false>;
+function CliOneOfArgParser<U extends string[]>(
   config: Config<U> & { required: true },
-): CliInput<U[number], true>;
-function CliOneOfInput<U extends string[]>(
+): CliArgParser<U[number], true>;
+function CliOneOfArgParser<U extends string[]>(
   config: Config<U>,
-): CliInput<U[number] | undefined, false>;
-function CliOneOfInput(config: Config<string[]>) {
+): CliArgParser<U[number] | undefined, false>;
+function CliOneOfArgParser(config: Config<string[]>) {
   const valuesString = wrapInCurlyBrackets(config.values.join(', '));
   const {
     required = false,
@@ -28,7 +28,7 @@ function CliOneOfInput(config: Config<string[]>) {
     hidden = false,
   } = config;
 
-  const input: CliInput<string | undefined> = {
+  const argParser: CliArgParser<string | undefined> = {
     required,
     placeholder: config.placeholder || '<value>',
     hidden,
@@ -50,7 +50,7 @@ function CliOneOfInput(config: Config<string[]>) {
     },
     description: `${regularizeText(description)}\nAllowed values ${valuesString}`,
   };
-  return input;
+  return argParser;
 }
 
-export { CliOneOfInput };
+export { CliOneOfArgParser };
