@@ -3,8 +3,8 @@ import { accumulateNamedValues } from './accumulate-named-values';
 import {
   dummyRequiredArgParser,
   dummyArgParser,
-  DUMMY_INPUT_THROW,
-} from './dummy-inputs-for-testing';
+  DUMMY_ARG_PARSER_THROW,
+} from './dummy-arg-parsers-for-testing';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 describe(accumulateNamedValues.name, () => {
@@ -23,7 +23,7 @@ describe(accumulateNamedValues.name, () => {
     const exception = await runAndCatch(
       accumulateNamedValues,
       { foo123: dummyArgParser },
-      { foo123: [DUMMY_INPUT_THROW] },
+      { foo123: [DUMMY_ARG_PARSER_THROW] },
     );
     expect(exception.message).toMatch('--foo123');
     expect(exception.message).toMatchSnapshot();

@@ -1,13 +1,13 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliLeaf } from './cli-leaf';
-import { dummyArgParser } from './dummy-inputs-for-testing';
+import { dummyArgParser } from './dummy-arg-parsers-for-testing';
 import { CliArgvInterface, CliEnhancer } from './cli-argv-interface';
 import { findVersion } from './find-version';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const leafWithNamedArgParsers = CliLeaf({
-  name: 'leaf-with-named-inputs',
+  name: 'leaf-with-named-args',
   namedArgParsers: {
     foo: dummyArgParser,
   },
@@ -17,7 +17,7 @@ const leafWithNamedArgParsers = CliLeaf({
 });
 
 const leafWithPositionalArgParser = CliLeaf({
-  name: 'leaf-with-positional-input',
+  name: 'leaf-with-positional-args',
   positionalArgParser: dummyArgParser,
   action(...args) {
     return args;
@@ -25,7 +25,7 @@ const leafWithPositionalArgParser = CliLeaf({
 });
 
 const leafWithEscapedArgParser = CliLeaf({
-  name: 'leaf-with-escaped-input',
+  name: 'leaf-with-escaped-arg-parser',
   escapedArgParser: dummyArgParser,
   action(...args) {
     return args;

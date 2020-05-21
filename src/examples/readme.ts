@@ -1,6 +1,6 @@
 import { CliLeaf } from '../cli-leaf';
-import { CliNumberArrayArgParser } from '../cli-number-array-input';
-import { CliFlagArgParser } from '../cli-flag-input';
+import { CliNumberArrayArgParser } from '../cli-number-array-arg-parser';
+import { CliFlagArgParser } from '../cli-flag-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 export const multiplyCliLeaf = CliLeaf({

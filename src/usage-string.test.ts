@@ -1,6 +1,6 @@
 import { UsageString } from './usage-string';
 import { CliBranch } from './cli-branch';
-import { CliStringArgParser } from './cli-string-input';
+import { CliStringArgParser } from './cli-string-arg-parser';
 import { CliLeaf } from './cli-leaf';
 import { Command } from './types';
 import { RED_ERROR } from './constants';

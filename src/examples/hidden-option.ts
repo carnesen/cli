@@ -1,6 +1,6 @@
 import { echoCliLeaf as echoCommand } from './echo';
 import { CliLeaf } from '../cli-leaf';
-import { CliFlagArgParser } from '../cli-flag-input';
+import { CliFlagArgParser } from '../cli-flag-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 const PIZZA_MESSAGE = `

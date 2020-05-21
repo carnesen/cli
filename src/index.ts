@@ -11,14 +11,14 @@ export { runCliAndExit } from './run-cli-and-exit';
 // CliArgvInterface
 export { CliArgvInterface, CliEnhancer } from './cli-argv-interface';
 
-// ArgParser factories:
-export { CliFlagArgParser } from './cli-flag-input';
-export { CliJsonArgParser } from './cli-json-input';
-export { CliNumberArrayArgParser } from './cli-number-array-input';
-export { CliNumberArgParser } from './cli-number-input';
-export { CliOneOfArgParser } from './cli-one-of-input';
-export { CliStringArrayArgParser } from './cli-string-array-input';
-export { CliStringArgParser } from './cli-string-input';
+// CliArgParser factories:
+export { CliFlagArgParser } from './cli-flag-arg-parser';
+export { CliJsonArgParser } from './cli-json-arg-parser';
+export { CliNumberArgParser } from './cli-number-arg-parser';
+export { CliNumberArrayArgParser } from './cli-number-array-arg-parser';
+export { CliOneOfArgParser } from './cli-one-of-arg-parser';
+export { CliStringArgParser } from './cli-string-arg-parser';
+export { CliStringArrayArgParser } from './cli-string-array-arg-parser';
 
 // Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';

@@ -5,10 +5,10 @@ import { CLI_USAGE_ERROR } from './cli-usage-error';
 import {
   dummyArgParser,
   dummyRequiredArgParser,
-  DUMMY_INPUT_THROWN_INTENTIONALLY,
-  DUMMY_INPUT_THROW,
-  DUMMY_INPUT_THROW_NON_TRUTHY,
-} from './dummy-inputs-for-testing';
+  DUMMY_ARG_PARSER_THROWN_INTENTIONALLY,
+  DUMMY_ARG_PARSER_THROW,
+  DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
+} from './dummy-arg-parsers-for-testing';
 
 describe(callGetValue.name, () => {
   it(`returns getValue(argv) if an argv with length >= 1 is passed`, async () => {
@@ -52,16 +52,16 @@ describe(callGetValue.name, () => {
 
   it(`throws if getValue does with a context/placeholder enhanced message`, async () => {
     const exception = await runAndCatch(callGetValue, dummyArgParser, [
-      DUMMY_INPUT_THROW,
+      DUMMY_ARG_PARSER_THROW,
     ]);
-    expect(exception.message).toMatch(DUMMY_INPUT_THROWN_INTENTIONALLY);
+    expect(exception.message).toMatch(DUMMY_ARG_PARSER_THROWN_INTENTIONALLY);
     expect(exception.message).toMatch(dummyArgParser.placeholder);
     expect(exception.message).toMatchSnapshot();
   });
 
   it(`just re-throws exception if getValue throws a non-truthy exception`, async () => {
     const exception = await runAndCatch(callGetValue, dummyArgParser, [
-      DUMMY_INPUT_THROW_NON_TRUTHY,
+      DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
     ]);
     expect(exception).not.toBeTruthy();
   });

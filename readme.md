@@ -63,22 +63,15 @@ $ ts-node readme.ts 1 2 3 --squared
 36 
 ```
 
-## Structure of argParsers
-A `@carnesen/cli` CLI specifies 
+## API
+The general structure of a `@carnesen/cli` is:
 ```
 <program> <branch> <leaf> <positional-args> --name <named-args> -- <escaped-args>
 ```
+Everything after `<program>` is optional.
 
-TODO: Make a diagram.
-
-To invoke an action the user provides (in order):
-- zero or more branch names
-- a leaf name
-- zero or more positional args
-- zero or more "options" (argParsers of the form `--foo bar`)
-
-### ArgParser<T, U>
-TODO
+### `CliArgParser`
+An arg parser converts a `string[]` of command-line arguments into a well-typed value. These `string[]`s could be positional arguments as in `echo foo bar baz` or part of a named argument group like `--users me you them`. This library [exports](src/index.ts) a number of `CliArgParser` factories for various types like `CliNumberArgParser`, which parses a `number` or `CliJsonArgParser`, which parses `any`.
 
 ### CliLeaf({name, description?, args?, options?, action, hidden?, version?})
 A factory for creating "action" commands. Returns the newly-created `leaf`.
@@ -142,7 +135,7 @@ This library has a couple dozen unit tests with >95% coverage. If you want to se
 ## Related
 - [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the result, and `process.exit`
 - [@carnesen/coded-error](https://github.com/carnesen/coded-error): An enhanced `Error` class with additional properties "code" and "data"
-- [@carnesen/tslint-config](https://github.com/carnesen/tslint-config): TSLint configurations for `@carnesen` projects
+- [@carnesen/eslint-config](https://github.com/carnesen/eslint-config): TSLint configurations for `@carnesen` projects
 - [@carnesen/tsconfig](https://github.com/carnesen/tsconfig): TypeScript configurations for `@carnesen` projects
 
 ## License

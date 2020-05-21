@@ -1,17 +1,17 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliNumberArrayArgParser } from './cli-number-array-input';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
+import { CliStringArrayArgParser } from './cli-string-array-arg-parser';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
 const required = false;
 
-const argParser = CliNumberArrayArgParser({ description, hidden, placeholder, required });
+const argParser = CliStringArrayArgParser({ description, hidden, placeholder, required });
 
-describe(CliNumberArrayArgParser.name, () => {
+describe(CliStringArrayArgParser.name, () => {
   it('getValue returns is argv converted to numbers', () => {
-    expect(argParser.getValue(['0', '1', '2'])).toEqual([0, 1, 2]);
+    expect(argParser.getValue(['0', '1', '2'])).toEqual(['0', '1', '2']);
   });
 
   it('getValue returns `undefined` if argv is', () => {
@@ -33,6 +33,6 @@ describe(CliNumberArrayArgParser.name, () => {
   });
 
   it('config is not required', () => {
-    CliNumberArrayArgParser();
+    CliStringArrayArgParser();
   });
 });

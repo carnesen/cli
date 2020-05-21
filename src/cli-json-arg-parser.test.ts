@@ -1,6 +1,6 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
-import { CliJsonArgParser } from './cli-json-input';
+import { CliJsonArgParser } from './cli-json-arg-parser';
 
 const description = 'foo bar baz';
 const hidden = true;

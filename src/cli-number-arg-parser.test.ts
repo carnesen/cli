@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliNumberArgParser } from './cli-number-input';
+import { CliNumberArgParser } from './cli-number-arg-parser';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const description = 'foo bar baz';
