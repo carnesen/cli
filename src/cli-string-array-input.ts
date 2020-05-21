@@ -8,7 +8,6 @@ type Config = Partial<{
   placeholder: string;
 }>;
 
-export { CliStringArrayInput };
 function CliStringArrayInput(
   config: Config & { required: true },
 ): CliInput<string[], true>;
@@ -39,3 +38,5 @@ function CliStringArrayInput(config: Config = {}) {
   };
   return input;
 }
+
+export { CliStringArrayInput };

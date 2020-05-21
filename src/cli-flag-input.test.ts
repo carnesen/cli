@@ -1,5 +1,5 @@
-import { CliFlagInput } from './cli-flag-input';
 import { runAndCatch } from '@carnesen/run-and-catch';
+import { CliFlagInput } from './cli-flag-input';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const description = 'foo bar baz';

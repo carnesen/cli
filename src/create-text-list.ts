@@ -5,7 +5,7 @@ type Item = {
   text?: string;
 };
 
-function createTextListParagraph(item: Item, targetNameLength: number = 0) {
+function createTextListParagraph(item: Item, targetNameLength = 0) {
   const { name, text } = item;
   const lines = regularizeText(text).split('\n');
   const paddedName = name.padEnd(targetNameLength);

@@ -14,10 +14,12 @@ export function accumulateCommandStack(
   );
 
   if (!found) {
+    // eslint-disable-next-line no-param-reassign
     command.next = undefined;
     return restCommandNamesAndPositionalArgv;
   }
 
+  // eslint-disable-next-line no-param-reassign
   command.next = found;
 
   return accumulateCommandStack(found, restCommandNamesAndPositionalArgv.slice(1));

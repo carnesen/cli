@@ -1,9 +1,9 @@
+import { CodedError } from '@carnesen/coded-error';
 import { CliLeaf } from './cli-leaf';
 import { runCliAndExit } from './run-cli-and-exit';
 import { CliUsageError } from './cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 import { RED_ERROR } from './constants';
-import { CodedError } from '@carnesen/coded-error';
 
 async function runMocked(action: () => any) {
   const result = {
@@ -29,22 +29,24 @@ async function runMocked(action: () => any) {
   expect(
     result.consoleError.mock.calls.length + result.consoleLog.mock.calls.length,
   ).toBeLessThanOrEqual(1);
-  let errorMessage: any = undefined;
-  let logMessage: any = undefined;
+  let errorMessage: any;
+  let logMessage: any;
   if (result.consoleLog.mock.calls.length === 1) {
     expect(result.consoleLog.mock.calls.length).toBe(1);
-    logMessage = result.consoleLog.mock.calls[0][0];
+    [[logMessage]] = result.consoleLog.mock.calls;
   }
   if (result.consoleError.mock.calls.length === 1) {
     expect(result.consoleError.mock.calls.length).toBe(1);
-    errorMessage = result.consoleError.mock.calls[0][0];
+    [[errorMessage]] = result.consoleError.mock.calls;
   }
   return { exitCode, errorMessage, logMessage };
 }
 
 describe(runCliAndExit.name, () => {
   it('exits 0 and does not console.log if action succeeds', async () => {
-    const { exitCode, errorMessage, logMessage } = await runMocked(() => {});
+    const { exitCode, errorMessage, logMessage } = await runMocked(() => {
+      // do nothing
+    });
     expect(exitCode).toBe(0);
     expect(errorMessage).toBe(undefined);
     expect(logMessage).toBe(undefined);
@@ -59,6 +61,7 @@ describe(runCliAndExit.name, () => {
 
   it('exits 1 and console.errors "non-truthy exception" if action throws a non-truthy exception', async () => {
     const { exitCode, errorMessage, logMessage } = await runMocked(() => {
+      // eslint-disable-next-line no-throw-literal
       throw '';
     });
     expect(exitCode).toBe(1);
@@ -127,7 +130,9 @@ describe(runCliAndExit.name, () => {
     runCliAndExit(
       CliLeaf({
         name: 'cli',
-        action() {},
+        action() {
+          // do nothing
+        },
       }),
       { processExit: jest.fn(), argv: [] },
     );

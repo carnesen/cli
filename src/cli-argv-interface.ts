@@ -65,7 +65,7 @@ export function CliArgvInterface(
       throw new CliUsageError();
     }
 
-    let argsValue: any = undefined;
+    let argsValue: any;
     if (lastCommand.positionalInput) {
       // Note that for named and escaped argvs, we distinguish between
       // `undefined` and `[]`. For example, "cli" gives an escaped argv
@@ -89,7 +89,7 @@ export function CliArgvInterface(
       namedArgvs,
     );
 
-    let escapedValue: any = undefined;
+    let escapedValue: any;
     if (lastCommand.escapedInput) {
       escapedValue = await callGetValue(lastCommand.escapedInput, escapedArgv, '--');
     } else if (escapedArgv) {

@@ -42,9 +42,9 @@ const argvInterface = CliArgvInterface(root);
 describe(CliArgvInterface.name, () => {
   it('calls the enhancer if provided', async () => {
     const spy = jest.fn();
-    const enhancer: CliEnhancer = (argvInterface) => async (...argv: string[]) => {
+    const enhancer: CliEnhancer = (innerArgvInterface) => async (...argv: string[]) => {
       spy(...argv);
-      await argvInterface(...argv);
+      await innerArgvInterface(...argv);
     };
     const enhancedArgvInterface = CliArgvInterface(leafWithPositionalInput, { enhancer });
     await enhancedArgvInterface('foo', 'bar');

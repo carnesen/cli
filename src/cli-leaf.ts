@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 import { AnyNamedInputs, CliLeaf, ExcludeCommandType, AnyInput, CliInput } from './types';
 import { CLI_LEAF } from './constants';
 

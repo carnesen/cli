@@ -9,7 +9,6 @@ type Config = Partial<{
   hidden: boolean;
 }>;
 
-export { CliNumberArrayInput };
 function CliNumberArrayInput(
   config: Config & { required: true },
 ): CliInput<number[], true>;
@@ -40,3 +39,5 @@ function CliNumberArrayInput(config: Config = {}) {
   };
   return input;
 }
+
+export { CliNumberArrayInput };

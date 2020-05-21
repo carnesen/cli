@@ -9,7 +9,6 @@ type Config = Partial<{
   placeholder?: string;
 }>;
 
-export { CliStringInput };
 function CliStringInput(
   config: Config & { defaultValue: string },
 ): CliInput<string, false>;
@@ -46,3 +45,5 @@ function CliStringInput(config: Config = {}) {
   };
   return input;
 }
+
+export { CliStringInput };
