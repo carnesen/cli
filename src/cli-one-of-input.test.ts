@@ -1,5 +1,5 @@
-import { CliOneOfInput } from './cli-one-of-input';
 import { runAndCatch } from '@carnesen/run-and-catch';
+import { CliOneOfInput } from './cli-one-of-input';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const description = 'foo bar baz';
@@ -35,8 +35,8 @@ describe(CliOneOfInput.name, () => {
   });
 
   it('returns undefined if argv is', () => {
-    const input = CliOneOfInput({ values: ['foo', 'bar'] });
-    expect(input.getValue(undefined)).toBe(undefined);
+    const input2 = CliOneOfInput({ values: ['foo', 'bar'] });
+    expect(input2.getValue(undefined)).toBe(undefined);
   });
 
   it('attaches config properties', () => {

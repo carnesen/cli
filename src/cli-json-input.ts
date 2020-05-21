@@ -26,7 +26,7 @@ export function CliJsonInput(config: Config = {}) {
     hidden,
     getValue(argv) {
       if (!argv) {
-        return;
+        return undefined;
       }
       if (argv.length !== 1) {
         throw new CliUsageError(`Expected a single ${placeholder} string`);

@@ -1,5 +1,5 @@
-import { CliNumberInput } from './cli-number-input';
 import { runAndCatch } from '@carnesen/run-and-catch';
+import { CliNumberInput } from './cli-number-input';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const description = 'foo bar baz';
@@ -15,8 +15,8 @@ describe(CliNumberInput.name, () => {
   });
 
   it('returns defaultValue if argv is `undefined` and defaultValue has been provided', () => {
-    const input = CliNumberInput({ defaultValue: 0 });
-    expect(input.getValue(undefined)).toBe(0);
+    const input2 = CliNumberInput({ defaultValue: 0 });
+    expect(input2.getValue(undefined)).toBe(0);
   });
 
   it('getValue returns the zeroth element of argv', () => {

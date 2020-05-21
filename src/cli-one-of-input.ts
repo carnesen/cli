@@ -10,8 +10,6 @@ type Config<TValues extends string[]> = {
   hidden?: boolean;
 };
 
-export { CliOneOfInput };
-
 function CliOneOfInput<U extends string[]>(
   config: Config<U> & { defaultValue: U },
 ): CliInput<U[number], false>;
@@ -36,7 +34,7 @@ function CliOneOfInput(config: Config<string[]>) {
     hidden,
     getValue(argv) {
       if (!argv) {
-        return;
+        return undefined;
       }
 
       if (argv.length !== 1) {
@@ -54,3 +52,5 @@ function CliOneOfInput(config: Config<string[]>) {
   };
   return input;
 }
+
+export { CliOneOfInput };

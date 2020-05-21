@@ -36,11 +36,11 @@ export function regularizeText(text?: string) {
 }
 
 export function convertToNumber(rawValue: string) {
-  let value: number = NaN;
+  let value = NaN;
   if (rawValue.length > 0) {
     value = Number(rawValue);
   }
-  if (isNaN(value)) {
+  if (Number.isNaN(value)) {
     throw new CliUsageError(`"${rawValue}" is not a number`);
   }
   return value;

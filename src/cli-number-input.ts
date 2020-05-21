@@ -10,7 +10,6 @@ type Config = Partial<{
   hidden: boolean;
 }>;
 
-export { CliNumberInput };
 function CliNumberInput(
   config: Config & { defaultValue: number },
 ): CliInput<number, false>;
@@ -47,3 +46,5 @@ function CliNumberInput(config: Config = {}) {
   };
   return input;
 }
+
+export { CliNumberInput };
