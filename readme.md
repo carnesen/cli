@@ -21,15 +21,9 @@ import {
 export const root = CliLeaf({
   name: 'multiply',
   description: 'Multiply numbers and print the result',
-<<<<<<< HEAD
   positionalArgParser: CliNumberArrayArgParser({ required: true }),
   namedArgParsers: {
     squared: CliFlagArgParser({
-=======
-  positionalInput: CliNumberArrayInput({ required: true }),
-  namedInputs: {
-    squared: CliFlagInput({
->>>>>>> origin/master
       description: 'Square the multiplication product too',
     }),
   },
