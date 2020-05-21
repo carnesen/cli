@@ -1,6 +1,6 @@
 import { echoCliLeaf as echoCommand } from './echo';
 import { CliLeaf } from '../cli-leaf';
-import { CliFlagInput } from '../cli-flag-input';
+import { CliFlagArgParser } from '../cli-flag-input';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 const PIZZA_MESSAGE = `
@@ -15,14 +15,14 @@ __ __  _ __________ _
 `;
 
 // All alwaysCLI abstractions are plain-old JavaScript objects and functions.
-// This makes it easy to re-use bits of existing commands and/or inputs.
+// This makes it easy to re-use bits of existing commands and/or argParsers.
 export const root = CliLeaf({
   ...echoCommand,
   description: `
     This CLI has a hidden option "--pizza". If an option is "hidden", it does not 
     appear in the command's usage documentation. Hidden options might be "easter eggs" 
     like in this example or experimental features, for example.`,
-  namedInputs: { pizza: CliFlagInput({ hidden: true }) },
+  namedArgParsers: { pizza: CliFlagArgParser({ hidden: true }) },
   action(messages, { pizza }, escaped) {
     if (pizza) {
       return PIZZA_MESSAGE;

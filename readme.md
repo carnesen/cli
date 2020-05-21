@@ -13,17 +13,17 @@ A `@carnesen/cli` CLI organizes commands into a tree. Each leaf is an action (e.
 // readme.ts
 import {
   CliLeaf,
-  CliFlagInput,
-  CliNumberArrayInput,
+  CliFlagArgParser,
+  CliNumberArrayArgParser,
   runCliAndExit,
 } from '@carnesen/cli';
 
 export const root = CliLeaf({
   name: 'multiply',
   description: 'Multiply numbers and print the result',
-  positionalInput: CliNumberArrayInput({ required: true }),
-  namedInputs: {
-    squared: CliFlagInput({
+  positionalArgParser: CliNumberArrayArgParser({ required: true }),
+  namedArgParsers: {
+    squared: CliFlagArgParser({
       description: 'Square the multiplication product too',
     }),
   },
@@ -63,20 +63,21 @@ $ ts-node readme.ts 1 2 3 --squared
 36 
 ```
 
-## API
-The structure of an `@carnesen/cli` CLI is:
+## Structure of argParsers
+A `@carnesen/cli` CLI specifies 
 ```
 <program> <branch> <leaf> <positional-args> --name <named-args> -- <escaped-args>
 ```
+
 TODO: Make a diagram.
 
 To invoke an action the user provides (in order):
 - zero or more branch names
 - a leaf name
 - zero or more positional args
-- zero or more "options" (inputs of the form `--foo bar`)
+- zero or more "options" (argParsers of the form `--foo bar`)
 
-### Input<T, U>
+### ArgParser<T, U>
 TODO
 
 ### CliLeaf({name, description?, args?, options?, action, hidden?, version?})
@@ -88,14 +89,14 @@ If this "leaf" is a subcommand, `name` is the string that the user will pass as 
 #### description
 (Optional) A string that will be included in `Usage:` if present.
 
-#### positionalInput
-(Optional) An `Input` for 
+#### positionalArgParser
+(Optional) An `ArgParser` for 
 
-#### namedInputs
-(Optional) An object of named `Input`s, for example:
+#### namedArgParsers
+(Optional) An object of named `ArgParser`s, for example:
 ```ts
 const options = {
-  path: createStringInput({
+  path: createStringArgParser({
     description: 'An absolute or relative path',
   }),
 }
@@ -133,7 +134,7 @@ Returns a function of the form `(...args: string[]) => Promise<any>` that can be
 A `Leaf` or `Branch`
 
 ### ArgvInterface
-`cli` is a function that takes command-line arguments (strings) as input and returns a `Promise` representing the execution of the arguments. We export `cli` so that we can unit test it [like so](src/examples/__tests__/readme.test.ts). 
+`cli` is a function that takes command-line arguments (strings) as argParser and returns a `Promise` representing the execution of the arguments. We export `cli` so that we can unit test it [like so](src/examples/__tests__/readme.test.ts). 
 
 ## More information
 This library has a couple dozen unit tests with >95% coverage. If you want to see more examples of how things works, check out the `.test.ts` files in the [src](src) directory. Also check out [src/examples](src/examples). If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.

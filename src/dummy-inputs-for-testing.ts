@@ -1,4 +1,4 @@
-import { CliInput } from './types';
+import { CliArgParser } from './types';
 
 export const DUMMY_INPUT_UNDEFINED_WAS_PASSED = 'undefined was passed';
 export const DUMMY_INPUT_EMPTY_ARRAY_WAS_PASSED = 'undefined was passed';
@@ -6,7 +6,7 @@ export const DUMMY_INPUT_THROWN_INTENTIONALLY = 'thrown intentionally';
 export const DUMMY_INPUT_THROW = 'throw';
 export const DUMMY_INPUT_THROW_NON_TRUTHY = 'throw-non-truthy';
 
-export const dummyInput: CliInput<string, false> = {
+export const dummyArgParser: CliArgParser<string, false> = {
   placeholder: '',
   getValue(argv) {
     if (typeof argv === 'undefined') {
@@ -26,8 +26,8 @@ export const dummyInput: CliInput<string, false> = {
   },
 };
 
-export const dummyRequiredInput: CliInput<string, true> = {
+export const dummyRequiredArgParser: CliArgParser<string, true> = {
   placeholder: '<foo>',
   required: true,
-  getValue: dummyInput.getValue,
+  getValue: dummyArgParser.getValue,
 };

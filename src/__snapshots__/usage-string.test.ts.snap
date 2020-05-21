@@ -42,4 +42,4 @@ Options:
    Another word"
 `;
 
-exports[`UsageString Does not write usage for named inputs if there are none 1`] = `"Usage: foo"`;
+exports[`UsageString Does not write usage for named argParsers if there are none 1`] = `"Usage: foo"`;

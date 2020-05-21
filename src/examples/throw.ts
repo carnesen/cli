@@ -1,25 +1,25 @@
 import { CodedError } from '@carnesen/coded-error';
 import { CliLeaf } from '../cli-leaf';
-import { CliStringInput } from '../cli-string-input';
-import { CliOneOfInput } from '../cli-one-of-input';
+import { CliStringArgParser } from '../cli-string-input';
+import { CliOneOfArgParser } from '../cli-one-of-input';
 import { CLI_TERSE_ERROR } from '../cli-terse-error';
 import { CLI_USAGE_ERROR } from '../cli-usage-error';
-import { CliJsonInput } from '../cli-json-input';
+import { CliJsonArgParser } from '../cli-json-input';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 export const root = CliLeaf({
   name: 'throw',
   description: 'Throw a CodedError in the "action" function',
-  namedInputs: {
-    message: CliStringInput({
+  namedArgParsers: {
+    message: CliStringArgParser({
       description: 'A message',
       required: true,
     }),
-    code: CliOneOfInput({
+    code: CliOneOfArgParser({
       values: [CLI_USAGE_ERROR, CLI_TERSE_ERROR],
       description: `A string "code" attached to the error.`,
     }),
-    data: CliJsonInput({
+    data: CliJsonArgParser({
       description: 'An arbitrary "data" field on the error object',
     }),
   },
