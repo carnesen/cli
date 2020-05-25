@@ -126,7 +126,7 @@ Returns a function of the form `(...args: string[]) => Promise<any>` that can be
 #### root
 A `Leaf` or `Branch`
 
-### ArgvInterface
+### ArgRunner
 `cli` is a function that takes command-line arguments (strings) as argParser and returns a `Promise` representing the execution of the arguments. We export `cli` so that we can unit test it [like so](src/examples/__tests__/readme.test.ts). 
 
 ## More information
@@ -135,9 +135,8 @@ This library has a couple dozen unit tests with >95% coverage. If you want to se
 ## Related
 - [@carnesen/run-and-exit](https://github.com/carnesen/run-and-exit): Run a function, `console.log` the result, and `process.exit`
 - [@carnesen/coded-error](https://github.com/carnesen/coded-error): An enhanced `Error` class with additional properties "code" and "data"
-- [@carnesen/eslint-config](https://github.com/carnesen/eslint-config): TSLint configurations for `@carnesen` projects
+- [@carnesen/eslint-config](https://github.com/carnesen/eslint-config): ESLint configurations for `@carnesen` projects
 - [@carnesen/tsconfig](https://github.com/carnesen/tsconfig): TypeScript configurations for `@carnesen` projects
 
 ## License
-
 MIT © [Chris Arnesen](https://www.carnesen.com)

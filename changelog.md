@@ -1,6 +1,7 @@
 # @carnesen/cli change log
 
 ## [Unreleased]
+### Breaking
 Recast "input" as "arg parser"
 ## 0.4.0
 ### Breaking

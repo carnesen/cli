@@ -16,14 +16,14 @@ const root = CliBranch({
 
 describe(accumulateCommandStack.name, () => {
   it('accumulates command linked list', () => {
-    const remainingArgv = accumulateCommandStack(root, ['echo', 'foo']);
+    const remainingArgs = accumulateCommandStack(root, ['echo', 'foo']);
     expect(root.next && root.next.name).toBe('echo');
-    expect(remainingArgv).toEqual(['foo']);
+    expect(remainingArgs).toEqual(['foo']);
   });
 
   it('does not attach a "next" command if the name does not match', () => {
-    const remainingArgv = accumulateCommandStack(root, ['bad-command-name']);
+    const remainingArgs = accumulateCommandStack(root, ['bad-command-name']);
     expect(root.next).toBe(undefined);
-    expect(remainingArgv).toEqual(['bad-command-name']);
+    expect(remainingArgs).toEqual(['bad-command-name']);
   });
 });

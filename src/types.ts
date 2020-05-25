@@ -1,14 +1,14 @@
 import { CLI_BRANCH, CLI_LEAF } from './constants';
 
-type ArgvForGetValue<TRequired extends boolean> = TRequired extends true
+type ArgsForGetValue<TRequired extends boolean> = TRequired extends true
   ? string[]
   : string[] | undefined;
 
 export type CliArgParser<TValue, TRequired extends boolean = boolean> = {
   placeholder: string;
   getValue:
-    | ((argv: ArgvForGetValue<TRequired>) => TValue)
-    | ((argv: ArgvForGetValue<TRequired>) => Promise<TValue>);
+    | ((args: ArgsForGetValue<TRequired>) => TValue)
+    | ((args: ArgsForGetValue<TRequired>) => Promise<TValue>);
   description?: string;
   required?: TRequired;
   hidden?: boolean;
