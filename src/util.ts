@@ -1,15 +1,15 @@
 import { CliUsageError } from './cli-usage-error';
 import redent = require('redent');
 
-export function wrapInSquareBrackets(str: string) {
+export function wrapInSquareBrackets(str: string): string {
   return `[${str}]`;
 }
 
-export function wrapInCurlyBrackets(str: string) {
+export function wrapInCurlyBrackets(str: string): string {
   return `{${str}}`;
 }
 
-export function regularizeText(text?: string) {
+export function regularizeText(text?: string): string {
   if (!text) {
     return '';
   }
@@ -35,7 +35,7 @@ export function regularizeText(text?: string) {
   return regularized;
 }
 
-export function convertToNumber(rawValue: string) {
+export function convertToNumber(rawValue: string): number {
   let value = NaN;
   if (rawValue.length > 0) {
     value = Number(rawValue);

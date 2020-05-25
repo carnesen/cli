@@ -10,7 +10,7 @@ import { mapCommand } from './map-command';
 
 const INDENT_SIZE = 3;
 
-export function UsageString(rootCommand: Command, errorMessage?: string) {
+export function UsageString(rootCommand: Command, errorMessage?: string): string {
   const lastCommand = LastCommand(rootCommand);
 
   const commandPathString = mapCommand(rootCommand, (command) => command.name).join(' ');

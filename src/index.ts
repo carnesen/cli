@@ -1,15 +1,9 @@
-// Arg type for custom arg types
-export { CliArgParser } from './types';
-
-// Command factories:
+// Command factories
 export { CliBranch } from './cli-branch';
 export { CliLeaf } from './cli-leaf';
 
 // Command-line interface runner
 export { runCliAndExit } from './run-cli-and-exit';
-
-// CliArgvInterface
-export { CliArgvInterface, CliEnhancer } from './cli-argv-interface';
 
 // CliArgParser factories:
 export { CliFlagArgParser } from './cli-flag-arg-parser';
@@ -23,3 +17,9 @@ export { CliStringArrayArgParser } from './cli-string-array-arg-parser';
 // Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
+
+// CliArgRunner
+export { CliArgRunner, CliEnhancer } from './cli-arg-runner';
+
+// For custom arg types
+export { CliArgParser } from './types';

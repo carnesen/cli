@@ -17,7 +17,7 @@ async function runMocked(action: () => any) {
       action,
     }),
     {
-      argv: [],
+      args: [],
       ...result,
     },
   );
@@ -134,7 +134,7 @@ describe(runCliAndExit.name, () => {
           // do nothing
         },
       }),
-      { processExit: jest.fn(), argv: [] },
+      { processExit: jest.fn(), args: [] },
     );
   });
 });

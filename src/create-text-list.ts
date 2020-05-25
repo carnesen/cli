@@ -18,7 +18,7 @@ function createTextListParagraph(item: Item, targetNameLength = 0) {
   return [firstLine, ...paddedLines].join('\n');
 }
 
-export function createTextList(...items: Item[]) {
+export function createTextList(...items: Item[]): string {
   const targetNameLength = Math.max(...items.map(({ name }) => name.length));
   const paragraphs = items.map((item) => createTextListParagraph(item, targetNameLength));
   return paragraphs.join('\n');

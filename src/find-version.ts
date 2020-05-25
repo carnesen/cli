@@ -1,7 +1,7 @@
 import readPkgUp = require('read-pkg-up');
 import { dirname } from 'path';
 
-export async function findVersion() {
+export async function findVersion(): Promise<string | undefined> {
   const mainModule = require.main;
   if (!mainModule) {
     // We not sure under what circumstances require.main would be undefined but

@@ -3,24 +3,24 @@ import { CLI_LEAF } from './constants';
 
 export function accumulateCommandStack(
   command: Command,
-  restCommandNamesAndPositionalArgv: string[],
+  restCommandNamesAndPositionalArgs: string[],
 ): string[] {
   if (command.commandType === CLI_LEAF) {
-    return restCommandNamesAndPositionalArgv;
+    return restCommandNamesAndPositionalArgs;
   }
 
   const found = command.subcommands.find(
-    (subcommand) => subcommand.name === restCommandNamesAndPositionalArgv[0],
+    (subcommand) => subcommand.name === restCommandNamesAndPositionalArgs[0],
   );
 
   if (!found) {
     // eslint-disable-next-line no-param-reassign
     command.next = undefined;
-    return restCommandNamesAndPositionalArgv;
+    return restCommandNamesAndPositionalArgs;
   }
 
   // eslint-disable-next-line no-param-reassign
   command.next = found;
 
-  return accumulateCommandStack(found, restCommandNamesAndPositionalArgv.slice(1));
+  return accumulateCommandStack(found, restCommandNamesAndPositionalArgs.slice(1));
 }

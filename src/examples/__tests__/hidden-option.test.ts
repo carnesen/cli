@@ -1,7 +1,7 @@
 import { root } from '../hidden-option';
-import { CliArgvInterface } from '../../cli-argv-interface';
+import { CliArgRunner } from '../../cli-arg-runner';
 
-const cli = CliArgvInterface(root);
+const cli = CliArgRunner(root);
 
 describe(root.name, () => {
   it('normally just echos', async () => {

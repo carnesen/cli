@@ -8,21 +8,21 @@ export const DUMMY_ARG_PARSER_THROW_NON_TRUTHY = 'throw-non-truthy';
 
 export const dummyArgParser: CliArgParser<string, false> = {
   placeholder: '',
-  getValue(argv) {
-    if (typeof argv === 'undefined') {
+  getValue(args) {
+    if (typeof args === 'undefined') {
       return DUMMY_ARG_PARSER_UNDEFINED_WAS_PASSED;
     }
-    if (argv.length === 0) {
+    if (args.length === 0) {
       return DUMMY_ARG_PARSER_EMPTY_ARRAY_WAS_PASSED;
     }
-    if (argv[0] === DUMMY_ARG_PARSER_THROW) {
+    if (args[0] === DUMMY_ARG_PARSER_THROW) {
       throw new Error(DUMMY_ARG_PARSER_THROWN_INTENTIONALLY);
     }
-    if (argv[0] === DUMMY_ARG_PARSER_THROW_NON_TRUTHY) {
+    if (args[0] === DUMMY_ARG_PARSER_THROW_NON_TRUTHY) {
       // eslint-disable-next-line no-throw-literal
       throw '';
     }
-    return argv[0];
+    return args[0];
   },
 };
 

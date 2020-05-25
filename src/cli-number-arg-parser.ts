@@ -28,20 +28,20 @@ function CliNumberArgParser(config: Config = {}) {
   const argParser: CliArgParser<number | undefined> = {
     required,
     hidden,
-    getValue(argv) {
-      if (!argv) {
+    getValue(args) {
+      if (!args) {
         return typeof defaultValue === 'number' ? defaultValue : undefined;
       }
 
-      if (argv.length > 1) {
+      if (args.length > 1) {
         throw new CliUsageError(`Expected just one ${placeholder}`);
       }
 
-      if (argv.length === 0) {
+      if (args.length === 0) {
         throw new CliUsageError(`Expected a ${placeholder}`);
       }
 
-      return convertToNumber(argv[0]);
+      return convertToNumber(args[0]);
     },
     description,
     placeholder,

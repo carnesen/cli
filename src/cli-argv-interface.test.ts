@@ -2,7 +2,7 @@ import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliLeaf } from './cli-leaf';
 import { dummyArgParser } from './dummy-arg-parsers-for-testing';
-import { CliArgvInterface, CliEnhancer } from './cli-argv-interface';
+import { CliArgRunner, CliEnhancer } from './cli-arg-runner';
 import { findVersion } from './find-version';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
@@ -41,50 +41,51 @@ const root = CliBranch({
   ],
 });
 
-const argvInterface = CliArgvInterface(root);
+const cliArgRunner = CliArgRunner(root);
 
-describe(CliArgvInterface.name, () => {
+describe(CliArgRunner.name, () => {
   it('calls the enhancer if provided', async () => {
     const spy = jest.fn();
-    const enhancer: CliEnhancer = (innerArgvInterface) => async (...argv: string[]) => {
-      spy(...argv);
-      await innerArgvInterface(...argv);
+    const enhancer: CliEnhancer = (innerArgRunner) => async (...args: string[]) => {
+      spy(...args);
+      await innerArgRunner(...args);
     };
-    const enhancedArgvInterface = CliArgvInterface(leafWithPositionalArgParser, {
+    const enhancedArgRunner = CliArgRunner(leafWithPositionalArgParser, {
       enhancer,
     });
-    await enhancedArgvInterface('foo', 'bar');
+    await enhancedArgRunner('foo', 'bar');
     expect(spy.mock.calls).toEqual([['foo', 'bar']]);
   });
+
   it('returns version string from package.json if "-v" or "--version" is passed', async () => {
     const version = await findVersion();
-    expect(await argvInterface('-v')).toBe(version);
-    expect(await argvInterface('--version')).toBe(version);
+    expect(await cliArgRunner('-v')).toBe(version);
+    expect(await cliArgRunner('--version')).toBe(version);
   });
 
   it('throws USAGE error with empty message if --help is passed', async () => {
-    const exception = await runAndCatch(argvInterface, '--help');
+    const exception = await runAndCatch(cliArgRunner, '--help');
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toBeFalsy();
   });
 
-  it('throws USAGE error with empty message if last command is a branch and no additional argv is present', async () => {
-    const exception = await runAndCatch(argvInterface);
+  it('throws USAGE error with empty message if last command is a branch and no additional args is present', async () => {
+    const exception = await runAndCatch(cliArgRunner);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toBeFalsy();
   });
 
-  it('throws USAGE error "bad command" if last command is a branch and additional argv is present', async () => {
-    const exception = await runAndCatch(argvInterface, 'oops');
+  it('throws USAGE error "bad command" if last command is a branch and additional args is present', async () => {
+    const exception = await runAndCatch(cliArgRunner, 'oops');
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch(/bad command/i);
     expect(exception.message).toMatch('"oops"');
     expect(exception.message).toMatchSnapshot();
   });
 
-  it('throws USAGE error "positional arguments" if last command is a leaf without positionalArgParser property and additional argv is present', async () => {
+  it('throws USAGE error "positional arguments" if last command is a leaf without positionalArgParser property and additional args is present', async () => {
     const exception = await runAndCatch(
-      argvInterface,
+      cliArgRunner,
       leafWithNamedArgParsers.name,
       'oops',
     );
@@ -96,17 +97,17 @@ describe(CliArgvInterface.name, () => {
   });
 
   it('Passes parsed positional value as first argument of the "action" function', async () => {
-    const positionalArgv = ['foo', 'bar'];
-    const result = await argvInterface(
+    const positionalArgs = ['foo', 'bar'];
+    const result = await cliArgRunner(
       leafWithPositionalArgParser.name,
-      ...positionalArgv,
+      ...positionalArgs,
     );
-    expect(result).toEqual([dummyArgParser.getValue(positionalArgv), {}, undefined]);
+    expect(result).toEqual([dummyArgParser.getValue(positionalArgs), {}, undefined]);
   });
 
   it('Passes parsed named values as second argument of the "action" function', async () => {
-    const namedArgv = ['--foo', 'bar'];
-    const result = await argvInterface(leafWithNamedArgParsers.name, ...namedArgv);
+    const namedArgs = ['--foo', 'bar'];
+    const result = await cliArgRunner(leafWithNamedArgParsers.name, ...namedArgs);
     expect(result).toEqual([
       undefined,
       { foo: dummyArgParser.getValue(['bar']) },
@@ -116,7 +117,7 @@ describe(CliArgvInterface.name, () => {
 
   it(`Throws USAGE error 'does not allow "--"' if leaf does not have an "escaped" property`, async () => {
     const exception = await runAndCatch(
-      argvInterface,
+      cliArgRunner,
       leafWithPositionalArgParser.name,
       '--',
     );
@@ -126,7 +127,7 @@ describe(CliArgvInterface.name, () => {
   });
 
   it('Passes parsed escaped value as third argument of the "action" function', async () => {
-    const result = await argvInterface(leafWithEscapedArgParser.name, '--');
+    const result = await cliArgRunner(leafWithEscapedArgParser.name, '--');
     expect(result).toEqual([
       undefined,
       {},

@@ -25,16 +25,16 @@ function CliStringArrayArgParser(config: Config = {}) {
     required,
     hidden,
     placeholder,
-    getValue(argv) {
-      if (!argv) {
+    getValue(args) {
+      if (!args) {
         return undefined;
       }
 
-      if (argv.length === 0) {
+      if (args.length === 0) {
         throw new CliUsageError(`Expected one or more values ${placeholder}`);
       }
 
-      return argv;
+      return args;
     },
     description,
   };
