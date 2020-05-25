@@ -13,7 +13,7 @@ type Config = Partial<{
 // Because a JSON argParser value has type `any`, we don't need to do anything fancy
 // with function overloads to handle the "required" field like we do for other
 // argParser factories.
-export function CliJsonArgParser(config: Config = {}) {
+export function CliJsonArgParser(config: Config = {}): CliArgParser<any> {
   const {
     placeholder = '<json>',
     required = false,
@@ -24,15 +24,15 @@ export function CliJsonArgParser(config: Config = {}) {
     required,
     placeholder,
     hidden,
-    getValue(argv) {
-      if (!argv) {
+    getValue(args) {
+      if (!args) {
         return undefined;
       }
-      if (argv.length !== 1) {
+      if (args.length !== 1) {
         throw new CliUsageError(`Expected a single ${placeholder} string`);
       }
       try {
-        const parsed = parseJson(argv[0]);
+        const parsed = parseJson(args[0]);
         return parsed;
       } catch (exception) {
         throw new CliUsageError(exception.message);

@@ -25,16 +25,16 @@ function CliNumberArrayArgParser(config: Config = {}) {
   const argParser: CliArgParser<number[] | undefined> = {
     required,
     hidden,
-    getValue(argv) {
-      if (!argv) {
+    getValue(args) {
+      if (!args) {
         return undefined;
       }
 
-      if (argv.length === 0) {
+      if (args.length === 0) {
         throw new CliUsageError(`Expected one or more arguments ${placeholder}`);
       }
 
-      return argv.map(convertToNumber);
+      return args.map(convertToNumber);
     },
     description,
     placeholder,

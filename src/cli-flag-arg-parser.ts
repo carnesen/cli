@@ -3,18 +3,18 @@ import { CliUsageError } from './cli-usage-error';
 
 type Config = Partial<{ description: string; hidden: boolean }>;
 
-export function CliFlagArgParser(config: Config = {}) {
+export function CliFlagArgParser(config: Config = {}): CliArgParser<boolean, false> {
   const { description, hidden = false } = config;
   const argParser: CliArgParser<boolean, false> = {
     placeholder: '',
     required: false,
     hidden,
-    getValue(argv) {
-      if (!argv) {
+    getValue(args) {
+      if (!args) {
         return false;
       }
-      if (argv.length > 0) {
-        throw new CliUsageError(`Unexpected argument "${argv[0]}"`);
+      if (args.length > 0) {
+        throw new CliUsageError(`Unexpected argument "${args[0]}"`);
       }
       return true;
     },

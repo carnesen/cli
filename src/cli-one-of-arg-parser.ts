@@ -32,21 +32,21 @@ function CliOneOfArgParser(config: Config<string[]>) {
     required,
     placeholder: config.placeholder || '<value>',
     hidden,
-    getValue(argv) {
-      if (!argv) {
+    getValue(args) {
+      if (!args) {
         return undefined;
       }
 
-      if (argv.length !== 1) {
+      if (args.length !== 1) {
         throw new CliUsageError(`Expected ${placeholder} to be one of ${valuesString}`);
       }
 
-      if (!config.values.includes(argv[0])) {
+      if (!config.values.includes(args[0])) {
         throw new CliUsageError(
-          `Invalid argument "${argv[0]}". Expected ${placeholder} to be one of ${valuesString}`,
+          `Invalid argument "${args[0]}". Expected ${placeholder} to be one of ${valuesString}`,
         );
       }
-      return argv[0];
+      return args[0];
     },
     description: `${regularizeText(description)}\nAllowed values ${valuesString}`,
   };

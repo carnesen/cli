@@ -11,24 +11,24 @@ import {
 } from './dummy-arg-parsers-for-testing';
 
 describe(callGetValue.name, () => {
-  it(`returns getValue(argv) if an argv with length >= 1 is passed`, async () => {
-    const argv = ['foo'];
-    expect(await callGetValue(dummyArgParser, argv)).toBe(dummyArgParser.getValue(argv));
-    expect(await callGetValue(dummyRequiredArgParser, argv)).toBe(
-      dummyRequiredArgParser.getValue(argv),
+  it(`returns getValue(args) if an args with length >= 1 is passed`, async () => {
+    const args = ['foo'];
+    expect(await callGetValue(dummyArgParser, args)).toBe(dummyArgParser.getValue(args));
+    expect(await callGetValue(dummyRequiredArgParser, args)).toBe(
+      dummyRequiredArgParser.getValue(args),
     );
   });
 
-  it(`if not required, returns getValue(argv) if argv is an empty array or undefined`, async () => {
+  it(`if not required, returns getValue(args) if args is an empty array or undefined`, async () => {
     expect(await callGetValue(dummyArgParser, [])).toBe(dummyArgParser.getValue([]));
     expect(await callGetValue(dummyArgParser, undefined)).toBe(
       dummyArgParser.getValue(undefined),
     );
   });
 
-  it(`if required, throws usage error "argParser is required" if argv is an empty array or undefined`, async () => {
-    for (const argv of [undefined, [] as string[]]) {
-      const exception = await runAndCatch(callGetValue, dummyRequiredArgParser, argv);
+  it(`if required, throws usage error "argParser is required" if args is an empty array or undefined`, async () => {
+    for (const args of [undefined, [] as string[]]) {
+      const exception = await runAndCatch(callGetValue, dummyRequiredArgParser, args);
       expect(exception.code).toBe(CLI_USAGE_ERROR);
       expect(exception.message).toMatch(/ArgParser is required/i);
       expect(exception.message).toMatch(dummyRequiredArgParser.placeholder);

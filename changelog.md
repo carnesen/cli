@@ -1,6 +1,8 @@
 # @carnesen/cli change log
 
 ## [Unreleased]
+### Breaking
+Recast "input" as "arg parser"
 ## 0.4.0
 ### Breaking
 Numerous tweaks to make the API more expressive and grepable, e.g. CliLeaf instead of just Leaf. The docs are still a work-in-progress but the TypeScript types are spot-on. Let them be your guide!
