@@ -9,7 +9,7 @@ export function CliFlagArgParser(config: Config = {}): CliArgParser<boolean, fal
     placeholder: '',
     required: false,
     hidden,
-    getValue(args) {
+    parse(args) {
       if (!args) {
         return false;
       }

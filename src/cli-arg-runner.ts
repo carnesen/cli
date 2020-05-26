@@ -6,7 +6,7 @@ import { CliUsageError } from './cli-usage-error';
 import { CliTerseError } from './cli-terse-error';
 import { CLI_BRANCH } from './constants';
 import { findVersion } from './find-version';
-import { callGetValue } from './call-get-value';
+import { callParse } from './call-parse';
 import { LastCommand } from './last-command';
 
 export type CliArgRunner = (...args: string[]) => Promise<any>;
@@ -77,7 +77,7 @@ export function CliArgRunner(
         restCommandNamesAndPositionalArgs.length > 0
           ? restCommandNamesAndPositionalArgs
           : undefined;
-      argsValue = await callGetValue(lastCommand.positionalArgParser, positionalArgs);
+      argsValue = await callParse(lastCommand.positionalArgParser, positionalArgs);
     } else if (restCommandNamesAndPositionalArgs.length > 0) {
       throw new CliUsageError(
         `Unexpected argument "${restCommandNamesAndPositionalArgs[0]}" : Command "${lastCommand.name}" does not accept positional arguments`,
@@ -91,7 +91,7 @@ export function CliArgRunner(
 
     let escapedValue: any;
     if (lastCommand.escapedArgParser) {
-      escapedValue = await callGetValue(lastCommand.escapedArgParser, escapedArgs, '--');
+      escapedValue = await callParse(lastCommand.escapedArgParser, escapedArgs, '--');
     } else if (escapedArgs) {
       throw new CliUsageError(
         `Command "${lastCommand.name}" does not allow "--" as an argument`,
