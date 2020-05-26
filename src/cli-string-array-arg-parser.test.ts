@@ -10,16 +10,16 @@ const required = false;
 const argParser = CliStringArrayArgParser({ description, hidden, placeholder, required });
 
 describe(CliStringArrayArgParser.name, () => {
-  it('getValue returns is args converted to numbers', () => {
-    expect(argParser.getValue(['0', '1', '2'])).toEqual(['0', '1', '2']);
+  it('parse returns is args converted to numbers', () => {
+    expect(argParser.parse(['0', '1', '2'])).toEqual(['0', '1', '2']);
   });
 
-  it('getValue returns `undefined` if args is', () => {
-    expect(argParser.getValue(undefined)).toBe(undefined);
+  it('parse returns `undefined` if args is', () => {
+    expect(argParser.parse(undefined)).toBe(undefined);
   });
 
-  it('getValue throws USAGE error "expected one or more" if args is an empty array', async () => {
-    const exception = await runAndCatch(argParser.getValue, []);
+  it('parse throws USAGE error "expected one or more" if args is an empty array', async () => {
+    const exception = await runAndCatch(argParser.parse, []);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch(/expected one or more/i);
     expect(exception.message).toMatch(placeholder);

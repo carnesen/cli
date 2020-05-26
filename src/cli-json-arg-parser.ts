@@ -24,7 +24,7 @@ export function CliJsonArgParser(config: Config = {}): CliArgParser<any> {
     required,
     placeholder,
     hidden,
-    getValue(args) {
+    parse(args) {
       if (!args) {
         return undefined;
       }

@@ -5,12 +5,18 @@ type Config = Partial<{
   required: boolean;
   description: string;
   defaultValue: string;
-  hidden?: boolean;
-  placeholder?: string;
+  hidden: boolean;
+  placeholder: string;
 }>;
 
+/**
+ * A factory for string-valued arg parsers
+ *
+ * @param options - An object of optional properties
+ * @returns A string-valued arg parser
+ */
 function CliStringArgParser(
-  config: Config & { defaultValue: string },
+  options: Config & { defaultValue: string },
 ): CliArgParser<string, false>;
 function CliStringArgParser(
   config: Config & { required: true },
@@ -28,7 +34,7 @@ function CliStringArgParser(config: Config = {}) {
     hidden,
     placeholder,
     required,
-    getValue(args) {
+    parse(args) {
       if (!args) {
         return typeof defaultValue === 'string' ? defaultValue : undefined;
       }
