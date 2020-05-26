@@ -25,7 +25,7 @@ function CliStringArrayArgParser(config: Config = {}) {
     required,
     hidden,
     placeholder,
-    getValue(args) {
+    parse(args) {
       if (!args) {
         return undefined;
       }

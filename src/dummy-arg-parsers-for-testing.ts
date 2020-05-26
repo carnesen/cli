@@ -8,7 +8,7 @@ export const DUMMY_ARG_PARSER_THROW_NON_TRUTHY = 'throw-non-truthy';
 
 export const dummyArgParser: CliArgParser<string, false> = {
   placeholder: '',
-  getValue(args) {
+  parse(args) {
     if (typeof args === 'undefined') {
       return DUMMY_ARG_PARSER_UNDEFINED_WAS_PASSED;
     }
@@ -29,5 +29,5 @@ export const dummyArgParser: CliArgParser<string, false> = {
 export const dummyRequiredArgParser: CliArgParser<string, true> = {
   placeholder: '<foo>',
   required: true,
-  getValue: dummyArgParser.getValue,
+  parse: dummyArgParser.parse,
 };

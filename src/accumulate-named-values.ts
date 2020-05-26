@@ -1,6 +1,6 @@
 import { AnyNamedArgParsers, NamedValues } from './types';
 import { NamedArgs } from './accumulate-args';
-import { callGetValue } from './call-get-value';
+import { callParse } from './call-parse';
 import { CliUsageError } from './cli-usage-error';
 
 type AccumulatedNamedValues = {
@@ -17,7 +17,7 @@ export async function accumulateNamedValues(
     const args = restNamedArgs[name];
     delete restNamedArgs[name];
     asyncFuncs.push(async () => {
-      const value = await callGetValue(argParser, args, `--${name}`);
+      const value = await callParse(argParser, args, `--${name}`);
       namedValues[name] = value;
     });
   }

@@ -11,27 +11,27 @@ const argParser = CliNumberArgParser({ required, description, hidden, placeholde
 
 describe(CliNumberArgParser.name, () => {
   it('returns `undefined` if args is `undefined` and no defaultValue has been provided', () => {
-    expect(argParser.getValue(undefined)).toBe(undefined);
+    expect(argParser.parse(undefined)).toBe(undefined);
   });
 
   it('returns defaultValue if args is `undefined` and defaultValue has been provided', () => {
     const argParser2 = CliNumberArgParser({ defaultValue: 0 });
-    expect(argParser2.getValue(undefined)).toBe(0);
+    expect(argParser2.parse(undefined)).toBe(0);
   });
 
-  it('getValue returns the zeroth element of args', () => {
-    expect(argParser.getValue(['1'])).toBe(1);
+  it('parse returns the zeroth element of args', () => {
+    expect(argParser.parse(['1'])).toBe(1);
   });
 
   it('throws UsageError "expected just one" if args has more than one element', async () => {
-    const exception = await runAndCatch(argParser.getValue, ['0', '1']);
+    const exception = await runAndCatch(argParser.parse, ['0', '1']);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch(/expected just one/i);
     expect(exception.message).toMatch(placeholder);
   });
 
   it('throws UsageError "expected a" if args is an empty array', async () => {
-    const exception = await runAndCatch(argParser.getValue, []);
+    const exception = await runAndCatch(argParser.parse, []);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch(/expected a/i);
     expect(exception.message).toMatch(placeholder);

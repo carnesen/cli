@@ -28,7 +28,7 @@ function CliNumberArgParser(config: Config = {}) {
   const argParser: CliArgParser<number | undefined> = {
     required,
     hidden,
-    getValue(args) {
+    parse(args) {
       if (!args) {
         return typeof defaultValue === 'number' ? defaultValue : undefined;
       }

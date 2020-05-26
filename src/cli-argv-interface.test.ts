@@ -102,7 +102,7 @@ describe(CliArgRunner.name, () => {
       leafWithPositionalArgParser.name,
       ...positionalArgs,
     );
-    expect(result).toEqual([dummyArgParser.getValue(positionalArgs), {}, undefined]);
+    expect(result).toEqual([dummyArgParser.parse(positionalArgs), {}, undefined]);
   });
 
   it('Passes parsed named values as second argument of the "action" function', async () => {
@@ -110,7 +110,7 @@ describe(CliArgRunner.name, () => {
     const result = await cliArgRunner(leafWithNamedArgParsers.name, ...namedArgs);
     expect(result).toEqual([
       undefined,
-      { foo: dummyArgParser.getValue(['bar']) },
+      { foo: dummyArgParser.parse(['bar']) },
       undefined,
     ]);
   });
@@ -131,7 +131,7 @@ describe(CliArgRunner.name, () => {
     expect(result).toEqual([
       undefined,
       {},
-      leafWithEscapedArgParser.escapedArgParser!.getValue([]),
+      leafWithEscapedArgParser.escapedArgParser!.parse([]),
     ]);
   });
 });

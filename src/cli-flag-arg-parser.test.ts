@@ -12,16 +12,16 @@ describe(CliFlagArgParser.name, () => {
     expect(argParser.required).toBe(false);
   });
 
-  it('getValue returns false if args is undefined', () => {
-    expect(argParser.getValue(undefined)).toBe(false);
+  it('parse returns false if args is undefined', () => {
+    expect(argParser.parse(undefined)).toBe(false);
   });
 
-  it('getValue returns true if args is an empty array', () => {
-    expect(argParser.getValue([])).toBe(true);
+  it('parse returns true if args is an empty array', () => {
+    expect(argParser.parse([])).toBe(true);
   });
 
-  it('getValue throws a usage error "unexpected argument" if args has a value', async () => {
-    const exception = await runAndCatch(argParser.getValue, ['foo']);
+  it('parse throws a usage error "unexpected argument" if args has a value', async () => {
+    const exception = await runAndCatch(argParser.parse, ['foo']);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch(/unexpected argument/i);
     expect(exception.message).toMatch('"foo"');

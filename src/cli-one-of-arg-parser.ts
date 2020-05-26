@@ -32,7 +32,7 @@ function CliOneOfArgParser(config: Config<string[]>) {
     required,
     placeholder: config.placeholder || '<value>',
     hidden,
-    getValue(args) {
+    parse(args) {
       if (!args) {
         return undefined;
       }

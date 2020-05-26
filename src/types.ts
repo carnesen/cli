@@ -1,17 +1,17 @@
 import { CLI_BRANCH, CLI_LEAF } from './constants';
 
-type ArgsForGetValue<TRequired extends boolean> = TRequired extends true
+type MaybeArgs<TRequired extends boolean> = TRequired extends true
   ? string[]
   : string[] | undefined;
 
 export type CliArgParser<TValue, TRequired extends boolean = boolean> = {
-  placeholder: string;
-  getValue:
-    | ((args: ArgsForGetValue<TRequired>) => TValue)
-    | ((args: ArgsForGetValue<TRequired>) => Promise<TValue>);
   description?: string;
-  required?: TRequired;
   hidden?: boolean;
+  parse:
+    | ((args: MaybeArgs<TRequired>) => TValue)
+    | ((args: MaybeArgs<TRequired>) => Promise<TValue>);
+  placeholder: string;
+  required?: TRequired;
 };
 
 export type AnyArgParser = CliArgParser<any>;

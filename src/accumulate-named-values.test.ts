@@ -14,12 +14,12 @@ describe(accumulateNamedValues.name, () => {
       { foo: ['bar'], baz: ['bop'] },
     );
     expect(namedValues).toEqual({
-      foo: dummyRequiredArgParser.getValue(['bar']),
-      baz: dummyRequiredArgParser.getValue(['bop']),
+      foo: dummyRequiredArgParser.parse(['bar']),
+      baz: dummyRequiredArgParser.parse(['bop']),
     });
   });
 
-  it(`re-throws error with name-specific context if getValue does`, async () => {
+  it(`re-throws error with name-specific context if parse does`, async () => {
     const exception = await runAndCatch(
       accumulateNamedValues,
       { foo123: dummyArgParser },

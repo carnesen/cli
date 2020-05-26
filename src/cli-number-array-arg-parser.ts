@@ -25,7 +25,7 @@ function CliNumberArrayArgParser(config: Config = {}) {
   const argParser: CliArgParser<number[] | undefined> = {
     required,
     hidden,
-    getValue(args) {
+    parse(args) {
       if (!args) {
         return undefined;
       }
