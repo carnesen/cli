@@ -16,19 +16,19 @@ const argParser = CliOneOfArgParser({
 });
 
 describe(CliOneOfArgParser.name, () => {
-  it('getValue returns the zeroth element of args', () => {
-    expect(argParser.getValue(['foo'])).toBe('foo');
+  it('parse returns the zeroth element of args', () => {
+    expect(argParser.parse(['foo'])).toBe('foo');
   });
 
-  it('getValue throws usage error "expected one of" if args is an empty array', async () => {
-    const exception = await runAndCatch(argParser.getValue, []);
+  it('parse throws usage error "expected one of" if args is an empty array', async () => {
+    const exception = await runAndCatch(argParser.parse, []);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch(/expected <special> to be one of/i);
     expect(exception.message).toMatch(/foo, bar/i);
   });
 
-  it('getValue throws usage error "invalid argument ... expected one of" if args has a bad value', async () => {
-    const exception = await runAndCatch(argParser.getValue, ['baz']);
+  it('parse throws usage error "invalid argument ... expected one of" if args has a bad value', async () => {
+    const exception = await runAndCatch(argParser.parse, ['baz']);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch(/expected <special> to be one of/i);
     expect(exception.message).toMatch(placeholder);
@@ -36,7 +36,7 @@ describe(CliOneOfArgParser.name, () => {
 
   it('returns undefined if args is', () => {
     const argParser2 = CliOneOfArgParser({ values: ['foo', 'bar'] });
-    expect(argParser2.getValue(undefined)).toBe(undefined);
+    expect(argParser2.parse(undefined)).toBe(undefined);
   });
 
   it('attaches config properties', () => {
