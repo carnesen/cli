@@ -4,6 +4,15 @@ type MaybeArgs<TRequired extends boolean> = TRequired extends true
   ? string[]
   : string[] | undefined;
 
+/**
+ *
+ * @remarks
+ * An arg parser converts a `string[]` of command-line arguments into a well-typed value.
+ * These `string[]`s could be positional arguments as in `echo foo bar baz` or part of a
+ * named argument group like `--users me you them`. This library [exports](src/index.ts) a
+ * number of `CliArgParser` factories for various types like `CliNumberArgParser`, which
+ * parses a `number` or `CliJsonArgParser`, which parses `any`.
+ */
 export type CliArgParser<TValue, TRequired extends boolean = boolean> = {
   description?: string;
   hidden?: boolean;
@@ -34,7 +43,6 @@ export type CliBranch = {
   description?: string;
   hidden?: boolean;
   subcommands: (CliBranch | CliLeaf<any, any, any>)[];
-  next?: CliBranch | CliLeaf<any, any, any>;
 };
 
 export type CliLeaf<
@@ -56,8 +64,16 @@ export type CliLeaf<
   hidden?: boolean;
 };
 
-export type Command = CliBranch | CliLeaf<AnyArgParser, AnyNamedArgParsers, AnyArgParser>;
+export type AnyCliLeaf = CliLeaf<AnyArgParser, AnyNamedArgParsers, AnyArgParser>;
+export type Command = CliBranch | AnyCliLeaf;
 export type AnyCommand = CliBranch | CliLeaf<any, any, any>;
+
+export type CommandStack = {
+  parents: CliBranch[];
+  current: Command;
+};
+
+export type LeafStack = { parents: CliBranch[]; current: AnyCliLeaf };
 
 // The "commandType" field is assigned internally by the framework.
 // This helper function is used to remove that field for the argParser

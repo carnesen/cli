@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`CliArgRunner throws USAGE error "bad command" if last command is a branch and additional args is present 1`] = `"Bad command \\"oops\\""`;
-
-exports[`CliArgRunner throws USAGE error "positional arguments" if last command is a leaf without positionalArgParser property and additional args is present 1`] = `"Unexpected argument \\"oops\\" : Command \\"leaf-with-named-args\\" does not accept positional arguments"`;

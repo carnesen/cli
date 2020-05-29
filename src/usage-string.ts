@@ -1,19 +1,18 @@
 import redent = require('redent');
 
-import { Command, AnyArgParser } from './types';
-import { CLI_BRANCH, RED_ERROR } from './constants';
-import { createTextList } from './create-text-list';
+import { AnyArgParser, CommandStack } from './types';
+import { CLI_BRANCH } from './constants';
+import { TextList } from './text-list';
 import { regularizeText, wrapInSquareBrackets } from './util';
 import { getPathAndDescriptionOfLeaves } from './get-path-and-description-of-leaves';
-import { LastCommand } from './last-command';
-import { mapCommand } from './map-command';
 
 const INDENT_SIZE = 3;
 
-export function UsageString(rootCommand: Command, errorMessage?: string): string {
-  const lastCommand = LastCommand(rootCommand);
+export function UsageString(commandStack: CommandStack): string {
+  const { current, parents } = commandStack;
+  const lastCommand = current;
 
-  const commandPathString = mapCommand(rootCommand, (command) => command.name).join(' ');
+  const commandPathString = [...parents, current].map(({ name }) => name).join(' ');
   let firstParagraph = `Usage: ${commandPathString}`;
   const otherParagraphs: string[] = [];
 
@@ -36,13 +35,13 @@ export function UsageString(rootCommand: Command, errorMessage?: string): string
     firstParagraph += ' <subcommand> ...';
     otherParagraphs.push('Subcommands:');
     const nameAndDescriptionOfLeaves = getPathAndDescriptionOfLeaves(lastCommand, []);
-    const items: Parameters<typeof createTextList> = nameAndDescriptionOfLeaves.map(
+    const items: Parameters<typeof TextList> = nameAndDescriptionOfLeaves.map(
       ({ path, description }) => ({
         name: path.join(' '),
         text: description,
       }),
     );
-    const subcommandsParagraph = redent(createTextList(...items), INDENT_SIZE);
+    const subcommandsParagraph = redent(TextList(...items), INDENT_SIZE);
     otherParagraphs.push(subcommandsParagraph);
   } else {
     // LEAF
@@ -60,7 +59,7 @@ export function UsageString(rootCommand: Command, errorMessage?: string): string
         );
         firstParagraph += optionsNotRequired ? ' [<options>]' : ' <options>';
         otherParagraphs.push('Options:');
-        const items: Parameters<typeof createTextList> = entries.map(
+        const items: Parameters<typeof TextList> = entries.map(
           ([argParserName, argParser]) => {
             let name = `--${argParserName}`;
             if (argParser.placeholder) {
@@ -73,7 +72,7 @@ export function UsageString(rootCommand: Command, errorMessage?: string): string
             return { name, text };
           },
         );
-        const optionsParagraph = redent(createTextList(...items), INDENT_SIZE);
+        const optionsParagraph = redent(TextList(...items), INDENT_SIZE);
         otherParagraphs.push(optionsParagraph);
       }
     }
@@ -89,10 +88,6 @@ export function UsageString(rootCommand: Command, errorMessage?: string): string
   }
 
   paragraphs.push(...otherParagraphs);
-
-  if (errorMessage) {
-    paragraphs.push(`${RED_ERROR} ${errorMessage}`);
-  }
 
   return paragraphs.join('\n\n');
 }

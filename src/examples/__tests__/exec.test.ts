@@ -1,10 +1,10 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
 import { execCliLeaf } from '../exec';
-import { CliArgRunner } from '../../cli-arg-runner';
+import { RunCli } from '../../run-cli';
 import { CLI_USAGE_ERROR } from '../../cli-usage-error';
 
-const cliArgRunner = CliArgRunner(execCliLeaf);
+const cliArgRunner = RunCli(execCliLeaf);
 
 describe(execCliLeaf.name, () => {
   it('runs the provided command', async () => {
