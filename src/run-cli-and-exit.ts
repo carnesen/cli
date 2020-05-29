@@ -2,7 +2,7 @@ import { CliLeaf, CliBranch } from './types';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import { CLI_TERSE_ERROR } from './cli-terse-error';
 import { RED_ERROR } from './constants';
-import { CliArgRunner, CliEnhancer } from './cli-arg-runner';
+import { RunCli, CliEnhancer } from './run-cli';
 import { UsageString } from './usage-string';
 
 export type RunCliAndExitOptions = Partial<{
@@ -24,10 +24,10 @@ export async function runCliAndExit(
     consoleLog = console.log, // eslint-disable-line no-console
     consoleError = console.error, // eslint-disable-line no-console
   } = options;
-  const argRunner = CliArgRunner(rootCommand, { enhancer });
+  const runCli = RunCli(rootCommand, { enhancer });
   let exitCode = 0;
   try {
-    const result = await argRunner(...args);
+    const result = await runCli(...args);
     if (typeof result !== 'undefined') {
       consoleLog(result);
     }
@@ -38,7 +38,14 @@ export async function runCliAndExit(
         `${RED_ERROR} Encountered non-truthy exception "${exception}". Please contact the author of this command-line interface`,
       );
     } else if (exception.code === CLI_USAGE_ERROR) {
-      consoleError(UsageString(rootCommand, exception.message));
+      const usageString = UsageString(
+        exception.commandStack || { current: rootCommand, parents: [] },
+      );
+      if (exception.message) {
+        consoleError(`${usageString}\n\n${RED_ERROR} ${exception.message}`);
+      } else {
+        consoleError(usageString);
+      }
     } else if (exception.code === CLI_TERSE_ERROR) {
       if (!exception.message) {
         consoleError(exception);

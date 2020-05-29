@@ -1,7 +1,7 @@
 import { root } from '../hidden-leaf';
-import { CliArgRunner } from '../../cli-arg-runner';
+import { RunCli } from '../../run-cli';
 
-const cli = CliArgRunner(root);
+const cli = RunCli(root);
 
 describe(root.name, () => {
   it('has a hidden leaf "hidden-echo"', async () => {

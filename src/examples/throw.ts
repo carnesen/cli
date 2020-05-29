@@ -1,10 +1,10 @@
 import { CodedError } from '@carnesen/coded-error';
 import { CliLeaf } from '../cli-leaf';
-import { CliStringArgParser } from '../cli-string-arg-parser';
-import { CliOneOfArgParser } from '../cli-one-of-arg-parser';
+import { CliStringArgParser } from '../arg-parser-factories/cli-string-arg-parser';
+import { CliOneOfArgParser } from '../arg-parser-factories/cli-one-of-arg-parser';
 import { CLI_TERSE_ERROR } from '../cli-terse-error';
 import { CLI_USAGE_ERROR } from '../cli-usage-error';
-import { CliJsonArgParser } from '../cli-json-arg-parser';
+import { CliJsonArgParser } from '../arg-parser-factories/cli-json-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 export const root = CliLeaf({

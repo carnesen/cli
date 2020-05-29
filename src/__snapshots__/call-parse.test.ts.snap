@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`callParse if throws "argParser is required" with context, expect message to match snapshot 1`] = `"context <foo> : argument is required"`;
-
-exports[`callParse if throws "argParser is required", expect message to match snapshot 1`] = `"<foo> : argument is required"`;
-
-exports[`callParse throws if parse does with a context/placeholder enhanced message 1`] = `"thrown intentionally"`;

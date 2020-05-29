@@ -34,7 +34,6 @@ export type CliBranch = {
   description?: string;
   hidden?: boolean;
   subcommands: (CliBranch | CliLeaf<any, any, any>)[];
-  next?: CliBranch | CliLeaf<any, any, any>;
 };
 
 export type CliLeaf<
@@ -56,8 +55,16 @@ export type CliLeaf<
   hidden?: boolean;
 };
 
-export type Command = CliBranch | CliLeaf<AnyArgParser, AnyNamedArgParsers, AnyArgParser>;
+export type AnyCliLeaf = CliLeaf<AnyArgParser, AnyNamedArgParsers, AnyArgParser>;
+export type Command = CliBranch | AnyCliLeaf;
 export type AnyCommand = CliBranch | CliLeaf<any, any, any>;
+
+export type CommandStack = {
+  parents: CliBranch[];
+  current: Command;
+};
+
+export type LeafStack = { parents: CliBranch[]; current: AnyCliLeaf };
 
 // The "commandType" field is assigned internally by the framework.
 // This helper function is used to remove that field for the argParser

@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
-import { CliStringArgParser } from '../cli-string-arg-parser';
+import { CliStringArgParser } from '../arg-parser-factories/cli-string-arg-parser';
 import { CliLeaf } from '../cli-leaf';
-import { CliStringArrayArgParser } from '../cli-string-array-arg-parser';
+import { CliStringArrayArgParser } from '../arg-parser-factories/cli-string-array-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 export const execCliLeaf = CliLeaf({

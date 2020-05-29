@@ -8,12 +8,11 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "build": "tsc",
-    "clean-build": "rimraf lib && npm run build",
+    "build": "rimraf lib/ && tsc",
     "cli": "ts-node src/examples/index.ts",
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
-    "test": "npm run lint && npm run unit-test && npm run clean-build && npm run cli -- echo ok",
+    "test": "npm run lint && npm run unit-test && npm run build && npm run cli -- echo ok",
     "unit-test": "jest src"
   },
   "dependencies": {
@@ -35,6 +34,7 @@
     "rimraf": "3.0.2",
     "ts-jest": "26.0.0",
     "ts-node": "8.10.1",
+    "typedoc": "0.17.7",
     "typescript": "3.9.3"
   },
   "files": [
