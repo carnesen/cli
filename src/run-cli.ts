@@ -11,6 +11,14 @@ export type RunCli = (...args: string[]) => Promise<any>;
 
 export type CliEnhancer = (runCli: RunCli) => RunCli;
 
+/**
+ * 
+ * @remarks
+ * Returns a function of the form `(...args: string[]) => Promise<any>` that can be invoked as e.g. `cli('foo', 'bar')` for unit tests or as `cli(process.argv.slice(2))` in an executable CLI script.
+
+ * @param rootCommand 
+ * @param options 
+ */
 export function RunCli(
   rootCommand: AnyCommand,
   options: Partial<{ enhancer: CliEnhancer }> = {},
@@ -87,7 +95,7 @@ export function RunCli(
       return result;
     } catch (exception) {
       if (exception?.code === CLI_USAGE_ERROR) {
-        exception.commandStack = exception?.commandStack || leafStack;
+        exception.commandStack = leafStack;
       }
       throw exception;
     }

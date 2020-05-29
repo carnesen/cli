@@ -1,6 +1,6 @@
 import { UsageString } from './usage-string';
 import { CliBranch } from './cli-branch';
-import { CliStringArgParser } from './arg-parser-factories/cli-string-arg-parser';
+import { CliStringArgParser } from './arg-parsers/cli-string-arg-parser';
 import { CliLeaf } from './cli-leaf';
 import { Command } from './types';
 

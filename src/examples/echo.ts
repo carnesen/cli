@@ -1,5 +1,5 @@
 import { CliLeaf } from '../cli-leaf';
-import { CliStringArrayArgParser } from '../arg-parser-factories/cli-string-array-arg-parser';
+import { CliStringArrayArgParser } from '../arg-parsers/cli-string-array-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 // This is a single-action CLI that mimics the "echo" utility. Its root command

@@ -4,6 +4,15 @@ type MaybeArgs<TRequired extends boolean> = TRequired extends true
   ? string[]
   : string[] | undefined;
 
+/**
+ *
+ * @remarks
+ * An arg parser converts a `string[]` of command-line arguments into a well-typed value.
+ * These `string[]`s could be positional arguments as in `echo foo bar baz` or part of a
+ * named argument group like `--users me you them`. This library [exports](src/index.ts) a
+ * number of `CliArgParser` factories for various types like `CliNumberArgParser`, which
+ * parses a `number` or `CliJsonArgParser`, which parses `any`.
+ */
 export type CliArgParser<TValue, TRequired extends boolean = boolean> = {
   description?: string;
   hidden?: boolean;

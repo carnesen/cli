@@ -1,4 +1,4 @@
-# @carnesen/cli [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://badge.fury.io/js/%40carnesen%2Fcli) [![build status badge](https://github.com/carnesen/tsconfig/workflows/test/badge.svg)](https://github.com/carnesen/tsconfig/actions?query=workflow%3Atest+branch%3Amaster)
+# @carnesen/cli [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://badge.fury.io/js/%40carnesen%2Fcli) [![build status badge](https://github.com/carnesen/cli/workflows/test/badge.svg)](https://github.com/carnesen/cli/actions?query=workflow%3Atest+branch%3Amaster)
 
 A framework for building command-line interfaces (CLIs) in Node.js. This package includes runtime JavaScript files suitable for Node.js >=10 as well as the corresponding TypeScript type declarations.
 
@@ -63,71 +63,12 @@ $ ts-node readme.ts 1 2 3 --squared
 36 
 ```
 
-## API
+## Structure
 The general structure of a `@carnesen/cli` is:
 ```
 <program> <branch> <leaf> <positional-args> --name <named-args> -- <escaped-args>
 ```
 Everything after `<program>` is optional.
-
-### `CliArgParser`
-An arg parser converts a `string[]` of command-line arguments into a well-typed value. These `string[]`s could be positional arguments as in `echo foo bar baz` or part of a named argument group like `--users me you them`. This library [exports](src/index.ts) a number of `CliArgParser` factories for various types like `CliNumberArgParser`, which parses a `number` or `CliJsonArgParser`, which parses `any`.
-
-### CliLeaf({name, description?, args?, options?, action, hidden?, version?})
-A factory for creating "action" commands. Returns the newly-created `leaf`.
-
-#### name
-If this "leaf" is a subcommand, `name` is the string that the user will pass as the "subcommand" argument to invoke this action. If this "leaf" is the root command, `name` should be the CLI's name.
-
-#### description
-(Optional) A string that will be included in `Usage:` if present.
-
-#### positionalArgParser
-(Optional) An `ArgParser` for 
-
-#### namedArgParsers
-(Optional) An object of named `ArgParser`s, for example:
-```ts
-const options = {
-  path: createStringArgParser({
-    description: 'An absolute or relative path',
-  }),
-}
-```
-The `args` and `options` properties define how the command-line arguments get parsed and transformed before being passed into the `action` function.
-
-#### action(args, options)
-The function that defines your command logic. `action` can return a value synchronously like in the "multiply" example above, or it can be an `async` function that returns a `Promise`. If `action` returns/resolves a value, that value is `console.log`ged before the CLI exits. If `action` throws/rejects, the exception is `console.log`ged before the CLI exits. That means that if you don't want the user to see a stack trace, your `action` should throw a `string` instead of an `Error` object. The type of the `args` argument received by `action` is derived by the `args` property of the leaf. Similarly, the `options` argument type is derived from `leaf.options`.
-
-#### hidden
-(Optional) `boolean`
-
-#### version
-(Optional) `string`. If provided, this string will be printed when the user does `cli --version` or `cli -v`. If this value is not provided, `@carnesen/cli` will attempt to find a version string in your package.json file.
-
-### CliBranch({name, description, subcommands, hidden?})
-A factory function similar to `CliLeaf`. Returns the newly-created `Branch` object.
-
-#### name
-If this "branch" is not the root command, `name` is the string that the user will pass as the "subcommand" argument to invoke actions in this part of the command tree. If this "branch" command is the root command, `name` should be the CLI's name.
-
-#### description
-(Optional) A string that will be included in `Usage:` if present.
-
-#### subcommands
-An array of `Branch` and/or `Leaf` objects.
-
-#### hidden
-(Optional) `boolean`
-
-### createCli(root)
-Returns a function of the form `(...args: string[]) => Promise<any>` that can be invoked as e.g. `cli('foo', 'bar')` for unit tests or as `cli(process.argv.slice(2))` in an executable CLI script.
-
-#### root
-A `Leaf` or `Branch`
-
-### ArgRunner
-`cli` is a function that takes command-line arguments (strings) as argParser and returns a `Promise` representing the execution of the arguments. We export `cli` so that we can unit test it [like so](src/examples/__tests__/readme.test.ts). 
 
 ## More information
 This library has a couple dozen unit tests with >95% coverage. If you want to see more examples of how things works, check out the `.test.ts` files in the [src](src) directory. Also check out [src/examples](src/examples). If you encounter any bugs or have any questions or feature requests, please don't hesitate to file an issue or submit a pull request on this project's repository on GitHub.

@@ -38,9 +38,8 @@ export async function runCliAndExit(
         `${RED_ERROR} Encountered non-truthy exception "${exception}". Please contact the author of this command-line interface`,
       );
     } else if (exception.code === CLI_USAGE_ERROR) {
-      const usageString = UsageString(
-        exception.commandStack || { current: rootCommand, parents: [] },
-      );
+      const FALLBACK_COMMAND_STACK = { current: rootCommand, parents: [] };
+      const usageString = UsageString(exception.commandStack || FALLBACK_COMMAND_STACK);
       if (exception.message) {
         consoleError(`${usageString}\n\n${RED_ERROR} ${exception.message}`);
       } else {
