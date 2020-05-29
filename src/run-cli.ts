@@ -94,7 +94,7 @@ export function RunCli(
       const result = await leaf.action(argsValue, namedValues, escapedValue);
       return result;
     } catch (exception) {
-      if (exception?.code === CLI_USAGE_ERROR) {
+      if (exception && exception.code === CLI_USAGE_ERROR) {
         exception.commandStack = leafStack;
       }
       throw exception;

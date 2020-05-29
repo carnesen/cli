@@ -27,7 +27,7 @@ export async function parseArgs(
     if (exception && typeof exception.message === 'string') {
       exception.message = `${prefix}${exception.message}`;
     }
-    if (exception?.code === CLI_USAGE_ERROR) {
+    if (exception && exception.code === CLI_USAGE_ERROR) {
       exception.commandStack = leafStack;
     }
     throw exception;
