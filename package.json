@@ -10,6 +10,8 @@
   "scripts": {
     "build": "rimraf lib/ && tsc",
     "cli": "ts-node src/examples/index.ts",
+    "docs": "typedoc -- --mode library --inputFiles src/index.ts",
+    "docs-watch": "nodemon --exec typedoc -- --mode library --inputFiles src/index.ts",
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run unit-test && npm run build && npm run cli -- echo ok",
@@ -31,15 +33,17 @@
     "eslint": "7.1.0",
     "eslint-config-carnesen": "3.0.0",
     "jest": "26.0.1",
+    "nodemon": "2.0.4",
     "rimraf": "3.0.2",
     "ts-jest": "26.0.0",
     "ts-node": "8.10.2",
-    "typedoc": "0.17.7",
+    "typedoc": "0.17.0-3",
     "typescript": "3.9.3"
   },
   "files": [
-    "src",
-    "lib"
+    "docs",
+    "lib",
+    "src"
   ],
   "keywords": [
     "typescript",

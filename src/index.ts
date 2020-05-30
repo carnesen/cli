@@ -3,9 +3,18 @@ export { CliBranch } from './cli-branch';
 export { CliLeaf } from './cli-leaf';
 
 // CliArgParser factories
-export { CliFlagArgParser } from './arg-parsers/cli-flag-arg-parser';
-export { CliJsonArgParser } from './arg-parsers/cli-json-arg-parser';
-export { CliNumberArgParser } from './arg-parsers/cli-number-arg-parser';
+export {
+  CliFlagArgParser,
+  CliFlagArgParserOptions,
+} from './arg-parsers/cli-flag-arg-parser';
+export {
+  CliJsonArgParser,
+  CliJsonArgParserOptions,
+} from './arg-parsers/cli-json-arg-parser';
+export {
+  CliNumberArgParser,
+  CliNumberArgParserOptions,
+} from './arg-parsers/cli-number-arg-parser';
 export { CliNumberArrayArgParser } from './arg-parsers/cli-number-array-arg-parser';
 export { CliOneOfArgParser } from './arg-parsers/cli-one-of-arg-parser';
 export { CliStringArgParser } from './arg-parsers/cli-string-arg-parser';
