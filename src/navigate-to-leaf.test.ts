@@ -1,4 +1,4 @@
-import { findCliLeaf } from './find-cli-leaf';
+import { navigateToLeaf } from './navigate-to-leaf';
 import { CliBranch } from './cli-branch';
 import { CliLeaf } from './cli-leaf';
 
@@ -14,15 +14,9 @@ const branch = CliBranch({
   subcommands: [leaf],
 });
 
-describe(findCliLeaf.name, () => {
+describe(navigateToLeaf.name, () => {
   it('accumulates command linked list', () => {
-    const [leafStack, args] = findCliLeaf(
-      {
-        current: branch,
-        parents: [],
-      },
-      ['echo', 'foo'],
-    );
+    const [leafStack, args] = navigateToLeaf(branch, ['echo', 'foo']);
     expect(leafStack.current).toBe(leaf);
     expect(leafStack.parents[0]).toBe(branch);
     expect(args).toEqual(['foo']);

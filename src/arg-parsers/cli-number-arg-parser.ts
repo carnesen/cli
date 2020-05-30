@@ -2,22 +2,35 @@ import { CliArgParser } from '../types';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
-type Config = Partial<{
-  required: boolean;
-  description: string;
-  defaultValue: number;
-  placeholder: string;
-  hidden: boolean;
-}>;
+/**
+ * Type of {@linkcode CliNumberArgParser}'s `options` parameter
+ */
+export type CliNumberArgParserOptions = {
+  required?: boolean;
+  description?: string;
+  defaultValue?: number;
+  /**
+   * Defaults to <num>
+   */
+  placeholder?: string;
+  hidden?: boolean;
+};
 
+/**
+ * A factory function for creating number-valued arg parsers
+ * @param options
+ * @returns A number-valued arg parser
+ */
 function CliNumberArgParser(
-  config: Config & { defaultValue: number },
+  options: CliNumberArgParserOptions & { defaultValue: number },
 ): CliArgParser<number, false>;
 function CliNumberArgParser(
-  config: Config & { required: true },
+  config: CliNumberArgParserOptions & { required: true },
 ): CliArgParser<number, true>;
-function CliNumberArgParser(config?: Config): CliArgParser<number | undefined, boolean>;
-function CliNumberArgParser(config: Config = {}) {
+function CliNumberArgParser(
+  config?: CliNumberArgParserOptions,
+): CliArgParser<number | undefined, boolean>;
+function CliNumberArgParser(config: CliNumberArgParserOptions = {}) {
   const {
     required = false,
     description,

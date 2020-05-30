@@ -3,23 +3,44 @@ import parseJson = require('parse-json');
 import { CliArgParser } from '../types';
 import { CliUsageError } from '../cli-usage-error';
 
-type Config = Partial<{
-  description: string;
-  required: boolean;
-  placeholder: string;
-  hidden: boolean;
-}>;
+export type CliJsonArgParserOptions = {
+  description?: string;
+  required?: boolean;
+  /**
+   * Defaults to <json>
+   */
+  placeholder?: string;
+  hidden?: boolean;
+};
 
-// Because a JSON argParser value has type `any`, we don't need to do anything fancy
-// with function overloads to handle the "required" field like we do for other
-// argParser factories.
-export function CliJsonArgParser(config: Config = {}): CliArgParser<any> {
+/**
+ * A factory for arg parsers that JSON.parse the command-line arguments
+ *
+ * @param options
+ *
+ * @returns
+ * An any-valued ArgParser
+ *
+ * @example
+ * ```text
+ * $ cli --json '{"foo":true}' // named value "json" receives object `{ foo: true }`
+ * $ cli --json           // usage error
+ * $ cli --json '""' '""' // usage error
+ * $ cli --json foo // error parsing JSON
+ * ```
+ *
+ * @throws {@linkcode CliUsageError}
+ */
+
+export function CliJsonArgParser(
+  options: CliJsonArgParserOptions = {},
+): CliArgParser<any> {
   const {
     placeholder = '<json>',
     required = false,
     description,
     hidden = false,
-  } = config;
+  } = options;
   const argParser: CliArgParser<any> = {
     required,
     placeholder,

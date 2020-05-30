@@ -1,4 +1,4 @@
-import { CommandStack, LeafStack } from './types';
+import { CommandStack, LeafStack, Command } from './types';
 import { CLI_LEAF } from './constants';
 import { CliUsageError } from './cli-usage-error';
 
@@ -19,10 +19,14 @@ import { CliUsageError } from './cli-usage-error';
  * @param args - An array of string command-line arguments
  * @returns A Leaf Stack and the remaining unprocessed command-line args
  *
- * @internal
+ * @hidden
  */
 
-export function findCliLeaf(
+export function navigateToLeaf(command: Command, args: string[]): [LeafStack, string[]] {
+  return recursiveNavigateToLeaf({ current: command, parents: [] }, args);
+}
+
+export function recursiveNavigateToLeaf(
   commandStack: CommandStack,
   args: string[],
 ): [LeafStack, string[]] {
@@ -50,7 +54,7 @@ export function findCliLeaf(
     throw new CliUsageError(`Bad command "${args[0]}"`, commandStack);
   }
 
-  return findCliLeaf(
+  return recursiveNavigateToLeaf(
     {
       parents: [...parents, current],
       current: next,

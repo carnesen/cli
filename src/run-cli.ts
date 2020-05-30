@@ -5,7 +5,7 @@ import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { CliTerseError } from './cli-terse-error';
 import { findVersion } from './find-version';
 import { parseArgs } from './parse-args';
-import { findCliLeaf } from './find-cli-leaf';
+import { navigateToLeaf } from './navigate-to-leaf';
 
 export type RunCli = (...args: string[]) => Promise<any>;
 
@@ -41,13 +41,7 @@ export function RunCli(
       return version;
     }
 
-    const [leafStack, remainingArgs] = findCliLeaf(
-      {
-        current: rootCommand,
-        parents: [],
-      },
-      args,
-    );
+    const [leafStack, remainingArgs] = navigateToLeaf(rootCommand, args);
 
     const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(remainingArgs);
     if (namedArgs.help) {

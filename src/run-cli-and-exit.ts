@@ -1,4 +1,4 @@
-import { CliLeaf, CliBranch } from './types';
+import { ICliLeaf, CliBranch } from './types';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import { CLI_TERSE_ERROR } from './cli-terse-error';
 import { RED_ERROR } from './constants';
@@ -14,7 +14,7 @@ export type RunCliAndExitOptions = Partial<{
 }>;
 
 export async function runCliAndExit(
-  rootCommand: CliBranch | CliLeaf<any, any, any>,
+  rootCommand: CliBranch | ICliLeaf<any, any, any>,
   options: RunCliAndExitOptions = {},
 ): Promise<void> {
   const {
