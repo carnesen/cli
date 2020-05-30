@@ -37,6 +37,7 @@ build/
 built/
 lib/
 tmp/
+docs/
 
 # Serverless generated files
 .serverless/
