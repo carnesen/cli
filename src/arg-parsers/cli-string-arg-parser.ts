@@ -1,7 +1,10 @@
-import { CliArgParser } from '../types';
+import { ICliArgParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 
-type Config = Partial<{
+/**
+ * The type of {@linkcode CliStringArgParser}'s options parameter
+ */
+export type CliStringArgParserOptions = Partial<{
   required: boolean;
   description: string;
   defaultValue: string;
@@ -16,13 +19,15 @@ type Config = Partial<{
  * @returns A string-valued arg parser
  */
 function CliStringArgParser(
-  options: Config & { defaultValue: string },
-): CliArgParser<string, false>;
+  options: CliStringArgParserOptions & { defaultValue: string },
+): ICliArgParser<string, false>;
 function CliStringArgParser(
-  config: Config & { required: true },
-): CliArgParser<string, true>;
-function CliStringArgParser(config?: Config): CliArgParser<string | undefined, false>;
-function CliStringArgParser(config: Config = {}) {
+  options: CliStringArgParserOptions & { required: true },
+): ICliArgParser<string, true>;
+function CliStringArgParser(
+  options?: CliStringArgParserOptions,
+): ICliArgParser<string | undefined, false>;
+function CliStringArgParser(config: CliStringArgParserOptions = {}) {
   const {
     defaultValue,
     required = false,
@@ -30,7 +35,7 @@ function CliStringArgParser(config: Config = {}) {
     placeholder = '<str>',
     hidden = false,
   } = config;
-  const argParser: CliArgParser<string | undefined> = {
+  const argParser: ICliArgParser<string | undefined> = {
     hidden,
     placeholder,
     required,

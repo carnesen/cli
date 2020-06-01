@@ -1,10 +1,11 @@
 import redent = require('redent');
 
-import { AnyArgParser, CommandStack } from './types';
+import { CommandStack } from './types';
 import { CLI_BRANCH } from './constants';
 import { TextList } from './text-list';
 import { regularizeText, wrapInSquareBrackets } from './util';
 import { getPathAndDescriptionOfLeaves } from './get-path-and-description-of-leaves';
+import { AnyArgParser } from './cli-arg-parser';
 
 const INDENT_SIZE = 3;
 

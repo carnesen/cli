@@ -1,6 +1,6 @@
 import parseJson = require('parse-json');
 
-import { CliArgParser } from '../types';
+import { ICliArgParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 export type CliJsonArgParserOptions = {
@@ -22,7 +22,7 @@ export type CliJsonArgParserOptions = {
  * An any-valued ArgParser
  *
  * @example
- * ```text
+ * ```plaintext
  * $ cli --json '{"foo":true}' // named value "json" receives object `{ foo: true }`
  * $ cli --json           // usage error
  * $ cli --json '""' '""' // usage error
@@ -34,14 +34,14 @@ export type CliJsonArgParserOptions = {
 
 export function CliJsonArgParser(
   options: CliJsonArgParserOptions = {},
-): CliArgParser<any> {
+): ICliArgParser<any> {
   const {
     placeholder = '<json>',
     required = false,
     description,
     hidden = false,
   } = options;
-  const argParser: CliArgParser<any> = {
+  const argParser: ICliArgParser<any> = {
     required,
     placeholder,
     hidden,
