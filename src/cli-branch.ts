@@ -1,19 +1,33 @@
-/* eslint-disable no-redeclare */
-import { CliBranch, ExcludeCommandType } from './types';
 import { CLI_BRANCH } from './constants';
+import { ICliLeaf } from './cli-leaf';
 
-type Config = ExcludeCommandType<CliBranch>;
+export type CliBranchOptions = {
+  name: string;
+  description?: string;
+  hidden?: boolean;
+  subcommands: (ICliBranch | ICliLeaf<any, any, any>)[];
+};
+
+/**
+ * Interface describing a command branch
+ */
+export interface ICliBranch extends CliBranchOptions {
+  commandType: typeof CLI_BRANCH;
+}
 
 /**
  * A factory function for creating command branches
  * @remarks
- * @param config
- * @returns Returns the newly-created `CliBranch` object
+ * @param options
+ * @returns Returns the newly-created branch object
+ * @example
+ * ```typescript
+ * const cloudBranch = CliBranch()
+ * ```
  */
-export function CliBranch(config: Config): CliBranch {
-  const branch: CliBranch = {
-    ...config,
+export function CliBranch(options: CliBranchOptions): ICliBranch {
+  return {
+    ...options,
     commandType: CLI_BRANCH,
   };
-  return branch;
 }

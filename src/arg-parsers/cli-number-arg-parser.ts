@@ -1,4 +1,4 @@
-import { CliArgParser } from '../types';
+import { ICliArgParser } from '../cli-arg-parser';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
@@ -23,13 +23,13 @@ export type CliNumberArgParserOptions = {
  */
 function CliNumberArgParser(
   options: CliNumberArgParserOptions & { defaultValue: number },
-): CliArgParser<number, false>;
+): ICliArgParser<number, false>;
 function CliNumberArgParser(
   config: CliNumberArgParserOptions & { required: true },
-): CliArgParser<number, true>;
+): ICliArgParser<number, true>;
 function CliNumberArgParser(
   config?: CliNumberArgParserOptions,
-): CliArgParser<number | undefined, boolean>;
+): ICliArgParser<number | undefined, boolean>;
 function CliNumberArgParser(config: CliNumberArgParserOptions = {}) {
   const {
     required = false,
@@ -38,7 +38,7 @@ function CliNumberArgParser(config: CliNumberArgParserOptions = {}) {
     placeholder = '<num>',
     hidden = false,
   } = config;
-  const argParser: CliArgParser<number | undefined> = {
+  const argParser: ICliArgParser<number | undefined> = {
     required,
     hidden,
     parse(args) {

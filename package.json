@@ -10,11 +10,11 @@
   "scripts": {
     "build": "rimraf lib/ && tsc",
     "cli": "ts-node src/examples/index.ts",
-    "docs": "typedoc -- --mode library --inputFiles src/index.ts",
+    "docs": "rimraf docs/ && typedoc --mode library --inputFiles src/index.ts",
     "docs-watch": "nodemon --exec typedoc -- --mode library --inputFiles src/index.ts",
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
-    "test": "npm run lint && npm run unit-test && npm run build && npm run cli -- echo ok",
+    "test": "npm run lint && npm run unit-test && npm run build && npm run docs && npm run cli -- echo ok",
     "unit-test": "jest src"
   },
   "dependencies": {
