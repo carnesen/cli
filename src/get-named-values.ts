@@ -1,7 +1,8 @@
-import { AnyNamedArgParsers, NamedValues, LeafStack } from './types';
+import { LeafStack } from './types';
 import { NamedArgs } from './partition-args';
 import { parseArgs } from './parse-args';
 import { CliUsageError } from './cli-usage-error';
+import { AnyNamedArgParsers, NamedValues } from './cli-arg-parser';
 
 export async function getNamedValues(
   namedArgParsers: AnyNamedArgParsers,

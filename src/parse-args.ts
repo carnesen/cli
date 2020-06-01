@@ -1,5 +1,6 @@
-import { AnyArgParser, LeafStack } from './types';
+import { LeafStack } from './types';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
+import { AnyArgParser } from './cli-arg-parser';
 
 /**
  * Calls the parse method of an ArgParser

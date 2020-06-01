@@ -1,4 +1,4 @@
-import { CliArgParser } from '../types';
+import { ICliArgParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 type Config = Partial<{
@@ -10,10 +10,10 @@ type Config = Partial<{
 
 function CliStringArrayArgParser(
   config: Config & { required: true },
-): CliArgParser<string[], true>;
+): ICliArgParser<string[], true>;
 function CliStringArrayArgParser(
   config?: Config,
-): CliArgParser<string[] | undefined, boolean>;
+): ICliArgParser<string[] | undefined, boolean>;
 function CliStringArrayArgParser(config: Config = {}) {
   const {
     required = false,
@@ -21,7 +21,7 @@ function CliStringArrayArgParser(config: Config = {}) {
     placeholder = '<str0> [...]',
     hidden = false,
   } = config;
-  const argParser: CliArgParser<string[] | undefined> = {
+  const argParser: ICliArgParser<string[] | undefined> = {
     required,
     hidden,
     placeholder,

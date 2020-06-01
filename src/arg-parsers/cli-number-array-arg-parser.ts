@@ -1,28 +1,36 @@
-import { CliArgParser } from '../types';
+import { ICliArgParser } from '../cli-arg-parser';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
-type Config = Partial<{
-  description: string;
-  required: boolean;
-  placeholder: string;
-  hidden: boolean;
-}>;
+/**
+ * Type of {@linkcode CliNumberArrayArgParser}'s `options` parameter
+ */
+export type CliNumberArrayArgParserOptions = {
+  description?: string;
+  required?: boolean;
+  placeholder?: string;
+  hidden?: boolean;
+};
 
+/**
+ * A factory function for creating number-array-valued arg parsers
+ * @param options
+ * @returns A number-array-valued arg parser
+ */
 function CliNumberArrayArgParser(
-  config: Config & { required: true },
-): CliArgParser<number[], true>;
+  config: CliNumberArrayArgParserOptions & { required: true },
+): ICliArgParser<number[], true>;
 function CliNumberArrayArgParser(
-  config?: Config,
-): CliArgParser<number[] | undefined, boolean>;
-function CliNumberArrayArgParser(config: Config = {}) {
+  config?: CliNumberArrayArgParserOptions,
+): ICliArgParser<number[] | undefined, boolean>;
+function CliNumberArrayArgParser(config: CliNumberArrayArgParserOptions = {}) {
   const {
     required = false,
     description,
     placeholder = '<num0> [...]',
     hidden = false,
   } = config;
-  const argParser: CliArgParser<number[] | undefined> = {
+  const argParser: ICliArgParser<number[] | undefined> = {
     required,
     hidden,
     parse(args) {

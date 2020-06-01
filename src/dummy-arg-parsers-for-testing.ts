@@ -1,4 +1,4 @@
-import { CliArgParser } from './types';
+import { ICliArgParser } from './cli-arg-parser';
 
 export const DUMMY_ARG_PARSER_UNDEFINED_WAS_PASSED = 'undefined was passed';
 export const DUMMY_ARG_PARSER_EMPTY_ARRAY_WAS_PASSED = 'undefined was passed';
@@ -6,7 +6,7 @@ export const DUMMY_ARG_PARSER_THROWN_INTENTIONALLY = 'thrown intentionally';
 export const DUMMY_ARG_PARSER_THROW = 'throw';
 export const DUMMY_ARG_PARSER_THROW_NON_TRUTHY = 'throw-non-truthy';
 
-export const dummyArgParser: CliArgParser<string, false> = {
+export const dummyArgParser: ICliArgParser<string, false> = {
   placeholder: '',
   parse(args) {
     if (typeof args === 'undefined') {
@@ -26,7 +26,7 @@ export const dummyArgParser: CliArgParser<string, false> = {
   },
 };
 
-export const dummyRequiredArgParser: CliArgParser<string, true> = {
+export const dummyRequiredArgParser: ICliArgParser<string, true> = {
   placeholder: '<foo>',
   required: true,
   parse: dummyArgParser.parse,

@@ -1,8 +1,15 @@
-import { CliArgParser } from '../types';
+import { ICliArgParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 import { wrapInCurlyBrackets, regularizeText } from '../util';
 
-type Config<TValues extends string[]> = {
+/**
+ * Type of {@linkcode CliOneOfArgParser}'s `options` parameter
+ * @typeParam TValues Type of the required property "values" and `parse`'s return value
+ */
+export type CliOneOfArgParserOptions<TValues extends string[]> = {
+  /**
+   * Array enumerating the allowed values for this argument
+   */
   values: TValues;
   required?: boolean;
   description?: string;
@@ -10,16 +17,21 @@ type Config<TValues extends string[]> = {
   hidden?: boolean;
 };
 
-function CliOneOfArgParser<U extends string[]>(
-  config: Config<U> & { defaultValue: U },
-): CliArgParser<U[number], false>;
-function CliOneOfArgParser<U extends string[]>(
-  config: Config<U> & { required: true },
-): CliArgParser<U[number], true>;
-function CliOneOfArgParser<U extends string[]>(
-  config: Config<U>,
-): CliArgParser<U[number] | undefined, false>;
-function CliOneOfArgParser(config: Config<string[]>) {
+/**
+ * A factory function for creating number-array-valued arg parsers
+ * @param options
+ * @returns A number-array-valued arg parser
+ */
+function CliOneOfArgParser<TValues extends string[]>(
+  options: CliOneOfArgParserOptions<TValues> & { defaultValue: TValues },
+): ICliArgParser<TValues[number], false>;
+function CliOneOfArgParser<TValues extends string[]>(
+  options: CliOneOfArgParserOptions<TValues> & { required: true },
+): ICliArgParser<TValues[number], true>;
+function CliOneOfArgParser<TValues extends string[]>(
+  options: CliOneOfArgParserOptions<TValues>,
+): ICliArgParser<TValues[number] | undefined, false>;
+function CliOneOfArgParser(config: CliOneOfArgParserOptions<string[]>) {
   const valuesString = wrapInCurlyBrackets(config.values.join(', '));
   const {
     required = false,
@@ -28,7 +40,7 @@ function CliOneOfArgParser(config: Config<string[]>) {
     hidden = false,
   } = config;
 
-  const argParser: CliArgParser<string | undefined> = {
+  const argParser: ICliArgParser<string | undefined> = {
     required,
     placeholder: config.placeholder || '<value>',
     hidden,

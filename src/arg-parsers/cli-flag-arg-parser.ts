@@ -1,4 +1,4 @@
-import { CliArgParser } from '../types';
+import { ICliArgParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 export type CliFlagArgParserOptions = { description?: string; hidden?: boolean };
@@ -13,7 +13,7 @@ export type CliFlagArgParserOptions = { description?: string; hidden?: boolean }
  * A boolean-valued optional ArgParser
  *
  * @example
- * ```text
+ * ```plaintext
  * $ cli           // named flag "foo" parses `false`
  * $ cli --foo     // named flag "foo" parses `true`
  * $ cli --foo bar // usage error
@@ -23,9 +23,9 @@ export type CliFlagArgParserOptions = { description?: string; hidden?: boolean }
  */
 export function CliFlagArgParser(
   options: CliFlagArgParserOptions = {},
-): CliArgParser<boolean, false> {
+): ICliArgParser<boolean, false> {
   const { description, hidden = false } = options;
-  const argParser: CliArgParser<boolean, false> = {
+  const argParser: ICliArgParser<boolean, false> = {
     placeholder: '',
     required: false,
     hidden,
