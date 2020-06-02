@@ -1,8 +1,8 @@
-import { echoCliLeaf } from '../echo';
+import { echoCliCommand } from '../echo';
 import { RunCli } from '../../run-cli';
 
-describe(echoCliLeaf.name, () => {
+describe(echoCliCommand.name, () => {
   it('" "-joins and returns the provided positional args', async () => {
-    expect(await RunCli(echoCliLeaf)('foo', 'bar', 'baz')).toBe('foo bar baz');
+    expect(await RunCli(echoCliCommand)('foo', 'bar', 'baz')).toBe('foo bar baz');
   });
 });

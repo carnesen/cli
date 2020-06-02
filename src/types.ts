@@ -1,14 +1,14 @@
 import { AnyArgParser, AnyNamedArgParsers } from './cli-arg-parser';
 import { ICliBranch } from './cli-branch';
-import { ICliLeaf } from './cli-leaf';
+import { ICliCommand } from './cli-command';
 
-type AnyCliLeaf = ICliLeaf<AnyArgParser, AnyNamedArgParsers, AnyArgParser>;
-export type Command = ICliBranch | AnyCliLeaf;
-export type AnyCommand = ICliBranch | ICliLeaf<any, any, any>;
+type AnyCliCommand = ICliCommand<AnyArgParser, AnyNamedArgParsers, AnyArgParser>;
+export type BranchOrCommand = ICliBranch | AnyCliCommand;
+export type BranchOrAnyCommand = ICliBranch | ICliCommand<any, any, any>;
 
-export type CommandStack = {
+export type BranchOrCommandStack = {
   parents: ICliBranch[];
-  current: Command;
+  current: BranchOrCommand;
 };
 
-export type LeafStack = { parents: ICliBranch[]; current: AnyCliLeaf };
+export type CommandStack = { parents: ICliBranch[]; current: AnyCliCommand };

@@ -1,5 +1,5 @@
 import { CodedError } from '@carnesen/coded-error';
-import { CliLeaf } from './cli-leaf';
+import { CliCommand } from './cli-command';
 import { runCliAndExit } from './run-cli-and-exit';
 import { CliUsageError } from './cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
@@ -12,7 +12,7 @@ async function runMocked(action: () => any) {
     processExit: jest.fn(),
   };
   await runCliAndExit(
-    CliLeaf({
+    CliCommand({
       name: 'cli',
       action,
     }),
@@ -128,7 +128,7 @@ describe(runCliAndExit.name, () => {
 
   it('uses sensible defaults for all options', async () => {
     runCliAndExit(
-      CliLeaf({
+      CliCommand({
         name: 'cli',
         action() {
           // do nothing

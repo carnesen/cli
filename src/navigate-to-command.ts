@@ -1,9 +1,9 @@
-import { CommandStack, LeafStack, Command } from './types';
-import { CLI_LEAF } from './constants';
+import { BranchOrCommandStack, CommandStack, BranchOrCommand } from './types';
+import { CLI_COMMAND } from './constants';
 import { CliUsageError } from './cli-usage-error';
 
 /**
- * Navigate a tree of commands to find a leaf
+ * Navigate a tree of commands to find a command
  *
  * @remarks
  * This function uses recursion to construct a linked list of commands. For example,
@@ -12,27 +12,30 @@ import { CliUsageError } from './cli-usage-error';
  * $ cloud-cli user login --username carnesen
  * ```
  * The root command is a branch with a subcommand "user", which in turn has a subcommand
- * "login", a leaf.
+ * "login", a command.
  *
- * The recursion terminates when a leaf is reached
- * @param command - A CliLeaf of
+ * The recursion terminates when a command is reached
+ * @param command - A CliCommand of
  * @param args - An array of string command-line arguments
- * @returns A Leaf Stack and the remaining unprocessed command-line args
+ * @returns A Command Stack and the remaining unprocessed command-line args
  *
  * @hidden
  */
 
-export function navigateToLeaf(command: Command, args: string[]): [LeafStack, string[]] {
-  return recursiveNavigateToLeaf({ current: command, parents: [] }, args);
+export function navigateToCommand(
+  command: BranchOrCommand,
+  args: string[],
+): [CommandStack, string[]] {
+  return recursiveNavigateToCommand({ current: command, parents: [] }, args);
 }
 
-export function recursiveNavigateToLeaf(
-  commandStack: CommandStack,
+export function recursiveNavigateToCommand(
+  commandStack: BranchOrCommandStack,
   args: string[],
-): [LeafStack, string[]] {
+): [CommandStack, string[]] {
   const { current, parents } = commandStack;
-  // Terminate recursion if current is a leaf
-  if (current.commandType === CLI_LEAF) {
+  // Terminate recursion if current is a command
+  if (current.commandType === CLI_COMMAND) {
     return [{ current, parents }, args];
   }
 
@@ -54,7 +57,7 @@ export function recursiveNavigateToLeaf(
     throw new CliUsageError(`Bad command "${args[0]}"`, commandStack);
   }
 
-  return recursiveNavigateToLeaf(
+  return recursiveNavigateToCommand(
     {
       parents: [...parents, current],
       current: next,

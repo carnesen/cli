@@ -8,31 +8,21 @@ A framework for building command-line interfaces (CLIs) in Node.js. This package
 npm install @carnesen/cli
 ```
 
-A `@carnesen/cli` CLI organizes commands into a tree. Each leaf is an action (e.g. "list"). Branches (optional) can be used for navigation (e.g. "cloud users list"). Here is a simple CLI whose root command is a leaf:
+Here is a CLI that does some basic arithmetic:
 ```ts
 // readme.ts
 import {
-  CliLeaf,
-  CliFlagArgParser,
+  CliCommand,
   CliNumberArrayArgParser,
   runCliAndExit,
 } from '@carnesen/cli';
 
-export const root = CliLeaf({
+export const root = CliCommand({
   name: 'multiply',
   description: 'Multiply numbers and print the result',
   positionalArgParser: CliNumberArrayArgParser({ required: true }),
-  namedArgParsers: {
-    squared: CliFlagArgParser({
-      description: 'Square the multiplication product too',
-    }),
-  },
-  action(args, { squared }) {
-    const multiplied = args.reduce((a, b) => a * b, 1);
-    if (squared) {
-      return multiplied * multiplied;
-    }
-    return multiplied;
+  action(args) {
+    return args.reduce((a, b) => a * b, 1);
   },
 });
 
@@ -42,31 +32,17 @@ if (require.main === module) {
 ```
 
 Here's how that behaves as a CLI.
-```
-$ ts-node readme.ts
-Usage: multiply <num0> [...] [<options>]
-
-   Multiply numbers and print the result
-
-Options:
-
-   [--squared] : Square the result before printing it
-
-Error: "<num0> [...]": Value is required
-```
-
+![Usage: multiply <num0> ... Multiply numbers and print the result Error: <num0> ... : argument is required](media/readme-usage.jpg)
 With arguments:
 ```
 $ ts-node readme.ts 1 2 3
 6
-$ ts-node readme.ts 1 2 3 --squared
-36 
 ```
 
 ## Structure
 The general structure of a `@carnesen/cli` is:
 ```
-<program> <branch> <leaf> <positional-args> --name <named-args> -- <escaped-args>
+<branch> <command> <positional-args> --name <named-args> -- <escaped-args>
 ```
 Everything after `<program>` is optional.
 

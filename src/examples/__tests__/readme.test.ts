@@ -1,7 +1,7 @@
-import { multiplyCliLeaf } from '../readme';
+import { multiplyCliCommand } from '../readme';
 import { RunCli } from '../../run-cli';
 
-const cli = RunCli(multiplyCliLeaf);
+const cli = RunCli(multiplyCliCommand);
 
 describe('readme example', () => {
   it('multiplies the provided numbers together', async () => {

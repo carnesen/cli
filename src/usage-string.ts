@@ -1,15 +1,15 @@
 import redent = require('redent');
 
-import { CommandStack } from './types';
+import { BranchOrCommandStack } from './types';
 import { CLI_BRANCH } from './constants';
 import { TextList } from './text-list';
 import { regularizeText, wrapInSquareBrackets } from './util';
-import { getPathAndDescriptionOfLeaves } from './get-path-and-description-of-leaves';
+import { getPathAndDescriptionOfLeaves } from './get-path-and-description-of-commands';
 import { AnyArgParser } from './cli-arg-parser';
 
 const INDENT_SIZE = 3;
 
-export function UsageString(commandStack: CommandStack): string {
+export function UsageString(commandStack: BranchOrCommandStack): string {
   const { current, parents } = commandStack;
   const lastCommand = current;
 

@@ -1,5 +1,5 @@
 import { CodedError } from '@carnesen/coded-error';
-import { CliLeaf } from '../cli-leaf';
+import { CliCommand } from '../cli-command';
 import { CliStringArgParser } from '../arg-parsers/cli-string-arg-parser';
 import { CliOneOfArgParser } from '../arg-parsers/cli-one-of-arg-parser';
 import { CLI_TERSE_ERROR } from '../cli-terse-error';
@@ -7,7 +7,7 @@ import { CLI_USAGE_ERROR } from '../cli-usage-error';
 import { CliJsonArgParser } from '../arg-parsers/cli-json-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
-export const root = CliLeaf({
+export const root = CliCommand({
   name: 'throw',
   description: 'Throw a CodedError in the "action" function',
   namedArgParsers: {

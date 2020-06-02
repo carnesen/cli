@@ -1,26 +1,16 @@
-import { CliLeaf } from '../cli-leaf';
+import { CliCommand } from '../cli-command';
 import { CliNumberArrayArgParser } from '../arg-parsers/cli-number-array-arg-parser';
-import { CliFlagArgParser } from '../arg-parsers/cli-flag-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
-export const multiplyCliLeaf = CliLeaf({
+export const multiplyCliCommand = CliCommand({
   name: 'multiply',
   description: 'Multiply numbers and print the result',
   positionalArgParser: CliNumberArrayArgParser({ required: true }),
-  namedArgParsers: {
-    squared: CliFlagArgParser({
-      description: 'Square the result before printing it',
-    }),
-  },
-  action(numbers, { squared }) {
-    const multiplied = numbers.reduce((a, b) => a * b, 1);
-    if (squared) {
-      return multiplied * multiplied;
-    }
-    return multiplied;
+  action(numbers) {
+    return numbers.reduce((a, b) => a * b, 1);
   },
 });
 
 if (require.main === module) {
-  runCliAndExit(multiplyCliLeaf);
+  runCliAndExit(multiplyCliCommand);
 }
