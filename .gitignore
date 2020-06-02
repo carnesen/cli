@@ -32,6 +32,11 @@ dispatch.yaml
 .gcloudignore
 
 #Build generated
+index.html
+globals.html
+assets/
+classes/
+interfaces/
 dist/
 build/
 built/

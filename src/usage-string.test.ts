@@ -1,8 +1,8 @@
 import { UsageString } from './usage-string';
 import { CliBranch } from './cli-branch';
 import { CliStringArgParser } from './arg-parsers/cli-string-arg-parser';
-import { CliLeaf } from './cli-leaf';
-import { Command } from './types';
+import { CliCommand } from './cli-command';
+import { BranchOrCommand } from './types';
 
 const messageArgParser = CliStringArgParser({ description: 'A string message please' });
 const positionalArgParser = CliStringArgParser({
@@ -14,7 +14,7 @@ const escapedArgParser = CliStringArgParser({
   required: true,
 });
 
-const leaf = CliLeaf({
+const command = CliCommand({
   name: 'echo',
   positionalArgParser,
   namedArgParsers: {
@@ -29,7 +29,7 @@ const leaf = CliLeaf({
 const branch = CliBranch({
   name: 'cli',
   description: 'This is a CLI',
-  subcommands: [leaf],
+  subcommands: [command],
 });
 
 describe(UsageString.name, () => {
@@ -38,23 +38,23 @@ describe(UsageString.name, () => {
     expect(usageString).toMatchSnapshot();
   });
 
-  it('Creates a usage string for a leaf without a parent', () => {
-    const usageString = UsageString({ current: leaf as Command, parents: [] });
+  it('Creates a usage string for a command without a parent', () => {
+    const usageString = UsageString({ current: command as BranchOrCommand, parents: [] });
     expect(usageString).toMatch(messageArgParser.description!);
     expect(usageString).toMatchSnapshot();
   });
 
-  it('Creates a usage string for a leaf without a parent branch', () => {
+  it('Creates a usage string for a command without a parent branch', () => {
     const usageString = UsageString({
-      current: leaf as Command,
+      current: command as BranchOrCommand,
       parents: [branch],
     });
     expect(usageString).toMatchSnapshot();
   });
 
   it('Does not write usage for named argParsers if there are none', () => {
-    const fooLeaf = CliLeaf({ name: 'foo', action() {} });
-    const usageString = UsageString({ current: fooLeaf, parents: [] });
+    const fooCommand = CliCommand({ name: 'foo', action() {} });
+    const usageString = UsageString({ current: fooCommand, parents: [] });
     expect(usageString).toMatchSnapshot();
   });
 });

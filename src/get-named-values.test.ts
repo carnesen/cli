@@ -6,11 +6,11 @@ import {
   DUMMY_ARG_PARSER_THROW,
 } from './dummy-arg-parsers-for-testing';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
-import { CliLeaf } from './cli-leaf';
-import { LeafStack } from './types';
+import { CliCommand } from './cli-command';
+import { CommandStack } from './types';
 
-const leafStack: LeafStack = {
-  current: CliLeaf({ name: 'foo', action() {} }),
+const commandStack: CommandStack = {
+  current: CliCommand({ name: 'foo', action() {} }),
   parents: [],
 };
 
@@ -19,7 +19,7 @@ describe(getNamedValues.name, () => {
     const namedValues = await getNamedValues(
       { foo: dummyRequiredArgParser, baz: dummyRequiredArgParser },
       { foo: ['bar'], baz: ['bop'] },
-      leafStack,
+      commandStack,
     );
     expect(namedValues).toEqual({
       foo: dummyRequiredArgParser.parse(['bar']),
@@ -32,7 +32,7 @@ describe(getNamedValues.name, () => {
       getNamedValues,
       { foo123: dummyArgParser },
       { foo123: [DUMMY_ARG_PARSER_THROW] },
-      leafStack,
+      commandStack,
     );
     expect(exception.message).toMatch('--foo123');
     expect(exception.message).toMatchSnapshot();
@@ -43,7 +43,7 @@ describe(getNamedValues.name, () => {
       getNamedValues,
       { foo123: dummyArgParser },
       { foo1234: [] },
-      leafStack,
+      commandStack,
     );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch('--foo1234 : Unknown named argument');

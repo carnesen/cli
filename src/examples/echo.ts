@@ -1,10 +1,10 @@
-import { CliLeaf } from '../cli-leaf';
+import { CliCommand } from '../cli-command';
 import { CliStringArrayArgParser } from '../arg-parsers/cli-string-array-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
 // This is a single-action CLI that mimics the "echo" utility. Its root command
 // is imported by a number of other examples in this directory.
-export const echoCliLeaf = CliLeaf({
+export const echoCliCommand = CliCommand({
   name: 'echo',
   description: `
     Write arguments to standard output (stdout)
@@ -17,5 +17,5 @@ export const echoCliLeaf = CliLeaf({
 });
 
 if (module === require.main) {
-  runCliAndExit(echoCliLeaf);
+  runCliAndExit(echoCliCommand);
 }

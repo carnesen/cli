@@ -1,4 +1,4 @@
-import { CLI_LEAF } from './constants';
+import { CLI_COMMAND } from './constants';
 import {
   AnyArgParser,
   AnyNamedArgParsers,
@@ -7,14 +7,13 @@ import {
   ICliArgParser,
 } from './cli-arg-parser';
 
-export type CliLeafOptions<
+export type CliCommandOptions<
   TPositionalArgParser extends AnyArgParser,
   TNamedArgParsers extends AnyNamedArgParsers,
   TEscapedArgParser extends AnyArgParser
 > = {
   /**
-   * An action word that describes what this leaf does. Used for navigation e.g. "list" in
-   * `cloud users list`.
+   * Name used in command-line usage
    */
   name: string;
   /**
@@ -27,8 +26,8 @@ export type CliLeafOptions<
    * @remarks
    * By default, {@linkcode runCliAndExit} `console.log`s the value returned by `action`.
    * The type of the `args` argument received by `action` is derived by the `args`
-   * property of the leaf. Similarly, the `options` argument type is derived from
-   * `leaf.options`.
+   * property of the command. Similarly, the `options` argument type is derived from
+   * `command.options`.
    *
    */
   action: (
@@ -44,39 +43,39 @@ export type CliLeafOptions<
    */
   description?: string;
   /**
-   * If true, don't show this leaf in usage docs.
+   * If true, don't show this command in usage docs.
    */
   hidden?: boolean;
 };
 
 /**
- * Interface describing a "leaf" command
+ * Interface describing a "command" command
  * @typeParam TPositionalArgParser Type of the "positional" arguments parser
  * @typeParam TNamedArgParsers Type of the ""
  */
-export interface ICliLeaf<
+export interface ICliCommand<
   TPositionalArgParser extends AnyArgParser,
   TNamedArgParsers extends AnyNamedArgParsers,
   TEscapedArgParser extends AnyArgParser
-> extends CliLeafOptions<TPositionalArgParser, TNamedArgParsers, TEscapedArgParser> {
-  commandType: typeof CLI_LEAF;
+> extends CliCommandOptions<TPositionalArgParser, TNamedArgParsers, TEscapedArgParser> {
+  commandType: typeof CLI_COMMAND;
 }
 
 /**
  *
- * A factory function for creating CLI leaf commands
+ * A factory function for creating CLI command commands
  * @param options
- * @returns The newly-created `leaf`.
+ * @returns The newly-created `command`.
  */
-export function CliLeaf<
+export function CliCommand<
   TPositional extends AnyArgParser = ICliArgParser<undefined, false>,
   TNamed extends AnyNamedArgParsers = any,
   TEscaped extends AnyArgParser = ICliArgParser<undefined, false>
 >(
-  options: CliLeafOptions<TPositional, TNamed, TEscaped>,
-): ICliLeaf<TPositional, TNamed, TEscaped> {
+  options: CliCommandOptions<TPositional, TNamed, TEscaped>,
+): ICliCommand<TPositional, TNamed, TEscaped> {
   return {
     ...options,
-    commandType: CLI_LEAF,
+    commandType: CLI_COMMAND,
   };
 }

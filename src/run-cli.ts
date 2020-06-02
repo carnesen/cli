@@ -1,11 +1,11 @@
-import { AnyCommand } from './types';
+import { BranchOrAnyCommand } from './types';
 import { partitionArgs } from './partition-args';
 import { getNamedValues } from './get-named-values';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { CliTerseError } from './cli-terse-error';
 import { findVersion } from './find-version';
 import { parseArgs } from './parse-args';
-import { navigateToLeaf } from './navigate-to-leaf';
+import { navigateToCommand } from './navigate-to-command';
 
 export type RunCli = (...args: string[]) => Promise<any>;
 
@@ -20,7 +20,7 @@ export type CliEnhancer = (runCli: RunCli) => RunCli;
  * @param options 
  */
 export function RunCli(
-  rootCommand: AnyCommand,
+  rootCommand: BranchOrAnyCommand,
   options: Partial<{ enhancer: CliEnhancer }> = {},
 ): RunCli {
   const { enhancer } = options;
@@ -41,15 +41,15 @@ export function RunCli(
       return version;
     }
 
-    const [leafStack, remainingArgs] = navigateToLeaf(rootCommand, args);
+    const [commandStack, remainingArgs] = navigateToCommand(rootCommand, args);
 
     const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(remainingArgs);
     if (namedArgs.help) {
-      throw new CliUsageError(undefined, leafStack);
+      throw new CliUsageError(undefined, commandStack);
     }
-    const leaf = leafStack.current;
+    const command = commandStack.current;
     let argsValue: any;
-    if (leaf.positionalArgParser) {
+    if (command.positionalArgParser) {
       // Note that for named and escaped args, we distinguish between
       // `undefined` and `[]`. For example, "cli" gives an escaped args
       // `undefined` whereas "cli --" gives an escaped args `[]`. For the
@@ -57,39 +57,44 @@ export function RunCli(
       // we elect here to pass in `undefined` rather than an empty array when no
       // positional arguments are passed.
       argsValue = await parseArgs(
-        leaf.positionalArgParser,
+        command.positionalArgParser,
         positionalArgs.length > 0 ? positionalArgs : undefined,
         undefined,
-        leafStack,
+        commandStack,
       );
     } else if (positionalArgs.length > 0) {
       throw new CliUsageError(
-        `Unexpected argument "${positionalArgs[0]}" : Command "${leaf.name}" does not accept positional arguments`,
-        leafStack,
+        `Unexpected argument "${positionalArgs[0]}" : Command "${command.name}" does not accept positional arguments`,
+        commandStack,
       );
     }
 
     const namedValues = await getNamedValues(
-      leaf.namedArgParsers || {},
+      command.namedArgParsers || {},
       namedArgs,
-      leafStack,
+      commandStack,
     );
 
     let escapedValue: any;
-    if (leaf.escapedArgParser) {
-      escapedValue = await parseArgs(leaf.escapedArgParser, escapedArgs, '--', leafStack);
+    if (command.escapedArgParser) {
+      escapedValue = await parseArgs(
+        command.escapedArgParser,
+        escapedArgs,
+        '--',
+        commandStack,
+      );
     } else if (escapedArgs) {
       throw new CliUsageError(
-        `Command "${leaf.name}" does not allow "--" as an argument`,
+        `Command "${command.name}" does not allow "--" as an argument`,
       );
     }
 
     try {
-      const result = await leaf.action(argsValue, namedValues, escapedValue);
+      const result = await command.action(argsValue, namedValues, escapedValue);
       return result;
     } catch (exception) {
       if (exception && exception.code === CLI_USAGE_ERROR) {
-        exception.commandStack = leafStack;
+        exception.commandStack = commandStack;
       }
       throw exception;
     }

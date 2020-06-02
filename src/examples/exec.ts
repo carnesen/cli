@@ -1,10 +1,10 @@
 import { execSync } from 'child_process';
 import { CliStringArgParser } from '../arg-parsers/cli-string-arg-parser';
-import { CliLeaf } from '../cli-leaf';
+import { CliCommand } from '../cli-command';
 import { CliStringArrayArgParser } from '../arg-parsers/cli-string-array-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
-export const execCliLeaf = CliLeaf({
+export const execCliCommand = CliCommand({
   name: 'exec',
   description: 'Run a shell command',
   namedArgParsers: {
@@ -25,5 +25,5 @@ export const execCliLeaf = CliLeaf({
 });
 
 if (module === require.main) {
-  runCliAndExit(execCliLeaf);
+  runCliAndExit(execCliCommand);
 }
