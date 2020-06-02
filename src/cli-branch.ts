@@ -1,11 +1,11 @@
 import { CLI_BRANCH } from './constants';
-import { ICliLeaf } from './cli-leaf';
+import { ICliCommand } from './cli-command';
 
 export type CliBranchOptions = {
   name: string;
   description?: string;
   hidden?: boolean;
-  subcommands: (ICliBranch | ICliLeaf<any, any, any>)[];
+  subcommands: (ICliBranch | ICliCommand<any, any, any>)[];
 };
 
 /**

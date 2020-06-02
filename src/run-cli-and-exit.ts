@@ -4,7 +4,7 @@ import { RED_ERROR } from './constants';
 import { RunCli, CliEnhancer } from './run-cli';
 import { UsageString } from './usage-string';
 import { ICliBranch } from './cli-branch';
-import { ICliLeaf } from './cli-leaf';
+import { ICliCommand } from './cli-command';
 
 export type RunCliAndExitOptions = Partial<{
   args: string[];
@@ -15,7 +15,7 @@ export type RunCliAndExitOptions = Partial<{
 }>;
 
 export async function runCliAndExit(
-  rootCommand: ICliBranch | ICliLeaf<any, any, any>,
+  rootCommand: ICliBranch | ICliCommand<any, any, any>,
   options: RunCliAndExitOptions = {},
 ): Promise<void> {
   const {

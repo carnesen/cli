@@ -1,12 +1,12 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
-import { execCliLeaf } from '../exec';
+import { execCliCommand } from '../exec';
 import { RunCli } from '../../run-cli';
 import { CLI_USAGE_ERROR } from '../../cli-usage-error';
 
-const cliArgRunner = RunCli(execCliLeaf);
+const cliArgRunner = RunCli(execCliCommand);
 
-describe(execCliLeaf.name, () => {
+describe(execCliCommand.name, () => {
   it('runs the provided command', async () => {
     const output = await cliArgRunner('--', 'echo', '--foo', '--bar');
     expect(output).toBe('--foo --bar\n');

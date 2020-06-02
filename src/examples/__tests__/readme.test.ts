@@ -1,13 +1,10 @@
-import { multiplyCliLeaf } from '../readme';
+import { multiplyCliCommand } from '../readme';
 import { RunCli } from '../../run-cli';
 
-const cli = RunCli(multiplyCliLeaf);
+const cli = RunCli(multiplyCliCommand);
 
 describe('readme example', () => {
   it('multiplies the provided numbers together', async () => {
     expect(await cli('1', '2', '3')).toBe(6);
-  });
-  it('squares the result if --squared is passed', async () => {
-    expect(await cli('1', '2', '3', '--squared')).toBe(36);
   });
 });

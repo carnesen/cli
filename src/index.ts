@@ -1,6 +1,6 @@
 // Command factories
 export { CliBranch, ICliBranch } from './cli-branch';
-export { CliLeaf, ICliLeaf } from './cli-leaf';
+export { CliCommand, ICliCommand } from './cli-command';
 
 // CliArgParser factories
 export {

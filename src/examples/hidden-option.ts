@@ -1,5 +1,5 @@
-import { echoCliLeaf as echoCommand } from './echo';
-import { CliLeaf } from '../cli-leaf';
+import { echoCliCommand as echoCommand } from './echo';
+import { CliCommand } from '../cli-command';
 import { CliFlagArgParser } from '../arg-parsers/cli-flag-arg-parser';
 import { runCliAndExit } from '../run-cli-and-exit';
 
@@ -16,7 +16,7 @@ __ __  _ __________ _
 
 // All alwaysCLI abstractions are plain-old JavaScript objects and functions.
 // This makes it easy to re-use bits of existing commands and/or argParsers.
-export const root = CliLeaf({
+export const root = CliCommand({
   ...echoCommand,
   description: `
     This CLI has a hidden option "--pizza". If an option is "hidden", it does not 

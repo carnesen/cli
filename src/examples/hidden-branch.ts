@@ -1,4 +1,4 @@
-import { echoCliLeaf as echoCommand } from './echo';
+import { echoCliCommand as echoCommand } from './echo';
 import { CliBranch } from '../cli-branch';
 import { runCliAndExit } from '../run-cli-and-exit';
 

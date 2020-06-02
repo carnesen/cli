@@ -10,7 +10,7 @@ Subcommands:
    echo"
 `;
 
-exports[`UsageString Creates a usage string for a leaf without a parent 1`] = `
+exports[`UsageString Creates a usage string for a command without a parent 1`] = `
 "Usage: echo [<word>] [<options>] -- <str>
 
 <word>:
@@ -26,7 +26,7 @@ Options:
    Another word"
 `;
 
-exports[`UsageString Creates a usage string for a leaf without a parent branch 1`] = `
+exports[`UsageString Creates a usage string for a command without a parent branch 1`] = `
 "Usage: cli echo [<word>] [<options>] -- <str>
 
 <word>:

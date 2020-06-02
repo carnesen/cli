@@ -1,9 +1,9 @@
-import { echoCliLeaf as echoCommand } from './echo';
-import { CliLeaf } from '../cli-leaf';
+import { echoCliCommand as echoCommand } from './echo';
+import { CliCommand } from '../cli-command';
 import { CliBranch } from '../cli-branch';
 import { runCliAndExit } from '../run-cli-and-exit';
 
-const hiddenEcho = CliLeaf({
+const hiddenEcho = CliCommand({
   ...echoCommand,
   name: 'hidden-echo',
   description: 'This command is a clone of "echo" but with "hidden" set to true',

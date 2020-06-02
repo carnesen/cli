@@ -1,13 +1,13 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
-import { CliLeaf } from './cli-leaf';
+import { CliCommand } from './cli-command';
 import { dummyArgParser } from './dummy-arg-parsers-for-testing';
 import { RunCli, CliEnhancer } from './run-cli';
 import { findVersion } from './find-version';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
-const leafWithNamedArgParsers = CliLeaf({
-  name: 'leaf-with-named-args',
+const commandWithNamedArgParsers = CliCommand({
+  name: 'command-with-named-args',
   namedArgParsers: {
     foo: dummyArgParser,
   },
@@ -16,16 +16,16 @@ const leafWithNamedArgParsers = CliLeaf({
   },
 });
 
-const leafWithPositionalArgParser = CliLeaf({
-  name: 'leaf-with-positional-args',
+const commandWithPositionalArgParser = CliCommand({
+  name: 'command-with-positional-args',
   positionalArgParser: dummyArgParser,
   action(...args) {
     return args;
   },
 });
 
-const leafWithEscapedArgParser = CliLeaf({
-  name: 'leaf-with-escaped-arg-parser',
+const commandWithEscapedArgParser = CliCommand({
+  name: 'command-with-escaped-arg-parser',
   escapedArgParser: dummyArgParser,
   action(...args) {
     return args;
@@ -35,9 +35,9 @@ const leafWithEscapedArgParser = CliLeaf({
 const root = CliBranch({
   name: 'cli',
   subcommands: [
-    leafWithPositionalArgParser,
-    leafWithNamedArgParsers,
-    leafWithEscapedArgParser,
+    commandWithPositionalArgParser,
+    commandWithNamedArgParsers,
+    commandWithEscapedArgParser,
   ],
 });
 
@@ -50,7 +50,7 @@ describe(RunCli.name, () => {
       spy(...args);
       await innerArgRunner(...args);
     };
-    const enhancedArgRunner = RunCli(leafWithPositionalArgParser, {
+    const enhancedArgRunner = RunCli(commandWithPositionalArgParser, {
       enhancer,
     });
     await enhancedArgRunner('foo', 'bar');
@@ -82,15 +82,15 @@ describe(RunCli.name, () => {
     expect(exception.message).toMatchSnapshot();
   });
 
-  it('throws USAGE error "positional arguments" if last command is a leaf without positionalArgParser property and additional args is present', async () => {
+  it('throws USAGE error "positional arguments" if last command is a command without positionalArgParser property and additional args is present', async () => {
     const exception = await runAndCatch(
       cliArgRunner,
-      leafWithNamedArgParsers.name,
+      commandWithNamedArgParsers.name,
       'oops',
     );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch('Unexpected argument "oops"');
-    expect(exception.message).toMatch(leafWithNamedArgParsers.name);
+    expect(exception.message).toMatch(commandWithNamedArgParsers.name);
     expect(exception.message).toMatch(/positional arguments/i);
     expect(exception.message).toMatchSnapshot();
   });
@@ -98,7 +98,7 @@ describe(RunCli.name, () => {
   it('Passes parsed positional value as first argument of the "action" function', async () => {
     const positionalArgs = ['foo', 'bar'];
     const result = await cliArgRunner(
-      leafWithPositionalArgParser.name,
+      commandWithPositionalArgParser.name,
       ...positionalArgs,
     );
     expect(result).toEqual([dummyArgParser.parse(positionalArgs), {}, undefined]);
@@ -106,7 +106,7 @@ describe(RunCli.name, () => {
 
   it('Passes parsed named values as second argument of the "action" function', async () => {
     const namedArgs = ['--foo', 'bar'];
-    const result = await cliArgRunner(leafWithNamedArgParsers.name, ...namedArgs);
+    const result = await cliArgRunner(commandWithNamedArgParsers.name, ...namedArgs);
     expect(result).toEqual([
       undefined,
       { foo: dummyArgParser.parse(['bar']) },
@@ -114,23 +114,23 @@ describe(RunCli.name, () => {
     ]);
   });
 
-  it(`Throws USAGE error 'does not allow "--"' if leaf does not have an "escaped" property`, async () => {
+  it(`Throws USAGE error 'does not allow "--"' if command does not have an "escaped" property`, async () => {
     const exception = await runAndCatch(
       cliArgRunner,
-      leafWithPositionalArgParser.name,
+      commandWithPositionalArgParser.name,
       '--',
     );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
-    expect(exception.message).toMatch(leafWithPositionalArgParser.name);
+    expect(exception.message).toMatch(commandWithPositionalArgParser.name);
     expect(exception.message).toMatch('does not allow "--"');
   });
 
   it('Passes parsed escaped value as third argument of the "action" function', async () => {
-    const result = await cliArgRunner(leafWithEscapedArgParser.name, '--');
+    const result = await cliArgRunner(commandWithEscapedArgParser.name, '--');
     expect(result).toEqual([
       undefined,
       {},
-      leafWithEscapedArgParser.escapedArgParser!.parse([]),
+      commandWithEscapedArgParser.escapedArgParser!.parse([]),
     ]);
   });
 });

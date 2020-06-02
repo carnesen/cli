@@ -1,4 +1,4 @@
-import { LeafStack } from './types';
+import { CommandStack } from './types';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { AnyArgParser } from './cli-arg-parser';
 
@@ -14,13 +14,13 @@ export async function parseArgs(
   argParser: AnyArgParser,
   args: string[] | undefined,
   separator: string | undefined,
-  leafStack: LeafStack,
+  commandStack: CommandStack,
 ): Promise<any> {
   const { required, placeholder, parse } = argParser;
   const fullContext = [separator, placeholder].filter((str) => Boolean(str)).join(' ');
   const prefix = fullContext ? `${fullContext} : ` : '';
   if (required && (!args || args.length === 0)) {
-    throw new CliUsageError(`${prefix}argument is required`, leafStack);
+    throw new CliUsageError(`${prefix}argument is required`, commandStack);
   }
   try {
     return await parse(args);
@@ -29,7 +29,7 @@ export async function parseArgs(
       exception.message = `${prefix}${exception.message}`;
     }
     if (exception && exception.code === CLI_USAGE_ERROR) {
-      exception.commandStack = leafStack;
+      exception.commandStack = commandStack;
     }
     throw exception;
   }

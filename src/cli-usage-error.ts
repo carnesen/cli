@@ -1,4 +1,4 @@
-import { CommandStack } from './types';
+import { BranchOrCommandStack } from './types';
 
 export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
 
@@ -17,14 +17,14 @@ export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
 export class CliUsageError extends Error {
   public readonly code: typeof CLI_USAGE_ERROR;
 
-  public commandStack?: CommandStack;
+  public commandStack?: BranchOrCommandStack;
 
   /**
    *
    * @param message An `Error` message
    * @param commandStack Used internally for argument processing
    */
-  constructor(message?: string, commandStack?: CommandStack) {
+  constructor(message?: string, commandStack?: BranchOrCommandStack) {
     super(message);
     this.code = CLI_USAGE_ERROR;
     this.commandStack = commandStack;
