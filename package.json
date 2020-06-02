@@ -11,7 +11,7 @@
     "build": "rimraf lib/ && tsc",
     "build-watch": "npm run build -- --watch",
     "cli": "ts-node src/examples/index.ts",
-    "docs": "rimraf dist/ && typedoc --mode library --inputFiles src/index.ts --out dist/",
+    "docs": "rimraf dist/ && typedoc --mode library --inputFiles src/index.ts --out dist/ && cp -r dist/* .",
     "docs-watch": "nodemon --exec typedoc -- --mode library --inputFiles src/index.ts --out dist/",
     "docs-serve": "browser-sync dist/",
     "lint": "eslint --ext .ts src/",
@@ -43,11 +43,6 @@
     "typedoc": "0.17.0-3",
     "typescript": "3.9.3"
   },
-  "files": [
-    "dist",
-    "lib",
-    "src"
-  ],
   "keywords": [
     "typescript",
     "nodejs",
