@@ -1,0 +1,1 @@
+{"version":3,"file":"cli-terse-error.d.ts","sourceRoot":"","sources":["../src/cli-terse-error.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,eAAe,oBAAoB,CAAC;AAEjD;;;;;;;;;;GAUG;AACH,qBAAa,aAAc,SAAQ,KAAK;IACtC,SAAgB,IAAI,EAAE,OAAO,eAAe,CAAC;gBAEjC,OAAO,EAAE,MAAM;CAK5B"}

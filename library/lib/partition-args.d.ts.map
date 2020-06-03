@@ -1,0 +1,1 @@
+{"version":3,"file":"partition-args.d.ts","sourceRoot":"","sources":["../src/partition-args.ts"],"names":[],"mappings":"AAAA,oBAAY,SAAS,GAAG;IACtB,CAAC,OAAO,EAAE,MAAM,GAAG,MAAM,EAAE,GAAG,SAAS,CAAC;CACzC,CAAC;AAEF,wBAAgB,aAAa,CAC3B,IAAI,EAAE,MAAM,EAAE,GACb;IACD,cAAc,EAAE,MAAM,EAAE,CAAC;IACzB,WAAW,EAAE,MAAM,EAAE,GAAG,SAAS,CAAC;IAClC,SAAS,EAAE,SAAS,CAAC;CACtB,CAyCA"}

@@ -12,15 +12,30 @@ npm install @carnesen/cli
 
 Here is a CLI that does some basic arithmetic:
 
-[![TypeScript code](media/readme-ts.jpg)](src/examples/readme.ts)
+```typescript
+// readme.ts
+import {
+  CliCommand,
+  CliNumberArrayArgParser,
+  runCliAndExit
+} from '@carnesen/cli';
 
+export const multiply = CliCommand({
+  name: 'multiply',
+  description: 'Multiply numbers and print the result',
+  positionalArgParser: CliNumberArrayArgParser({ required: true }),
+  action(numbers) {
+    return numbers.reduce((a, b) => a * b, 1);
+  },
+});
+
+if (require.main === module) {
+  runCliAndExit(multiply);
+}
+```
 Here's how that behaves as a CLI.
 
-![ts-node readme.ts newline Usage: multiply <num0> ... Multiply numbers and print the result Error: <num0> ... : argument is required](media/readme-usage.jpg)
-
-With arguments:
-
-![ts-node readme.ts 1 2 3 newline 6](media/readme-usage-2.jpg)
+![command-line usage ](media/readme-usage.gif)
 
 Check out [src/examples](src/examples) for more!
 ## Structure
