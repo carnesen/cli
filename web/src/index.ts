@@ -17,7 +17,7 @@ const dist = CliCommand({
       '--mode',
       'library',
       '--readme',
-      path.join(PROJECT_DIR, 'readme.md'),
+      'none',
       '--inputFiles',
       path.join('src', 'index.ts'),
       '--out',
