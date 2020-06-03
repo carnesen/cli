@@ -42,7 +42,7 @@ dist/
 build/
 built/
 tmp/
-docs/
+lib/
 
 # Serverless generated files
 .serverless/
