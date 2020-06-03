@@ -35,7 +35,7 @@ if (require.main === module) {
 ```
 Here's how that behaves as a CLI.
 
-![command-line usage ](examples/src/multiply/demo.gif)
+![screen recording of "multiply" CLI](examples/src/multiply/demo.gif)
 
 Check out [examples/src](examples/src) for more!
 ## Structure
