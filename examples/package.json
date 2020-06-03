@@ -1,9 +1,12 @@
 {
   "name": "@carnesen/cli-examples",
   "description": "Examples of how to use @carnesen/cli",
-  "version": "0.0.0-0",
+  "version": "0.5.0-8",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "bin": {
+    "carnesen-cli-examples": "lib/index.js"
+  },
   "engines": {
     "node": ">=10.0.0"
   },
@@ -13,13 +16,14 @@
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run unit-test && npm run build && node lib echo ok",
-    "unit-test": "jest src"
+    "unit-test": "jest src",
+    "prepublishOnly": "npm test"
   },
   "dependencies": {
-    "@carnesen/cli": "0.5.0-5"
+    "@carnesen/cli": "0.5.0-8",
+    "@carnesen/coded-error": "0.1.1"
   },
   "devDependencies": {
-    "@carnesen/coded-error": "0.1.1",
     "@carnesen/run-and-catch": "0.4.0",
     "@carnesen/tsconfig": "0.3.1",
     "@types/jest": "25.2.3",
@@ -37,6 +41,15 @@
     "nodejs",
     "cli",
     "command-line-interface"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  },
+  "files": [
+    "src",
+    "lib",
+    "package-lock.json"
   ],
   "author": {
     "name": "Chris Arnesen",

@@ -1,1 +1,1 @@
-TODO: Index of features and examples
+# @carnesen/cli-examples
