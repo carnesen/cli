@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli",
   "description": "A library for building Node.js command-line interfaces (CLIs)",
-  "version": "0.5.0-6",
+  "version": "0.5.0-8",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
@@ -13,7 +13,8 @@
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run unit-test && npm run build",
-    "unit-test": "jest src"
+    "unit-test": "jest src",
+    "prepublishOnly": "npm test"
   },
   "dependencies": {
     "@types/parse-json": "4.0.0",
@@ -36,6 +37,15 @@
     "ts-jest": "26.1.0",
     "ts-node": "8.10.2",
     "typescript": "3.9.3"
+  },
+  "files": [
+    "src",
+    "lib",
+    "tsconfig.json"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
   },
   "keywords": [
     "typescript",
