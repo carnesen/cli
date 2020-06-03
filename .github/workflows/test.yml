@@ -15,5 +15,5 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd library && npm ci && npm test
-    - run: cd examples && npm ci && npm install ../library && npm test
+    - run: cd library && npm ci && npm test && npm pack
+    - run: cd examples && npm ci && npm install ../library/carnesen-cli*.tgz && npm test
