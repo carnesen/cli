@@ -10,9 +10,10 @@ yarn-error.log*
 
 # Optional npm cache directory
 .npm
+*.tgz
 
 # Dependency directories
-/node_modules
+node_modules/
 /jspm_packages
 /bower_components
 
@@ -40,9 +41,8 @@ interfaces/
 dist/
 build/
 built/
-lib/
 tmp/
-docs/
+lib/
 
 # Serverless generated files
 .serverless/
@@ -137,7 +137,6 @@ dispatch.yaml
 dist/
 build/
 built/
-lib/
 tmp/
 
 # Serverless generated files
