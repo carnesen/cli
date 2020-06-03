@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli-web",
   "description": "The source code for cli.carnesen.com",
-  "version": "0.5.0-8",
+  "version": "0.5.0-9",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
@@ -18,7 +18,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@carnesen/cli": "0.5.0-8",
+    "@carnesen/cli": "0.5.0-9",
     "@carnesen/tsconfig": "0.3.1",
     "@types/node": "14.0.9",
     "browser-sync": "2.26.7",

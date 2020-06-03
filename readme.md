@@ -2,7 +2,8 @@
 
 `@carnesen/cli` is a TypeScript-first framework for building command-line interfaces (CLIs) in Node.js. The package includes runtime JavaScript files suitable for Node.js >=10 as well as the corresponding TypeScript type declarations.
 
-API docs: [https://cli.carnesen.com/](https://cli.carnesen.com/)
+- API docs: [https://cli.carnesen.com/](https://cli.carnesen.com/).
+- Examples: [examples/src](examples/src)
 
 ## Usage
 
@@ -37,13 +38,13 @@ Here's how that behaves as a CLI.
 
 ![screen recording of "multiply" CLI](examples/src/multiply/demo.gif)
 
-Check out [examples/src](examples/src) for more!
+Check out [examples/src](examples/src) for more examples.
 ## Structure
 The general structure of a `@carnesen/cli` is:
 ```
-<branch> <command> <positional-args> --name <named-args> -- <escaped-args>
+[<branch>] <command> <positional-args> --name <named-args> -- <escaped-args>
 ```
-Everything after `<program>` is optional.
+`[branch]` and everything after `<command>` are optional features.
 
 ## More information
 If you encounter any bugs, questions, or feature requests, please don't hesitate to file an issue or submit a pull request on [this project's repository on GitHub](https://github.com/carnesen/cli).
