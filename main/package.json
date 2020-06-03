@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli",
   "description": "A library for building Node.js command-line interfaces (CLIs)",
-  "version": "0.5.0-5",
+  "version": "0.5.0-6",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
@@ -10,12 +10,9 @@
   "scripts": {
     "build": "rimraf lib/ && tsc",
     "build-watch": "npm run build -- --watch",
-    "docs": "rimraf dist/ && typedoc --mode library --inputFiles src/index.ts --out dist/ && cp -r dist/* .",
-    "docs-watch": "nodemon --exec typedoc -- --mode library --inputFiles src/index.ts --out dist/",
-    "docs-serve": "browser-sync dist/",
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
-    "test": "npm run lint && npm run unit-test && npm run build && npm run docs",
+    "test": "npm run lint && npm run unit-test && npm run build",
     "unit-test": "jest src"
   },
   "dependencies": {
@@ -31,7 +28,6 @@
     "@carnesen/tsconfig": "0.3.1",
     "@types/jest": "25.2.3",
     "@types/node": "14.0.9",
-    "browser-sync": "2.26.7",
     "eslint": "7.1.0",
     "eslint-config-carnesen": "3.0.0",
     "jest": "26.0.1",
@@ -39,7 +35,6 @@
     "rimraf": "3.0.2",
     "ts-jest": "26.1.0",
     "ts-node": "8.10.2",
-    "typedoc": "0.17.0-3",
     "typescript": "3.9.3"
   },
   "keywords": [
