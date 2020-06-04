@@ -34,7 +34,7 @@ const commandWithEscapedArgParser = CliCommand({
 
 const root = CliBranch({
   name: 'cli',
-  subcommands: [
+  children: [
     commandWithPositionalArgParser,
     commandWithNamedArgParsers,
     commandWithEscapedArgParser,

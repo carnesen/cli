@@ -1,4 +1,4 @@
-import { BranchOrAnyCommand } from './types';
+import { BranchOrAnyCommand } from './cli-node';
 import { partitionArgs } from './partition-args';
 import { getNamedValues } from './get-named-values';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
@@ -41,13 +41,13 @@ export function RunCli(
       return version;
     }
 
-    const [commandStack, remainingArgs] = navigateToCommand(rootCommand, args);
+    const [locationInCommandTree, remainingArgs] = navigateToCommand(rootCommand, args);
 
     const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(remainingArgs);
     if (namedArgs.help) {
-      throw new CliUsageError(undefined, commandStack);
+      throw new CliUsageError(undefined, locationInCommandTree);
     }
-    const command = commandStack.current;
+    const command = locationInCommandTree.current;
     let argsValue: any;
     if (command.positionalArgParser) {
       // Note that for named and escaped args, we distinguish between
@@ -60,19 +60,19 @@ export function RunCli(
         command.positionalArgParser,
         positionalArgs.length > 0 ? positionalArgs : undefined,
         undefined,
-        commandStack,
+        locationInCommandTree,
       );
     } else if (positionalArgs.length > 0) {
       throw new CliUsageError(
         `Unexpected argument "${positionalArgs[0]}" : Command "${command.name}" does not accept positional arguments`,
-        commandStack,
+        locationInCommandTree,
       );
     }
 
     const namedValues = await getNamedValues(
       command.namedArgParsers || {},
       namedArgs,
-      commandStack,
+      locationInCommandTree,
     );
 
     let escapedValue: any;
@@ -81,7 +81,7 @@ export function RunCli(
         command.escapedArgParser,
         escapedArgs,
         '--',
-        commandStack,
+        locationInCommandTree,
       );
     } else if (escapedArgs) {
       throw new CliUsageError(
@@ -94,7 +94,7 @@ export function RunCli(
       return result;
     } catch (exception) {
       if (exception && exception.code === CLI_USAGE_ERROR) {
-        exception.commandStack = commandStack;
+        exception.locationInCommandTree = locationInCommandTree;
       }
       throw exception;
     }

@@ -7,9 +7,9 @@ import {
 } from './dummy-arg-parsers-for-testing';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import { CliCommand } from './cli-command';
-import { CommandStack } from './types';
+import { Leaf } from './cli-node';
 
-const commandStack: CommandStack = {
+const locationInCommandTree: Leaf = {
   current: CliCommand({ name: 'foo', action() {} }),
   parents: [],
 };
@@ -19,7 +19,7 @@ describe(getNamedValues.name, () => {
     const namedValues = await getNamedValues(
       { foo: dummyRequiredArgParser, baz: dummyRequiredArgParser },
       { foo: ['bar'], baz: ['bop'] },
-      commandStack,
+      locationInCommandTree,
     );
     expect(namedValues).toEqual({
       foo: dummyRequiredArgParser.parse(['bar']),
@@ -32,7 +32,7 @@ describe(getNamedValues.name, () => {
       getNamedValues,
       { foo123: dummyArgParser },
       { foo123: [DUMMY_ARG_PARSER_THROW] },
-      commandStack,
+      locationInCommandTree,
     );
     expect(exception.message).toMatch('--foo123');
     expect(exception.message).toMatchSnapshot();
@@ -43,7 +43,7 @@ describe(getNamedValues.name, () => {
       getNamedValues,
       { foo123: dummyArgParser },
       { foo1234: [] },
-      commandStack,
+      locationInCommandTree,
     );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch('--foo1234 : Unknown named argument');

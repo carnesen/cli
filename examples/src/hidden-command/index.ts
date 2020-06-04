@@ -18,8 +18,8 @@ export const root = CliBranch({
 	name: 'cli',
 	description: `
     Non-hidden command "${echoCommand.name}" shows up in this usage documentation.
-    Hidden subcommand "${hiddenEcho.name}" does not appear in the subcommands list.`,
-	subcommands: [hiddenEcho, echoCommand],
+    Hidden subcommand "${hiddenEcho.name}" does not appear in the children list.`,
+	children: [hiddenEcho, echoCommand],
 });
 
 if (module === require.main) {

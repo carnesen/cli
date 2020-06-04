@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli-examples",
   "description": "Examples of how to use @carnesen/cli",
-  "version": "0.5.0-9",
+  "version": "0.5.0-10",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
@@ -20,7 +20,7 @@
     "prepublishOnly": "npm test"
   },
   "dependencies": {
-    "@carnesen/cli": "0.5.0-9",
+    "@carnesen/cli": "0.5.0-10",
     "@carnesen/coded-error": "0.1.1"
   },
   "devDependencies": {

@@ -17,4 +17,3 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: cd main && npm ci && npm test && npm pack
     - run: cd examples && npm ci && npm install ../main/carnesen-cli*.tgz && npm test
-    - run: cd web && npm ci && npm install ../main/carnesen-cli*.tgz && npm test

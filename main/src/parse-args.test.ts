@@ -10,9 +10,9 @@ import {
   DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
 } from './dummy-arg-parsers-for-testing';
 import { CliCommand } from './cli-command';
-import { CommandStack } from './types';
+import { Leaf } from './cli-node';
 
-const commandStack: CommandStack = {
+const locationInCommandTree: Leaf = {
   current: CliCommand({ name: 'foo', action() {} }),
   parents: [],
 };
@@ -20,21 +20,21 @@ const commandStack: CommandStack = {
 describe(parseArgs.name, () => {
   it(`returns parse(args) if an args with length >= 1 is passed`, async () => {
     const args = ['foo'];
-    expect(await parseArgs(dummyArgParser, args, undefined, commandStack)).toBe(
+    expect(await parseArgs(dummyArgParser, args, undefined, locationInCommandTree)).toBe(
       dummyArgParser.parse(args),
     );
-    expect(await parseArgs(dummyRequiredArgParser, args, undefined, commandStack)).toBe(
-      dummyRequiredArgParser.parse(args),
-    );
+    expect(
+      await parseArgs(dummyRequiredArgParser, args, undefined, locationInCommandTree),
+    ).toBe(dummyRequiredArgParser.parse(args));
   });
 
   it(`if not required, returns parse(args) if args is an empty array or undefined`, async () => {
-    expect(await parseArgs(dummyArgParser, [], undefined, commandStack)).toBe(
+    expect(await parseArgs(dummyArgParser, [], undefined, locationInCommandTree)).toBe(
       dummyArgParser.parse([]),
     );
-    expect(await parseArgs(dummyArgParser, undefined, undefined, commandStack)).toBe(
-      dummyArgParser.parse(undefined),
-    );
+    expect(
+      await parseArgs(dummyArgParser, undefined, undefined, locationInCommandTree),
+    ).toBe(dummyArgParser.parse(undefined));
   });
 
   it(`if required, throws usage error "argument is required" if args is an empty array or undefined`, async () => {
@@ -44,7 +44,7 @@ describe(parseArgs.name, () => {
         dummyRequiredArgParser,
         args,
         undefined,
-        commandStack,
+        locationInCommandTree,
       );
       expect(exception.code).toBe(CLI_USAGE_ERROR);
       expect(exception.message).toMatch(/argument is required/i);
@@ -58,7 +58,7 @@ describe(parseArgs.name, () => {
       dummyRequiredArgParser,
       undefined,
       undefined,
-      commandStack,
+      locationInCommandTree,
     );
     expect(exception.message).toMatchSnapshot();
   });
@@ -69,7 +69,7 @@ describe(parseArgs.name, () => {
       dummyRequiredArgParser,
       undefined,
       'context',
-      commandStack,
+      locationInCommandTree,
     );
     expect(exception.message).toMatchSnapshot();
   });
@@ -80,7 +80,7 @@ describe(parseArgs.name, () => {
       dummyArgParser,
       [DUMMY_ARG_PARSER_THROW],
       undefined,
-      commandStack,
+      locationInCommandTree,
     );
     expect(exception.message).toMatch(DUMMY_ARG_PARSER_THROWN_INTENTIONALLY);
     expect(exception.message).toMatch(dummyArgParser.placeholder);
@@ -93,7 +93,7 @@ describe(parseArgs.name, () => {
       dummyArgParser,
       [DUMMY_ARG_PARSER_THROW_NON_TRUTHY],
       undefined,
-      commandStack,
+      locationInCommandTree,
     );
     expect(exception).not.toBeTruthy();
   });
