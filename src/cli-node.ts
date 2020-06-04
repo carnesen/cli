@@ -6,9 +6,9 @@ type AnyCliCommand = ICliCommand<AnyArgParser, AnyNamedArgParsers, AnyArgParser>
 export type BranchOrCommand = ICliBranch | AnyCliCommand;
 export type BranchOrAnyCommand = ICliBranch | ICliCommand<any, any, any>;
 
-export type BranchOrCommandStack = {
+export type Node = {
   parents: ICliBranch[];
   current: BranchOrCommand;
 };
 
-export type CommandStack = { parents: ICliBranch[]; current: AnyCliCommand };
+export type Leaf = { parents: ICliBranch[]; current: AnyCliCommand };

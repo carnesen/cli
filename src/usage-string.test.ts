@@ -2,7 +2,7 @@ import { UsageString } from './usage-string';
 import { CliBranch } from './cli-branch';
 import { CliStringArgParser } from './arg-parsers/cli-string-arg-parser';
 import { CliCommand } from './cli-command';
-import { BranchOrCommand } from './types';
+import { BranchOrCommand } from './cli-node';
 
 const messageArgParser = CliStringArgParser({ description: 'A string message please' });
 const positionalArgParser = CliStringArgParser({
@@ -29,7 +29,7 @@ const command = CliCommand({
 const branch = CliBranch({
   name: 'cli',
   description: 'This is a CLI',
-  subcommands: [command],
+  children: [command],
 });
 
 describe(UsageString.name, () => {

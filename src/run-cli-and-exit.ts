@@ -40,7 +40,9 @@ export async function runCliAndExit(
       );
     } else if (exception.code === CLI_USAGE_ERROR) {
       const FALLBACK_COMMAND_STACK = { current: rootCommand, parents: [] };
-      const usageString = UsageString(exception.commandStack || FALLBACK_COMMAND_STACK);
+      const usageString = UsageString(
+        exception.locationInCommandTree || FALLBACK_COMMAND_STACK,
+      );
       if (exception.message) {
         consoleError(`${usageString}\n\n${RED_ERROR} ${exception.message}`);
       } else {

@@ -1,4 +1,4 @@
-import { BranchOrCommandStack } from './types';
+import { Node } from './cli-node';
 
 export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
 
@@ -17,17 +17,17 @@ export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
 export class CliUsageError extends Error {
   public readonly code: typeof CLI_USAGE_ERROR;
 
-  public commandStack?: BranchOrCommandStack;
+  public locationInCommandTree?: Node;
 
   /**
    *
    * @param message An `Error` message
-   * @param commandStack Used internally for argument processing
+   * @param node Used internally for argument processing
    */
-  constructor(message?: string, commandStack?: BranchOrCommandStack) {
+  constructor(message?: string, node?: Node) {
     super(message);
     this.code = CLI_USAGE_ERROR;
-    this.commandStack = commandStack;
+    this.locationInCommandTree = node;
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }

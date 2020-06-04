@@ -1,4 +1,4 @@
-import { BranchOrCommand } from './types';
+import { BranchOrCommand } from './cli-node';
 import { CLI_COMMAND } from './constants';
 
 type PathAndDescription = {
@@ -25,7 +25,7 @@ export function getPathAndDescriptionOfLeaves(
     ];
   }
   const returnValue: PathAndDescription[] = [];
-  for (const subcommand of command.subcommands) {
+  for (const subcommand of command.children) {
     returnValue.push(
       ...getPathAndDescriptionOfLeaves(subcommand, [...path, subcommand.name]),
     );
