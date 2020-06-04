@@ -1,6 +1,6 @@
 ### Node ###
 
-/coverage
+coverage/
 
 # Logs
 logs
