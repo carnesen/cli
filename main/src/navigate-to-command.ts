@@ -1,4 +1,4 @@
-import { BranchOrCommandStack, CommandStack, BranchOrCommand } from './types';
+import { Node, Leaf, BranchOrCommand } from './cli-node';
 import { CLI_COMMAND } from './constants';
 import { CliUsageError } from './cli-usage-error';
 
@@ -25,15 +25,15 @@ import { CliUsageError } from './cli-usage-error';
 export function navigateToCommand(
   command: BranchOrCommand,
   args: string[],
-): [CommandStack, string[]] {
+): [Leaf, string[]] {
   return recursiveNavigateToCommand({ current: command, parents: [] }, args);
 }
 
 export function recursiveNavigateToCommand(
-  commandStack: BranchOrCommandStack,
+  locationInCommandTree: Node,
   args: string[],
-): [CommandStack, string[]] {
-  const { current, parents } = commandStack;
+): [Leaf, string[]] {
+  const { current, parents } = locationInCommandTree;
   // Terminate recursion if current is a command
   if (current.commandType === CLI_COMMAND) {
     return [{ current, parents }, args];
@@ -43,18 +43,18 @@ export function recursiveNavigateToCommand(
   if (args.length === 0) {
     // Example: Full command is "cli user login". They've done "cli user". In this case we
     // want to print the usage string but not an error message.
-    throw new CliUsageError(undefined, commandStack);
+    throw new CliUsageError(undefined, locationInCommandTree);
   }
 
   if (args[0] === '--help') {
-    throw new CliUsageError(undefined, commandStack);
+    throw new CliUsageError(undefined, locationInCommandTree);
   }
 
-  const next = current.subcommands.find((subcommand) => subcommand.name === args[0]);
+  const next = current.children.find((subcommand) => subcommand.name === args[0]);
 
   if (!next) {
     // Example: Full command is "cli user login". They've done "cli login".
-    throw new CliUsageError(`Bad command "${args[0]}"`, commandStack);
+    throw new CliUsageError(`Bad command "${args[0]}"`, locationInCommandTree);
   }
 
   return recursiveNavigateToCommand(

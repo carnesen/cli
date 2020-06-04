@@ -7,7 +7,7 @@ import { throwSpecialError } from './throw-special-error';
 export const carnesenCliExamples = CliBranch({
 	name: 'carnesen-cli-examples',
 	description: `Examples that demonstrate @carnesen/cli features`,
-	subcommands: [echo, multiply, throwSpecialError],
+	children: [echo, multiply, throwSpecialError],
 });
 
 if (module === require.main) {

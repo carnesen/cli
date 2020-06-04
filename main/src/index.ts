@@ -38,4 +38,4 @@ export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
 // For custom arg parsers
-export { ICliArgParser as CliArgParser } from './cli-arg-parser';
+export { ICliArgParser } from './cli-arg-parser';

@@ -5,7 +5,7 @@ export type CliBranchOptions = {
   name: string;
   description?: string;
   hidden?: boolean;
-  subcommands: (ICliBranch | ICliCommand<any, any, any>)[];
+  children: (ICliBranch | ICliCommand<any, any, any>)[];
 };
 
 /**

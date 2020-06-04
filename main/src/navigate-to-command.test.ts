@@ -11,14 +11,14 @@ const command = CliCommand({
 
 const branch = CliBranch({
   name: 'cli',
-  subcommands: [command],
+  children: [command],
 });
 
 describe(navigateToCommand.name, () => {
   it('accumulates command linked list', () => {
-    const [commandStack, args] = navigateToCommand(branch, ['echo', 'foo']);
-    expect(commandStack.current).toBe(command);
-    expect(commandStack.parents[0]).toBe(branch);
+    const [locationInCommandTree, args] = navigateToCommand(branch, ['echo', 'foo']);
+    expect(locationInCommandTree.current).toBe(command);
+    expect(locationInCommandTree.parents[0]).toBe(branch);
     expect(args).toEqual(['foo']);
   });
 });

@@ -1,6 +1,6 @@
 import redent = require('redent');
 
-import { BranchOrCommandStack } from './types';
+import { Node } from './cli-node';
 import { CLI_BRANCH } from './constants';
 import { TextList } from './text-list';
 import { regularizeText, wrapInSquareBrackets } from './util';
@@ -9,10 +9,7 @@ import { AnyArgParser } from './cli-arg-parser';
 
 const INDENT_SIZE = 3;
 
-export function UsageString(commandStack: BranchOrCommandStack): string {
-  const { current, parents } = commandStack;
-  const lastCommand = current;
-
+export function UsageString({ current, parents }: Node): string {
   const commandPathString = [...parents, current].map(({ name }) => name).join(' ');
   let firstParagraph = `Usage: ${commandPathString}`;
   const otherParagraphs: string[] = [];
@@ -31,22 +28,22 @@ export function UsageString(commandStack: BranchOrCommandStack): string {
     }
   }
 
-  if (lastCommand.commandType === CLI_BRANCH) {
+  if (current.commandType === CLI_BRANCH) {
     // BRANCH
     firstParagraph += ' <subcommand> ...';
     otherParagraphs.push('Subcommands:');
-    const nameAndDescriptionOfLeaves = getPathAndDescriptionOfLeaves(lastCommand, []);
+    const nameAndDescriptionOfLeaves = getPathAndDescriptionOfLeaves(current, []);
     const items: Parameters<typeof TextList> = nameAndDescriptionOfLeaves.map(
       ({ path, description }) => ({
         name: path.join(' '),
         text: description,
       }),
     );
-    const subcommandsParagraph = redent(TextList(...items), INDENT_SIZE);
-    otherParagraphs.push(subcommandsParagraph);
+    const childrenParagraph = redent(TextList(...items), INDENT_SIZE);
+    otherParagraphs.push(childrenParagraph);
   } else {
     // LEAF
-    const { positionalArgParser, namedArgParsers, escapedArgParser } = lastCommand;
+    const { positionalArgParser, namedArgParsers, escapedArgParser } = current;
 
     appendArgParserUsage(positionalArgParser);
 
@@ -83,7 +80,7 @@ export function UsageString(commandStack: BranchOrCommandStack): string {
 
   const paragraphs = [firstParagraph];
 
-  const regularizedDescription = regularizeText(lastCommand.description);
+  const regularizedDescription = regularizeText(current.description);
   if (regularizedDescription) {
     paragraphs.push(redent(regularizedDescription, INDENT_SIZE));
   }
