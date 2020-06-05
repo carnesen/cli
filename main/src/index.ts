@@ -1,6 +1,6 @@
 // Command factories
-export { CliBranch, ICliBranch } from './cli-branch';
-export { CliCommand, ICliCommand } from './cli-command';
+export { CliBranch, ICliBranch, ICliBranchOptions } from './cli-branch';
+export { CliCommand, ICliCommand, ICliCommandOptions } from './cli-command';
 
 // CliArgParser factories
 export {
@@ -38,4 +38,4 @@ export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
 // For custom arg parsers
-export { ICliArgParser } from './cli-arg-parser';
+export { ICliArgParser, CliArgs } from './cli-arg-parser';
