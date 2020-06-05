@@ -1,22 +1,32 @@
-type MaybeArgs<TRequired extends boolean> = TRequired extends true
+/**
+ * Defines the type of the args passed to an {@linkcode ICliArgParser}
+ * @typeParam TRequired If `true`, the `args` parameter might be `undefined`
+ */
+export type CliArgs<TRequired extends boolean> = TRequired extends true
   ? string[]
   : string[] | undefined;
 
 /**
- * Interface describing the "argument parser" object
- * @remarks
- * An arg parser is an object that converts command-line arguments (strings) into
- * strictly-typed values.
- * @typeParam TValue Type of the value returned by `#parse`
- * @typeParam TRequired If `true`, throw in `parse` if `args.length === 0`
+ * Interface describing an "argument parser" object for converting string arguments
+ * well-typed values.
+ * @typeParam TValue Type of the parsed value
+ * @typeParam TRequired If `true`, `undefined` is removed from the input type to `parse`
  */
 export interface ICliArgParser<TValue extends any, TRequired extends boolean = boolean> {
-  description?: string;
-  hidden?: boolean;
+  /** Function or async function that converts an array of string arguments into a
+   * well-typed value */
   parse:
-    | ((args: MaybeArgs<TRequired>) => TValue)
-    | ((args: MaybeArgs<TRequired>) => Promise<TValue>);
+    | ((args: CliArgs<TRequired>) => TValue)
+    | ((args: CliArgs<TRequired>) => Promise<TValue>);
+  /** For representing this argument in command-line usage. The default placeholders are
+   * like "\<str\>" */
   placeholder: string;
+  /** For describing this argument in command-line usage */
+  description?: string;
+  /** If true, the CLI will not show this arg parser in command-line usage */
+  hidden?: boolean;
+  /** The CLI will throw a {@linkcode CliUsageError} if a required argument is not
+   * provided */
   required?: TRequired;
 }
 

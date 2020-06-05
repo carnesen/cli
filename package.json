@@ -10,9 +10,9 @@
   "scripts": {
     "build": "rimraf lib/ && tsc",
     "build-watch": "npm run build -- --watch",
-    "docs": "typedoc --mode library --readme api.md --inputFiles src/index.ts --out dist",
+    "docs": "rimraf dist/ && typedoc --mode library --readme api.md --inputFiles src/index.ts --out dist --theme theme/",
     "docs-serve": "browser-sync dist",
-    "docs-watch": "nodemon --ext ts --exec npm -- run docs",
+    "docs-watch": "nodemon --ext ts,css --ignore dist/ --exec npm -- run docs",
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
     "test": "npm run lint && npm run unit-test && npm run build",

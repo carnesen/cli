@@ -7,11 +7,11 @@ import {
   ICliArgParser,
 } from './cli-arg-parser';
 
-export type CliCommandOptions<
+export interface ICliCommandOptions<
   TPositionalArgParser extends AnyArgParser,
   TNamedArgParsers extends AnyNamedArgParsers,
   TEscapedArgParser extends AnyArgParser
-> = {
+> {
   /**
    * Name used in command-line usage
    */
@@ -46,7 +46,7 @@ export type CliCommandOptions<
    * If true, don't show this command in usage docs.
    */
   hidden?: boolean;
-};
+}
 
 /**
  * Interface describing a "command" command
@@ -57,7 +57,7 @@ export interface ICliCommand<
   TPositionalArgParser extends AnyArgParser,
   TNamedArgParsers extends AnyNamedArgParsers,
   TEscapedArgParser extends AnyArgParser
-> extends CliCommandOptions<TPositionalArgParser, TNamedArgParsers, TEscapedArgParser> {
+> extends ICliCommandOptions<TPositionalArgParser, TNamedArgParsers, TEscapedArgParser> {
   commandType: typeof CLI_COMMAND;
 }
 
@@ -72,7 +72,7 @@ export function CliCommand<
   TNamed extends AnyNamedArgParsers = any,
   TEscaped extends AnyArgParser = ICliArgParser<undefined, false>
 >(
-  options: CliCommandOptions<TPositional, TNamed, TEscaped>,
+  options: ICliCommandOptions<TPositional, TNamed, TEscaped>,
 ): ICliCommand<TPositional, TNamed, TEscaped> {
   return {
     ...options,
