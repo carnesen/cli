@@ -52,7 +52,7 @@ describe(parseArgs.name, () => {
     }
   });
 
-  it(`if throws "parser is required", expect message to match snapshot`, async () => {
+  it(`if throws "argument is required", expect message to match snapshot`, async () => {
     const exception = await runAndCatch(
       parseArgs,
       dummyRequiredValuedParser,
@@ -60,10 +60,11 @@ describe(parseArgs.name, () => {
       undefined,
       locationInCommandTree,
     );
+    expect(exception.message).toMatch('argument is required');
     expect(exception.message).toMatchSnapshot();
   });
 
-  it(`if throws "parser is required" with context, expect message to match snapshot`, async () => {
+  it(`if throws "argument is required" with context, expect message to match snapshot`, async () => {
     const exception = await runAndCatch(
       parseArgs,
       dummyRequiredValuedParser,
@@ -71,6 +72,7 @@ describe(parseArgs.name, () => {
       'context',
       locationInCommandTree,
     );
+    expect(exception.message).toMatch('argument is required');
     expect(exception.message).toMatchSnapshot();
   });
 
