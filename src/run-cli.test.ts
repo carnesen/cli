@@ -1,32 +1,32 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliCommand } from './cli-command';
-import { dummyArgParser } from './dummy-arg-parsers-for-testing';
-import { RunCli, CliEnhancer } from './run-cli';
+import { dummyValuedParser } from './dummy-arg-parsers-for-testing';
+import { RunCli, ICliEnhancer } from './run-cli';
 import { findVersion } from './find-version';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
-const commandWithNamedArgParsers = CliCommand({
+const commandWithNamedValuedParsers = CliCommand({
   name: 'command-with-named-args',
-  namedArgParsers: {
-    foo: dummyArgParser,
+  namedParsers: {
+    foo: dummyValuedParser,
   },
   action(...args) {
     return args;
   },
 });
 
-const commandWithPositionalArgParser = CliCommand({
+const commandWithPositionalValuedParser = CliCommand({
   name: 'command-with-positional-args',
-  positionalArgParser: dummyArgParser,
+  positionalParser: dummyValuedParser,
   action(...args) {
     return args;
   },
 });
 
-const commandWithEscapedArgParser = CliCommand({
+const commandWithEscapedValuedParser = CliCommand({
   name: 'command-with-escaped-arg-parser',
-  escapedArgParser: dummyArgParser,
+  escapedParser: dummyValuedParser,
   action(...args) {
     return args;
   },
@@ -35,9 +35,9 @@ const commandWithEscapedArgParser = CliCommand({
 const root = CliBranch({
   name: 'cli',
   children: [
-    commandWithPositionalArgParser,
-    commandWithNamedArgParsers,
-    commandWithEscapedArgParser,
+    commandWithPositionalValuedParser,
+    commandWithNamedValuedParsers,
+    commandWithEscapedValuedParser,
   ],
 });
 
@@ -46,11 +46,11 @@ const cliArgRunner = RunCli(root);
 describe(RunCli.name, () => {
   it('calls the enhancer if provided', async () => {
     const spy = jest.fn();
-    const enhancer: CliEnhancer = (innerArgRunner) => async (...args: string[]) => {
+    const enhancer: ICliEnhancer = (innerArgRunner) => async (...args: string[]) => {
       spy(...args);
       await innerArgRunner(...args);
     };
-    const enhancedArgRunner = RunCli(commandWithPositionalArgParser, {
+    const enhancedArgRunner = RunCli(commandWithPositionalValuedParser, {
       enhancer,
     });
     await enhancedArgRunner('foo', 'bar');
@@ -82,15 +82,15 @@ describe(RunCli.name, () => {
     expect(exception.message).toMatchSnapshot();
   });
 
-  it('throws USAGE error "positional arguments" if last command is a command without positionalArgParser property and additional args is present', async () => {
+  it('throws USAGE error "positional arguments" if last command is a command without positionalValuedParser property and additional args is present', async () => {
     const exception = await runAndCatch(
       cliArgRunner,
-      commandWithNamedArgParsers.name,
+      commandWithNamedValuedParsers.name,
       'oops',
     );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch('Unexpected argument "oops"');
-    expect(exception.message).toMatch(commandWithNamedArgParsers.name);
+    expect(exception.message).toMatch(commandWithNamedValuedParsers.name);
     expect(exception.message).toMatch(/positional arguments/i);
     expect(exception.message).toMatchSnapshot();
   });
@@ -98,18 +98,18 @@ describe(RunCli.name, () => {
   it('Passes parsed positional value as first argument of the "action" function', async () => {
     const positionalArgs = ['foo', 'bar'];
     const result = await cliArgRunner(
-      commandWithPositionalArgParser.name,
+      commandWithPositionalValuedParser.name,
       ...positionalArgs,
     );
-    expect(result).toEqual([dummyArgParser.parse(positionalArgs), {}, undefined]);
+    expect(result).toEqual([dummyValuedParser.parse(positionalArgs), {}, undefined]);
   });
 
   it('Passes parsed named values as second argument of the "action" function', async () => {
     const namedArgs = ['--foo', 'bar'];
-    const result = await cliArgRunner(commandWithNamedArgParsers.name, ...namedArgs);
+    const result = await cliArgRunner(commandWithNamedValuedParsers.name, ...namedArgs);
     expect(result).toEqual([
       undefined,
-      { foo: dummyArgParser.parse(['bar']) },
+      { foo: dummyValuedParser.parse(['bar']) },
       undefined,
     ]);
   });
@@ -117,20 +117,20 @@ describe(RunCli.name, () => {
   it(`Throws USAGE error 'does not allow "--"' if command does not have an "escaped" property`, async () => {
     const exception = await runAndCatch(
       cliArgRunner,
-      commandWithPositionalArgParser.name,
+      commandWithPositionalValuedParser.name,
       '--',
     );
     expect(exception.code).toBe(CLI_USAGE_ERROR);
-    expect(exception.message).toMatch(commandWithPositionalArgParser.name);
+    expect(exception.message).toMatch(commandWithPositionalValuedParser.name);
     expect(exception.message).toMatch('does not allow "--"');
   });
 
   it('Passes parsed escaped value as third argument of the "action" function', async () => {
-    const result = await cliArgRunner(commandWithEscapedArgParser.name, '--');
+    const result = await cliArgRunner(commandWithEscapedValuedParser.name, '--');
     expect(result).toEqual([
       undefined,
       {},
-      commandWithEscapedArgParser.escapedArgParser!.parse([]),
+      commandWithEscapedValuedParser.escapedParser!.parse([]),
     ]);
   });
 });

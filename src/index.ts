@@ -2,40 +2,43 @@
 export { CliBranch, ICliBranch, ICliBranchOptions } from './cli-branch';
 export { CliCommand, ICliCommand, ICliCommandOptions } from './cli-command';
 
-// CliArgParser factories
+// ICliParser factories
 export {
-  CliFlagArgParser,
-  CliFlagArgParserOptions,
-} from './arg-parsers/cli-flag-arg-parser';
+  CliBooleanValuedParser,
+  CliBooleanValuedParserOptions,
+} from './arg-parsers/cli-boolean-valued-parser';
 export {
-  CliJsonArgParser,
-  CliJsonArgParserOptions,
-} from './arg-parsers/cli-json-arg-parser';
+  CliJsonValuedParser,
+  CliJsonValuedParserOptions,
+} from './arg-parsers/cli-json-valued-parser';
 export {
-  CliNumberArgParser,
-  CliNumberArgParserOptions,
-} from './arg-parsers/cli-number-arg-parser';
+  CliNumberValuedParser,
+  CliNumberValuedParserOptions,
+} from './arg-parsers/cli-number-valued-parser';
 export {
-  CliNumberArrayArgParser,
-  CliNumberArrayArgParserOptions,
-} from './arg-parsers/cli-number-array-arg-parser';
+  CliNumberArrayValuedParser,
+  CliNumberArrayValuedParserOptions,
+} from './arg-parsers/cli-number-array-valued-parser';
 export {
-  CliOneOfArgParser,
-  CliOneOfArgParserOptions,
-} from './arg-parsers/cli-one-of-arg-parser';
+  CliOneOfValuedParser,
+  CliOneOfValuedParserOptions,
+} from './arg-parsers/cli-one-of-valued-parser';
 export {
-  CliStringArgParser,
-  CliStringArgParserOptions,
+  CliStringValuedParser,
+  CliStringValuedParserOptions,
 } from './arg-parsers/cli-string-arg-parser';
-export { CliStringArrayArgParser } from './arg-parsers/cli-string-array-arg-parser';
+export {
+  CliStringArrayValuedParser,
+  CliStringArrayValuedParserOptions,
+} from './arg-parsers/cli-string-array-valued-parser';
 
-// Command-line interface runner
+// Command-line interface runners
 export { runCliAndExit, RunCliAndExitOptions } from './run-cli-and-exit';
-export { RunCli, CliEnhancer } from './run-cli';
+export { RunCli, IRunCli, ICliEnhancer } from './run-cli';
 
 // Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
-// For custom arg parsers
-export { ICliArgParser, CliArgs } from './cli-arg-parser';
+// For custom parsers
+export { ICliParser, CliArgs } from './cli-arg-parser';

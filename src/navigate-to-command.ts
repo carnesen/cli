@@ -1,6 +1,6 @@
 import { Node, Leaf, BranchOrCommand } from './cli-node';
-import { CLI_COMMAND } from './constants';
 import { CliUsageError } from './cli-usage-error';
+import { CLI_COMMAND } from './cli-command';
 
 /**
  * Navigate a tree of commands to find a command
@@ -15,7 +15,7 @@ import { CliUsageError } from './cli-usage-error';
  * "login", a command.
  *
  * The recursion terminates when a command is reached
- * @param command - A CliCommand of
+ * @param current - A CliCommand of
  * @param args - An array of string command-line arguments
  * @returns A Command Stack and the remaining unprocessed command-line args
  *
@@ -23,10 +23,10 @@ import { CliUsageError } from './cli-usage-error';
  */
 
 export function navigateToCommand(
-  command: BranchOrCommand,
+  current: BranchOrCommand,
   args: string[],
 ): [Leaf, string[]] {
-  return recursiveNavigateToCommand({ current: command, parents: [] }, args);
+  return recursiveNavigateToCommand({ current, parents: [] }, args);
 }
 
 export function recursiveNavigateToCommand(
@@ -35,7 +35,7 @@ export function recursiveNavigateToCommand(
 ): [Leaf, string[]] {
   const { current, parents } = locationInCommandTree;
   // Terminate recursion if current is a command
-  if (current.commandType === CLI_COMMAND) {
+  if (current.kind === CLI_COMMAND) {
     return [{ current, parents }, args];
   }
 

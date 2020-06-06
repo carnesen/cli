@@ -1,26 +1,28 @@
 import { UsageString } from './usage-string';
 import { CliBranch } from './cli-branch';
-import { CliStringArgParser } from './arg-parsers/cli-string-arg-parser';
+import { CliStringValuedParser } from './arg-parsers/cli-string-arg-parser';
 import { CliCommand } from './cli-command';
 import { BranchOrCommand } from './cli-node';
 
-const messageArgParser = CliStringArgParser({ description: 'A string message please' });
-const positionalArgParser = CliStringArgParser({
+const messageValuedParser = CliStringValuedParser({
+  description: 'A string message please',
+});
+const positionalValuedParser = CliStringValuedParser({
   description: 'A word',
   placeholder: '<word>',
 });
-const escapedArgParser = CliStringArgParser({
+const escapedValuedParser = CliStringValuedParser({
   description: 'Another word',
   required: true,
 });
 
 const command = CliCommand({
   name: 'echo',
-  positionalArgParser,
-  namedArgParsers: {
-    message: messageArgParser,
+  positionalParser: positionalValuedParser,
+  namedParsers: {
+    message: messageValuedParser,
   },
-  escapedArgParser,
+  escapedParser: escapedValuedParser,
   action(foo) {
     return foo;
   },
@@ -40,7 +42,7 @@ describe(UsageString.name, () => {
 
   it('Creates a usage string for a command without a parent', () => {
     const usageString = UsageString({ current: command as BranchOrCommand, parents: [] });
-    expect(usageString).toMatch(messageArgParser.description!);
+    expect(usageString).toMatch(messageValuedParser.description!);
     expect(usageString).toMatchSnapshot();
   });
 
@@ -52,7 +54,7 @@ describe(UsageString.name, () => {
     expect(usageString).toMatchSnapshot();
   });
 
-  it('Does not write usage for named argParsers if there are none', () => {
+  it('Does not write usage for named parsers if there are none', () => {
     const fooCommand = CliCommand({ name: 'foo', action() {} });
     const usageString = UsageString({ current: fooCommand, parents: [] });
     expect(usageString).toMatchSnapshot();

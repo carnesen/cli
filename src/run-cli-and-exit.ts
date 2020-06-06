@@ -1,21 +1,41 @@
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import { CLI_TERSE_ERROR } from './cli-terse-error';
-import { RED_ERROR } from './constants';
-import { RunCli, CliEnhancer } from './run-cli';
+import { RunCli, ICliEnhancer } from './run-cli';
 import { UsageString } from './usage-string';
 import { ICliBranch } from './cli-branch';
 import { ICliCommand } from './cli-command';
 
-export type RunCliAndExitOptions = Partial<{
-  args: string[];
-  enhancer: CliEnhancer;
-  processExit: (code?: number) => any;
-  consoleLog: typeof console.log;
-  consoleError: typeof console.error;
-}>;
+function red(message: string) {
+  return `\u001b[31m${message}\u001b[39m`;
+}
 
+export const RED_ERROR = red('Error:');
+
+/** Options for {@linkcode runCliAndExit} */
+export type RunCliAndExitOptions = {
+  /** Command-line arguments defaulting to `process.argv.slice(2)` */
+  args?: string[];
+
+  /** (Advanced) Modify the CLI's behavior. Passed to {@linkcode RunCli} */
+  enhancer?: ICliEnhancer;
+
+  /** Called after the command has completed defaulting to `process.exit` */
+  processExit?: (code?: number) => any;
+
+  /** Called on the result of the command defaulting to `console.log` */
+  consoleLog?: typeof console.log;
+
+  /** Called on errors and exceptions defaulting to `console.error` */
+  consoleError?: typeof console.error;
+};
+
+/**
+ * Run a command-line interface and exit
+ *
+ * @param root The root of this CLI's command tree
+ * */
 export async function runCliAndExit(
-  rootCommand: ICliBranch | ICliCommand<any, any, any>,
+  root: ICliBranch | ICliCommand<any, any, any>,
   options: RunCliAndExitOptions = {},
 ): Promise<void> {
   const {
@@ -25,7 +45,7 @@ export async function runCliAndExit(
     consoleLog = console.log, // eslint-disable-line no-console
     consoleError = console.error, // eslint-disable-line no-console
   } = options;
-  const runCli = RunCli(rootCommand, { enhancer });
+  const runCli = RunCli(root, { enhancer });
   let exitCode = 0;
   try {
     const result = await runCli(...args);
@@ -39,7 +59,7 @@ export async function runCliAndExit(
         `${RED_ERROR} Encountered non-truthy exception "${exception}". Please contact the author of this command-line interface`,
       );
     } else if (exception.code === CLI_USAGE_ERROR) {
-      const FALLBACK_COMMAND_STACK = { current: rootCommand, parents: [] };
+      const FALLBACK_COMMAND_STACK = { current: root, parents: [] };
       const usageString = UsageString(
         exception.locationInCommandTree || FALLBACK_COMMAND_STACK,
       );

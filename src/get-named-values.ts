@@ -2,21 +2,21 @@ import { Leaf } from './cli-node';
 import { NamedArgs } from './partition-args';
 import { parseArgs } from './parse-args';
 import { CliUsageError } from './cli-usage-error';
-import { AnyNamedArgParsers, NamedValues } from './cli-arg-parser';
+import { AnyNamedParsers, NamedValues } from './cli-arg-parser';
 
 export async function getNamedValues(
-  namedArgParsers: AnyNamedArgParsers,
+  namedValuedParsers: AnyNamedParsers,
   namedArgs: NamedArgs,
   locationInCommandTree: Leaf,
-): Promise<NamedValues<AnyNamedArgParsers>> {
-  const namedValues: NamedValues<AnyNamedArgParsers> = {};
+): Promise<NamedValues<AnyNamedParsers>> {
+  const namedValues: NamedValues<AnyNamedParsers> = {};
   const restNamedArgs = { ...namedArgs };
   const asyncFuncs: (() => Promise<void>)[] = [];
-  for (const [name, argParser] of Object.entries(namedArgParsers)) {
+  for (const [name, parser] of Object.entries(namedValuedParsers)) {
     const args = restNamedArgs[name];
     delete restNamedArgs[name];
     asyncFuncs.push(async () => {
-      const value = await parseArgs(argParser, args, `--${name}`, locationInCommandTree);
+      const value = await parseArgs(parser, args, `--${name}`, locationInCommandTree);
       namedValues[name] = value;
     });
   }

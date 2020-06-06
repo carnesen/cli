@@ -1,81 +1,66 @@
-import { CLI_COMMAND } from './constants';
 import {
-  AnyArgParser,
-  AnyNamedArgParsers,
-  ValueFromArgParser,
+  AnyParser,
+  AnyNamedParsers,
+  ValueFromParser,
   NamedValues,
-  ICliArgParser,
+  ICliParser,
 } from './cli-arg-parser';
 
+/** "kind" of a {@linkcode ICliCommand} */
+export const CLI_COMMAND = 'CLI_COMMAND';
+
+/** Options for {@linkcode CliCommand} */
 export interface ICliCommandOptions<
-  TPositionalArgParser extends AnyArgParser,
-  TNamedArgParsers extends AnyNamedArgParsers,
-  TEscapedArgParser extends AnyArgParser
+  TPositionalParser extends AnyParser,
+  TNamedParsers extends AnyNamedParsers,
+  TEscapedParser extends AnyParser
 > {
-  /**
-   * Name used in command-line usage
-   */
+  /** Identifier for this command in command-line usage */
   name: string;
-  /**
-   * The function that defines your command logic.
-   *
-   * @param positionalValue
-   * @param namedValues
-   * @param escapedValue
-   * @returns A value (synchronously) or a `Promise` that resolves to a value
-   * @remarks
-   * By default, {@linkcode runCliAndExit} `console.log`s the value returned by `action`.
-   * The type of the `args` argument received by `action` is derived by the `args`
-   * property of the command. Similarly, the `options` argument type is derived from
-   * `command.options`.
-   *
-   */
+
+  /** Function or async function that implements the command */
   action: (
-    positionalValue: ValueFromArgParser<TPositionalArgParser>,
-    namedValues: NamedValues<TNamedArgParsers>,
-    escapedValue: ValueFromArgParser<TEscapedArgParser>,
+    positionalValue: ValueFromParser<TPositionalParser>,
+    namedValues: NamedValues<TNamedParsers>,
+    escapedValue: ValueFromParser<TEscapedParser>,
   ) => any;
-  positionalArgParser?: TPositionalArgParser;
-  namedArgParsers?: TNamedArgParsers;
-  escapedArgParser?: TEscapedArgParser;
-  /**
-   * A string that will be included in `Usage:` if present.
-   */
+
+  /** A {@linkcode ICliParser} for the arguments before the first separator argument */
+  positionalParser?: TPositionalParser;
+
+  /** A {@linkcode ICliParser} for the arguments passed as "--name value" */
+  namedParsers?: TNamedParsers;
+
+  /** A {@linkcode ICliParser} for the arguments after a lone "--" */
+  escapedParser?: TEscapedParser;
+
+  /** A sentence or two about this command for command-line usage */
   description?: string;
-  /**
-   * If true, don't show this command in usage docs.
-   */
+
+  /** If `true`, don't show this command in command-line usage */
   hidden?: boolean;
 }
 
-/**
- * Interface describing a "command" command
- * @typeParam TPositionalArgParser Type of the "positional" arguments parser
- * @typeParam TNamedArgParsers Type of the ""
- */
+/** An object that defines a CLI command and its arguments */
 export interface ICliCommand<
-  TPositionalArgParser extends AnyArgParser,
-  TNamedArgParsers extends AnyNamedArgParsers,
-  TEscapedArgParser extends AnyArgParser
-> extends ICliCommandOptions<TPositionalArgParser, TNamedArgParsers, TEscapedArgParser> {
-  commandType: typeof CLI_COMMAND;
+  TPositionalParser extends AnyParser,
+  TNamedParsers extends AnyNamedParsers,
+  TEscapedParser extends AnyParser
+> extends ICliCommandOptions<TPositionalParser, TNamedParsers, TEscapedParser> {
+  /** The string literal {@linkcode CLI_COMMAND} */
+  kind: typeof CLI_COMMAND;
 }
 
-/**
- *
- * A factory function for creating CLI command commands
- * @param options
- * @returns The newly-created `command`.
- */
+/** A factory for {@linkcode ICliCommand}s */
 export function CliCommand<
-  TPositional extends AnyArgParser = ICliArgParser<undefined, false>,
-  TNamed extends AnyNamedArgParsers = any,
-  TEscaped extends AnyArgParser = ICliArgParser<undefined, false>
+  TPositionalParser extends AnyParser = ICliParser<undefined, false>,
+  TNamedParsers extends AnyNamedParsers = any,
+  TEscapedParser extends AnyParser = ICliParser<undefined, false>
 >(
-  options: ICliCommandOptions<TPositional, TNamed, TEscaped>,
-): ICliCommand<TPositional, TNamed, TEscaped> {
+  options: ICliCommandOptions<TPositionalParser, TNamedParsers, TEscapedParser>,
+): ICliCommand<TPositionalParser, TNamedParsers, TEscapedParser> {
   return {
     ...options,
-    commandType: CLI_COMMAND,
+    kind: CLI_COMMAND,
   };
 }

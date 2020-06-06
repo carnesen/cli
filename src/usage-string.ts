@@ -1,11 +1,11 @@
 import redent = require('redent');
 
 import { Node } from './cli-node';
-import { CLI_BRANCH } from './constants';
+import { CLI_BRANCH } from './cli-branch';
 import { TextList } from './text-list';
 import { regularizeText, wrapInSquareBrackets } from './util';
 import { getPathAndDescriptionOfLeaves } from './get-path-and-description-of-commands';
-import { AnyArgParser } from './cli-arg-parser';
+import { AnyParser } from './cli-arg-parser';
 
 const INDENT_SIZE = 3;
 
@@ -14,9 +14,9 @@ export function UsageString({ current, parents }: Node): string {
   let firstParagraph = `Usage: ${commandPathString}`;
   const otherParagraphs: string[] = [];
 
-  function appendArgParserUsage(argParser?: AnyArgParser, prefix?: string) {
-    if (argParser && !argParser.hidden) {
-      const { placeholder, description, required } = argParser;
+  function appendValuedParserUsage(parser?: AnyParser, prefix?: string) {
+    if (parser && !parser.hidden) {
+      const { placeholder, description, required } = parser;
       if (prefix) {
         firstParagraph += ` ${prefix}`;
       }
@@ -28,7 +28,7 @@ export function UsageString({ current, parents }: Node): string {
     }
   }
 
-  if (current.commandType === CLI_BRANCH) {
+  if (current.kind === CLI_BRANCH) {
     // BRANCH
     firstParagraph += ' <subcommand> ...';
     otherParagraphs.push('Subcommands:');
@@ -43,39 +43,41 @@ export function UsageString({ current, parents }: Node): string {
     otherParagraphs.push(childrenParagraph);
   } else {
     // LEAF
-    const { positionalArgParser, namedArgParsers, escapedArgParser } = current;
+    const {
+      positionalParser: positionalValuedParser,
+      namedParsers: namedValuedParsers,
+      escapedParser: escapedValuedParser,
+    } = current;
 
-    appendArgParserUsage(positionalArgParser);
+    appendValuedParserUsage(positionalValuedParser);
 
-    if (namedArgParsers) {
-      const entries = Object.entries(namedArgParsers).filter(
-        ([_, argParser]) => !argParser.hidden,
+    if (namedValuedParsers) {
+      const entries = Object.entries(namedValuedParsers).filter(
+        ([_, parser]) => !parser.hidden,
       );
       if (entries.length > 0) {
         const optionsNotRequired = entries.every(
-          ([_, namedArgParser]) => !namedArgParser.required,
+          ([_, namedValuedParser]) => !namedValuedParser.required,
         );
         firstParagraph += optionsNotRequired ? ' [<options>]' : ' <options>';
         otherParagraphs.push('Options:');
-        const items: Parameters<typeof TextList> = entries.map(
-          ([argParserName, argParser]) => {
-            let name = `--${argParserName}`;
-            if (argParser.placeholder) {
-              name += ` ${argParser.placeholder}`;
-            }
-            if (!argParser.required) {
-              name = wrapInSquareBrackets(name);
-            }
-            const text = argParser.description;
-            return { name, text };
-          },
-        );
+        const items: Parameters<typeof TextList> = entries.map(([parserName, parser]) => {
+          let name = `--${parserName}`;
+          if (parser.placeholder) {
+            name += ` ${parser.placeholder}`;
+          }
+          if (!parser.required) {
+            name = wrapInSquareBrackets(name);
+          }
+          const text = parser.description;
+          return { name, text };
+        });
         const optionsParagraph = redent(TextList(...items), INDENT_SIZE);
         otherParagraphs.push(optionsParagraph);
       }
     }
 
-    appendArgParserUsage(escapedArgParser, '--');
+    appendValuedParserUsage(escapedValuedParser, '--');
   }
 
   const paragraphs = [firstParagraph];

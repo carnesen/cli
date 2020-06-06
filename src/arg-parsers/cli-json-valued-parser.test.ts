@@ -1,26 +1,26 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CLI_USAGE_ERROR } from '../cli-usage-error';
-import { CliJsonArgParser } from './cli-json-arg-parser';
+import { CliJsonValuedParser } from './cli-json-valued-parser';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
 const required = true;
 
-const argParser = CliJsonArgParser({ description, hidden, placeholder, required });
+const parser = CliJsonValuedParser({ description, hidden, placeholder, required });
 
-describe(CliJsonArgParser.name, () => {
+describe(CliJsonValuedParser.name, () => {
   it('parse returns undefined if args is undefined', () => {
-    expect(argParser.parse(undefined)).toBe(undefined);
+    expect(parser.parse(undefined)).toBe(undefined);
   });
 
   it('parse returns parsed JSON if args is an array with one JSON-parsable string', () => {
-    expect(argParser.parse(['"foo"'])).toBe('foo');
+    expect(parser.parse(['"foo"'])).toBe('foo');
   });
 
   it('parse throws a usage error "expected a single" if args is an array with zero or more than one items', async () => {
     for (const args of [[], ['', '']]) {
-      const exception = await runAndCatch(argParser.parse, args);
+      const exception = await runAndCatch(parser.parse, args);
       expect(exception.code).toBe(CLI_USAGE_ERROR);
       expect(exception.message).toMatch(/expected a single/i);
       expect(exception.message).toMatch(placeholder);
@@ -28,19 +28,19 @@ describe(CliJsonArgParser.name, () => {
   });
 
   it('parse throws a good usage error if the string in args is not parsable', async () => {
-    const exception = await runAndCatch(argParser.parse, ['foo']);
+    const exception = await runAndCatch(parser.parse, ['foo']);
     expect(exception.code).toBe(CLI_USAGE_ERROR);
     expect(exception.message).toMatch("while parsing near 'foo'");
   });
 
   it('attaches config properties', () => {
-    expect(argParser.description).toBe(description);
-    expect(argParser.hidden).toBe(hidden);
-    expect(argParser.placeholder).toBe(placeholder);
-    expect(argParser.required).toBe(required);
+    expect(parser.description).toBe(description);
+    expect(parser.hidden).toBe(hidden);
+    expect(parser.placeholder).toBe(placeholder);
+    expect(parser.required).toBe(required);
   });
 
   it('config is optional', () => {
-    expect(CliJsonArgParser().hidden).toBe(false);
+    expect(CliJsonValuedParser().hidden).toBe(false);
   });
 });

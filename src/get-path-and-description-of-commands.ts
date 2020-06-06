@@ -1,5 +1,5 @@
 import { BranchOrCommand } from './cli-node';
-import { CLI_COMMAND } from './constants';
+import { CLI_COMMAND } from './cli-command';
 
 type PathAndDescription = {
   path: string[];
@@ -16,7 +16,7 @@ export function getPathAndDescriptionOfLeaves(
     // show the leaves underneath "hidden-command".
     return [];
   }
-  if (command.commandType === CLI_COMMAND) {
+  if (command.kind === CLI_COMMAND) {
     return [
       {
         path,
