@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import {
 	CliCommand,
-	CliStringArrayArgParser,
+	CliStringArrayValuedParser,
 	runCliAndExit,
 } from '@carnesen/cli';
 
@@ -9,7 +9,7 @@ export const echo = CliCommand({
 	name: 'echo',
 	description:
 		'Write arguments to standard output (stdout)',
-	positionalArgParser: CliStringArrayArgParser({
+	positionalParser: CliStringArrayValuedParser({
 		required: true,
 	}),
 	action(messages) {

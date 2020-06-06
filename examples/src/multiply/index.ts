@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 import {
 	CliCommand,
-	CliNumberArrayArgParser,
+	CliNumberArrayValuedParser,
 	runCliAndExit,
 } from '@carnesen/cli';
 
 export const multiply = CliCommand({
 	name: 'multiply',
 	description: 'Multiply numbers and print the result',
-	positionalArgParser: CliNumberArrayArgParser({
+	positionalParser: CliNumberArrayValuedParser({
 		required: true,
 	}),
 	action(numbers) {

@@ -1,22 +1,22 @@
 import { Leaf } from './cli-node';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
-import { AnyArgParser } from './cli-arg-parser';
+import { AnyParser } from './cli-arg-parser';
 
 /**
- * Calls the parse method of an ArgParser
+ * Calls the parse method of an ValuedParser
  *
- * @param argParser - An ArgParser
+ * @param parser - An ValuedParser
  * @param args - An array of string arguments
  * @param separator - A string that will be prepended to error messages (e.g. "--users")
  * @returns The result of parse
  */
 export async function parseArgs(
-  argParser: AnyArgParser,
+  parser: AnyParser,
   args: string[] | undefined,
   separator: string | undefined,
   locationInCommandTree: Leaf,
 ): Promise<any> {
-  const { required, placeholder, parse } = argParser;
+  const { required, placeholder, parse } = parser;
   const fullContext = [separator, placeholder].filter((str) => Boolean(str)).join(' ');
   const prefix = fullContext ? `${fullContext} : ` : '';
   if (required && (!args || args.length === 0)) {

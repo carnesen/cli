@@ -2,14 +2,14 @@
 import { execSync } from 'child_process';
 import {
 	CliCommand,
-	CliStringArrayArgParser,
+	CliStringArrayValuedParser,
 	runCliAndExit,
 } from '@carnesen/cli';
 
 export const exec = CliCommand({
 	name: 'exec',
 	description: 'Run a shell command',
-	escapedArgParser: CliStringArrayArgParser({
+	escapedParser: CliStringArrayValuedParser({
 		required: true,
 		placeholder: '<command> [<arguments>]',
 	}),

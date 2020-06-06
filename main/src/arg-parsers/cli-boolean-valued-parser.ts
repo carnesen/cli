@@ -1,16 +1,18 @@
-import { ICliArgParser } from '../cli-arg-parser';
+import { ICliParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 
-export type CliFlagArgParserOptions = { description?: string; hidden?: boolean };
+/**
+ * Options for the {@linkcode CliBooleanValuedParser} factory
+ */
+export type CliBooleanValuedParserOptions = {
+  /** {@linkcode ICliParser.description} */
+  description?: string;
+  /** {@linkcode ICliParser.hidden} */
+  hidden?: boolean;
+};
 
 /**
- * A factory for command-line flag arg parsers
- *
- * @param options
- * If `options.hidden`, do not show in usage.
- *
- * @returns
- * A boolean-valued optional ArgParser
+ * A factory for boolean-valued {@linkcode ICliParser}'s
  *
  * @example
  * ```plaintext
@@ -21,11 +23,11 @@ export type CliFlagArgParserOptions = { description?: string; hidden?: boolean }
  *
  * @throws {@linkcode CliUsageError}
  */
-export function CliFlagArgParser(
-  options: CliFlagArgParserOptions = {},
-): ICliArgParser<boolean, false> {
+export function CliBooleanValuedParser(
+  options: CliBooleanValuedParserOptions = {},
+): ICliParser<boolean, false> {
   const { description, hidden = false } = options;
-  const argParser: ICliArgParser<boolean, false> = {
+  const parser: ICliParser<boolean, false> = {
     placeholder: '',
     required: false,
     hidden,
@@ -40,5 +42,5 @@ export function CliFlagArgParser(
     },
     description,
   };
-  return argParser;
+  return parser;
 }

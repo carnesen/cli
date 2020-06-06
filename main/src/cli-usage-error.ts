@@ -1,21 +1,22 @@
 import { Node } from './cli-node';
 
+/** "code" of a {@link CliUsageError} */
 export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
 
 /**
- * A custom error for when you want {@linkcode runCliAndExit} to show command usage and
- * exit, no visible stack trace.
+ * Thrown to print command usage and an error message but not a `stack`
  */
 export class CliUsageError extends Error {
+  /** The string constant {@linkcode CLI_USAGE_ERROR} */
   public readonly code: typeof CLI_USAGE_ERROR;
 
+  /** Used internally for constructing the command-line usage string */
   public node?: Node;
 
   /**
-   *
-   * @param message If provided, {@linkcode runCliAndExit} will also print "Error: your
-   * message"
-   * @param node Used internally for argument processing
+   * @param message If provided, {@linkcode runCliAndExit} will also print "Error: \<your
+   * message\>"
+   * @param node Used internally for constructing the command-line usage string
    */
   constructor(message?: string, node?: Node) {
     super(message);

@@ -1,47 +1,46 @@
 import parseJson = require('parse-json');
 
-import { ICliArgParser } from '../cli-arg-parser';
+import { ICliParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 
-export type CliJsonArgParserOptions = {
+/** Options for the {@linkcode CliJsonValuedParser} factory */
+export type CliJsonValuedParserOptions = {
+  /** {@linkcode ICliParser.description} */
   description?: string;
+
+  /** {@linkcode ICliParser.required} */
   required?: boolean;
-  /**
-   * Defaults to <json>
-   */
+
+  /** {@linkcode ICliParser.placeholder}. Defaults to "\<json\>" */
   placeholder?: string;
+
+  /** {@linkcode ICliParser.hidden} */
   hidden?: boolean;
 };
 
 /**
- * A factory for arg parsers that JSON.parse the command-line arguments
- *
- * @param options
- *
- * @returns
- * An any-valued ArgParser
+ * A factory for {@linkcode ICliParser}s that `JSON.parse`
  *
  * @example
  * ```plaintext
  * $ cli --json '{"foo":true}' // named value "json" receives object `{ foo: true }`
- * $ cli --json           // usage error
- * $ cli --json '""' '""' // usage error
- * $ cli --json foo // error parsing JSON
+ * $ cli --json                // usage error
+ * $ cli --json '""' '""'      // usage error
+ * $ cli --json foo            // error parsing JSON
  * ```
  *
  * @throws {@linkcode CliUsageError}
  */
-
-export function CliJsonArgParser(
-  options: CliJsonArgParserOptions = {},
-): ICliArgParser<any> {
+export function CliJsonValuedParser(
+  options: CliJsonValuedParserOptions = {},
+): ICliParser<any> {
   const {
     placeholder = '<json>',
     required = false,
     description,
     hidden = false,
   } = options;
-  const argParser: ICliArgParser<any> = {
+  const parser: ICliParser<any> = {
     required,
     placeholder,
     hidden,
@@ -61,5 +60,5 @@ export function CliJsonArgParser(
     },
     description,
   };
-  return argParser;
+  return parser;
 }

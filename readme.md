@@ -21,14 +21,14 @@ Here is [a CLI](examples/src/multiply/index.ts) that does some basic arithmetic:
 // examples/src/multiply/index.ts
 import {
   CliCommand,
-  CliNumberArrayArgParser,
+  CliNumberArrayValuedParser,
   runCliAndExit
 } from '@carnesen/cli';
 
 export const multiply = CliCommand({
   name: 'multiply',
   description: 'Multiply numbers and print the result',
-  positionalArgParser: CliNumberArrayArgParser({ required: true }),
+  positionalValuedParser: CliNumberArrayValuedParser({ required: true }),
   action(numbers) {
     return numbers.reduce((a, b) => a * b, 1);
   },

@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@types/parse-json": "4.0.0",
-    "chalk": "4.0.0",
     "parse-json": "5.0.0",
     "read-pkg-up": "7.0.1",
     "redent": "3.0.0"

@@ -1,4 +1,3 @@
-import { BranchOrAnyCommand } from './cli-node';
 import { partitionArgs } from './partition-args';
 import { getNamedValues } from './get-named-values';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
@@ -6,23 +5,30 @@ import { CliTerseError } from './cli-terse-error';
 import { findVersion } from './find-version';
 import { parseArgs } from './parse-args';
 import { navigateToCommand } from './navigate-to-command';
+import { ICliBranch } from './cli-branch';
+import { ICliCommand } from './cli-command';
 
-export type RunCli = (...args: string[]) => Promise<any>;
+/** A JavaScript command runner. Useful for unit testing CLI logic. */
+export interface IRunCli {
+  (...args: string[]): Promise<any>;
+}
 
-export type CliEnhancer = (runCli: RunCli) => RunCli;
+/** (Advanced) Wrap the default {@linkcode IRunCli} to modify its behavior */
+export interface ICliEnhancer {
+  (runCli: IRunCli): IRunCli;
+}
+
+export type RunCliOptions = { enhancer?: ICliEnhancer };
 
 /**
- * 
- * @remarks
- * Returns a function of the form `(...args: string[]) => Promise<any>` that can be invoked as e.g. `cli('foo', 'bar')` for unit tests or as `cli(process.argv.slice(2))` in an executable CLI script.
-
- * @param rootCommand 
- * @param options 
+ * A factory for {@linkcode IRunCli}s, the core of {@linkcode runCliAndExit}
+ *
+ * @param root The root of this CLI's command tree
  */
 export function RunCli(
-  rootCommand: BranchOrAnyCommand,
-  options: Partial<{ enhancer: CliEnhancer }> = {},
-): RunCli {
+  root: ICliBranch | ICliCommand<any, any, any>,
+  options: RunCliOptions = {},
+): IRunCli {
   const { enhancer } = options;
 
   if (enhancer) {
@@ -41,7 +47,7 @@ export function RunCli(
       return version;
     }
 
-    const [locationInCommandTree, remainingArgs] = navigateToCommand(rootCommand, args);
+    const [locationInCommandTree, remainingArgs] = navigateToCommand(root, args);
 
     const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(remainingArgs);
     if (namedArgs.help) {
@@ -49,7 +55,7 @@ export function RunCli(
     }
     const command = locationInCommandTree.current;
     let argsValue: any;
-    if (command.positionalArgParser) {
+    if (command.positionalParser) {
       // Note that for named and escaped args, we distinguish between
       // `undefined` and `[]`. For example, "cli" gives an escaped args
       // `undefined` whereas "cli --" gives an escaped args `[]`. For the
@@ -57,7 +63,7 @@ export function RunCli(
       // we elect here to pass in `undefined` rather than an empty array when no
       // positional arguments are passed.
       argsValue = await parseArgs(
-        command.positionalArgParser,
+        command.positionalParser,
         positionalArgs.length > 0 ? positionalArgs : undefined,
         undefined,
         locationInCommandTree,
@@ -70,15 +76,15 @@ export function RunCli(
     }
 
     const namedValues = await getNamedValues(
-      command.namedArgParsers || {},
+      command.namedParsers || {},
       namedArgs,
       locationInCommandTree,
     );
 
     let escapedValue: any;
-    if (command.escapedArgParser) {
+    if (command.escapedParser) {
       escapedValue = await parseArgs(
-        command.escapedArgParser,
+        command.escapedParser,
         escapedArgs,
         '--',
         locationInCommandTree,

@@ -1,9 +1,8 @@
 import { CodedError } from '@carnesen/coded-error';
 import { CliCommand } from './cli-command';
-import { runCliAndExit } from './run-cli-and-exit';
+import { runCliAndExit, RED_ERROR } from './run-cli-and-exit';
 import { CliUsageError } from './cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
-import { RED_ERROR } from './constants';
 
 async function runMocked(action: () => any) {
   const result = {
