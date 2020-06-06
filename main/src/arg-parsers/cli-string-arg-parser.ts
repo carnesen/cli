@@ -1,47 +1,46 @@
-import { ICliArgParser } from '../cli-arg-parser';
+import { ICliParser } from '../cli-arg-parser';
 import { CliUsageError } from '../cli-usage-error';
 
-/**
- * The type of {@linkcode CliStringArgParser}'s options parameter
- */
-export type CliStringArgParserOptions = Partial<{
-  required: boolean;
-  description: string;
-  defaultValue: string;
-  hidden: boolean;
-  placeholder: string;
-}>;
+/** Options for {@linkcode CliStringValuedParser} */
+export type CliStringValuedParserOptions = {
+  /** {@linkcode ICliParser.required} */
+  required?: boolean;
 
-/**
- * A factory for string-valued arg parsers
- *
- * @param options - An object of optional properties
- * @returns A string-valued arg parser
- */
-function CliStringArgParser(
-  options: CliStringArgParserOptions & { defaultValue: string },
-): ICliArgParser<string, false>;
-function CliStringArgParser(
-  options: CliStringArgParserOptions & { required: true },
-): ICliArgParser<string, true>;
-function CliStringArgParser(
-  options?: CliStringArgParserOptions,
-): ICliArgParser<string | undefined, false>;
-function CliStringArgParser(config: CliStringArgParserOptions = {}) {
+  /** {@linkcode ICliParser.description} */
+  description?: string;
+
+  /** {@linkcode ICliParser.hidden} */
+  hidden?: boolean;
+
+  /** {@linkcode ICliParser.placeholder} defaulting to "\<str\>" */
+  placeholder?: string;
+};
+
+/** A factory for required `string`-valued {@linkcode ICliParser}s */
+function CliStringValuedParser(
+  options: CliStringValuedParserOptions & { required: true },
+): ICliParser<string, true>;
+
+/** A factory for optional `string | undefined`-valued {@linkcode ICliParser}s */
+function CliStringValuedParser(
+  options?: CliStringValuedParserOptions,
+): ICliParser<string | undefined, false>;
+
+// Implementation
+function CliStringValuedParser(options: CliStringValuedParserOptions = {}) {
   const {
-    defaultValue,
     required = false,
     description,
     placeholder = '<str>',
     hidden = false,
-  } = config;
-  const argParser: ICliArgParser<string | undefined> = {
+  } = options;
+  const parser: ICliParser<string | undefined> = {
     hidden,
     placeholder,
     required,
     parse(args) {
       if (!args) {
-        return typeof defaultValue === 'string' ? defaultValue : undefined;
+        return undefined;
       }
 
       if (args.length > 1) {
@@ -56,7 +55,7 @@ function CliStringArgParser(config: CliStringArgParserOptions = {}) {
     },
     description,
   };
-  return argParser;
+  return parser;
 }
 
-export { CliStringArgParser };
+export { CliStringValuedParser };

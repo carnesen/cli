@@ -3,8 +3,8 @@ import { runAndCatch } from '@carnesen/run-and-catch';
 import { parseArgs } from './parse-args';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import {
-  dummyArgParser,
-  dummyRequiredArgParser,
+  dummyValuedParser,
+  dummyRequiredValuedParser,
   DUMMY_ARG_PARSER_THROWN_INTENTIONALLY,
   DUMMY_ARG_PARSER_THROW,
   DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
@@ -20,77 +20,79 @@ const locationInCommandTree: Leaf = {
 describe(parseArgs.name, () => {
   it(`returns parse(args) if an args with length >= 1 is passed`, async () => {
     const args = ['foo'];
-    expect(await parseArgs(dummyArgParser, args, undefined, locationInCommandTree)).toBe(
-      dummyArgParser.parse(args),
-    );
     expect(
-      await parseArgs(dummyRequiredArgParser, args, undefined, locationInCommandTree),
-    ).toBe(dummyRequiredArgParser.parse(args));
+      await parseArgs(dummyValuedParser, args, undefined, locationInCommandTree),
+    ).toBe(dummyValuedParser.parse(args));
+    expect(
+      await parseArgs(dummyRequiredValuedParser, args, undefined, locationInCommandTree),
+    ).toBe(dummyRequiredValuedParser.parse(args));
   });
 
   it(`if not required, returns parse(args) if args is an empty array or undefined`, async () => {
-    expect(await parseArgs(dummyArgParser, [], undefined, locationInCommandTree)).toBe(
-      dummyArgParser.parse([]),
+    expect(await parseArgs(dummyValuedParser, [], undefined, locationInCommandTree)).toBe(
+      dummyValuedParser.parse([]),
     );
     expect(
-      await parseArgs(dummyArgParser, undefined, undefined, locationInCommandTree),
-    ).toBe(dummyArgParser.parse(undefined));
+      await parseArgs(dummyValuedParser, undefined, undefined, locationInCommandTree),
+    ).toBe(dummyValuedParser.parse(undefined));
   });
 
   it(`if required, throws usage error "argument is required" if args is an empty array or undefined`, async () => {
     for (const args of [undefined, [] as string[]]) {
       const exception = await runAndCatch(
         parseArgs,
-        dummyRequiredArgParser,
+        dummyRequiredValuedParser,
         args,
         undefined,
         locationInCommandTree,
       );
       expect(exception.code).toBe(CLI_USAGE_ERROR);
       expect(exception.message).toMatch(/argument is required/i);
-      expect(exception.message).toMatch(dummyRequiredArgParser.placeholder);
+      expect(exception.message).toMatch(dummyRequiredValuedParser.placeholder);
     }
   });
 
-  it(`if throws "argParser is required", expect message to match snapshot`, async () => {
+  it(`if throws "argument is required", expect message to match snapshot`, async () => {
     const exception = await runAndCatch(
       parseArgs,
-      dummyRequiredArgParser,
+      dummyRequiredValuedParser,
       undefined,
       undefined,
       locationInCommandTree,
     );
+    expect(exception.message).toMatch('argument is required');
     expect(exception.message).toMatchSnapshot();
   });
 
-  it(`if throws "argParser is required" with context, expect message to match snapshot`, async () => {
+  it(`if throws "argument is required" with context, expect message to match snapshot`, async () => {
     const exception = await runAndCatch(
       parseArgs,
-      dummyRequiredArgParser,
+      dummyRequiredValuedParser,
       undefined,
       'context',
       locationInCommandTree,
     );
+    expect(exception.message).toMatch('argument is required');
     expect(exception.message).toMatchSnapshot();
   });
 
   it(`throws if parse does with a context/placeholder enhanced message`, async () => {
     const exception = await runAndCatch(
       parseArgs,
-      dummyArgParser,
+      dummyValuedParser,
       [DUMMY_ARG_PARSER_THROW],
       undefined,
       locationInCommandTree,
     );
     expect(exception.message).toMatch(DUMMY_ARG_PARSER_THROWN_INTENTIONALLY);
-    expect(exception.message).toMatch(dummyArgParser.placeholder);
+    expect(exception.message).toMatch(dummyValuedParser.placeholder);
     expect(exception.message).toMatchSnapshot();
   });
 
   it(`just re-throws exception if parse throws a non-truthy exception`, async () => {
     const exception = await runAndCatch(
       parseArgs,
-      dummyArgParser,
+      dummyValuedParser,
       [DUMMY_ARG_PARSER_THROW_NON_TRUTHY],
       undefined,
       locationInCommandTree,

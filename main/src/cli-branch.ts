@@ -1,29 +1,36 @@
-import { CLI_BRANCH } from './constants';
 import { ICliCommand } from './cli-command';
 
+/** "kind" of an {@linkcode ICliBranch} */
+export const CLI_BRANCH = 'CLI_BRANCH';
+
+/** Options for {@linkcode CliBranch} */
 export interface ICliBranchOptions {
   /** Name of this command branch, typically a category like "user" or "cloud" */
   name: string;
-  /** A short description of this command branch for command-line usage */
+
+  /** A short description of this branch for command-line usage */
   description?: string;
-  /** If `true`, this command will not appear in command-line usage */
+
+  /** If `true`, this branch will not appear in command-line usage */
   hidden?: boolean;
-  /** Branches and/or commands under this branch */
+
+  /** Branches and/or commands underneath this branch */
   children: (ICliBranch | ICliCommand<any, any, any>)[];
 }
 
 /**
- * Interface describing a command branch
+ * A branch in a command tree
  */
 export interface ICliBranch extends ICliBranchOptions {
-  commandType: typeof CLI_BRANCH;
+  /** Used internally for discriminating between {@linkcode ICliBranch}'s and
+   * {@linkcode ICliCommand}'s */
+  kind: typeof CLI_BRANCH;
 }
 
 /**
- * A factory function for creating command branches
- * @remarks
+ * A factory for {@linkcode ICliBranch} objects
  * @param options
- * @returns Returns the newly-created branch object
+ * @returns An {@linkcode ICliBranch} object
  * @example
  * ```typescript
  * const cloudBranch = CliBranch()
@@ -32,6 +39,6 @@ export interface ICliBranch extends ICliBranchOptions {
 export function CliBranch(options: ICliBranchOptions): ICliBranch {
   return {
     ...options,
-    commandType: CLI_BRANCH,
+    kind: CLI_BRANCH,
   };
 }

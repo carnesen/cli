@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import {
 	CliCommand,
-	CliFlagArgParser,
+	CliBooleanValuedParser,
 	runCliAndExit,
 } from '@carnesen/cli';
 import { echo } from '../echo';
@@ -25,8 +25,8 @@ export const rootCommand = CliCommand({
     This CLI has a hidden option "--pizza". If an option is "hidden", it does not 
     appear in the command's usage documentation. Hidden options might be "easter eggs" 
     like in this example or experimental features, for example.`,
-	namedArgParsers: {
-		pizza: CliFlagArgParser({ hidden: true }),
+	namedParsers: {
+		pizza: CliBooleanValuedParser({ hidden: true }),
 	},
 	action(messages, { pizza }, escaped) {
 		if (pizza) {

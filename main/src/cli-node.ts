@@ -1,10 +1,9 @@
-import { AnyArgParser, AnyNamedArgParsers } from './cli-arg-parser';
+import { AnyParser, AnyNamedParsers } from './cli-arg-parser';
 import { ICliBranch } from './cli-branch';
 import { ICliCommand } from './cli-command';
 
-type AnyCliCommand = ICliCommand<AnyArgParser, AnyNamedArgParsers, AnyArgParser>;
+type AnyCliCommand = ICliCommand<AnyParser, AnyNamedParsers, AnyParser>;
 export type BranchOrCommand = ICliBranch | AnyCliCommand;
-export type BranchOrAnyCommand = ICliBranch | ICliCommand<any, any, any>;
 
 export type Node = {
   parents: ICliBranch[];

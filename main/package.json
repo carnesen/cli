@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli",
   "description": "A TypeScript-first library for building Node.js command-line interfaces",
-  "version": "0.5.0-10",
+  "version": "0.5.0-11",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@types/parse-json": "4.0.0",
-    "chalk": "4.0.0",
     "parse-json": "5.0.0",
     "read-pkg-up": "7.0.1",
     "redent": "3.0.0"
