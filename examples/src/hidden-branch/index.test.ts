@@ -1,7 +1,7 @@
-import { RunCli } from '@carnesen/cli';
+import { Cli } from '@carnesen/cli';
 import { rootBranch } from '.';
 
-const runCli = RunCli(rootBranch);
+const runCli = Cli(rootBranch);
 
 describe(runCli.name, () => {
 	it('has a command "secret echo"', async () => {

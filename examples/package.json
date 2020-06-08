@@ -1,11 +1,11 @@
 {
   "name": "@carnesen/cli-examples",
   "description": "Examples of how to use @carnesen/cli",
-  "version": "0.5.0-11",
+  "version": "0.5.0-13",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
-    "carnesen-cli-examples": "lib/index.js"
+    "carnesen-cli-examples": "lib/cli.js"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -15,26 +15,26 @@
     "build-watch": "npm run build -- --watch",
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
-    "test": "npm run lint && npm run unit-test && npm run build && node lib echo ok",
+    "test": "npm run lint && npm run unit-test && npm run build && node lib/cli.js echo ok",
     "unit-test": "jest src",
     "prepublishOnly": "npm test"
   },
   "dependencies": {
-    "@carnesen/cli": "0.5.0-11",
+    "@carnesen/cli": "0.5.0-12",
     "@carnesen/coded-error": "0.1.1"
   },
   "devDependencies": {
     "@carnesen/run-and-catch": "0.4.0",
     "@carnesen/tsconfig": "0.3.1",
     "@types/jest": "25.2.3",
-    "@types/node": "14.0.9",
-    "eslint": "7.1.0",
+    "@types/node": "14.0.11",
+    "eslint": "7.2.0",
     "eslint-config-carnesen": "3.0.0",
     "jest": "26.0.1",
     "rimraf": "3.0.2",
     "ts-jest": "26.1.0",
     "ts-node": "8.10.2",
-    "typescript": "3.9.3"
+    "typescript": "3.9.5"
   },
   "keywords": [
     "typescript",

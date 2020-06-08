@@ -1,7 +1,7 @@
-import { RunCli } from '@carnesen/cli';
+import { Cli } from '@carnesen/cli';
 import { multiply } from '.';
 
-const cli = RunCli(multiply);
+const cli = Cli(multiply);
 
 describe('readme example', () => {
 	it('multiplies the provided numbers together', async () => {

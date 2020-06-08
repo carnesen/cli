@@ -1,18 +1,18 @@
-import { ICliParser } from '../cli-arg-parser';
+import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 /**
- * Options for the {@linkcode CliBooleanValuedParser} factory
+ * Options for the [[`CliBooleanValuedParser`]] factory
  */
 export type CliBooleanValuedParserOptions = {
-  /** {@linkcode ICliParser.description} */
+  /** [[`ICliParser.description`]] */
   description?: string;
-  /** {@linkcode ICliParser.hidden} */
+  /** [[`ICliParser.hidden`]] */
   hidden?: boolean;
 };
 
 /**
- * A factory for boolean-valued {@linkcode ICliParser}'s
+ * A factory for boolean-valued [[`ICliParser`]]'s
  *
  * @example
  * ```plaintext
@@ -21,7 +21,7 @@ export type CliBooleanValuedParserOptions = {
  * $ cli --foo bar // usage error
  * ```
  *
- * @throws {@linkcode CliUsageError}
+ * @throws [[`CliUsageError`]]
  */
 export function CliBooleanValuedParser(
   options: CliBooleanValuedParserOptions = {},

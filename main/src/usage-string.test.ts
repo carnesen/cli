@@ -1,8 +1,8 @@
 import { UsageString } from './usage-string';
 import { CliBranch } from './cli-branch';
-import { CliStringValuedParser } from './arg-parsers/cli-string-arg-parser';
+import { CliStringValuedParser } from './parsers/cli-string-valued-parser';
 import { CliCommand } from './cli-command';
-import { BranchOrCommand } from './cli-node';
+import { CliNode } from './cli-node';
 
 const messageValuedParser = CliStringValuedParser({
   description: 'A string message please',
@@ -16,7 +16,7 @@ const escapedValuedParser = CliStringValuedParser({
   required: true,
 });
 
-const command = CliCommand({
+const current = CliCommand({
   name: 'echo',
   positionalParser: positionalValuedParser,
   namedParsers: {
@@ -31,7 +31,7 @@ const command = CliCommand({
 const branch = CliBranch({
   name: 'cli',
   description: 'This is a CLI',
-  children: [command],
+  children: [current],
 });
 
 describe(UsageString.name, () => {
@@ -41,14 +41,17 @@ describe(UsageString.name, () => {
   });
 
   it('Creates a usage string for a command without a parent', () => {
-    const usageString = UsageString({ current: command as BranchOrCommand, parents: [] });
+    const usageString = UsageString({
+      current: current as CliNode['current'],
+      parents: [],
+    });
     expect(usageString).toMatch(messageValuedParser.description!);
     expect(usageString).toMatchSnapshot();
   });
 
   it('Creates a usage string for a command without a parent branch', () => {
     const usageString = UsageString({
-      current: command as BranchOrCommand,
+      current: current as CliNode['current'],
       parents: [branch],
     });
     expect(usageString).toMatchSnapshot();

@@ -1,4 +1,4 @@
-import { ICliParser } from './cli-arg-parser';
+import { ICliParser } from './cli-parser';
 
 export const DUMMY_ARG_PARSER_UNDEFINED_WAS_PASSED = 'undefined was passed';
 export const DUMMY_ARG_PARSER_EMPTY_ARRAY_WAS_PASSED = 'undefined was passed';

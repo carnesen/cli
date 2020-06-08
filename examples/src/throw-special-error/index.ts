@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { CodedError } from '@carnesen/coded-error';
 import {
 	CliCommand,

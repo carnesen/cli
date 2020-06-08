@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { CliBranch, runCliAndExit } from '@carnesen/cli';
 import { echo } from '../echo';
 

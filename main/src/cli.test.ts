@@ -2,8 +2,7 @@ import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliCommand } from './cli-command';
 import { dummyValuedParser } from './dummy-arg-parsers-for-testing';
-import { RunCli, ICliEnhancer } from './run-cli';
-import { findVersion } from './find-version';
+import { Cli, ICliEnhancer } from './cli';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const commandWithNamedValuedParsers = CliCommand({
@@ -41,25 +40,20 @@ const root = CliBranch({
   ],
 });
 
-const cliArgRunner = RunCli(root);
+const cliArgRunner = Cli(root);
 
-describe(RunCli.name, () => {
+describe(Cli.name, () => {
   it('calls the enhancer if provided', async () => {
     const spy = jest.fn();
     const enhancer: ICliEnhancer = (innerArgRunner) => async (...args: string[]) => {
       spy(...args);
       await innerArgRunner(...args);
     };
-    const enhancedArgRunner = RunCli(commandWithPositionalValuedParser, {
+    const enhancedArgRunner = Cli(commandWithPositionalValuedParser, {
       enhancer,
     });
     await enhancedArgRunner('foo', 'bar');
     expect(spy.mock.calls).toEqual([['foo', 'bar']]);
-  });
-
-  it('returns version string from package.json if "--version" is passed', async () => {
-    const version = await findVersion();
-    expect(await cliArgRunner('--version')).toBe(version);
   });
 
   it('throws USAGE error with empty message if --help is passed', async () => {

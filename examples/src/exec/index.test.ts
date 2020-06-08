@@ -1,9 +1,9 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
-import { RunCli, CLI_USAGE_ERROR } from '@carnesen/cli';
+import { Cli, CLI_USAGE_ERROR } from '@carnesen/cli';
 import { exec } from '.';
 
-const cliArgRunner = RunCli(exec);
+const cliArgRunner = Cli(exec);
 
 describe(exec.name, () => {
 	it('runs the provided command', async () => {

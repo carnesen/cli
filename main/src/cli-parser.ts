@@ -1,5 +1,5 @@
 /**
- * Defines the type of the args passed to an {@linkcode ICliValuedParser}
+ * Defines the type of the args passed to an [[`ICliValuedParser`]]
  * @typeParam TRequired If `true`, the `args` parameter might be `undefined`
  */
 export type CliArgs<TRequired extends boolean> = TRequired extends true
@@ -27,7 +27,7 @@ export interface ICliParser<TValue extends any, TRequired extends boolean = bool
   /** If true, the CLI will not show this parser in command-line usage */
   hidden?: boolean;
 
-  /** A {@linkcode CliUsageError} is thrown if a required argument is not provided */
+  /** A [[`CliUsageError`]] is thrown if a required argument is not provided */
   required?: TRequired;
 }
 

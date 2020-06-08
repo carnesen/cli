@@ -1,59 +1,55 @@
 import { partitionArgs } from './partition-args';
 import { getNamedValues } from './get-named-values';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
-import { CliTerseError } from './cli-terse-error';
-import { findVersion } from './find-version';
 import { parseArgs } from './parse-args';
 import { navigateToCommand } from './navigate-to-command';
 import { ICliBranch } from './cli-branch';
 import { ICliCommand } from './cli-command';
+import { CliCommandNode } from './cli-node';
 
 /** A JavaScript command runner. Useful for unit testing CLI logic. */
-export interface IRunCli {
+export interface ICli {
   (...args: string[]): Promise<any>;
 }
 
-/** (Advanced) Wrap the default {@linkcode IRunCli} to modify its behavior */
+/** (Advanced) Wrap the default [[`ICli`]] to modify its behavior */
 export interface ICliEnhancer {
-  (runCli: IRunCli): IRunCli;
+  (cli: ICli): ICli;
 }
 
-export type RunCliOptions = { enhancer?: ICliEnhancer };
+export interface ICliOptions {
+  /** (Advanced) Modify the CLI's behavior. Passed to [[`Cli`]] */
+  enhancer?: ICliEnhancer;
+}
 
 /**
- * A factory for {@linkcode IRunCli}s, the core of {@linkcode runCliAndExit}
+ * A factory for [[`ICli}s, the core of {@linkcode runCliAndExit`]]
  *
  * @param root The root of this CLI's command tree
  */
-export function RunCli(
+export function Cli(
   root: ICliBranch | ICliCommand<any, any, any>,
-  options: RunCliOptions = {},
-): IRunCli {
+  options: ICliOptions = {},
+): ICli {
   const { enhancer } = options;
 
   if (enhancer) {
-    return enhancer(runCli);
+    return enhancer(cli);
   }
 
-  return runCli;
+  return cli;
 
-  async function runCli(...args: string[]) {
-    // If the very first argument is --version, return this software's version identifier.
-    if (args[0] === '--version') {
-      const version = await findVersion();
-      if (!version) {
-        throw new CliTerseError('Failed to find a "version" string');
-      }
-      return version;
-    }
-
-    const [locationInCommandTree, remainingArgs] = navigateToCommand(root, args);
+  async function cli(...args: string[]) {
+    const [leaf, remainingArgs]: [CliCommandNode, string[]] = navigateToCommand(
+      root,
+      args,
+    );
 
     const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(remainingArgs);
     if (namedArgs.help) {
-      throw new CliUsageError(undefined, locationInCommandTree);
+      throw new CliUsageError(undefined, leaf);
     }
-    const command = locationInCommandTree.current;
+    const command = leaf.current;
     let argsValue: any;
     if (command.positionalParser) {
       // Note that for named and escaped args, we distinguish between
@@ -66,29 +62,20 @@ export function RunCli(
         command.positionalParser,
         positionalArgs.length > 0 ? positionalArgs : undefined,
         undefined,
-        locationInCommandTree,
+        leaf,
       );
     } else if (positionalArgs.length > 0) {
       throw new CliUsageError(
         `Unexpected argument "${positionalArgs[0]}" : Command "${command.name}" does not accept positional arguments`,
-        locationInCommandTree,
+        leaf,
       );
     }
 
-    const namedValues = await getNamedValues(
-      command.namedParsers || {},
-      namedArgs,
-      locationInCommandTree,
-    );
+    const namedValues = await getNamedValues(command.namedParsers || {}, namedArgs, leaf);
 
     let escapedValue: any;
     if (command.escapedParser) {
-      escapedValue = await parseArgs(
-        command.escapedParser,
-        escapedArgs,
-        '--',
-        locationInCommandTree,
-      );
+      escapedValue = await parseArgs(command.escapedParser, escapedArgs, '--', leaf);
     } else if (escapedArgs) {
       throw new CliUsageError(
         `Command "${command.name}" does not allow "--" as an argument`,
@@ -100,7 +87,7 @@ export function RunCli(
       return result;
     } catch (exception) {
       if (exception && exception.code === CLI_USAGE_ERROR) {
-        exception.locationInCommandTree = locationInCommandTree;
+        exception.node = leaf;
       }
       throw exception;
     }
