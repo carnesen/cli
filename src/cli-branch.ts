@@ -1,9 +1,9 @@
 import { ICliCommand } from './cli-command';
 
-/** "kind" of an {@linkcode ICliBranch} */
+/** "kind" of an [[`ICliBranch`]] */
 export const CLI_BRANCH = 'CLI_BRANCH';
 
-/** Options for {@linkcode CliBranch} */
+/** Options for [[`CliBranch`]] */
 export interface ICliBranchOptions {
   /** Name of this command branch, typically a category like "user" or "cloud" */
   name: string;
@@ -22,15 +22,15 @@ export interface ICliBranchOptions {
  * A branch in a command tree
  */
 export interface ICliBranch extends ICliBranchOptions {
-  /** Used internally for discriminating between {@linkcode ICliBranch}'s and
-   * {@linkcode ICliCommand}'s */
+  /** Used internally for discriminating between [[`ICliBranch`]]'s and
+   * [[`ICliCommand`]]'s */
   kind: typeof CLI_BRANCH;
 }
 
 /**
- * A factory for {@linkcode ICliBranch} objects
+ * A factory for [[`ICliBranch`]]s
  * @param options
- * @returns An {@linkcode ICliBranch} object
+ * @returns An [[`ICliBranch`]] object
  * @example
  * ```typescript
  * const cloudBranch = CliBranch()

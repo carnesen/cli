@@ -10,9 +10,9 @@ import {
   DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
 } from './dummy-arg-parsers-for-testing';
 import { CliCommand } from './cli-command';
-import { Leaf } from './cli-node';
+import { CliCommandNode } from './cli-node';
 
-const locationInCommandTree: Leaf = {
+const node: CliCommandNode = {
   current: CliCommand({ name: 'foo', action() {} }),
   parents: [],
 };
@@ -20,21 +20,21 @@ const locationInCommandTree: Leaf = {
 describe(parseArgs.name, () => {
   it(`returns parse(args) if an args with length >= 1 is passed`, async () => {
     const args = ['foo'];
-    expect(
-      await parseArgs(dummyValuedParser, args, undefined, locationInCommandTree),
-    ).toBe(dummyValuedParser.parse(args));
-    expect(
-      await parseArgs(dummyRequiredValuedParser, args, undefined, locationInCommandTree),
-    ).toBe(dummyRequiredValuedParser.parse(args));
+    expect(await parseArgs(dummyValuedParser, args, undefined, node)).toBe(
+      dummyValuedParser.parse(args),
+    );
+    expect(await parseArgs(dummyRequiredValuedParser, args, undefined, node)).toBe(
+      dummyRequiredValuedParser.parse(args),
+    );
   });
 
   it(`if not required, returns parse(args) if args is an empty array or undefined`, async () => {
-    expect(await parseArgs(dummyValuedParser, [], undefined, locationInCommandTree)).toBe(
+    expect(await parseArgs(dummyValuedParser, [], undefined, node)).toBe(
       dummyValuedParser.parse([]),
     );
-    expect(
-      await parseArgs(dummyValuedParser, undefined, undefined, locationInCommandTree),
-    ).toBe(dummyValuedParser.parse(undefined));
+    expect(await parseArgs(dummyValuedParser, undefined, undefined, node)).toBe(
+      dummyValuedParser.parse(undefined),
+    );
   });
 
   it(`if required, throws usage error "argument is required" if args is an empty array or undefined`, async () => {
@@ -44,7 +44,7 @@ describe(parseArgs.name, () => {
         dummyRequiredValuedParser,
         args,
         undefined,
-        locationInCommandTree,
+        node,
       );
       expect(exception.code).toBe(CLI_USAGE_ERROR);
       expect(exception.message).toMatch(/argument is required/i);
@@ -58,7 +58,7 @@ describe(parseArgs.name, () => {
       dummyRequiredValuedParser,
       undefined,
       undefined,
-      locationInCommandTree,
+      node,
     );
     expect(exception.message).toMatch('argument is required');
     expect(exception.message).toMatchSnapshot();
@@ -70,7 +70,7 @@ describe(parseArgs.name, () => {
       dummyRequiredValuedParser,
       undefined,
       'context',
-      locationInCommandTree,
+      node,
     );
     expect(exception.message).toMatch('argument is required');
     expect(exception.message).toMatchSnapshot();
@@ -82,7 +82,7 @@ describe(parseArgs.name, () => {
       dummyValuedParser,
       [DUMMY_ARG_PARSER_THROW],
       undefined,
-      locationInCommandTree,
+      node,
     );
     expect(exception.message).toMatch(DUMMY_ARG_PARSER_THROWN_INTENTIONALLY);
     expect(exception.message).toMatch(dummyValuedParser.placeholder);
@@ -95,7 +95,7 @@ describe(parseArgs.name, () => {
       dummyValuedParser,
       [DUMMY_ARG_PARSER_THROW_NON_TRUTHY],
       undefined,
-      locationInCommandTree,
+      node,
     );
     expect(exception).not.toBeTruthy();
   });

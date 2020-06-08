@@ -1,11 +1,11 @@
-/** "code" of a {@linkcode CliTerseError} */
+/** "code" of a [[`CliTerseError`]] */
 export const CLI_TERSE_ERROR = 'CLI_TERSE_ERROR';
 
 /**
  * Thrown to print an error message but not a `stack`.
  */
 export class CliTerseError extends Error {
-  /** The string constant {@linkcode CLI_TERSE_ERROR} */
+  /** The string constant [[`CLI_TERSE_ERROR`]] */
   public readonly code: typeof CLI_TERSE_ERROR;
 
   constructor(message: string) {

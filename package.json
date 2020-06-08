@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli",
   "description": "A TypeScript-first library for building Node.js command-line interfaces",
-  "version": "0.5.0-11",
+  "version": "0.5.0-13",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
@@ -10,29 +10,24 @@
   "scripts": {
     "build": "rimraf lib/ && tsc",
     "build-watch": "npm run build -- --watch",
-    "docs": "rimraf dist/ && typedoc --mode library --readme api.md --inputFiles src/index.ts --out dist --theme theme/",
+    "docs": "rimraf dist/ && typedoc --mode library --inputFiles src/index.ts --out dist --theme theme/",
     "docs-serve": "browser-sync dist",
     "docs-watch": "nodemon --ext ts,css --ignore dist/ --exec npm -- run docs",
     "lint": "eslint --ext .ts src/",
     "fix": "npm run lint -- --fix",
-    "test": "npm run lint && npm run unit-test && npm run build",
+    "test": "npm run lint && npm run unit-test && npm run build && npm run docs",
     "unit-test": "jest src",
     "prepublishOnly": "npm test"
   },
-  "dependencies": {
-    "@types/parse-json": "4.0.0",
-    "parse-json": "5.0.0",
-    "read-pkg-up": "7.0.1",
-    "redent": "3.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@carnesen/coded-error": "0.1.1",
     "@carnesen/run-and-catch": "0.4.0",
     "@carnesen/tsconfig": "0.3.1",
     "@types/jest": "25.2.3",
-    "@types/node": "14.0.9",
+    "@types/node": "14.0.11",
     "browser-sync": "2.26.7",
-    "eslint": "7.1.0",
+    "eslint": "7.2.0",
     "eslint-config-carnesen": "3.0.0",
     "jest": "26.0.1",
     "nodemon": "2.0.4",
@@ -40,7 +35,7 @@
     "ts-jest": "26.1.0",
     "ts-node": "8.10.2",
     "typedoc": "0.17.0-3",
-    "typescript": "3.9.3"
+    "typescript": "3.9.5"
   },
   "files": [
     "src",
