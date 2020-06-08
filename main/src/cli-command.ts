@@ -4,7 +4,7 @@ import {
   ValueFromParser,
   NamedValues,
   ICliParser,
-} from './cli-arg-parser';
+} from './cli-parser';
 
 /** "kind" of a {@linkcode ICliCommand} */
 export const CLI_COMMAND = 'CLI_COMMAND';

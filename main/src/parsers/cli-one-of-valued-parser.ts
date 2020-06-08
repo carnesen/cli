@@ -1,4 +1,4 @@
-import { ICliParser } from '../cli-arg-parser';
+import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 import { wrapInCurlyBrackets, regularizeText } from '../util';
 

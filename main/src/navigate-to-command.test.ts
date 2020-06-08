@@ -16,9 +16,9 @@ const branch = CliBranch({
 
 describe(navigateToCommand.name, () => {
   it('accumulates command linked list', () => {
-    const [locationInCommandTree, args] = navigateToCommand(branch, ['echo', 'foo']);
-    expect(locationInCommandTree.current).toBe(command);
-    expect(locationInCommandTree.parents[0]).toBe(branch);
+    const [node, args] = navigateToCommand(branch, ['echo', 'foo']);
+    expect(node.current).toBe(command);
+    expect(node.parents[0]).toBe(branch);
     expect(args).toEqual(['foo']);
   });
 });

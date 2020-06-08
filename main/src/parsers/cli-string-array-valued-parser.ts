@@ -1,4 +1,4 @@
-import { ICliParser } from '../cli-arg-parser';
+import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for {@linkcode CliStringArrayValuedParser} */

@@ -1,6 +1,4 @@
-import parseJson = require('parse-json');
-
-import { ICliParser } from '../cli-arg-parser';
+import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for the {@linkcode CliJsonValuedParser} factory */
@@ -52,7 +50,7 @@ export function CliJsonValuedParser(
         throw new CliUsageError(`Expected a single ${placeholder} string`);
       }
       try {
-        const parsed = parseJson(args[0]);
+        const parsed = JSON.parse(args[0]);
         return parsed;
       } catch (exception) {
         throw new CliUsageError(exception.message);

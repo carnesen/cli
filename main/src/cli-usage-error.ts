@@ -1,4 +1,4 @@
-import { Node } from './cli-node';
+import { CliNode } from './cli-node';
 
 /** "code" of a {@link CliUsageError} */
 export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
@@ -11,14 +11,14 @@ export class CliUsageError extends Error {
   public readonly code: typeof CLI_USAGE_ERROR;
 
   /** Used internally for constructing the command-line usage string */
-  public node?: Node;
+  public node?: CliNode;
 
   /**
    * @param message If provided, {@linkcode runCliAndExit} will also print "Error: \<your
    * message\>"
    * @param node Used internally for constructing the command-line usage string
    */
-  constructor(message?: string, node?: Node) {
+  constructor(message?: string, node?: CliNode) {
     super(message);
     this.code = CLI_USAGE_ERROR;
     this.node = node;

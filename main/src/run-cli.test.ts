@@ -3,7 +3,6 @@ import { CliBranch } from './cli-branch';
 import { CliCommand } from './cli-command';
 import { dummyValuedParser } from './dummy-arg-parsers-for-testing';
 import { RunCli, ICliEnhancer } from './run-cli';
-import { findVersion } from './find-version';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const commandWithNamedValuedParsers = CliCommand({
@@ -55,11 +54,6 @@ describe(RunCli.name, () => {
     });
     await enhancedArgRunner('foo', 'bar');
     expect(spy.mock.calls).toEqual([['foo', 'bar']]);
-  });
-
-  it('returns version string from package.json if "--version" is passed', async () => {
-    const version = await findVersion();
-    expect(await cliArgRunner('--version')).toBe(version);
   });
 
   it('throws USAGE error with empty message if --help is passed', async () => {

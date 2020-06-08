@@ -1,6 +1,6 @@
-import { Leaf } from './cli-node';
+import { CliCommandNode } from './cli-node';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
-import { AnyParser } from './cli-arg-parser';
+import { AnyParser } from './cli-parser';
 
 /**
  * Calls the parse method of an ValuedParser
@@ -14,13 +14,13 @@ export async function parseArgs(
   parser: AnyParser,
   args: string[] | undefined,
   separator: string | undefined,
-  locationInCommandTree: Leaf,
+  node: CliCommandNode,
 ): Promise<any> {
   const { required, placeholder, parse } = parser;
   const fullContext = [separator, placeholder].filter((str) => Boolean(str)).join(' ');
   const prefix = fullContext ? `${fullContext} : ` : '';
   if (required && (!args || args.length === 0)) {
-    throw new CliUsageError(`${prefix}argument is required`, locationInCommandTree);
+    throw new CliUsageError(`${prefix}argument is required`, node);
   }
   try {
     return await parse(args);
@@ -29,7 +29,7 @@ export async function parseArgs(
       exception.message = `${prefix}${exception.message}`;
     }
     if (exception && exception.code === CLI_USAGE_ERROR) {
-      exception.locationInCommandTree = locationInCommandTree;
+      exception.node = node;
     }
     throw exception;
   }
