@@ -2,27 +2,27 @@ import { ICliParser } from '../cli-parser';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
-/** Options for {@linkcode CliNumberArrayValuedParser} */
+/** Options for [[`CliNumberArrayValuedParser`]] */
 export type CliNumberArrayValuedParserOptions = {
-  /** {@linkcode ICliParser.description} */
+  /** [[`ICliParser.description`]] */
   description?: string;
 
-  /** {@linkcode ICliParser.required} */
+  /** [[`ICliParser.required`]] */
   required?: boolean;
 
-  /** {@linkcode ICliParser.placeholder} defaulting to "\<num0\> [...]" */
+  /** [[`ICliParser.placeholder`]] defaulting to "\<num0\> [...]" */
   placeholder?: string;
 
-  /** {@linkcode ICliParser.hidden} */
+  /** [[`ICliParser.hidden`]] */
   hidden?: boolean;
 };
 
-/** A factory for required `number[]`-valued {@linkcode ICliParser}s */
+/** A factory for required `number[]`-valued [[`ICliParser`]]s */
 function CliNumberArrayValuedParser(
   options: CliNumberArrayValuedParserOptions & { required: true },
 ): ICliParser<number[], true>;
 
-/** A factory for optional `number[] | undefined`-valued {@linkcode ICliParser}s */
+/** A factory for optional `number[] | undefined`-valued [[`ICliParser`]]s */
 function CliNumberArrayValuedParser(
   options?: CliNumberArrayValuedParserOptions,
 ): ICliParser<number[] | undefined, boolean>;

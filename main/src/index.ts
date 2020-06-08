@@ -33,8 +33,8 @@ export {
 } from './parsers/cli-string-array-valued-parser';
 
 // Command-line interface runners
-export { runCliAndExit, RunCliAndExitOptions } from './run-cli-and-exit';
-export { RunCli, IRunCli, ICliEnhancer } from './run-cli';
+export { runCliAndExit, IRunCliAndExitOptions } from './run-cli-and-exit';
+export { Cli, ICli, ICliOptions, ICliEnhancer } from './cli';
 
 // Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';

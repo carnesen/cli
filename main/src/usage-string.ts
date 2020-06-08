@@ -5,10 +5,11 @@ import { CLI_COMMAND } from './cli-command';
 import { UsageForCommand } from './usage-for-command';
 
 export function UsageString(
-  { current, parents }: CliNode,
-  maxLineLength = process.stdout.columns,
-  indentation = '   ',
+  node: CliNode,
+  maxLineLength = +Infinity,
+  indentation = '',
 ): string {
+  const { current, parents } = node;
   let lines: string[] = [];
   if (current.kind === CLI_BRANCH) {
     lines = UsageForBranch(current, parents, maxLineLength, indentation);

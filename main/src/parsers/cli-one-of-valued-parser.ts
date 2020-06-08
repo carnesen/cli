@@ -1,31 +1,30 @@
 import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
-import { wrapInCurlyBrackets, regularizeText } from '../util';
 
 /**
- * Options for {@linkcode CliOneOfValuedParser}
+ * Options for [[`CliOneOfValuedParser`]]
  * @typeParam TValues Type of the "values" option
  */
 export type CliOneOfValuedParserOptions<TValues extends string[]> = {
   /** Allowed values for this argument. For strict typing do e.g. `['foo' as const]` */
   values: TValues;
 
-  /** {@linkcode ICliParser.required} */
+  /** [[`ICliParser.required`]] */
   required?: boolean;
 
-  /** {@linkcode ICliParser.description} with "Allowed values: ..." appended automatically
+  /** [[`ICliParser.description`]] with "Allowed values: ..." appended automatically
    * */
   description?: string;
 
-  /** {@linkcode ICliParser.placeholder} defaulting to "\<value\>" */
+  /** [[`ICliParser.placeholder`]] defaulting to "\<value\>" */
   placeholder?: string;
 
-  /** {@linkcode ICliParser.hidden} */
+  /** [[`ICliParser.hidden`]] */
   hidden?: boolean;
 };
 
 /**
- * A factory for required {@linkcode ICliParser}s whose value is one of the values
+ * A factory for required [[`ICliParser`]]s whose value is one of the values
  * provided
  * @typeParam TValues Type of the provided values
  * */
@@ -34,7 +33,7 @@ function CliOneOfValuedParser<TValues extends string[]>(
 ): ICliParser<TValues[number], true>;
 
 /**
- * A factory for optional {@linkcode ICliParser}s whose value is one of the values
+ * A factory for optional [[`ICliParser`]]s whose value is one of the values
  * provided
  * @typeParam TValues Type of the provided values
  * */
@@ -44,7 +43,7 @@ function CliOneOfValuedParser<TValues extends string[]>(
 
 // Implementation
 function CliOneOfValuedParser(config: CliOneOfValuedParserOptions<string[]>) {
-  const valuesString = wrapInCurlyBrackets(config.values.join(', '));
+  const valuesString = config.values.join(', ');
   const {
     required = false,
     description,
@@ -72,7 +71,7 @@ function CliOneOfValuedParser(config: CliOneOfValuedParserOptions<string[]>) {
       }
       return args[0];
     },
-    description: `${regularizeText(description)}\nAllowed values ${valuesString}`,
+    description: `${description || ''}\n\nAllowed values: ${valuesString}`,
   };
   return parser;
 }

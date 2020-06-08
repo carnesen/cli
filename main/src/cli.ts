@@ -8,35 +8,38 @@ import { ICliCommand } from './cli-command';
 import { CliCommandNode } from './cli-node';
 
 /** A JavaScript command runner. Useful for unit testing CLI logic. */
-export interface IRunCli {
+export interface ICli {
   (...args: string[]): Promise<any>;
 }
 
-/** (Advanced) Wrap the default {@linkcode IRunCli} to modify its behavior */
+/** (Advanced) Wrap the default [[`ICli`]] to modify its behavior */
 export interface ICliEnhancer {
-  (runCli: IRunCli): IRunCli;
+  (cli: ICli): ICli;
 }
 
-export type RunCliOptions = { enhancer?: ICliEnhancer };
+export interface ICliOptions {
+  /** (Advanced) Modify the CLI's behavior. Passed to [[`Cli`]] */
+  enhancer?: ICliEnhancer;
+}
 
 /**
- * A factory for {@linkcode IRunCli}s, the core of {@linkcode runCliAndExit}
+ * A factory for [[`ICli}s, the core of {@linkcode runCliAndExit`]]
  *
  * @param root The root of this CLI's command tree
  */
-export function RunCli(
+export function Cli(
   root: ICliBranch | ICliCommand<any, any, any>,
-  options: RunCliOptions = {},
-): IRunCli {
+  options: ICliOptions = {},
+): ICli {
   const { enhancer } = options;
 
   if (enhancer) {
-    return enhancer(runCli);
+    return enhancer(cli);
   }
 
-  return runCli;
+  return cli;
 
-  async function runCli(...args: string[]) {
+  async function cli(...args: string[]) {
     const [leaf, remainingArgs]: [CliCommandNode, string[]] = navigateToCommand(
       root,
       args,

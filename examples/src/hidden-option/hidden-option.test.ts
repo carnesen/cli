@@ -1,7 +1,7 @@
-import { RunCli } from '@carnesen/cli';
+import { Cli } from '@carnesen/cli';
 import { rootCommand } from './hidden-option';
 
-const runCli = RunCli(rootCommand);
+const runCli = Cli(rootCommand);
 
 describe(rootCommand.name, () => {
 	it('normally just echos', async () => {

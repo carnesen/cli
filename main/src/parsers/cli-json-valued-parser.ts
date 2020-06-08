@@ -1,23 +1,23 @@
 import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 
-/** Options for the {@linkcode CliJsonValuedParser} factory */
+/** Options for the [[`CliJsonValuedParser`]] factory */
 export type CliJsonValuedParserOptions = {
-  /** {@linkcode ICliParser.description} */
+  /** [[`ICliParser.description`]] */
   description?: string;
 
-  /** {@linkcode ICliParser.required} */
+  /** [[`ICliParser.required`]] */
   required?: boolean;
 
-  /** {@linkcode ICliParser.placeholder}. Defaults to "\<json\>" */
+  /** [[`ICliParser.placeholder`]]. Defaults to "\<json\>" */
   placeholder?: string;
 
-  /** {@linkcode ICliParser.hidden} */
+  /** [[`ICliParser.hidden`]] */
   hidden?: boolean;
 };
 
 /**
- * A factory for {@linkcode ICliParser}s that `JSON.parse`
+ * A factory for [[`ICliParser`]]s that `JSON.parse`
  *
  * @example
  * ```plaintext
@@ -27,7 +27,7 @@ export type CliJsonValuedParserOptions = {
  * $ cli --json foo            // error parsing JSON
  * ```
  *
- * @throws {@linkcode CliUsageError}
+ * @throws [[`CliUsageError`]]
  */
 export function CliJsonValuedParser(
   options: CliJsonValuedParserOptions = {},

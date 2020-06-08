@@ -1,9 +1,9 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
-import { RunCli } from '@carnesen/cli';
+import { Cli } from '@carnesen/cli';
 import { throwSpecialError } from '.';
 
-const cli = RunCli(throwSpecialError);
+const cli = Cli(throwSpecialError);
 
 describe('throw CLI', () => {
 	it('throws', async () => {

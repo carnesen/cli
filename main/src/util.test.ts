@@ -1,4 +1,4 @@
-import { convertToNumber, regularizeText } from './util';
+import { convertToNumber } from './util';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 describe(convertToNumber.name, () => {
@@ -14,11 +14,5 @@ describe(convertToNumber.name, () => {
       expect(ex.code).toBe(CLI_USAGE_ERROR);
       expect(ex.message).toMatch('not a number');
     }
-  });
-});
-
-describe(regularizeText.name, () => {
-  it('strips out a leading newline, trailing whitespace', () => {
-    expect(regularizeText('\n   foo\n      bar\n   ')).toBe('foo\n   bar');
   });
 });

@@ -2,27 +2,27 @@ import { ICliParser } from '../cli-parser';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
-/** Options for the {@linkcode CliNumberValuedParser} factory */
+/** Options for the [[`CliNumberValuedParser`]] factory */
 export type CliNumberValuedParserOptions = {
-  /** {@linkcode ICliParser.required} */
+  /** [[`ICliParser.required`]] */
   required?: boolean;
 
-  /** {@linkcode ICliParser.description} */
+  /** [[`ICliParser.description`]] */
   description?: string;
 
-  /** {@linkcode ICliParser.placeholder} defaulting to "\<num\>" */
+  /** [[`ICliParser.placeholder`]] defaulting to "\<num\>" */
   placeholder?: string;
 
-  /** {@linkcode ICliParser.description} */
+  /** [[`ICliParser.description`]] */
   hidden?: boolean;
 };
 
-/** A factory for `number`-valued required {@linkcode ICliParser}s */
+/** A factory for `number`-valued required [[`ICliParser`]]s */
 function CliNumberValuedParser(
   options: CliNumberValuedParserOptions & { required: true },
 ): ICliParser<number, true>;
 
-/** A factory for `number | undefined`-valued optional {@linkcode ICliParser}s */
+/** A factory for `number | undefined`-valued optional [[`ICliParser`]]s */
 function CliNumberValuedParser(
   options?: CliNumberValuedParserOptions,
 ): ICliParser<number | undefined, boolean>;
