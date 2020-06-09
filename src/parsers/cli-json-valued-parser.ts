@@ -3,17 +3,17 @@ import { CliUsageError } from '../cli-usage-error';
 
 /** Options for the [[`CliJsonValuedParser`]] factory */
 export type CliJsonValuedParserOptions = {
-  /** [[`ICliParser.description`]] */
-  description?: string;
+	/** [[`ICliParser.description`]] */
+	description?: string;
 
-  /** [[`ICliParser.required`]] */
-  required?: boolean;
+	/** [[`ICliParser.required`]] */
+	required?: boolean;
 
-  /** [[`ICliParser.placeholder`]]. Defaults to "\<json\>" */
-  placeholder?: string;
+	/** [[`ICliParser.placeholder`]]. Defaults to "\<json\>" */
+	placeholder?: string;
 
-  /** [[`ICliParser.hidden`]] */
-  hidden?: boolean;
+	/** [[`ICliParser.hidden`]] */
+	hidden?: boolean;
 };
 
 /**
@@ -30,33 +30,33 @@ export type CliJsonValuedParserOptions = {
  * @throws [[`CliUsageError`]]
  */
 export function CliJsonValuedParser(
-  options: CliJsonValuedParserOptions = {},
+	options: CliJsonValuedParserOptions = {},
 ): ICliParser<any> {
-  const {
-    placeholder = '<json>',
-    required = false,
-    description,
-    hidden = false,
-  } = options;
-  const parser: ICliParser<any> = {
-    required,
-    placeholder,
-    hidden,
-    parse(args) {
-      if (!args) {
-        return undefined;
-      }
-      if (args.length !== 1) {
-        throw new CliUsageError(`Expected a single ${placeholder} string`);
-      }
-      try {
-        const parsed = JSON.parse(args[0]);
-        return parsed;
-      } catch (exception) {
-        throw new CliUsageError(exception.message);
-      }
-    },
-    description,
-  };
-  return parser;
+	const {
+		placeholder = '<json>',
+		required = false,
+		description,
+		hidden = false,
+	} = options;
+	const parser: ICliParser<any> = {
+		required,
+		placeholder,
+		hidden,
+		parse(args) {
+			if (!args) {
+				return undefined;
+			}
+			if (args.length !== 1) {
+				throw new CliUsageError(`Expected a single ${placeholder} string`);
+			}
+			try {
+				const parsed = JSON.parse(args[0]);
+				return parsed;
+			} catch (exception) {
+				throw new CliUsageError(exception.message);
+			}
+		},
+		description,
+	};
+	return parser;
 }

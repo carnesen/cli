@@ -1,35 +1,45 @@
 // Command factories
-export { CliBranch, ICliBranch, ICliBranchOptions, CLI_BRANCH } from './cli-branch';
-export { CliCommand, ICliCommand, ICliCommandOptions, CLI_COMMAND } from './cli-command';
+export {
+	CliBranch,
+	ICliBranch,
+	ICliBranchOptions,
+	CLI_BRANCH,
+} from './cli-branch';
+export {
+	CliCommand,
+	ICliCommand,
+	ICliCommandOptions,
+	CLI_COMMAND,
+} from './cli-command';
 
 // ICliParser factories
 export {
-  CliBooleanValuedParser,
-  CliBooleanValuedParserOptions,
+	CliBooleanValuedParser,
+	CliBooleanValuedParserOptions,
 } from './parsers/cli-boolean-valued-parser';
 export {
-  CliJsonValuedParser,
-  CliJsonValuedParserOptions,
+	CliJsonValuedParser,
+	CliJsonValuedParserOptions,
 } from './parsers/cli-json-valued-parser';
 export {
-  CliNumberValuedParser,
-  CliNumberValuedParserOptions,
+	CliNumberValuedParser,
+	CliNumberValuedParserOptions,
 } from './parsers/cli-number-valued-parser';
 export {
-  CliNumberArrayValuedParser,
-  CliNumberArrayValuedParserOptions,
+	CliNumberArrayValuedParser,
+	CliNumberArrayValuedParserOptions,
 } from './parsers/cli-number-array-valued-parser';
 export {
-  CliOneOfValuedParser,
-  CliOneOfValuedParserOptions,
+	CliOneOfValuedParser,
+	CliOneOfValuedParserOptions,
 } from './parsers/cli-one-of-valued-parser';
 export {
-  CliStringValuedParser,
-  CliStringValuedParserOptions,
+	CliStringValuedParser,
+	CliStringValuedParserOptions,
 } from './parsers/cli-string-valued-parser';
 export {
-  CliStringArrayValuedParser,
-  CliStringArrayValuedParserOptions,
+	CliStringArrayValuedParser,
+	CliStringArrayValuedParserOptions,
 } from './parsers/cli-string-array-valued-parser';
 
 // Command-line interface runners
