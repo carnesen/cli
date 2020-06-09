@@ -5,26 +5,26 @@ export const CLI_BRANCH = 'CLI_BRANCH';
 
 /** Options for [[`CliBranch`]] */
 export interface ICliBranchOptions {
-  /** Name of this command branch, typically a category like "user" or "cloud" */
-  name: string;
+	/** Name of this command branch, typically a category like "user" or "cloud" */
+	name: string;
 
-  /** A short description of this branch for command-line usage */
-  description?: string;
+	/** A short description of this branch for command-line usage */
+	description?: string;
 
-  /** If `true`, this branch will not appear in command-line usage */
-  hidden?: boolean;
+	/** If `true`, this branch will not appear in command-line usage */
+	hidden?: boolean;
 
-  /** Branches and/or commands underneath this branch */
-  children: (ICliBranch | ICliCommand<any, any, any>)[];
+	/** Branches and/or commands underneath this branch */
+	children: (ICliBranch | ICliCommand<any, any, any>)[];
 }
 
 /**
  * A branch in a command tree
  */
 export interface ICliBranch extends ICliBranchOptions {
-  /** Used internally for discriminating between [[`ICliBranch`]]'s and
-   * [[`ICliCommand`]]'s */
-  kind: typeof CLI_BRANCH;
+	/** Used internally for discriminating between [[`ICliBranch`]]'s and
+	 * [[`ICliCommand`]]'s */
+	kind: typeof CLI_BRANCH;
 }
 
 /**
@@ -37,8 +37,8 @@ export interface ICliBranch extends ICliBranchOptions {
  * ```
  */
 export function CliBranch(options: ICliBranchOptions): ICliBranch {
-  return {
-    ...options,
-    kind: CLI_BRANCH,
-  };
+	return {
+		...options,
+		kind: CLI_BRANCH,
+	};
 }

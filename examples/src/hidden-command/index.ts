@@ -1,8 +1,4 @@
-import {
-	CliCommand,
-	CliBranch,
-	runCliAndExit,
-} from '@carnesen/cli';
+import { CliCommand, CliBranch, runCliAndExit } from '@carnesen/cli';
 import { echo as echoCommand } from '../echo';
 
 const hiddenEcho = CliCommand({

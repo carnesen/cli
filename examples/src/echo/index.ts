@@ -6,8 +6,7 @@ import {
 
 export const echo = CliCommand({
 	name: 'echo',
-	description:
-		'Write arguments to standard output (stdout)',
+	description: 'Write arguments to standard output (stdout)',
 	positionalParser: CliStringArrayValuedParser({
 		required: true,
 	}),

@@ -21,8 +21,7 @@ const hiddenBranch = CliBranch({
 
 export const rootBranch = CliBranch({
 	name: 'cli',
-	description:
-		'This CLI has a hidden branch called "secret".',
+	description: 'This CLI has a hidden branch called "secret".',
 	children: [normalBranch, hiddenBranch],
 });
 

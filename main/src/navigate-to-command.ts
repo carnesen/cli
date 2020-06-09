@@ -24,49 +24,51 @@ import { CLI_BRANCH } from './cli-branch';
  */
 
 export function navigateToCommand(
-  current: CliNode['current'],
-  args: string[],
+	current: CliNode['current'],
+	args: string[],
 ): [CliCommandNode, string[]] {
-  return recursiveNavigateToCommand({ current, parents: [] }, args);
+	return recursiveNavigateToCommand({ current, parents: [] }, args);
 }
 
 export function recursiveNavigateToCommand(
-  node: CliNode,
-  args: string[],
+	node: CliNode,
+	args: string[],
 ): [CliCommandNode, string[]] {
-  const { current, parents } = node;
+	const { current, parents } = node;
 
-  // Terminate recursion if current is a command
-  if (current.kind === CLI_COMMAND) {
-    return [{ current, parents }, args];
-  }
+	// Terminate recursion if current is a command
+	if (current.kind === CLI_COMMAND) {
+		return [{ current, parents }, args];
+	}
 
-  if (current.kind === CLI_BRANCH) {
-    if (args.length === 0) {
-      // Example: Full command is "cli user login". They've done "cli user". In this case we
-      // want to print the usage string but not an error message.
-      throw new CliUsageError(undefined, node);
-    }
+	if (current.kind === CLI_BRANCH) {
+		if (args.length === 0) {
+			// Example: Full command is "cli user login". They've done "cli user". In this case we
+			// want to print the usage string but not an error message.
+			throw new CliUsageError(undefined, node);
+		}
 
-    if (args[0] === '--help') {
-      throw new CliUsageError(undefined, node);
-    }
+		if (args[0] === '--help') {
+			throw new CliUsageError(undefined, node);
+		}
 
-    const next = current.children.find((subcommand) => subcommand.name === args[0]);
+		const next = current.children.find(
+			(subcommand) => subcommand.name === args[0],
+		);
 
-    if (!next) {
-      // Example: Full command is "cli user login". They've done "cli login".
-      throw new CliUsageError(`Bad command "${args[0]}"`, node);
-    }
+		if (!next) {
+			// Example: Full command is "cli user login". They've done "cli login".
+			throw new CliUsageError(`Bad command "${args[0]}"`, node);
+		}
 
-    return recursiveNavigateToCommand(
-      {
-        parents: [...parents, current],
-        current: next,
-      },
-      args.slice(1),
-    );
-  }
+		return recursiveNavigateToCommand(
+			{
+				parents: [...parents, current],
+				current: next,
+			},
+			args.slice(1),
+		);
+	}
 
-  throw new Error('Unexpected kind');
+	throw new Error('Unexpected kind');
 }

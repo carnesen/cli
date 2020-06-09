@@ -1,9 +1,5 @@
 {
   "extends": [
     "eslint-config-carnesen"
-  ],
-  "rules": {
-    "import/export": "off",
-    "no-use-before-define": "off"
-  }
+  ]
 }
