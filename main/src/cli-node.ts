@@ -3,11 +3,11 @@ import { ICliBranch } from './cli-branch';
 import { ICliCommand } from './cli-command';
 
 export type CliNode = {
-  current: ICliBranch | ICliCommand<AnyParser, AnyNamedParsers, AnyParser>;
-  parents: ICliBranch[];
+	current: ICliBranch | ICliCommand<AnyParser, AnyNamedParsers, AnyParser>;
+	parents: ICliBranch[];
 };
 
 export type CliCommandNode = {
-  current: ICliCommand<AnyParser, AnyNamedParsers, AnyParser>;
-  parents: ICliBranch[];
+	current: ICliCommand<AnyParser, AnyNamedParsers, AnyParser>;
+	parents: ICliBranch[];
 };

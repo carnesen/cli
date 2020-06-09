@@ -8,8 +8,6 @@ describe(rootCommand.name, () => {
 		expect(await runCli('foo')).toEqual('foo');
 	});
 	it('has a hidden option "--pizza"', async () => {
-		expect(await runCli('foo', '--pizza')).toMatch(
-			'__________',
-		);
+		expect(await runCli('foo', '--pizza')).toMatch('__________');
 	});
 });

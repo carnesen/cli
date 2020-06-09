@@ -7,12 +7,7 @@ const cliArgRunner = Cli(exec);
 
 describe(exec.name, () => {
 	it('runs the provided command', async () => {
-		const output = await cliArgRunner(
-			'--',
-			'echo',
-			'--foo',
-			'--bar',
-		);
+		const output = await cliArgRunner('--', 'echo', '--foo', '--bar');
 		expect(output).toBe('--foo --bar\n');
 	});
 

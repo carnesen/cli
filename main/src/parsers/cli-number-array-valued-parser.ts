@@ -4,55 +4,59 @@ import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliNumberArrayValuedParser`]] */
 export type CliNumberArrayValuedParserOptions = {
-  /** [[`ICliParser.description`]] */
-  description?: string;
+	/** [[`ICliParser.description`]] */
+	description?: string;
 
-  /** [[`ICliParser.required`]] */
-  required?: boolean;
+	/** [[`ICliParser.required`]] */
+	required?: boolean;
 
-  /** [[`ICliParser.placeholder`]] defaulting to "\<num0\> [...]" */
-  placeholder?: string;
+	/** [[`ICliParser.placeholder`]] defaulting to "\<num0\> [...]" */
+	placeholder?: string;
 
-  /** [[`ICliParser.hidden`]] */
-  hidden?: boolean;
+	/** [[`ICliParser.hidden`]] */
+	hidden?: boolean;
 };
 
 /** A factory for required `number[]`-valued [[`ICliParser`]]s */
 function CliNumberArrayValuedParser(
-  options: CliNumberArrayValuedParserOptions & { required: true },
+	options: CliNumberArrayValuedParserOptions & { required: true },
 ): ICliParser<number[], true>;
 
 /** A factory for optional `number[] | undefined`-valued [[`ICliParser`]]s */
 function CliNumberArrayValuedParser(
-  options?: CliNumberArrayValuedParserOptions,
+	options?: CliNumberArrayValuedParserOptions,
 ): ICliParser<number[] | undefined, boolean>;
 
 // Implementation
-function CliNumberArrayValuedParser(options: CliNumberArrayValuedParserOptions = {}) {
-  const {
-    required = false,
-    description,
-    placeholder = '<num0> [...]',
-    hidden = false,
-  } = options;
-  const parser: ICliParser<number[] | undefined> = {
-    required,
-    hidden,
-    parse(args) {
-      if (!args) {
-        return undefined;
-      }
+function CliNumberArrayValuedParser(
+	options: CliNumberArrayValuedParserOptions = {},
+) {
+	const {
+		required = false,
+		description,
+		placeholder = '<num0> [...]',
+		hidden = false,
+	} = options;
+	const parser: ICliParser<number[] | undefined> = {
+		required,
+		hidden,
+		parse(args) {
+			if (!args) {
+				return undefined;
+			}
 
-      if (args.length === 0) {
-        throw new CliUsageError(`Expected one or more arguments ${placeholder}`);
-      }
+			if (args.length === 0) {
+				throw new CliUsageError(
+					`Expected one or more arguments ${placeholder}`,
+				);
+			}
 
-      return args.map(convertToNumber);
-    },
-    description,
-    placeholder,
-  };
-  return parser;
+			return args.map(convertToNumber);
+		},
+		description,
+		placeholder,
+	};
+	return parser;
 }
 
 export { CliNumberArrayValuedParser };

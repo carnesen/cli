@@ -8,8 +8,7 @@ import {
 
 export const throwSpecialError = CliCommand({
 	name: 'throw-special-error',
-	description:
-		'Throw a special error in this command\'s "action" function',
+	description: 'Throw a special error in this command\'s "action" function',
 	namedParsers: {
 		message: CliStringValuedParser({
 			description: 'A message',
