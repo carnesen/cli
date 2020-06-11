@@ -1,10 +1,7 @@
-import { Cli } from '@carnesen/cli';
-import { rootBranch } from '.';
+import { cli, HIDDEN_BRANCH } from '.';
 
-const runCli = Cli(rootBranch);
-
-describe(runCli.name, () => {
-	it('has a command "secret echo"', async () => {
-		expect(await runCli('secret', 'echo', 'foo')).toBe('foo');
+describe(__filename, () => {
+	it(`has a command "${HIDDEN_BRANCH} echo"`, async () => {
+		expect(await cli(HIDDEN_BRANCH, 'echo', 'foo')).toBe('foo');
 	});
 });

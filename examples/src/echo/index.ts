@@ -1,6 +1,7 @@
 import {
 	CliCommand,
 	CliStringArrayValuedParser,
+	Cli,
 	runCliAndExit,
 } from '@carnesen/cli';
 
@@ -16,6 +17,9 @@ export const echo = CliCommand({
 	},
 });
 
+// Exported for unit testing
+export const cli = Cli(echo);
+
 if (module === require.main) {
-	runCliAndExit(echo);
+	runCliAndExit(cli);
 }
