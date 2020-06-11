@@ -5,7 +5,7 @@ import { CliUsageError } from '../cli-usage-error';
  * Options for [[`CliOneOfValuedParser`]]
  * @typeParam TValues Type of the "values" option
  */
-export type CliOneOfValuedParserOptions<TValues extends string[]> = {
+export interface ICliOneOfValuedParserOptions<TValues extends string[]> {
 	/** Allowed values for this argument. For strict typing do e.g. `['foo' as const]` */
 	values: TValues;
 
@@ -21,7 +21,7 @@ export type CliOneOfValuedParserOptions<TValues extends string[]> = {
 
 	/** [[`ICliParser.hidden`]] */
 	hidden?: boolean;
-};
+}
 
 /**
  * A factory for required [[`ICliParser`]]s whose value is one of the values
@@ -29,7 +29,7 @@ export type CliOneOfValuedParserOptions<TValues extends string[]> = {
  * @typeParam TValues Type of the provided values
  * */
 function CliOneOfValuedParser<TValues extends string[]>(
-	options: CliOneOfValuedParserOptions<TValues> & { required: true },
+	options: ICliOneOfValuedParserOptions<TValues> & { required: true },
 ): ICliParser<TValues[number], true>;
 
 /**
@@ -38,11 +38,13 @@ function CliOneOfValuedParser<TValues extends string[]>(
  * @typeParam TValues Type of the provided values
  * */
 function CliOneOfValuedParser<TValues extends string[]>(
-	options: CliOneOfValuedParserOptions<TValues>,
+	options: ICliOneOfValuedParserOptions<TValues>,
 ): ICliParser<TValues[number] | undefined, false>;
 
 // Implementation
-function CliOneOfValuedParser(config: CliOneOfValuedParserOptions<string[]>) {
+function CliOneOfValuedParser(
+	config: ICliOneOfValuedParserOptions<string[]>,
+): ICliParser<string | undefined> {
 	const valuesString = config.values.join(', ');
 	const {
 		required = false,

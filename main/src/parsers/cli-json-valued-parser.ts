@@ -1,8 +1,8 @@
 import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 
-/** Options for the [[`CliJsonValuedParser`]] factory */
-export type CliJsonValuedParserOptions = {
+/** Options for [[`CliJsonValuedParser`]] */
+export interface ICliJsonValuedParserOptions {
 	/** [[`ICliParser.description`]] */
 	description?: string;
 
@@ -14,7 +14,7 @@ export type CliJsonValuedParserOptions = {
 
 	/** [[`ICliParser.hidden`]] */
 	hidden?: boolean;
-};
+}
 
 /**
  * A factory for [[`ICliParser`]]s that `JSON.parse`
@@ -30,7 +30,7 @@ export type CliJsonValuedParserOptions = {
  * @throws [[`CliUsageError`]]
  */
 export function CliJsonValuedParser(
-	options: CliJsonValuedParserOptions = {},
+	options: ICliJsonValuedParserOptions = {},
 ): ICliParser<any> {
 	const {
 		placeholder = '<json>',

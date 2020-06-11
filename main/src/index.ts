@@ -15,40 +15,40 @@ export {
 // ICliParser factories
 export {
 	CliBooleanValuedParser,
-	CliBooleanValuedParserOptions,
+	ICliBooleanValuedParserOptions,
 } from './parsers/cli-boolean-valued-parser';
 export {
 	CliJsonValuedParser,
-	CliJsonValuedParserOptions,
+	ICliJsonValuedParserOptions,
 } from './parsers/cli-json-valued-parser';
 export {
 	CliNumberValuedParser,
-	CliNumberValuedParserOptions,
+	ICliNumberValuedParserOptions,
 } from './parsers/cli-number-valued-parser';
 export {
 	CliNumberArrayValuedParser,
-	CliNumberArrayValuedParserOptions,
+	ICliNumberArrayValuedParserOptions,
 } from './parsers/cli-number-array-valued-parser';
 export {
 	CliOneOfValuedParser,
-	CliOneOfValuedParserOptions,
+	ICliOneOfValuedParserOptions,
 } from './parsers/cli-one-of-valued-parser';
 export {
 	CliStringValuedParser,
-	CliStringValuedParserOptions,
+	ICliStringValuedParserOptions,
 } from './parsers/cli-string-valued-parser';
 export {
 	CliStringArrayValuedParser,
-	CliStringArrayValuedParserOptions,
+	ICliStringArrayValuedParserOptions,
 } from './parsers/cli-string-array-valued-parser';
 
 // Command-line interface runners
 export { runCliAndExit, IRunCliAndExitOptions } from './run-cli-and-exit';
-export { Cli, ICli, ICliOptions, ICliEnhancer } from './cli';
+export { Cli, ICli } from './cli';
 
 // Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
 // For custom parsers
-export { ICliParser, CliArgs } from './cli-parser';
+export { ICliParser, TCliParserArgs } from './cli-parser';
