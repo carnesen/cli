@@ -1,9 +1,7 @@
-import { CLI_USAGE_ERROR } from './cli-usage-error';
+import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
 import { CLI_TERSE_ERROR } from './cli-terse-error';
-import { Cli, ICliOptions } from './cli';
+import { ICli } from './cli';
 import { UsageString } from './usage-string';
-import { ICliBranch } from './cli-branch';
-import { ICliCommand } from './cli-command';
 
 function red(message: string) {
 	return `\u001b[31m${message}\u001b[39m`;
@@ -12,7 +10,7 @@ function red(message: string) {
 export const RED_ERROR = red('Error:');
 
 /** Options for [[`runCliAndExit`]] */
-export interface IRunCliAndExitOptions extends ICliOptions {
+export interface IRunCliAndExitOptions {
 	/** Command-line arguments defaulting to `process.argv.slice(2)` */
 	args?: string[];
 
@@ -26,27 +24,44 @@ export interface IRunCliAndExitOptions extends ICliOptions {
 	consoleError?: typeof console.error;
 
 	/** Defaults to `process.stdout.columns` */
-	maxLineWidth?: number;
+	columns?: number;
 }
 
+// Default behavior that's convenient for Node.js but also safe for a browser
+function DEFAULT_PROCESS_EXIT(code?: number): void {
+	if (typeof process === 'object' && typeof process.exit === 'function') {
+		process.exit(code);
+	}
+}
+
+const DEFAULT_ARGS: string[] =
+	typeof process === 'object' && Array.isArray(process.argv)
+		? process.argv.slice(2)
+		: [];
+
+const DEFAULT_COLUMNS =
+	typeof process === 'object' &&
+	typeof process.stdout === 'object' &&
+	process.stdout.columns
+		? process.stdout.columns
+		: 80;
+
 /**
- * Run a command-line interface and exit
+ * Run a command-line interface and call process.exit
  *
- * @param root The root of this CLI's command tree
+ * @param cli A CLI function
  * */
 export async function runCliAndExit(
-	root: ICliBranch | ICliCommand<any, any, any>,
+	cli: ICli,
 	options: IRunCliAndExitOptions = {},
 ): Promise<void> {
 	const {
-		args = process.argv.slice(2) || [],
-		enhancer,
-		processExit = process.exit,
+		args = DEFAULT_ARGS,
+		processExit = DEFAULT_PROCESS_EXIT,
 		consoleLog = console.log, // eslint-disable-line no-console
 		consoleError = console.error, // eslint-disable-line no-console
-		maxLineWidth = process.stdout.columns,
+		columns = DEFAULT_COLUMNS,
 	} = options;
-	const cli = Cli(root, { enhancer });
 	let exitCode = 0;
 	try {
 		const result = await cli(...args);
@@ -60,16 +75,18 @@ export async function runCliAndExit(
 				`${RED_ERROR} Encountered non-truthy exception "${exception}". Please contact the author of this command-line interface`,
 			);
 		} else if (exception.code === CLI_USAGE_ERROR) {
-			const FALLBACK_COMMAND_STACK = { current: root, parents: [] };
-			const usageString = UsageString(
-				exception.node || FALLBACK_COMMAND_STACK,
-				maxLineWidth,
-				'   ',
-			);
-			if (exception.message) {
-				consoleError(`${usageString}\n\n${RED_ERROR} ${exception.message}`);
+			const exceptionAsUsageError: CliUsageError = exception;
+			if (exceptionAsUsageError.node) {
+				const usageString = UsageString(exception.node, columns, '   ');
+				if (exception.message) {
+					consoleError(`${usageString}\n\n${RED_ERROR} ${exception.message}`);
+				} else {
+					consoleError(usageString);
+				}
 			} else {
-				consoleError(usageString);
+				// Handle case where "code" is CLI_USAGE_ERROR but "node" is undefined. Surely
+				// this is a coding mistake on our part.
+				consoleError(exceptionAsUsageError);
 			}
 		} else if (exception.code === CLI_TERSE_ERROR) {
 			if (!exception.message) {

@@ -3,6 +3,7 @@ import { CliCommand } from './cli-command';
 import { runCliAndExit, RED_ERROR } from './run-cli-and-exit';
 import { CliUsageError } from './cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
+import { Cli } from './cli';
 
 async function runMocked(action: () => any) {
 	const result = {
@@ -10,16 +11,18 @@ async function runMocked(action: () => any) {
 		consoleError: jest.fn(),
 		processExit: jest.fn(),
 	};
-	await runCliAndExit(
-		CliCommand({
-			name: 'cli',
-			action,
-		}),
-		{
-			args: [],
-			...result,
-		},
-	);
+
+	const command = CliCommand({
+		name: 'cli',
+		action,
+	});
+
+	const cli = Cli(command);
+
+	await runCliAndExit(cli, {
+		args: [],
+		...result,
+	});
 
 	expect(result.processExit.mock.calls.length).toBe(1);
 	expect(result.processExit.mock.calls[0].length).toBe(1);
@@ -126,14 +129,13 @@ describe(runCliAndExit.name, () => {
 	});
 
 	it('uses sensible defaults for all options', async () => {
-		runCliAndExit(
-			CliCommand({
-				name: 'cli',
-				action() {
-					// do nothing
-				},
-			}),
-			{ processExit: jest.fn(), args: [] },
-		);
+		const command = CliCommand({
+			name: 'cli',
+			action() {
+				// do nothing
+			},
+		});
+		const cli = Cli(command);
+		runCliAndExit(cli, { processExit: jest.fn(), args: [] });
 	});
 });

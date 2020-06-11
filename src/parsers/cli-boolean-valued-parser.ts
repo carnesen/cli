@@ -2,14 +2,14 @@ import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 /**
- * Options for the [[`CliBooleanValuedParser`]] factory
+ * Options for [[`CliBooleanValuedParser`]]
  */
-export type CliBooleanValuedParserOptions = {
+export interface ICliBooleanValuedParserOptions {
 	/** [[`ICliParser.description`]] */
 	description?: string;
 	/** [[`ICliParser.hidden`]] */
 	hidden?: boolean;
-};
+}
 
 /**
  * A factory for boolean-valued [[`ICliParser`]]'s
@@ -24,7 +24,7 @@ export type CliBooleanValuedParserOptions = {
  * @throws [[`CliUsageError`]]
  */
 export function CliBooleanValuedParser(
-	options: CliBooleanValuedParserOptions = {},
+	options: ICliBooleanValuedParserOptions = {},
 ): ICliParser<boolean, false> {
 	const { description, hidden = false } = options;
 	const parser: ICliParser<boolean, false> = {

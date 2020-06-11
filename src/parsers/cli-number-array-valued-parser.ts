@@ -3,7 +3,7 @@ import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliNumberArrayValuedParser`]] */
-export type CliNumberArrayValuedParserOptions = {
+export interface ICliNumberArrayValuedParserOptions {
 	/** [[`ICliParser.description`]] */
 	description?: string;
 
@@ -15,22 +15,22 @@ export type CliNumberArrayValuedParserOptions = {
 
 	/** [[`ICliParser.hidden`]] */
 	hidden?: boolean;
-};
+}
 
 /** A factory for required `number[]`-valued [[`ICliParser`]]s */
 function CliNumberArrayValuedParser(
-	options: CliNumberArrayValuedParserOptions & { required: true },
+	options: ICliNumberArrayValuedParserOptions & { required: true },
 ): ICliParser<number[], true>;
 
 /** A factory for optional `number[] | undefined`-valued [[`ICliParser`]]s */
 function CliNumberArrayValuedParser(
-	options?: CliNumberArrayValuedParserOptions,
+	options?: ICliNumberArrayValuedParserOptions,
 ): ICliParser<number[] | undefined, boolean>;
 
 // Implementation
 function CliNumberArrayValuedParser(
-	options: CliNumberArrayValuedParserOptions = {},
-) {
+	options: ICliNumberArrayValuedParserOptions = {},
+): ICliParser<number[] | undefined> {
 	const {
 		required = false,
 		description,

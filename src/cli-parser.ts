@@ -2,7 +2,7 @@
  * Defines the type of the args passed to an [[`ICliValuedParser`]]
  * @typeParam TRequired If `true`, the `args` parameter might be `undefined`
  */
-export type CliArgs<TRequired extends boolean> = TRequired extends true
+export type TCliParserArgs<TRequired extends boolean> = TRequired extends true
 	? string[]
 	: string[] | undefined;
 
@@ -17,8 +17,8 @@ export interface ICliParser<
 > {
 	/** Function or async function that parses a well-typed value from string arguments */
 	parse:
-		| ((args: CliArgs<TRequired>) => TValue)
-		| ((args: CliArgs<TRequired>) => Promise<TValue>);
+		| ((args: TCliParserArgs<TRequired>) => TValue)
+		| ((args: TCliParserArgs<TRequired>) => Promise<TValue>);
 
 	/** A short placeholder for this argument in command-line usage e.g. "\<str\>"
 	 * */

@@ -7,39 +7,18 @@ import { ICliBranch } from './cli-branch';
 import { ICliCommand } from './cli-command';
 import { CliCommandNode } from './cli-node';
 
-/** A JavaScript command runner. Useful for unit testing CLI logic. */
+/** A JavaScript command-line interface */
 export interface ICli {
 	(...args: string[]): Promise<any>;
 }
 
-/** (Advanced) Wrap the default [[`ICli`]] to modify its behavior */
-export interface ICliEnhancer {
-	(cli: ICli): ICli;
-}
-
-export interface ICliOptions {
-	/** (Advanced) Modify the CLI's behavior. Passed to [[`Cli`]] */
-	enhancer?: ICliEnhancer;
-}
-
 /**
- * A factory for [[`ICli}s, the core of {@linkcode runCliAndExit`]]
+ * A factory for [[`ICli`]]s, the core of [[`runCliAndExit`]]
  *
  * @param root The root of this CLI's command tree
  */
-export function Cli(
-	root: ICliBranch | ICliCommand<any, any, any>,
-	options: ICliOptions = {},
-): ICli {
-	const { enhancer } = options;
-
-	if (enhancer) {
-		return enhancer(cli);
-	}
-
-	return cli;
-
-	async function cli(...args: string[]) {
+export function Cli(root: ICliBranch | ICliCommand<any, any, any>): ICli {
+	return async function cli(...args: string[]) {
 		const [leaf, remainingArgs]: [CliCommandNode, string[]] = navigateToCommand(
 			root,
 			args,
@@ -102,5 +81,5 @@ export function Cli(
 			}
 			throw exception;
 		}
-	}
+	};
 }

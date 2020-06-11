@@ -2,7 +2,7 @@ import { ICliParser } from '../cli-parser';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliStringValuedParser`]] */
-export type CliStringValuedParserOptions = {
+export interface ICliStringValuedParserOptions {
 	/** [[`ICliParser.required`]] */
 	required?: boolean;
 
@@ -14,20 +14,22 @@ export type CliStringValuedParserOptions = {
 
 	/** [[`ICliParser.placeholder`]] defaulting to "\<str\>" */
 	placeholder?: string;
-};
+}
 
 /** A factory for required `string`-valued [[`ICliParser`]]s */
 function CliStringValuedParser(
-	options: CliStringValuedParserOptions & { required: true },
+	options: ICliStringValuedParserOptions & { required: true },
 ): ICliParser<string, true>;
 
 /** A factory for optional `string | undefined`-valued [[`ICliParser`]]s */
 function CliStringValuedParser(
-	options?: CliStringValuedParserOptions,
+	options?: ICliStringValuedParserOptions,
 ): ICliParser<string | undefined, false>;
 
 // Implementation
-function CliStringValuedParser(options: CliStringValuedParserOptions = {}) {
+function CliStringValuedParser(
+	options: ICliStringValuedParserOptions = {},
+): ICliParser<string | undefined> {
 	const {
 		required = false,
 		description,
