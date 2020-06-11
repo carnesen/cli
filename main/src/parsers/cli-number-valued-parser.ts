@@ -2,8 +2,8 @@ import { ICliParser } from '../cli-parser';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
-/** Options for the [[`CliNumberValuedParser`]] factory */
-export type CliNumberValuedParserOptions = {
+/** Options for [[`CliNumberValuedParser`]] */
+export interface ICliNumberValuedParserOptions {
 	/** [[`ICliParser.required`]] */
 	required?: boolean;
 
@@ -15,20 +15,22 @@ export type CliNumberValuedParserOptions = {
 
 	/** [[`ICliParser.description`]] */
 	hidden?: boolean;
-};
+}
 
 /** A factory for `number`-valued required [[`ICliParser`]]s */
 function CliNumberValuedParser(
-	options: CliNumberValuedParserOptions & { required: true },
+	options: ICliNumberValuedParserOptions & { required: true },
 ): ICliParser<number, true>;
 
 /** A factory for `number | undefined`-valued optional [[`ICliParser`]]s */
 function CliNumberValuedParser(
-	options?: CliNumberValuedParserOptions,
+	options?: ICliNumberValuedParserOptions,
 ): ICliParser<number | undefined, boolean>;
 
 // Implementation
-function CliNumberValuedParser(config: CliNumberValuedParserOptions = {}) {
+function CliNumberValuedParser(
+	config: ICliNumberValuedParserOptions = {},
+): ICliParser<number | undefined> {
 	const {
 		required = false,
 		description,

@@ -2,7 +2,7 @@ import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliCommand } from './cli-command';
 import { dummyValuedParser } from './dummy-arg-parsers-for-testing';
-import { Cli, ICliEnhancer } from './cli';
+import { Cli } from './cli';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 
 const commandWithNamedValuedParsers = CliCommand({
@@ -43,21 +43,6 @@ const root = CliBranch({
 const cliArgRunner = Cli(root);
 
 describe(Cli.name, () => {
-	it('calls the enhancer if provided', async () => {
-		const spy = jest.fn();
-		const enhancer: ICliEnhancer = (innerArgRunner) => async (
-			...args: string[]
-		) => {
-			spy(...args);
-			await innerArgRunner(...args);
-		};
-		const enhancedArgRunner = Cli(commandWithPositionalValuedParser, {
-			enhancer,
-		});
-		await enhancedArgRunner('foo', 'bar');
-		expect(spy.mock.calls).toEqual([['foo', 'bar']]);
-	});
-
 	it('throws USAGE error with empty message if --help is passed', async () => {
 		const exception = await runAndCatch(cliArgRunner, '--help');
 		expect(exception.code).toBe(CLI_USAGE_ERROR);

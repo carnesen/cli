@@ -21,4 +21,3 @@ if (require.main === module) {
 	runCliAndExit(multiply);
 }
 ```
-![screen recording of CLI](demo.gif)

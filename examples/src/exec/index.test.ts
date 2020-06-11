@@ -1,18 +1,16 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
-import { Cli, CLI_USAGE_ERROR } from '@carnesen/cli';
-import { exec } from '.';
+import { CliUsageError } from '@carnesen/cli';
+import { npmStartEscapedArguments, cli } from '.';
 
-const cliArgRunner = Cli(exec);
-
-describe(exec.name, () => {
+describe(npmStartEscapedArguments.name, () => {
 	it('runs the provided command', async () => {
-		const output = await cliArgRunner('--', 'echo', '--foo', '--bar');
-		expect(output).toBe('--foo --bar\n');
+		const output = await cli('--', 'echo', '--foo', '--bar');
+		expect(output).toMatch('npm start -- echo');
 	});
 
 	it('throws usage', async () => {
-		const output = await runAndCatch(cliArgRunner);
-		expect(output.code).toBe(CLI_USAGE_ERROR);
+		const exception = await runAndCatch(cli);
+		expect(exception instanceof CliUsageError).toBe(true);
 	});
 });

@@ -2,8 +2,10 @@ import {
 	CliCommand,
 	CliNumberArrayValuedParser,
 	runCliAndExit,
+	Cli,
 } from '@carnesen/cli';
 
+/** Exported because this command is also a child of the main branch in ../ */
 export const multiply = CliCommand({
 	name: 'multiply',
 	description: 'Multiply numbers and print the result',
@@ -15,6 +17,10 @@ export const multiply = CliCommand({
 	},
 });
 
+/** Exported for unit testing */
+export const cli = Cli(multiply);
+
+/** So that we can run this module as a standalone CLI too */
 if (require.main === module) {
-	runCliAndExit(multiply);
+	runCliAndExit(cli);
 }

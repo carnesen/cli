@@ -42,7 +42,7 @@ if (require.main === module) {
 ```
 Here's how that behaves as a CLI.
 
-![screen recording of "multiply" CLI](examples/src/multiply/demo.gif)
+![screen recording of "multiply" CLI](demo.gif)
 
 Check out [examples/src](examples/src) for more examples.
 
