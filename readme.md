@@ -20,6 +20,7 @@ Here is [a CLI](examples/src/multiply/index.ts) that does some basic arithmetic:
 ```typescript
 // examples/src/multiply/index.ts
 import {
+	Cli,
 	CliCommand,
 	CliNumberArrayValuedParser,
 	runCliAndExit,
@@ -36,8 +37,11 @@ export const multiply = CliCommand({
 	},
 });
 
+// Exported for unit testing
+export const cli = Cli(multiply);
+
 if (require.main === module) {
-	runCliAndExit(multiply);
+	runCliAndExit(cli);
 }
 ```
 Here's how that behaves as a CLI.

@@ -1,7 +1,7 @@
 {
   "name": "@carnesen/cli",
   "description": "A TypeScript-first library for building Node.js command-line interfaces",
-  "version": "0.5.0-13",
+  "version": "0.5.0-14",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
