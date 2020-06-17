@@ -5,7 +5,7 @@ A TypeScript-first framework for command-line interfaces in Node.js
 API documentation is available on the web at [https://cli.carnesen.com/](https://cli.carnesen.com/). Check out the [live examples page](https://cli.carnesen.com/examples) under construction 👷 CLI in a browser! Please visit [this project's repository on GitHub](https://github.com/carnesen/cli) for more information.
 
 ## Stability
-This library has 98% test coverage and has been around for years now but should still be considered 0.x beta software.
+This library has 98% test coverage and heavy usage by its author but should be considered 0.x beta software.
 
 ## License
 MIT © [Chris Arnesen](https://www.carnesen.com)
