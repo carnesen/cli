@@ -4,10 +4,6 @@ export function wrapInSquareBrackets(str: string): string {
 	return `[${str}]`;
 }
 
-export function wrapInCurlyBrackets(str: string): string {
-	return `{${str}}`;
-}
-
 export function convertToNumber(rawValue: string): number {
 	let value = NaN;
 	if (rawValue.length > 0) {
