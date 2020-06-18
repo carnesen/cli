@@ -1,9 +1,9 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
 import { CliUsageError } from '@carnesen/cli';
-import { npmStartEscapedArguments, cli } from '.';
+import { demoEscapedArguments, cli } from '.';
 
-describe(npmStartEscapedArguments.name, () => {
+describe(demoEscapedArguments.name, () => {
 	it('runs the provided command', async () => {
 		const output = await cli('--', 'echo', '--foo', '--bar');
 		expect(output).toMatch('npm start -- echo');
