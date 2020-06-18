@@ -1,9 +1,9 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
 import { CliUsageError, CliTerseError } from '@carnesen/cli';
-import { cli, throwSpecialError } from '.';
+import { cli, throwError } from '.';
 
-describe(throwSpecialError.name, () => {
+describe(throwError.name, () => {
 	it('throws a regular Error by default', async () => {
 		const exception = await runAndCatch(cli, '--message', 'foo');
 		expect(exception instanceof Error).toBe(true);

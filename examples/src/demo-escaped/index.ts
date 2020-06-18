@@ -6,8 +6,8 @@ import {
 } from '@carnesen/cli';
 
 // Exported because this is also a child of a branch
-export const npmStartEscapedArguments = CliCommand({
-	name: 'npm-start-escaped-arguments',
+export const demoEscapedArguments = CliCommand({
+	name: 'demo-escaped-arguments',
 	description: `
 	You might be familiar with the usage for "npm start":
 	
@@ -15,10 +15,9 @@ export const npmStartEscapedArguments = CliCommand({
 
 	https://docs.npmjs.com/cli/start.html
 
-	This "--" pattern is used in a CLI when <args> might have _values_ like "--name".
-	Normally "--name" would be interpreted by the CLI as a named argument separator. 
-	The "--" means, "Stop interpreting --whatever as a named argument separator. Just
-	pass all the arguments after -- into the escapedParser ICliParser.".
+	The "--" means, "Stop interpreting words that start with '--' 
+	as a named argument flags. Just pass all the args after '--' 
+	into the escapedParser ICliParser.".
 	`,
 	escapedParser: CliStringArrayValuedParser({
 		required: true,
@@ -26,15 +25,15 @@ export const npmStartEscapedArguments = CliCommand({
 	}),
 	action(_, __, escaped) {
 		return `
-npm start -- ${escaped.join(' ')}
+Running ${escaped.join(' ')}
 
-(This is just a mock command)
+(Not really this is just a mock command for demoing escaped arguments)
 		`;
 	},
 });
 
 // Exported for unit testing
-export const cli = Cli(npmStartEscapedArguments);
+export const cli = Cli(demoEscapedArguments);
 
 // So that we can run this module as a standalone CLI
 if (module === require.main) {

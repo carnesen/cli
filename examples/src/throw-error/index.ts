@@ -7,13 +7,12 @@ import {
 	CliUsageError,
 	CliTerseError,
 } from '@carnesen/cli';
-
 /**
  * Exported because this is a subcommand of the top-level branch in ../index.ts
  * */
-export const throwSpecialError = CliCommand({
-	name: 'throw-special-error',
-	description: 'Throw a special error in this command\'s "action" function',
+export const throwError = CliCommand({
+	name: 'throw',
+	description: 'Throw an error in the command to see how the CLI behaves',
 	namedParsers: {
 		message: CliStringValuedParser({
 			description: 'A message',
@@ -42,7 +41,7 @@ export const throwSpecialError = CliCommand({
 });
 
 /** Exported for unit testing */
-export const cli = Cli(throwSpecialError);
+export const cli = Cli(throwError);
 
 /** So that we can run this module directly as a CLI */
 if (module === require.main) {

@@ -1,9 +1,11 @@
 import { CliBranch } from '@carnesen/cli';
 import { echo } from './echo';
 import { multiply } from './multiply';
-import { throwSpecialError } from './throw-special-error';
-import { echoAsHiddenCommand } from './hidden-command';
+import { throwError } from './throw-error';
+import { echoAsHiddenCommand } from './echo-as-hidden-command';
 import { hiddenBranch } from './hidden-branch';
+import { echoWithHiddenOption } from './echo-with-hidden-option';
+import { demoEscapedArguments } from './demo-escaped';
 
 export const examples = CliBranch({
 	name: 'examples',
@@ -11,10 +13,12 @@ export const examples = CliBranch({
 	Examples that demonstrate @carnesen/cli features
 	`,
 	children: [
+		demoEscapedArguments,
 		echo,
+		echoWithHiddenOption,
 		echoAsHiddenCommand,
 		hiddenBranch,
 		multiply,
-		throwSpecialError,
+		throwError,
 	],
 });

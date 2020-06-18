@@ -1,12 +1,12 @@
 # @carnesen/cli
-A TypeScript-first framework for command-line interfaces in Node.js
+A TypeScript-first framework for command-line interfaces in Node.js and the browser
 
 [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://www.npmjs.com/package/@carnesen/cli) [![build status badge](https://github.com/carnesen/cli/workflows/test/badge.svg)](https://github.com/carnesen/cli/actions?query=workflow%3Atest+branch%3Amaster)
 
-The `@carnesen/cli` package includes runtime JavaScript files for Node.js >=v10 and strict `.d.ts` type declarations for TypeScript >=v3.8. API documentation is available on the web at [https://cli.carnesen.com/](https://cli.carnesen.com/).
+The `@carnesen/cli` package includes runtime JavaScript files for Node.js >=v10 and strict `.d.ts` type declarations for TypeScript >=v3.8. API documentation is available on the web at [cli.carnesen.com](https://cli.carnesen.com/). `@carnesen/cli` is pure Type/JavaScript, zero dependencies. So it works in a browser too! Check out [the live online examples](https://cli.carnesen.com/examples/index.html).
 
 ## Stability
-This library has 98% test coverage and years of use, but it should still be considered 0.x beta software.
+This library has 98% test coverage and is used a lot by its author but should still be considered 0.x beta software.
 
 ## Usage
 Install this package as a dependency of your project using `npm`:
@@ -26,7 +26,7 @@ import {
 	runCliAndExit,
 } from '@carnesen/cli';
 
-export const multiply = CliCommand({
+const multiply = CliCommand({
 	name: 'multiply',
 	description: 'Multiply numbers and print the result',
 	positionalParser: CliNumberArrayValuedParser({
@@ -37,8 +37,7 @@ export const multiply = CliCommand({
 	},
 });
 
-// Exported for unit testing
-export const cli = Cli(multiply);
+const cli = Cli(multiply);
 
 if (require.main === module) {
 	runCliAndExit(cli);
