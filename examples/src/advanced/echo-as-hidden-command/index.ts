@@ -5,7 +5,7 @@ import {
 	Cli,
 	CliStringArrayArgGroup,
 } from '@carnesen/cli';
-import { echo as echoCommand } from '../echo';
+import { echo as echoCommand } from '../../echo';
 
 export const ECHO_AS_HIDDEN_COMMAND = 'echo-as-hidden-command';
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { runCliAndExit, Cli } from '@carnesen/cli';
-import { examples } from '.';
+import { root } from '.';
 
-const cli = Cli(examples);
+const cli = Cli(root);
 
 if (module === require.main) {
 	runCliAndExit(cli);
