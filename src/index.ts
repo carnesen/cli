@@ -12,35 +12,35 @@ export {
 	CLI_COMMAND,
 } from './cli-command';
 
-// ICliParser factories
+// ICliArgGroup factories
 export {
-	CliBooleanValuedParser,
-	ICliBooleanValuedParserOptions,
-} from './parsers/cli-boolean-valued-parser';
+	CliBooleanArgGroup,
+	ICliBooleanArgGroupOptions,
+} from './arg-group/cli-boolean-arg-group';
 export {
-	CliJsonValuedParser,
-	ICliJsonValuedParserOptions,
-} from './parsers/cli-json-valued-parser';
+	CliJsonArgGroup,
+	ICliJsonArgGroupOptions,
+} from './arg-group/cli-json-arg-group';
 export {
-	CliNumberValuedParser,
-	ICliNumberValuedParserOptions,
-} from './parsers/cli-number-valued-parser';
+	CliNumberArgGroup,
+	ICliNumberArgGroupOptions,
+} from './arg-group/cli-number-arg-group';
 export {
-	CliNumberArrayValuedParser,
-	ICliNumberArrayValuedParserOptions,
-} from './parsers/cli-number-array-valued-parser';
+	CliNumberArrayArgGroup,
+	ICliNumberArrayArgGroupOptions,
+} from './arg-group/cli-number-array-arg-group';
 export {
-	CliOneOfValuedParser,
-	ICliOneOfValuedParserOptions,
-} from './parsers/cli-one-of-valued-parser';
+	CliOneOfArgGroup,
+	ICliOneOfArgGroupOptions,
+} from './arg-group/cli-one-of-arg-group';
 export {
-	CliStringValuedParser,
-	ICliStringValuedParserOptions,
-} from './parsers/cli-string-valued-parser';
+	CliStringArgGroup,
+	ICliStringArgGroupOptions,
+} from './arg-group/cli-string-arg-group';
 export {
-	CliStringArrayValuedParser,
-	ICliStringArrayValuedParserOptions,
-} from './parsers/cli-string-array-valued-parser';
+	CliStringArrayArgGroup,
+	ICliStringArrayArgGroupOptions,
+} from './arg-group/cli-string-array-arg-group';
 
 // Command-line interface runners
 export { runCliAndExit, IRunCliAndExitOptions } from './run-cli-and-exit';
@@ -50,5 +50,5 @@ export { Cli, ICli } from './cli';
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
-// For custom parsers
-export { ICliParser, TCliParserArgs } from './cli-parser';
+// For custom argGroups
+export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';

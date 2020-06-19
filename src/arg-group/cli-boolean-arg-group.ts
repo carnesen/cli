@@ -1,18 +1,18 @@
-import { ICliParser } from '../cli-parser';
+import { ICliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
 /**
- * Options for [[`CliBooleanValuedParser`]]
+ * Options for [[`CliBooleanArgGroup`]]
  */
-export interface ICliBooleanValuedParserOptions {
-	/** [[`ICliParser.description`]] */
+export interface ICliBooleanArgGroupOptions {
+	/** [[`ICliArgGroup.description`]] */
 	description?: string;
-	/** [[`ICliParser.hidden`]] */
+	/** [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }
 
 /**
- * A factory for boolean-valued [[`ICliParser`]]'s
+ * A factory for boolean-valued [[`ICliArgGroup`]]'s
  *
  * @example
  * ```plaintext
@@ -23,11 +23,11 @@ export interface ICliBooleanValuedParserOptions {
  *
  * @throws [[`CliUsageError`]]
  */
-export function CliBooleanValuedParser(
-	options: ICliBooleanValuedParserOptions = {},
-): ICliParser<boolean, false> {
+export function CliBooleanArgGroup(
+	options: ICliBooleanArgGroupOptions = {},
+): ICliArgGroup<boolean, false> {
 	const { description, hidden = false } = options;
-	const parser: ICliParser<boolean, false> = {
+	const argGroup: ICliArgGroup<boolean, false> = {
 		placeholder: '',
 		required: false,
 		hidden,
@@ -42,5 +42,5 @@ export function CliBooleanValuedParser(
 		},
 		description,
 	};
-	return parser;
+	return argGroup;
 }

@@ -1,20 +1,20 @@
 import { ICliBranch } from './cli-branch';
 import { wrapInSquareBrackets } from './util';
-import { AnyParser, AnyNamedParsers } from './cli-parser';
+import { AnyArgGroup, AnyNamedArgGroups } from './cli-arg-group';
 import { ICliCommand } from './cli-command';
 import { hardWrap } from './hard-wrap';
 import { TwoColumnTable, TwoColumnTableRow } from './two-column-table';
 
 export function UsageForCommand(
-	current: ICliCommand<AnyParser, AnyNamedParsers, AnyParser>,
+	current: ICliCommand<AnyArgGroup, AnyNamedArgGroups, AnyArgGroup>,
 	parents: ICliBranch[] = [],
 	maxLineLength = +Infinity,
 	indentation = '',
 ): string[] {
 	const {
-		positionalParser,
-		namedParsers,
-		escapedParser,
+		positionalArgGroup,
+		namedArgGroups,
+		escapedArgGroup,
 		description,
 	} = current;
 	const commandPathString = [...parents, current]
@@ -29,44 +29,44 @@ export function UsageForCommand(
 		lines.push('');
 	}
 
-	if (positionalParser && !positionalParser.hidden) {
-		if (positionalParser.required) {
-			firstLine += ` ${positionalParser.placeholder}`;
+	if (positionalArgGroup && !positionalArgGroup.hidden) {
+		if (positionalArgGroup.required) {
+			firstLine += ` ${positionalArgGroup.placeholder}`;
 		} else {
-			firstLine += ` ${wrapInSquareBrackets(positionalParser.placeholder)}`;
+			firstLine += ` ${wrapInSquareBrackets(positionalArgGroup.placeholder)}`;
 		}
 		lines.push('Positional arguments:');
 		lines.push('');
 		lines.push(
 			...TwoColumnTable(
-				[[positionalParser.placeholder, positionalParser.description]],
+				[[positionalArgGroup.placeholder, positionalArgGroup.description]],
 				maxLineLength,
 				indentation,
 			),
 		);
 	}
 
-	if (namedParsers) {
-		const namedParserEntries = Object.entries(namedParsers).filter(
-			([_, parser]) => !parser.hidden,
+	if (namedArgGroups) {
+		const namedArgGroupEntries = Object.entries(namedArgGroups).filter(
+			([_, argGroup]) => !argGroup.hidden,
 		);
-		if (namedParserEntries.length > 0) {
-			const namedParsersNotRequired = namedParserEntries.every(
-				([_, parser]) => !parser.required,
+		if (namedArgGroupEntries.length > 0) {
+			const namedArgGroupsNotRequired = namedArgGroupEntries.every(
+				([_, argGroup]) => !argGroup.required,
 			);
-			firstLine += namedParsersNotRequired ? ' [<options>]' : ' <options>';
+			firstLine += namedArgGroupsNotRequired ? ' [<options>]' : ' <options>';
 			lines.push('Options:');
 			lines.push('');
-			const rows: TwoColumnTableRow[] = namedParserEntries.map(
-				([name, parser]) => {
+			const rows: TwoColumnTableRow[] = namedArgGroupEntries.map(
+				([name, argGroup]) => {
 					let cell0 = `--${name}`;
-					if (parser.placeholder) {
-						cell0 += ` ${parser.placeholder}`;
+					if (argGroup.placeholder) {
+						cell0 += ` ${argGroup.placeholder}`;
 					}
-					if (!parser.required) {
+					if (!argGroup.required) {
 						cell0 = wrapInSquareBrackets(cell0);
 					}
-					return [cell0, parser.description];
+					return [cell0, argGroup.description];
 				},
 			);
 
@@ -74,15 +74,15 @@ export function UsageForCommand(
 		}
 	}
 
-	if (escapedParser && !escapedParser.hidden) {
-		const { placeholder, required } = escapedParser;
+	if (escapedArgGroup && !escapedArgGroup.hidden) {
+		const { placeholder, required } = escapedArgGroup;
 		const fullPlaceholder = `-- ${placeholder}`;
 		firstLine += ` ${
 			required ? fullPlaceholder : wrapInSquareBrackets(fullPlaceholder)
 		}`;
 		lines.push('Special arguments:');
 		lines.push('');
-		lines.push(...TwoColumnTable([[placeholder, escapedParser.description]]));
+		lines.push(...TwoColumnTable([[placeholder, escapedArgGroup.description]]));
 	}
 
 	return [firstLine, '', ...lines];

@@ -1,31 +1,36 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliCommand } from './cli-command';
-import { dummyValuedParser } from './dummy-arg-parsers-for-testing';
+import { dummyArgGroup } from './dummy-arg-groups-for-testing';
 import { Cli } from './cli';
-import { CLI_USAGE_ERROR } from './cli-usage-error';
+import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
 
-const commandWithNamedValuedParsers = CliCommand({
+const commandWithNoArguments = CliCommand({
+	name: 'command-with-no-args',
+	action() {},
+});
+
+const commandWithNamedArgGroups = CliCommand({
 	name: 'command-with-named-args',
-	namedParsers: {
-		foo: dummyValuedParser,
+	namedArgGroups: {
+		foo: dummyArgGroup,
 	},
 	action(...args) {
 		return args;
 	},
 });
 
-const commandWithPositionalValuedParser = CliCommand({
+const commandWithPositionalArgGroup = CliCommand({
 	name: 'command-with-positional-args',
-	positionalParser: dummyValuedParser,
+	positionalArgGroup: dummyArgGroup,
 	action(...args) {
 		return args;
 	},
 });
 
-const commandWithEscapedValuedParser = CliCommand({
-	name: 'command-with-escaped-arg-parser',
-	escapedParser: dummyValuedParser,
+const commandWithEscapedArgGroup = CliCommand({
+	name: 'command-with-escaped-arg-group',
+	escapedArgGroup: dummyArgGroup,
 	action(...args) {
 		return args;
 	},
@@ -34,56 +39,68 @@ const commandWithEscapedValuedParser = CliCommand({
 const root = CliBranch({
 	name: 'cli',
 	children: [
-		commandWithPositionalValuedParser,
-		commandWithNamedValuedParsers,
-		commandWithEscapedValuedParser,
+		commandWithNoArguments,
+		commandWithPositionalArgGroup,
+		commandWithNamedArgGroups,
+		commandWithEscapedArgGroup,
 	],
 });
 
-const cliArgRunner = Cli(root);
+const cli = Cli(root);
 
 describe(Cli.name, () => {
-	it('throws USAGE error with empty message if --help is passed', async () => {
-		const exception = await runAndCatch(cliArgRunner, '--help');
+	it(`throws ${CLI_USAGE_ERROR} if --help is passed among the arguments of on an otherwise valid invocation`, async () => {
+		const exception = await runAndCatch(Cli(commandWithNoArguments), '--help');
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toBeFalsy();
 	});
 
+	it(`throws ${CLI_USAGE_ERROR} if --help is passed among the commands`, async () => {
+		const exception = await runAndCatch(
+			cli,
+			'--help',
+			commandWithNoArguments.name,
+		);
+		expect(exception.code).toBe(CLI_USAGE_ERROR);
+		expect((exception as CliUsageError).node!.current).toBe(root);
+		expect(exception.message).toBeFalsy();
+	});
+
 	it('throws USAGE error with empty message if last command is a branch and no additional args is present', async () => {
-		const exception = await runAndCatch(cliArgRunner);
+		const exception = await runAndCatch(cli);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toBeFalsy();
 	});
 
 	it('throws USAGE error "bad command" if last command is a branch and additional args is present', async () => {
-		const exception = await runAndCatch(cliArgRunner, 'oops');
+		const exception = await runAndCatch(cli, 'oops');
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/bad command/i);
 		expect(exception.message).toMatch('"oops"');
 		expect(exception.message).toMatchSnapshot();
 	});
 
-	it('throws USAGE error "positional arguments" if last command is a command without positionalValuedParser property and additional args is present', async () => {
+	it('throws USAGE error "positional arguments" if last command is a command without positionalArgGroup property and additional args is present', async () => {
 		const exception = await runAndCatch(
-			cliArgRunner,
-			commandWithNamedValuedParsers.name,
+			cli,
+			commandWithNamedArgGroups.name,
 			'oops',
 		);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch('Unexpected argument "oops"');
-		expect(exception.message).toMatch(commandWithNamedValuedParsers.name);
+		expect(exception.message).toMatch(commandWithNamedArgGroups.name);
 		expect(exception.message).toMatch(/positional arguments/i);
 		expect(exception.message).toMatchSnapshot();
 	});
 
 	it('Passes parsed positional value as first argument of the "action" function', async () => {
 		const positionalArgs = ['foo', 'bar'];
-		const result = await cliArgRunner(
-			commandWithPositionalValuedParser.name,
+		const result = await cli(
+			commandWithPositionalArgGroup.name,
 			...positionalArgs,
 		);
 		expect(result).toEqual([
-			dummyValuedParser.parse(positionalArgs),
+			dummyArgGroup.parse(positionalArgs),
 			{},
 			undefined,
 		]);
@@ -91,37 +108,31 @@ describe(Cli.name, () => {
 
 	it('Passes parsed named values as second argument of the "action" function', async () => {
 		const namedArgs = ['--foo', 'bar'];
-		const result = await cliArgRunner(
-			commandWithNamedValuedParsers.name,
-			...namedArgs,
-		);
+		const result = await cli(commandWithNamedArgGroups.name, ...namedArgs);
 		expect(result).toEqual([
 			undefined,
-			{ foo: dummyValuedParser.parse(['bar']) },
+			{ foo: dummyArgGroup.parse(['bar']) },
 			undefined,
 		]);
 	});
 
 	it(`Throws USAGE error 'does not allow "--"' if command does not have an "escaped" property`, async () => {
 		const exception = await runAndCatch(
-			cliArgRunner,
-			commandWithPositionalValuedParser.name,
+			cli,
+			commandWithPositionalArgGroup.name,
 			'--',
 		);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
-		expect(exception.message).toMatch(commandWithPositionalValuedParser.name);
+		expect(exception.message).toMatch(commandWithPositionalArgGroup.name);
 		expect(exception.message).toMatch('does not allow "--"');
 	});
 
 	it('Passes parsed escaped value as third argument of the "action" function', async () => {
-		const result = await cliArgRunner(
-			commandWithEscapedValuedParser.name,
-			'--',
-		);
+		const result = await cli(commandWithEscapedArgGroup.name, '--');
 		expect(result).toEqual([
 			undefined,
 			{},
-			commandWithEscapedValuedParser.escapedParser!.parse([]),
+			commandWithEscapedArgGroup.escapedArgGroup!.parse([]),
 		]);
 	});
 });

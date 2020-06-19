@@ -2,21 +2,21 @@ import { CliCommandNode } from './cli-node';
 import { NamedArgs } from './partition-args';
 import { parseArgs } from './parse-args';
 import { CliUsageError } from './cli-usage-error';
-import { AnyNamedParsers, NamedValues } from './cli-parser';
+import { AnyNamedArgGroups, NamedValues } from './cli-arg-group';
 
 export async function getNamedValues(
-	namedValuedParsers: AnyNamedParsers,
+	namedArgGroups: AnyNamedArgGroups,
 	namedArgs: NamedArgs,
 	node: CliCommandNode,
-): Promise<NamedValues<AnyNamedParsers>> {
-	const namedValues: NamedValues<AnyNamedParsers> = {};
+): Promise<NamedValues<AnyNamedArgGroups>> {
+	const namedValues: NamedValues<AnyNamedArgGroups> = {};
 	const restNamedArgs = { ...namedArgs };
 	const asyncFuncs: (() => Promise<void>)[] = [];
-	for (const [name, parser] of Object.entries(namedValuedParsers)) {
+	for (const [name, argGroup] of Object.entries(namedArgGroups)) {
 		const args = restNamedArgs[name];
 		delete restNamedArgs[name];
 		asyncFuncs.push(async () => {
-			const value = await parseArgs(parser, args, `--${name}`, node);
+			const value = await parseArgs(argGroup, args, `--${name}`, node);
 			namedValues[name] = value;
 		});
 	}

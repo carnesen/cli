@@ -1,50 +1,50 @@
-import { ICliParser } from '../cli-parser';
+import { ICliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
 /**
- * Options for [[`CliOneOfValuedParser`]]
+ * Options for [[`CliOneOfArgGroup`]]
  * @typeParam TValues Type of the "values" option
  */
-export interface ICliOneOfValuedParserOptions<TValues extends string[]> {
+export interface ICliOneOfArgGroupOptions<TValues extends string[]> {
 	/** Allowed values for this argument. For strict typing do e.g. `['foo' as const]` */
 	values: TValues;
 
-	/** [[`ICliParser.required`]] */
+	/** [[`ICliArgGroup.required`]] */
 	required?: boolean;
 
-	/** [[`ICliParser.description`]] with "Allowed values: ..." appended automatically
+	/** [[`ICliArgGroup.description`]] with "Allowed values: ..." appended automatically
 	 * */
 	description?: string;
 
-	/** [[`ICliParser.placeholder`]] defaulting to "\<value\>" */
+	/** [[`ICliArgGroup.placeholder`]] defaulting to "\<value\>" */
 	placeholder?: string;
 
-	/** [[`ICliParser.hidden`]] */
+	/** [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }
 
 /**
- * A factory for required [[`ICliParser`]]s whose value is one of the values
+ * A factory for required [[`ICliArgGroup`]]s whose value is one of the values
  * provided
  * @typeParam TValues Type of the provided values
  * */
-function CliOneOfValuedParser<TValues extends string[]>(
-	options: ICliOneOfValuedParserOptions<TValues> & { required: true },
-): ICliParser<TValues[number], true>;
+function CliOneOfArgGroup<TValues extends string[]>(
+	options: ICliOneOfArgGroupOptions<TValues> & { required: true },
+): ICliArgGroup<TValues[number], true>;
 
 /**
- * A factory for optional [[`ICliParser`]]s whose value is one of the values
+ * A factory for optional [[`ICliArgGroup`]]s whose value is one of the values
  * provided
  * @typeParam TValues Type of the provided values
  * */
-function CliOneOfValuedParser<TValues extends string[]>(
-	options: ICliOneOfValuedParserOptions<TValues>,
-): ICliParser<TValues[number] | undefined, false>;
+function CliOneOfArgGroup<TValues extends string[]>(
+	options: ICliOneOfArgGroupOptions<TValues>,
+): ICliArgGroup<TValues[number] | undefined, false>;
 
 // Implementation
-function CliOneOfValuedParser(
-	config: ICliOneOfValuedParserOptions<string[]>,
-): ICliParser<string | undefined> {
+function CliOneOfArgGroup(
+	config: ICliOneOfArgGroupOptions<string[]>,
+): ICliArgGroup<string | undefined> {
 	const valuesString = config.values.join(', ');
 	const {
 		required = false,
@@ -53,7 +53,7 @@ function CliOneOfValuedParser(
 		hidden = false,
 	} = config;
 
-	const parser: ICliParser<string | undefined> = {
+	const argGroup: ICliArgGroup<string | undefined> = {
 		required,
 		placeholder: config.placeholder || '<value>',
 		hidden,
@@ -77,7 +77,7 @@ function CliOneOfValuedParser(
 		},
 		description: `${description || ''}\n\nAllowed values: ${valuesString}`,
 	};
-	return parser;
+	return argGroup;
 }
 
-export { CliOneOfValuedParser };
+export { CliOneOfArgGroup };

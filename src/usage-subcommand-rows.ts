@@ -11,17 +11,16 @@ export function UsageSubcommandRows(branch: ICliBranch): TwoColumnTableRow[] {
 
 function RecursiveUsageSubcommandRows(
 	current: CliNode['current'],
-	subcommandPath: string,
+	path: string,
 ): TwoColumnTableRow[] {
-	if (current.hidden && subcommandPath.length > 0) {
-		// ^^ conditional on path.length > 0 because we don't want to hide the usage for the
-		// current node, e.g. if a user does `cli hidden-branch` it should still show the
-		// leaves underneath "hidden-branch".
+	if (current.hidden && path.length > 0) {
+		// We've walked to a hidden node. When path.length === 0 the user has navigated to a
+		// hidden node in which case we still want to show them the usage.
 		return [];
 	}
 
 	if (current.kind === CLI_COMMAND) {
-		return [[subcommandPath, current.description]];
+		return [[path, current.description]];
 	}
 
 	if (current.kind === CLI_BRANCH) {
@@ -30,7 +29,7 @@ function RecursiveUsageSubcommandRows(
 			subcommandsForUsage.push(
 				...RecursiveUsageSubcommandRows(
 					child,
-					subcommandPath ? `${subcommandPath} ${child.name}` : child.name,
+					path ? `${path} ${child.name}` : child.name,
 				),
 			);
 		}

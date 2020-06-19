@@ -32,7 +32,7 @@ export function Cli(root: ICliBranch | ICliCommand<any, any, any>): ICli {
 		}
 		const command = leaf.current;
 		let argsValue: any;
-		if (command.positionalParser) {
+		if (command.positionalArgGroup) {
 			// Note that for named and escaped args, we distinguish between
 			// `undefined` and `[]`. For example, "cli" gives an escaped args
 			// `undefined` whereas "cli --" gives an escaped args `[]`. For the
@@ -40,7 +40,7 @@ export function Cli(root: ICliBranch | ICliCommand<any, any, any>): ICli {
 			// we elect here to pass in `undefined` rather than an empty array when no
 			// positional arguments are passed.
 			argsValue = await parseArgs(
-				command.positionalParser,
+				command.positionalArgGroup,
 				positionalArgs.length > 0 ? positionalArgs : undefined,
 				undefined,
 				leaf,
@@ -53,15 +53,15 @@ export function Cli(root: ICliBranch | ICliCommand<any, any, any>): ICli {
 		}
 
 		const namedValues = await getNamedValues(
-			command.namedParsers || {},
+			command.namedArgGroups || {},
 			namedArgs,
 			leaf,
 		);
 
 		let escapedValue: any;
-		if (command.escapedParser) {
+		if (command.escapedArgGroup) {
 			escapedValue = await parseArgs(
-				command.escapedParser,
+				command.escapedArgGroup,
 				escapedArgs,
 				'--',
 				leaf,

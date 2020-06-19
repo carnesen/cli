@@ -1,50 +1,50 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
+import { CliNumberArgGroup } from './cli-number-arg-group';
 import { CLI_USAGE_ERROR } from '../cli-usage-error';
-import { CliStringValuedParser } from './cli-string-valued-parser';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
 const required = false;
 
-const parser = CliStringValuedParser({
+const argGroup = CliNumberArgGroup({
 	required,
 	description,
 	hidden,
 	placeholder,
 });
 
-describe(CliStringValuedParser.name, () => {
+describe(CliNumberArgGroup.name, () => {
 	it('returns `undefined` if args is `undefined` and no defaultValue has been provided', () => {
-		expect(parser.parse(undefined)).toBe(undefined);
+		expect(argGroup.parse(undefined)).toBe(undefined);
 	});
 
 	it('parse returns the zeroth element of args', () => {
-		expect(parser.parse(['1'])).toBe('1');
+		expect(argGroup.parse(['1'])).toBe(1);
 	});
 
 	it('throws UsageError "expected just one" if args has more than one element', async () => {
-		const exception = await runAndCatch(parser.parse, ['0', '1']);
+		const exception = await runAndCatch(argGroup.parse, ['0', '1']);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/expected just one/i);
 		expect(exception.message).toMatch(placeholder);
 	});
 
 	it('throws UsageError "expected a" if args is an empty array', async () => {
-		const exception = await runAndCatch(parser.parse, []);
+		const exception = await runAndCatch(argGroup.parse, []);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/expected a/i);
 		expect(exception.message).toMatch(placeholder);
 	});
 
 	it('attaches config properties', () => {
-		expect(parser.description).toBe(description);
-		expect(parser.hidden).toBe(hidden);
-		expect(parser.placeholder).toBe(placeholder);
-		expect(parser.required).toBe(required);
+		expect(argGroup.description).toBe(description);
+		expect(argGroup.hidden).toBe(hidden);
+		expect(argGroup.placeholder).toBe(placeholder);
+		expect(argGroup.required).toBe(required);
 	});
 
 	it('config is not required', () => {
-		CliStringValuedParser();
+		CliNumberArgGroup();
 	});
 });
