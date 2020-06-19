@@ -38,7 +38,7 @@ Special arguments:
 <str> : Another word"
 `;
 
-exports[`UsageString Does not write usage for named parsers if there are none 1`] = `
+exports[`UsageString Does not write usage for named argGroups if there are none 1`] = `
 "Usage: foo
 "
 `;

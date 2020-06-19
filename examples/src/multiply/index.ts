@@ -1,15 +1,15 @@
 import {
 	CliCommand,
-	CliNumberArrayValuedParser,
+	CliNumberArrayArgGroup,
 	runCliAndExit,
 	Cli,
 } from '@carnesen/cli';
 
-/** Exported because this command is also a child of the main branch in ../ */
+/** Exported because this command is also a child of the main branch in .. */
 export const multiply = CliCommand({
 	name: 'multiply',
 	description: 'Multiply numbers and print the result',
-	positionalParser: CliNumberArrayValuedParser({
+	positionalArgGroup: CliNumberArrayArgGroup({
 		required: true,
 	}),
 	action(numbers) {

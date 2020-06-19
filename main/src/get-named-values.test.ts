@@ -1,10 +1,10 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { getNamedValues } from './get-named-values';
 import {
-	dummyRequiredValuedParser,
-	dummyValuedParser,
-	DUMMY_ARG_PARSER_THROW,
-} from './dummy-arg-parsers-for-testing';
+	dummyRequiredArgGroup,
+	dummyArgGroup,
+	DUMMY_ARG_GROUP_THROW,
+} from './dummy-arg-groups-for-testing';
 import { CLI_USAGE_ERROR } from './cli-usage-error';
 import { CliCommand } from './cli-command';
 import { CliCommandNode } from './cli-node';
@@ -17,21 +17,21 @@ const node: CliCommandNode = {
 describe(getNamedValues.name, () => {
 	it(`returns object of named values`, async () => {
 		const namedValues = await getNamedValues(
-			{ foo: dummyRequiredValuedParser, baz: dummyRequiredValuedParser },
+			{ foo: dummyRequiredArgGroup, baz: dummyRequiredArgGroup },
 			{ foo: ['bar'], baz: ['bop'] },
 			node,
 		);
 		expect(namedValues).toEqual({
-			foo: dummyRequiredValuedParser.parse(['bar']),
-			baz: dummyRequiredValuedParser.parse(['bop']),
+			foo: dummyRequiredArgGroup.parse(['bar']),
+			baz: dummyRequiredArgGroup.parse(['bop']),
 		});
 	});
 
 	it(`re-throws error with name-specific context if parse does`, async () => {
 		const exception = await runAndCatch(
 			getNamedValues,
-			{ foo123: dummyValuedParser },
-			{ foo123: [DUMMY_ARG_PARSER_THROW] },
+			{ foo123: dummyArgGroup },
+			{ foo123: [DUMMY_ARG_GROUP_THROW] },
 			node,
 		);
 		expect(exception.message).toMatch('--foo123');
@@ -41,7 +41,7 @@ describe(getNamedValues.name, () => {
 	it(`throws USAGE error "Unknown argument name" with context if an unknown named argument is passed`, async () => {
 		const exception = await runAndCatch(
 			getNamedValues,
-			{ foo123: dummyValuedParser },
+			{ foo123: dummyArgGroup },
 			{ foo1234: [] },
 			node,
 		);

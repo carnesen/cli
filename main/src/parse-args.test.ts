@@ -1,14 +1,15 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
 import { parseArgs } from './parse-args';
-import { CLI_USAGE_ERROR } from './cli-usage-error';
+import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
 import {
-	dummyValuedParser,
-	dummyRequiredValuedParser,
-	DUMMY_ARG_PARSER_THROWN_INTENTIONALLY,
-	DUMMY_ARG_PARSER_THROW,
-	DUMMY_ARG_PARSER_THROW_NON_TRUTHY,
-} from './dummy-arg-parsers-for-testing';
+	dummyArgGroup,
+	dummyRequiredArgGroup,
+	DUMMY_ARG_GROUP_THROWN_INTENTIONALLY,
+	DUMMY_ARG_GROUP_THROW,
+	DUMMY_ARG_GROUP_THROW_NON_TRUTHY,
+	DUMMY_ARG_GROUP_USAGE_ERROR,
+} from './dummy-arg-groups-for-testing';
 import { CliCommand } from './cli-command';
 import { CliCommandNode } from './cli-node';
 
@@ -20,20 +21,20 @@ const node: CliCommandNode = {
 describe(parseArgs.name, () => {
 	it(`returns parse(args) if an args with length >= 1 is passed`, async () => {
 		const args = ['foo'];
-		expect(await parseArgs(dummyValuedParser, args, undefined, node)).toBe(
-			dummyValuedParser.parse(args),
+		expect(await parseArgs(dummyArgGroup, args, undefined, node)).toBe(
+			dummyArgGroup.parse(args),
 		);
-		expect(
-			await parseArgs(dummyRequiredValuedParser, args, undefined, node),
-		).toBe(dummyRequiredValuedParser.parse(args));
+		expect(await parseArgs(dummyRequiredArgGroup, args, undefined, node)).toBe(
+			dummyRequiredArgGroup.parse(args),
+		);
 	});
 
 	it(`if not required, returns parse(args) if args is an empty array or undefined`, async () => {
-		expect(await parseArgs(dummyValuedParser, [], undefined, node)).toBe(
-			dummyValuedParser.parse([]),
+		expect(await parseArgs(dummyArgGroup, [], undefined, node)).toBe(
+			dummyArgGroup.parse([]),
 		);
-		expect(await parseArgs(dummyValuedParser, undefined, undefined, node)).toBe(
-			dummyValuedParser.parse(undefined),
+		expect(await parseArgs(dummyArgGroup, undefined, undefined, node)).toBe(
+			dummyArgGroup.parse(undefined),
 		);
 	});
 
@@ -41,21 +42,21 @@ describe(parseArgs.name, () => {
 		for (const args of [undefined, [] as string[]]) {
 			const exception = await runAndCatch(
 				parseArgs,
-				dummyRequiredValuedParser,
+				dummyRequiredArgGroup,
 				args,
 				undefined,
 				node,
 			);
 			expect(exception.code).toBe(CLI_USAGE_ERROR);
 			expect(exception.message).toMatch(/argument is required/i);
-			expect(exception.message).toMatch(dummyRequiredValuedParser.placeholder);
+			expect(exception.message).toMatch(dummyRequiredArgGroup.placeholder);
 		}
 	});
 
 	it(`if throws "argument is required", expect message to match snapshot`, async () => {
 		const exception = await runAndCatch(
 			parseArgs,
-			dummyRequiredValuedParser,
+			dummyRequiredArgGroup,
 			undefined,
 			undefined,
 			node,
@@ -67,7 +68,7 @@ describe(parseArgs.name, () => {
 	it(`if throws "argument is required" with context, expect message to match snapshot`, async () => {
 		const exception = await runAndCatch(
 			parseArgs,
-			dummyRequiredValuedParser,
+			dummyRequiredArgGroup,
 			undefined,
 			'context',
 			node,
@@ -79,24 +80,35 @@ describe(parseArgs.name, () => {
 	it(`throws if parse does with a context/placeholder enhanced message`, async () => {
 		const exception = await runAndCatch(
 			parseArgs,
-			dummyValuedParser,
-			[DUMMY_ARG_PARSER_THROW],
+			dummyArgGroup,
+			[DUMMY_ARG_GROUP_THROW],
 			undefined,
 			node,
 		);
-		expect(exception.message).toMatch(DUMMY_ARG_PARSER_THROWN_INTENTIONALLY);
-		expect(exception.message).toMatch(dummyValuedParser.placeholder);
+		expect(exception.message).toMatch(DUMMY_ARG_GROUP_THROWN_INTENTIONALLY);
+		expect(exception.message).toMatch(dummyArgGroup.placeholder);
 		expect(exception.message).toMatchSnapshot();
 	});
 
 	it(`just re-throws exception if parse throws a non-truthy exception`, async () => {
 		const exception = await runAndCatch(
 			parseArgs,
-			dummyValuedParser,
-			[DUMMY_ARG_PARSER_THROW_NON_TRUTHY],
+			dummyArgGroup,
+			[DUMMY_ARG_GROUP_THROW_NON_TRUTHY],
 			undefined,
 			node,
 		);
 		expect(exception).not.toBeTruthy();
+	});
+
+	it(`Attaches a "node" property to any ${CliUsageError.name} thrown`, async () => {
+		const exception = await runAndCatch(
+			parseArgs,
+			dummyArgGroup,
+			[DUMMY_ARG_GROUP_USAGE_ERROR],
+			undefined,
+			node,
+		);
+		expect(exception.node).toBe(node);
 	});
 });

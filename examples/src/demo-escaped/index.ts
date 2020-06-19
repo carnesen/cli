@@ -1,6 +1,6 @@
 import {
 	CliCommand,
-	CliStringArrayValuedParser,
+	CliStringArrayArgGroup,
 	Cli,
 	runCliAndExit,
 } from '@carnesen/cli';
@@ -17,9 +17,9 @@ export const demoEscapedArguments = CliCommand({
 
 	The "--" means, "Stop interpreting words that start with '--' 
 	as a named argument flags. Just pass all the args after '--' 
-	into the escapedParser ICliParser.".
+	into the escapedArgGroup ICliArgGroup.".
 	`,
-	escapedParser: CliStringArrayValuedParser({
+	escapedArgGroup: CliStringArrayArgGroup({
 		required: true,
 		placeholder: '<command> [<arguments>]',
 	}),

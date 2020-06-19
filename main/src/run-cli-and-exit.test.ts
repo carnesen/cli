@@ -80,6 +80,14 @@ describe(runCliAndExit.name, () => {
 		expect(logMessage).toBe(undefined);
 	});
 
+	it('usage string includes "Error" and the message if provided', async () => {
+		const { errorMessage } = await runMocked(() => {
+			throw new CliUsageError('Oops!');
+		});
+		expect(errorMessage).toMatch('Oops!');
+		expect(errorMessage).toMatch('Error');
+	});
+
 	it('exits 1 and console.errors a red error message if action throws a TerseError', async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			throw new CliTerseError('foo');
@@ -137,5 +145,20 @@ describe(runCliAndExit.name, () => {
 		});
 		const cli = Cli(command);
 		runCliAndExit(cli, { processExit: jest.fn(), args: [] });
+	});
+
+	it('calls the system process.exit at the end by default', async () => {
+		const mockExit = jest
+			.spyOn(process, 'exit')
+			.mockImplementation((() => {}) as any);
+		const command = CliCommand({
+			name: 'cli',
+			action() {
+				// do nothing
+			},
+		});
+		const cli = Cli(command);
+		await runCliAndExit(cli, { args: [] });
+		expect(mockExit).toHaveBeenCalledWith(0);
 	});
 });

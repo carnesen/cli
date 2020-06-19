@@ -3,7 +3,7 @@ import {
 	CliBranch,
 	runCliAndExit,
 	Cli,
-	CliStringArrayValuedParser,
+	CliStringArrayArgGroup,
 } from '@carnesen/cli';
 import { echo as echoCommand } from '../echo';
 
@@ -14,7 +14,7 @@ export const echoAsHiddenCommand = CliCommand({
 	description:
 		'This command is a clone of "echo" but with "hidden" set to true',
 	hidden: true,
-	positionalParser: CliStringArrayValuedParser({
+	positionalArgGroup: CliStringArrayArgGroup({
 		required: true,
 	}),
 	action(messages) {

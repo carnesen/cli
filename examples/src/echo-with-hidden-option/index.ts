@@ -1,8 +1,8 @@
 import {
 	Cli,
-	CliBooleanValuedParser,
+	CliBooleanArgGroup,
 	CliCommand,
-	CliStringArrayValuedParser,
+	CliStringArrayArgGroup,
 	runCliAndExit,
 } from '@carnesen/cli';
 
@@ -19,15 +19,15 @@ __ __  _ __________ _
 
 export const echoWithHiddenOption = CliCommand({
 	name: 'echo-with-hidden-option',
-	positionalParser: CliStringArrayValuedParser({
+	positionalArgGroup: CliStringArrayArgGroup({
 		required: true,
 	}),
 	description: `
     This CLI has a hidden option "--pizza". If an option is "hidden", it does not 
     appear in the command's usage documentation. Hidden options might be "easter eggs" 
     like in this example or experimental features.`,
-	namedParsers: {
-		pizza: CliBooleanValuedParser({ hidden: true }),
+	namedArgGroups: {
+		pizza: CliBooleanArgGroup({ hidden: true }),
 	},
 	action(messages, { pizza }) {
 		if (pizza) {

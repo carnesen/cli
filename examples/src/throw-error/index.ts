@@ -1,8 +1,8 @@
 import {
 	Cli,
 	CliCommand,
-	CliOneOfValuedParser,
-	CliStringValuedParser,
+	CliOneOfArgGroup,
+	CliStringArgGroup,
 	runCliAndExit,
 	CliUsageError,
 	CliTerseError,
@@ -13,12 +13,12 @@ import {
 export const throwError = CliCommand({
 	name: 'throw',
 	description: 'Throw an error in the command to see how the CLI behaves',
-	namedParsers: {
-		message: CliStringValuedParser({
+	namedArgGroups: {
+		message: CliStringArgGroup({
 			description: 'A message',
 			required: true,
 		}),
-		class: CliOneOfValuedParser({
+		class: CliOneOfArgGroup({
 			values: ['usage' as const, 'terse' as const],
 			required: false,
 			description: `Throw a regular Error (default), a UsageError, or a TerseError`,

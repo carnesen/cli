@@ -1,6 +1,6 @@
 import {
 	CliCommand,
-	CliStringArrayValuedParser,
+	CliStringArrayArgGroup,
 	Cli,
 	runCliAndExit,
 } from '@carnesen/cli';
@@ -8,7 +8,7 @@ import {
 export const echo = CliCommand({
 	name: 'echo',
 	description: 'Write arguments to standard output (stdout)',
-	positionalParser: CliStringArrayValuedParser({
+	positionalArgGroup: CliStringArrayArgGroup({
 		required: true,
 	}),
 	action(messages) {
