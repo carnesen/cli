@@ -3,10 +3,10 @@ A TypeScript-first framework for command-line interfaces in Node.js and the brow
 
 [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://www.npmjs.com/package/@carnesen/cli) [![build status badge](https://github.com/carnesen/cli/workflows/test/badge.svg)](https://github.com/carnesen/cli/actions?query=workflow%3Atest+branch%3Amaster)
 
-The `@carnesen/cli` package includes runtime JavaScript files for Node.js >=v10 and strict `.d.ts` type declarations for TypeScript >=v3.8. API documentation is available on the web at [cli.carnesen.com](https://cli.carnesen.com/). `@carnesen/cli` is pure Type/JavaScript, zero dependencies. So it works in a browser too! Check out [the live online examples](https://cli.carnesen.com/examples/index.html).
+The `@carnesen/cli` package includes runtime JavaScript files for Node.js >=v10 and strict `.d.ts` type declarations for TypeScript >=v3.8. API documentation is available on the web at [cli.carnesen.com](https://cli.carnesen.com/). This  library has _no_ dependencies, so it works in a browser too! Check out [the live online examples](https://cli.carnesen.com/examples/index.html).
 
 ## Stability
-This library has 98% test coverage and is used a lot by its author but should still be considered 0.x beta software.
+This library has 99% test coverage and is used a lot by its author but should still be considered 0.x beta software.
 
 ## Usage
 Install this package as a dependency of your project using `npm`:
@@ -37,17 +37,15 @@ const multiply = CliCommand({
 	},
 });
 
-const cli = Cli(multiply);
-
 if (require.main === module) {
-	runCliAndExit(cli);
+	runCliAndExit(Cli(multiply));
 }
 ```
 Here's how that behaves as a CLI.
 
 ![screen recording of "multiply" CLI](demo.gif)
 
-Check out [examples/src](examples/src) for more examples.
+Check out [examples/src](examples/src) and [cli.carnesen.com/examples](https://cli.carnesen.com/examples/index.html) for more examples.
 
 ## Structure
 The general structure of a `@carnesen/cli` is:
