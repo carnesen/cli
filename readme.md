@@ -22,14 +22,14 @@ Here is [a CLI](examples/src/multiply/index.ts) that does some basic arithmetic:
 import {
 	Cli,
 	CliCommand,
-	CliNumberArrayValuedParser,
+	CliNumberArrayArgGroup,
 	runCliAndExit,
 } from '@carnesen/cli';
 
 const multiply = CliCommand({
 	name: 'multiply',
 	description: 'Multiply numbers and print the result',
-	positionalParser: CliNumberArrayValuedParser({
+	positionalArgGroup: CliNumberArrayArgGroup({
 		required: true,
 	}),
 	action(numbers) {

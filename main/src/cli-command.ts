@@ -1,38 +1,38 @@
 import {
-	AnyParser,
-	AnyNamedParsers,
-	ValueFromParser,
+	AnyArgGroup,
+	AnyNamedArgGroups,
+	TValueFromCliArgGroup,
 	NamedValues,
-	ICliParser,
-} from './cli-parser';
+	ICliArgGroup,
+} from './cli-arg-group';
 
 /** "kind" of a [[`ICliCommand`]] */
 export const CLI_COMMAND = 'CLI_COMMAND';
 
 /** Options for [[`CliCommand`]] */
 export interface ICliCommandOptions<
-	TPositionalParser extends AnyParser,
-	TNamedParsers extends AnyNamedParsers,
-	TEscapedParser extends AnyParser
+	TPositionalArgGroup extends AnyArgGroup,
+	TNamedArgGroups extends AnyNamedArgGroups,
+	TEscapedArgGroup extends AnyArgGroup
 > {
 	/** Identifier for this command in command-line usage */
 	name: string;
 
 	/** Function or async function that implements the command */
 	action: (
-		positionalValue: ValueFromParser<TPositionalParser>,
-		namedValues: NamedValues<TNamedParsers>,
-		escapedValue: ValueFromParser<TEscapedParser>,
+		positionalValue: TValueFromCliArgGroup<TPositionalArgGroup>,
+		namedValues: NamedValues<TNamedArgGroups>,
+		escapedValue: TValueFromCliArgGroup<TEscapedArgGroup>,
 	) => any;
 
-	/** A [[`ICliParser`]] for the arguments before the first separator argument */
-	positionalParser?: TPositionalParser;
+	/** A [[`ICliArgGroup`]] for the arguments before the first separator argument */
+	positionalArgGroup?: TPositionalArgGroup;
 
-	/** A [[`ICliParser`]] for the arguments passed as "--name value" */
-	namedParsers?: TNamedParsers;
+	/** A [[`ICliArgGroup`]] for the arguments passed as "--name value" */
+	namedArgGroups?: TNamedArgGroups;
 
-	/** A [[`ICliParser`]] for the arguments after a lone "--" */
-	escapedParser?: TEscapedParser;
+	/** A [[`ICliArgGroup`]] for the arguments after a lone "--" */
+	escapedArgGroup?: TEscapedArgGroup;
 
 	/** A sentence or two about this command for command-line usage */
 	description?: string;
@@ -43,22 +43,31 @@ export interface ICliCommandOptions<
 
 /** An object that defines a CLI command and its arguments */
 export interface ICliCommand<
-	TPositionalParser extends AnyParser,
-	TNamedParsers extends AnyNamedParsers,
-	TEscapedParser extends AnyParser
-> extends ICliCommandOptions<TPositionalParser, TNamedParsers, TEscapedParser> {
+	TPositionalArgGroup extends AnyArgGroup,
+	TNamedArgGroups extends AnyNamedArgGroups,
+	TEscapedArgGroup extends AnyArgGroup
+>
+	extends ICliCommandOptions<
+		TPositionalArgGroup,
+		TNamedArgGroups,
+		TEscapedArgGroup
+	> {
 	/** The string literal [[`CLI_COMMAND`]] */
 	kind: typeof CLI_COMMAND;
 }
 
 /** A factory for [[`ICliCommand`]]s */
 export function CliCommand<
-	TPositionalParser extends AnyParser = ICliParser<undefined, false>,
-	TNamedParsers extends AnyNamedParsers = any,
-	TEscapedParser extends AnyParser = ICliParser<undefined, false>
+	TPositionalArgGroup extends AnyArgGroup = ICliArgGroup<undefined, false>,
+	TNamedArgGroups extends AnyNamedArgGroups = any,
+	TEscapedArgGroup extends AnyArgGroup = ICliArgGroup<undefined, false>
 >(
-	options: ICliCommandOptions<TPositionalParser, TNamedParsers, TEscapedParser>,
-): ICliCommand<TPositionalParser, TNamedParsers, TEscapedParser> {
+	options: ICliCommandOptions<
+		TPositionalArgGroup,
+		TNamedArgGroups,
+		TEscapedArgGroup
+	>,
+): ICliCommand<TPositionalArgGroup, TNamedArgGroups, TEscapedArgGroup> {
 	return {
 		...options,
 		kind: CLI_COMMAND,

@@ -1,6 +1,6 @@
 import {
 	CliCommand,
-	CliNumberArrayValuedParser,
+	CliNumberArrayArgGroup,
 	runCliAndExit,
 	Cli,
 } from '@carnesen/cli';
@@ -9,7 +9,7 @@ import {
 export const multiply = CliCommand({
 	name: 'multiply',
 	description: 'Multiply numbers and print the result',
-	positionalParser: CliNumberArrayValuedParser({
+	positionalArgGroup: CliNumberArrayArgGroup({
 		required: true,
 	}),
 	action(numbers) {

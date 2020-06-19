@@ -1,22 +1,22 @@
 import { CliCommandNode } from './cli-node';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
-import { AnyParser } from './cli-parser';
+import { AnyArgGroup } from './cli-arg-group';
 
 /**
- * Calls the parse method of an ValuedParser
+ * Calls the parse method of an ArgGroup
  *
- * @param parser - An ValuedParser
+ * @param argGroup - An ArgGroup
  * @param args - An array of string arguments
  * @param separator - A string that will be prepended to error messages (e.g. "--users")
  * @returns The result of parse
  */
 export async function parseArgs(
-	parser: AnyParser,
+	argGroup: AnyArgGroup,
 	args: string[] | undefined,
 	separator: string | undefined,
 	node: CliCommandNode,
 ): Promise<any> {
-	const { required, placeholder, parse } = parser;
+	const { required, placeholder, parse } = argGroup;
 	const fullContext = [separator, placeholder]
 		.filter((str) => Boolean(str))
 		.join(' ');

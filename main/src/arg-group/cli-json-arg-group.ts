@@ -1,23 +1,23 @@
-import { ICliParser } from '../cli-parser';
+import { ICliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
-/** Options for [[`CliJsonValuedParser`]] */
-export interface ICliJsonValuedParserOptions {
-	/** [[`ICliParser.description`]] */
+/** Options for [[`CliJsonArgGroup`]] */
+export interface ICliJsonArgGroupOptions {
+	/** [[`ICliArgGroup.description`]] */
 	description?: string;
 
-	/** [[`ICliParser.required`]] */
+	/** [[`ICliArgGroup.required`]] */
 	required?: boolean;
 
-	/** [[`ICliParser.placeholder`]]. Defaults to "\<json\>" */
+	/** [[`ICliArgGroup.placeholder`]]. Defaults to "\<json\>" */
 	placeholder?: string;
 
-	/** [[`ICliParser.hidden`]] */
+	/** [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }
 
 /**
- * A factory for [[`ICliParser`]]s that `JSON.parse`
+ * A factory for [[`ICliArgGroup`]]s that `JSON.parse`
  *
  * @example
  * ```plaintext
@@ -29,16 +29,16 @@ export interface ICliJsonValuedParserOptions {
  *
  * @throws [[`CliUsageError`]]
  */
-export function CliJsonValuedParser(
-	options: ICliJsonValuedParserOptions = {},
-): ICliParser<any> {
+export function CliJsonArgGroup(
+	options: ICliJsonArgGroupOptions = {},
+): ICliArgGroup<any> {
 	const {
 		placeholder = '<json>',
 		required = false,
 		description,
 		hidden = false,
 	} = options;
-	const parser: ICliParser<any> = {
+	const argGroup: ICliArgGroup<any> = {
 		required,
 		placeholder,
 		hidden,
@@ -58,5 +58,5 @@ export function CliJsonValuedParser(
 		},
 		description,
 	};
-	return parser;
+	return argGroup;
 }
