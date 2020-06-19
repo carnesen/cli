@@ -1,5 +1,5 @@
 import { CliBranch, runCliAndExit, Cli } from '@carnesen/cli';
-import { echo } from '../echo';
+import { echo } from '../../echo';
 
 const normalBranch = CliBranch({
 	name: 'normal-branch',

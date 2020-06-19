@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'MonoLisa';
+  src:  url('MonoLisa-Regular.woff2') format('woff2'),
+        url('MonoLisa-Regular.woff') format('woff'),
+        url('MonoLisa-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'MonoLisa';
+  font-weight: bold;
+  src:  url('MonoLisa-Bold.woff2') format('woff2'),
+        url('MonoLisa-Bold.woff') format('woff'),
+        url('MonoLisa-Bold.ttf') format('truetype');
+}
