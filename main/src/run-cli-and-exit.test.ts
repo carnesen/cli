@@ -158,7 +158,7 @@ describe(runCliAndExit.name, () => {
 			},
 		});
 		const cli = Cli(command);
-		await runCliAndExit(cli);
+		await runCliAndExit(cli, { args: [] });
 		expect(mockExit).toHaveBeenCalledWith(0);
 	});
 });
