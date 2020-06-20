@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { navigateToCommand } from './navigate-to-command';
+import { findCliNode } from './find-cli-node';
 import { CliBranch } from './cli-branch';
 import { CliCommand } from './cli-command';
 
@@ -15,17 +15,17 @@ const branch = CliBranch({
 	children: [command],
 });
 
-describe(navigateToCommand.name, () => {
+describe(findCliNode.name, () => {
 	it('finds a command in a tree based on command-line arguments', () => {
-		const [node, args] = navigateToCommand(branch, ['echo', 'foo']);
-		expect(node.current).toBe(command);
-		expect(node.parents[0]).toBe(branch);
+		const { current, parents, args } = findCliNode(branch, ['echo', 'foo']);
+		expect(current).toBe(command);
+		expect(parents[0]).toBe(branch);
 		expect(args).toEqual(['foo']);
 	});
 
 	it('throws an error if passed an unexpected kind', async () => {
 		const exception = await runAndCatch(
-			navigateToCommand,
+			findCliNode,
 			{ current: {} } as any,
 			[],
 		);

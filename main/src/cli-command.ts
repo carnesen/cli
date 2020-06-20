@@ -1,19 +1,17 @@
-import {
-	AnyArgGroup,
-	AnyNamedArgGroups,
-	TValueFromCliArgGroup,
-	NamedValues,
-	ICliArgGroup,
-} from './cli-arg-group';
+import { TValueFromCliArgGroup, ICliArgGroup } from './cli-arg-group';
 
 /** "kind" of a [[`ICliCommand`]] */
 export const CLI_COMMAND = 'CLI_COMMAND';
 
 /** Options for [[`CliCommand`]] */
 export interface ICliCommandOptions<
-	TPositionalArgGroup extends AnyArgGroup,
-	TNamedArgGroups extends AnyNamedArgGroups,
-	TEscapedArgGroup extends AnyArgGroup
+	TPositionalArgGroup extends ICliArgGroup = ICliArgGroup,
+	TNamedArgGroups extends {
+		[name: string]: ICliArgGroup;
+	} = {
+		[name: string]: ICliArgGroup;
+	},
+	TEscapedArgGroup extends ICliArgGroup = ICliArgGroup
 > {
 	/** Identifier for this command in command-line usage */
 	name: string;
@@ -21,7 +19,9 @@ export interface ICliCommandOptions<
 	/** Function or async function that implements the command */
 	action: (
 		positionalValue: TValueFromCliArgGroup<TPositionalArgGroup>,
-		namedValues: NamedValues<TNamedArgGroups>,
+		namedValues: {
+			[K in keyof TNamedArgGroups]: TValueFromCliArgGroup<TNamedArgGroups[K]>;
+		},
 		escapedValue: TValueFromCliArgGroup<TEscapedArgGroup>,
 	) => any;
 
@@ -43,9 +43,13 @@ export interface ICliCommandOptions<
 
 /** An object that defines a CLI command and its arguments */
 export interface ICliCommand<
-	TPositionalArgGroup extends AnyArgGroup,
-	TNamedArgGroups extends AnyNamedArgGroups,
-	TEscapedArgGroup extends AnyArgGroup
+	TPositionalArgGroup extends ICliArgGroup = ICliArgGroup,
+	TNamedArgGroups extends {
+		[name: string]: ICliArgGroup;
+	} = {
+		[name: string]: ICliArgGroup;
+	},
+	TEscapedArgGroup extends ICliArgGroup = ICliArgGroup
 >
 	extends ICliCommandOptions<
 		TPositionalArgGroup,
@@ -58,9 +62,13 @@ export interface ICliCommand<
 
 /** A factory for [[`ICliCommand`]]s */
 export function CliCommand<
-	TPositionalArgGroup extends AnyArgGroup = ICliArgGroup<undefined, false>,
-	TNamedArgGroups extends AnyNamedArgGroups = any,
-	TEscapedArgGroup extends AnyArgGroup = ICliArgGroup<undefined, false>
+	TPositionalArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>,
+	TNamedArgGroups extends {
+		[name: string]: ICliArgGroup;
+	} = {
+		[name: string]: ICliArgGroup;
+	},
+	TEscapedArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>
 >(
 	options: ICliCommandOptions<
 		TPositionalArgGroup,

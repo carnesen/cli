@@ -1,4 +1,4 @@
-import { CliNode } from './cli-node';
+import { ICliNode } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { ICliBranch, CLI_BRANCH } from './cli-branch';
 import { TwoColumnTableRow } from './two-column-table';
@@ -10,7 +10,7 @@ export function UsageSubcommandRows(branch: ICliBranch): TwoColumnTableRow[] {
 }
 
 function RecursiveUsageSubcommandRows(
-	current: CliNode['current'],
+	current: ICliNode['current'],
 	path: string,
 ): TwoColumnTableRow[] {
 	if (current.hidden && path.length > 0) {

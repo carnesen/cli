@@ -11,7 +11,7 @@ import {
  * Exported because this is a subcommand of the top-level branch in ../index.ts
  * */
 export const throwError = CliCommand({
-	name: 'throw',
+	name: 'throw-error',
 	description: 'Throw an error in the command to see how the CLI behaves',
 	namedArgGroups: {
 		message: CliStringArgGroup({
