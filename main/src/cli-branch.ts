@@ -14,7 +14,7 @@ export interface ICliBranchOptions {
 	/** If `true`, this branch will not appear in command-line usage */
 	hidden?: boolean;
 
-	/** Branches and/or commands underneath this branch */
+	/** [[`ICliBranch`]] and/or [[`ICliCommand`]]s underneath this branch */
 	children: (ICliBranch | ICliCommand<any, any, any>)[];
 }
 

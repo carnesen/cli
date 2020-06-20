@@ -7,46 +7,45 @@ export type TCliArgGroupArgs<TRequired extends boolean> = TRequired extends true
 	: string[] | undefined;
 
 /**
- * An object for parsing a well-typed value from string arguments
- * @typeParam TValue Type of the parsed value
- * @typeParam TRequired If `true`, the argGroup won't receive `undefined`
+ * A group of adjacent command-line arguments
+ * @typeParam TValue Type of the value returned by [[`ICliArgGroup.parse`]]
+ * @typeParam TRequired If `true`, the type of `args` passed to
+ * [[`ICliArgGroup.parse`]] does not include `undefined`.
  */
 export interface ICliArgGroup<
-	TValue extends any,
+	TValue = unknown,
 	TRequired extends boolean = boolean
 > {
-	/** Function or async function that parses a well-typed value from string arguments */
+	/**
+	 * Function or async function that parses a well-typed value from string
+	 * arguments */
 	parse:
 		| ((args: TCliArgGroupArgs<TRequired>) => TValue)
 		| ((args: TCliArgGroupArgs<TRequired>) => Promise<TValue>);
 
-	/** A short placeholder for this argument in command-line usage e.g. "\<str\>"
+	/**
+	 * A short placeholder for this argument group in command-line usage e.g.
+	 * "\<str\>"
 	 * */
 	placeholder: string;
 
-	/** A sentence or two describing this argument for command-line usage */
+	/** A sentence or two describing this argument group for command-line usage */
 	description?: string;
 
-	/** If true, the CLI will not show this argGroup in command-line usage */
+	/**
+	 * If `true`, command-line usage will not normally show this arg group.
+	 * */
 	hidden?: boolean;
 
-	/** A [[`CliUsageError`]] is thrown if a required argument is not provided */
+	/**
+	 * If `true` a [[`CliUsageError`]] is thrown if no arg is provided for this
+	 * group.
+	 * */
 	required?: TRequired;
 }
 
-export type AnyArgGroup = ICliArgGroup<any>;
-
 export type TValueFromCliArgGroup<TArgGroup> = TArgGroup extends ICliArgGroup<
-	infer TValue,
-	any
+	infer TValue
 >
 	? TValue
 	: never;
-
-export type AnyNamedArgGroups = {
-	[name: string]: AnyArgGroup;
-};
-
-export type NamedValues<TNamedArgGroups extends AnyNamedArgGroups> = {
-	[K in keyof TNamedArgGroups]: TValueFromCliArgGroup<TNamedArgGroups[K]>;
-};
