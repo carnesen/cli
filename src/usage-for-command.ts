@@ -1,12 +1,11 @@
 import { ICliBranch } from './cli-branch';
 import { wrapInSquareBrackets } from './util';
-import { AnyArgGroup, AnyNamedArgGroups } from './cli-arg-group';
 import { ICliCommand } from './cli-command';
 import { hardWrap } from './hard-wrap';
 import { TwoColumnTable, TwoColumnTableRow } from './two-column-table';
 
 export function UsageForCommand(
-	current: ICliCommand<AnyArgGroup, AnyNamedArgGroups, AnyArgGroup>,
+	current: ICliCommand,
 	parents: ICliBranch[] = [],
 	maxLineLength = +Infinity,
 	indentation = '',

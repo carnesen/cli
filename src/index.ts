@@ -1,10 +1,18 @@
-// Command factories
+// Command-line interface
+export { Cli, ICli } from './cli';
+
+// Command-line interface runner
+export { runCliAndExit, IRunCliAndExitOptions } from './run-cli-and-exit';
+
+// Branch factory
 export {
 	CliBranch,
 	ICliBranch,
 	ICliBranchOptions,
 	CLI_BRANCH,
 } from './cli-branch';
+
+// Command factory
 export {
 	CliCommand,
 	ICliCommand,
@@ -12,43 +20,43 @@ export {
 	CLI_COMMAND,
 } from './cli-command';
 
-// ICliArgGroup factories
+// Argument group factories
 export {
 	CliBooleanArgGroup,
 	ICliBooleanArgGroupOptions,
-} from './arg-group/cli-boolean-arg-group';
+} from './arg-group-factories/cli-boolean-arg-group';
 export {
 	CliJsonArgGroup,
 	ICliJsonArgGroupOptions,
-} from './arg-group/cli-json-arg-group';
+} from './arg-group-factories/cli-json-arg-group';
 export {
 	CliNumberArgGroup,
 	ICliNumberArgGroupOptions,
-} from './arg-group/cli-number-arg-group';
+} from './arg-group-factories/cli-number-arg-group';
 export {
 	CliNumberArrayArgGroup,
 	ICliNumberArrayArgGroupOptions,
-} from './arg-group/cli-number-array-arg-group';
+} from './arg-group-factories/cli-number-array-arg-group';
 export {
 	CliOneOfArgGroup,
 	ICliOneOfArgGroupOptions,
-} from './arg-group/cli-one-of-arg-group';
+} from './arg-group-factories/cli-one-of-arg-group';
 export {
 	CliStringArgGroup,
 	ICliStringArgGroupOptions,
-} from './arg-group/cli-string-arg-group';
+} from './arg-group-factories/cli-string-arg-group';
 export {
 	CliStringArrayArgGroup,
 	ICliStringArrayArgGroupOptions,
-} from './arg-group/cli-string-array-arg-group';
+} from './arg-group-factories/cli-string-array-arg-group';
 
-// Command-line interface runners
-export { runCliAndExit, IRunCliAndExitOptions } from './run-cli-and-exit';
-export { Cli, ICli } from './cli';
-
-// Error constructors
+// Advanced: Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
-// For custom argGroups
+// Advanced: Custom ArgGroup
 export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';
+
+// Advanced: Command tree
+export { TCliRoot, ICliNode, ICliLeaf } from './cli-tree';
+export { findCliNode, IFindCliNodeResult } from './find-cli-node';

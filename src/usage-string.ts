@@ -1,11 +1,11 @@
-import { CliNode } from './cli-node';
+import { ICliNode } from './cli-tree';
 import { CLI_BRANCH } from './cli-branch';
 import { UsageForBranch } from './usage-for-branch';
 import { CLI_COMMAND } from './cli-command';
 import { UsageForCommand } from './usage-for-command';
 
 export function UsageString(
-	node: CliNode,
+	node: ICliNode,
 	maxLineLength = +Infinity,
 	indentation = '',
 ): string {
