@@ -1,0 +1,10 @@
+{
+	"extends": "@carnesen/tsconfig",
+	"include": [
+		"src", "index copy.ts"
+	],
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "lib"
+	}
+}
