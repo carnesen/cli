@@ -10,7 +10,7 @@ export const advanced = CliBranch({
 	Examples of advanced @carnesen/cli features. This is a hidden branch!
 	`,
 	hidden: true,
-	children: [
+	subcommands: [
 		demoEscapedArguments,
 		echoWithHiddenOption,
 		echoAsHiddenCommand,

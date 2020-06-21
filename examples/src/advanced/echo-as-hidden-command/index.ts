@@ -28,8 +28,8 @@ const branch = CliBranch({
 	description: `
 		Non-hidden command "${echoCommand.name}" shows up in this usage documentation.
 		
-		Hidden subcommand "${echoAsHiddenCommand.name}" does not appear in the children list.`,
-	children: [echoAsHiddenCommand, echoCommand],
+		Hidden subcommand "${echoAsHiddenCommand.name}" does not appear in the subcommands list.`,
+	subcommands: [echoAsHiddenCommand, echoCommand],
 });
 
 // Exported for unit testing

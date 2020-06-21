@@ -9,5 +9,5 @@ export const root = CliBranch({
 	description: `
 	Examples that demonstrate @carnesen/cli features
 	`,
-	children: [echo, multiply, throwError, advanced],
+	subcommands: [echo, multiply, throwError, advanced],
 });
