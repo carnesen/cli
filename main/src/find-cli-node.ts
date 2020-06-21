@@ -43,7 +43,7 @@ function recursiveFindCliNode(result: IFindCliNodeResult): IFindCliNodeResult {
 			return result;
 		}
 
-		const next = result.current.children.find(
+		const next = result.current.subcommands.find(
 			(subcommand) => subcommand.name === result.args[0],
 		);
 

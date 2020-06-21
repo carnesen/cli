@@ -12,7 +12,7 @@ const command = CliCommand({
 
 const branch = CliBranch({
 	name: 'cli',
-	children: [command],
+	subcommands: [command],
 });
 
 describe(findCliNode.name, () => {

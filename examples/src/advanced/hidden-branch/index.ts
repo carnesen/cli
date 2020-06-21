@@ -6,7 +6,7 @@ const normalBranch = CliBranch({
 	description: `
     This is a normal non-hidden command branch.
     Its "description" shows up in command usage docs.`,
-	children: [echo],
+	subcommands: [echo],
 });
 
 // Exported for unit testing
@@ -16,16 +16,16 @@ export const hiddenBranch = CliBranch({
 	name: HIDDEN_BRANCH,
 	description: `
     This is a command branch that has hidden=true.
-    It does not show up in the list of "children",
+    It does not show up in the list of "subcommands",
     but it is otherwise fully functional.`,
 	hidden: true,
-	children: [echo],
+	subcommands: [echo],
 });
 
 const branch = CliBranch({
 	name: 'cli',
 	description: `This CLI has a hidden branch called "${HIDDEN_BRANCH}.`,
-	children: [normalBranch, hiddenBranch],
+	subcommands: [normalBranch, hiddenBranch],
 });
 
 // Exported for unit testing

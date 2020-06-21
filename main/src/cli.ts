@@ -24,7 +24,7 @@ export interface ICli {
  *
  * @param root The root of this command-line interface's command tree
  */
-export function Cli(root: TCliRoot<any, any, any>): ICli {
+export function Cli(root: TCliRoot): ICli {
 	return async function cli(...args: string[]) {
 		const node = findCliNode(root, args);
 

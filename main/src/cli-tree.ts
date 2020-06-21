@@ -5,17 +5,9 @@ import { ICliArgGroup } from './cli-arg-group';
 /**
  * The root of a command tree
  */
-export type TCliRoot<
-	TPositionalArgGroup extends ICliArgGroup = ICliArgGroup,
-	TNamedArgGroups extends {
-		[name: string]: ICliArgGroup;
-	} = {
-		[name: string]: ICliArgGroup;
-	},
-	TEscapedArgGroup extends ICliArgGroup = ICliArgGroup
-> =
+export type TCliRoot =
 	| ICliBranch
-	| ICliCommand<TPositionalArgGroup, TNamedArgGroups, TEscapedArgGroup>;
+	| ICliCommand<ICliArgGroup, any, ICliArgGroup>;
 
 /**
  * A node in a command tree
