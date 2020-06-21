@@ -15,8 +15,11 @@ const hiddenCommand = CliCommand({
 	action() {},
 });
 
-const branch = CliBranch({ name: 'users', children: [command, hiddenCommand] });
-const root = CliBranch({ name: 'cloud', children: [branch] });
+const branch = CliBranch({
+	name: 'users',
+	subcommands: [command, hiddenCommand],
+});
+const root = CliBranch({ name: 'cloud', subcommands: [branch] });
 
 describe(UsageSubcommandRows.name, () => {
 	it('lists all commands underneath the provided branch, recursive', () => {

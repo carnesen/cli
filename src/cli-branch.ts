@@ -15,7 +15,7 @@ export interface ICliBranchOptions {
 	hidden?: boolean;
 
 	/** [[`ICliBranch`]] and/or [[`ICliCommand`]]s underneath this branch */
-	children: (ICliBranch | ICliCommand<any, any, any>)[];
+	subcommands: (ICliBranch | ICliCommand<any, any, any>)[];
 }
 
 /**

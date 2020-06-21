@@ -25,11 +25,11 @@ function RecursiveUsageSubcommandRows(
 
 	if (current.kind === CLI_BRANCH) {
 		const subcommandsForUsage: TwoColumnTableRow[] = [];
-		for (const child of current.children) {
+		for (const subcommand of current.subcommands) {
 			subcommandsForUsage.push(
 				...RecursiveUsageSubcommandRows(
-					child,
-					path ? `${path} ${child.name}` : child.name,
+					subcommand,
+					path ? `${path} ${subcommand.name}` : subcommand.name,
 				),
 			);
 		}

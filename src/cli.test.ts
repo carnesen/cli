@@ -38,7 +38,7 @@ const commandWithEscapedArgGroup = CliCommand({
 
 const root = CliBranch({
 	name: 'cli',
-	children: [
+	subcommands: [
 		commandWithNoArguments,
 		commandWithPositionalArgGroup,
 		commandWithNamedArgGroups,

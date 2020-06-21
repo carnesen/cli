@@ -31,7 +31,7 @@ const current = CliCommand({
 const branch = CliBranch({
 	name: 'cli',
 	description: 'This is a CLI',
-	children: [current],
+	subcommands: [current],
 });
 
 describe(UsageString.name, () => {
