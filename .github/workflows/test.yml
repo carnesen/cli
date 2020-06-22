@@ -35,3 +35,10 @@ jobs:
         npm install ../main/carnesen-cli*.tgz
         npm install ../examples/carnesen-cli*.tgz
         npm test
+        npm pack
+    - name: Build and test @carnesen/cli-website
+      working-directory: ./website-server
+      run: |
+        npm ci
+        npm install ../website/carnesen-cli*.tgz
+        npm test
