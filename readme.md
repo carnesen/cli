@@ -1,5 +1,5 @@
 # @carnesen/cli
-A TypeScript-first framework for command-line interfaces in Node.js and the browser
+A framework for command-line interfaces in Node.js and the browser
 
 [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://www.npmjs.com/package/@carnesen/cli) [![build status badge](https://github.com/carnesen/cli/workflows/test/badge.svg)](https://github.com/carnesen/cli/actions?query=workflow%3Atest+branch%3Amaster)
 

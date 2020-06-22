@@ -54,13 +54,10 @@
     "name": "Chris Arnesen",
     "email": "chris.arnesen@gmail.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/carnesen/cli.git"
-  },
+  "repository": "github:carnesen/cli",
   "bugs": {
     "url": "https://github.com/carnesen/cli/issues"
   },
-  "homepage": "https://github.com/carnesen/cli#readme",
+  "homepage": "https://cli.carnesen.com",
   "license": "MIT"
 }

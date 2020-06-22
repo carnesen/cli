@@ -1,4 +1,4 @@
-# @carnesen/cli-website change log
+# @carnesen/cli-website changelog
 
 ## 2020.6.2
 - Support tab completion to arbitrary command depth
