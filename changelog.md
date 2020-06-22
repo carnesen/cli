@@ -1,4 +1,4 @@
-# @carnesen/cli change log
+# @carnesen/cli changelog
 
 ## Unreleased 0.5.0
 
