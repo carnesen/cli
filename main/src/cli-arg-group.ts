@@ -42,6 +42,12 @@ export interface ICliArgGroup<
 	 * group.
 	 * */
 	required?: TRequired;
+
+	/**
+	 * Experimental support for autocompletion
+	 * @hidden true
+	 */
+	_suggest?: (args: string[], search?: string) => string[];
 }
 
 export type TValueFromCliArgGroup<TArgGroup> = TArgGroup extends ICliArgGroup<
