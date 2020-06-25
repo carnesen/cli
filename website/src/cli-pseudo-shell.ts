@@ -3,17 +3,15 @@ import {
 	runCliAndExit,
 	IRunCliAndExitOptions,
 	Cli,
-	findCliNode,
-	CLI_COMMAND,
 	ICliBranch,
 	ICliCommand,
 	CliBranch,
 } from '@carnesen/cli';
 
 import { CommandLineHistory } from './command-line-history';
-import { LongestLeadingSubstring } from './longest-leading-substring';
 import { green, yellow, splitWords } from './util';
 import { HistoryCommand } from './history-command';
+import { autocomplete } from './autocomplete';
 
 const INDENTATION = '    ';
 
@@ -104,7 +102,7 @@ export class CliPseudoShell {
 
 			case 9: {
 				// tab
-				this.autoComplete();
+				this.autocomplete();
 				break;
 			}
 
@@ -238,46 +236,42 @@ export class CliPseudoShell {
 		this.setLine(line, this.index + str.length);
 	}
 
-	private autoComplete(): void {
+	private autocomplete(): void {
 		const lineBeforeCursor = this.line.substring(0, this.index);
 		const wordsBeforeCursor = splitWords(lineBeforeCursor);
-		const node = findCliNode(this.root, wordsBeforeCursor);
-		if (node.current.kind === CLI_COMMAND) {
-			// not yet implemented
-			return;
+		let args: string[];
+		let search = '';
+		if (lineBeforeCursor.endsWith(' ')) {
+			search = '';
+			args = wordsBeforeCursor;
+		} else {
+			[search = ''] = wordsBeforeCursor.slice(-1);
+			args = wordsBeforeCursor.slice(0, -1);
 		}
-		const searchTerm = node.args[0] || '';
-		const matchingSubcommands = node.current.subcommands.filter((c) =>
-			c.name.startsWith(searchTerm),
-		);
 
-		if (matchingSubcommands.length === 1) {
-			// There is a single child matching the search term. Auto-complete the
-			// whole command name and put a space too to start the next arg.
-			this.addToLine(
-				`${matchingSubcommands[0].name.substring(searchTerm.length)} `,
-			);
-		} else if (matchingSubcommands.length > 1) {
-			// First try autocomplete the longest leading substring
-			const longestLeadingSubstring = LongestLeadingSubstring(
-				matchingSubcommands.map(({ name }) => name),
-				searchTerm,
-			);
-			if (longestLeadingSubstring.length > searchTerm.length) {
-				// We found an autocompletion
-				this.addToLine(longestLeadingSubstring.substring(searchTerm.length));
-			} else {
-				// Write out the possibilities and make them refine
+		const completions = autocomplete(this.root, args, search);
+		console.log(args, search);
+
+		switch (completions.length) {
+			case 0: {
+				return;
+			}
+			case 1: {
+				this.addToLine(completions[0]);
+				break;
+			}
+			default: {
+				// Write out the completions
 				this.consoleLog('');
-				for (const { name } of matchingSubcommands) {
-					this.consoleLog(`${INDENTATION}${name}`);
+				for (const completion of completions) {
+					this.consoleLog(`${INDENTATION}${search}${completion}`);
 				}
+				// Re-write line
 				const countAfterCursor = this.line.length - this.index;
 				this.terminal.write(
 					`${PS1}${this.line}${'\b'.repeat(countAfterCursor)}`,
 				);
 			}
 		}
-		// They're on their own
 	}
 }

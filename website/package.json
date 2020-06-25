@@ -18,6 +18,7 @@
 	"devDependencies": {
 		"@carnesen/cli": "0.5.0-18",
 		"@carnesen/cli-examples": "0.5.0-18",
+		"@carnesen/run-and-catch": "0.4.0",
 		"@carnesen/tsconfig": "0.3.1",
 		"@types/jest": "26.0.0",
 		"@types/node": "14.0.13",
@@ -56,10 +57,10 @@
 		"name": "Chris Arnesen",
 		"email": "chris.arnesen@gmail.com"
 	},
-  "repository": "github:carnesen/cli",
-  "bugs": {
-    "url": "https://github.com/carnesen/cli/issues"
-  },
-  "homepage": "https://cli.carnesen.com",
+	"repository": "github:carnesen/cli",
+	"bugs": {
+		"url": "https://github.com/carnesen/cli/issues"
+	},
+	"homepage": "https://cli.carnesen.com",
 	"license": "MIT"
 }

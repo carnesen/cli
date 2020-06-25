@@ -76,6 +76,12 @@ function CliOneOfArgGroup(
 			return args[0];
 		},
 		description: `${description || ''}\n\nAllowed values: ${valuesString}`,
+		_suggest(args) {
+			if (args.length > 0) {
+				return [];
+			}
+			return config.values;
+		},
 	};
 	return argGroup;
 }
