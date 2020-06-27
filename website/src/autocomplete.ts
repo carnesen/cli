@@ -1,10 +1,5 @@
-import {
-	findCliNode,
-	CLI_COMMAND,
-	TCliRoot,
-	CLI_BRANCH,
-	ICliArgGroup,
-} from '@carnesen/cli';
+import { CLI_COMMAND, TCliRoot, CLI_BRANCH, ICliArgGroup } from '@carnesen/cli';
+import { findCliNode } from '@carnesen/cli/lib/find-cli-node';
 
 import { LongestLeadingSubstring } from './longest-leading-substring';
 
