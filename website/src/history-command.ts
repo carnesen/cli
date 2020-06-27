@@ -6,7 +6,7 @@ export function HistoryCommand(
 ): ICliCommand<any, any, any> {
 	const history = CliCommand({
 		name: 'history',
-		description: "List the commands in this shell's history file",
+		description: "List the commands in this terminal's history file",
 		action: () => {
 			return commandLineHistory
 				.list()

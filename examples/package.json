@@ -1,63 +1,63 @@
 {
-  "name": "@carnesen/cli-examples",
-  "description": "Examples of how to use @carnesen/cli",
-  "version": "0.5.0-18",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "bin": {
-    "carnesen-cli-examples": "lib/cli.js"
-  },
-  "engines": {
-    "node": ">=10.0.0"
-  },
-  "scripts": {
-    "build": "rimraf lib/ && tsc",
-    "build-watch": "npm run build -- --watch",
-    "lint": "eslint --ext .ts src/",
-    "fix": "npm run lint -- --fix",
-    "test": "npm run lint && npm run unit-test && npm run build && node lib/cli.js echo ok",
-    "unit-test": "jest src",
-    "prepublishOnly": "npm test"
-  },
-  "dependencies": {
-    "@carnesen/cli": "0.5.0-18"
-  },
-  "devDependencies": {
-    "@carnesen/run-and-catch": "0.4.0",
-    "@carnesen/tsconfig": "0.3.1",
-    "@types/jest": "26.0.0",
-    "@types/node": "14.0.13",
-    "eslint": "7.2.0",
-    "eslint-config-carnesen": "4.0.0",
-    "jest": "26.0.1",
-    "rimraf": "3.0.2",
-    "ts-jest": "26.1.0",
-    "ts-node": "8.10.2",
-    "typescript": "3.9.5"
-  },
-  "keywords": [
-    "typescript",
-    "nodejs",
-    "cli",
-    "command-line-interface"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "tag": "next"
-  },
-  "files": [
-    "src",
-    "lib",
-    "package-lock.json"
-  ],
-  "author": {
-    "name": "Chris Arnesen",
-    "email": "chris.arnesen@gmail.com"
-  },
-  "repository": "github:carnesen/cli",
-  "bugs": {
-    "url": "https://github.com/carnesen/cli/issues"
-  },
-  "homepage": "https://cli.carnesen.com",
-  "license": "MIT"
+	"name": "@carnesen/cli-examples",
+	"description": "Examples of how to use @carnesen/cli",
+	"version": "0.5.0-19",
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"bin": {
+		"carnesen-cli-examples": "lib/cli.js"
+	},
+	"engines": {
+		"node": ">=10.0.0"
+	},
+	"scripts": {
+		"build": "rimraf lib/ && tsc",
+		"build-watch": "npm run build -- --watch",
+		"lint": "eslint --ext .ts src/",
+		"fix": "npm run lint -- --fix",
+		"test": "npm run lint && npm run unit-test && npm run build && node lib/cli.js echo ok",
+		"unit-test": "jest src",
+		"prepublishOnly": "npm test"
+	},
+	"dependencies": {
+		"@carnesen/cli": "0.5.0-19"
+	},
+	"devDependencies": {
+		"@carnesen/run-and-catch": "0.4.0",
+		"@carnesen/tsconfig": "0.3.1",
+		"@types/jest": "26.0.3",
+		"@types/node": "14.0.14",
+		"eslint": "7.3.1",
+		"eslint-config-carnesen": "4.1.0",
+		"jest": "26.1.0",
+		"rimraf": "3.0.2",
+		"ts-jest": "26.1.1",
+		"ts-node": "8.10.2",
+		"typescript": "3.9.5"
+	},
+	"keywords": [
+		"typescript",
+		"nodejs",
+		"cli",
+		"command-line-interface"
+	],
+	"publishConfig": {
+		"access": "public",
+		"tag": "next"
+	},
+	"files": [
+		"src",
+		"lib",
+		"package-lock.json"
+	],
+	"author": {
+		"name": "Chris Arnesen",
+		"email": "chris.arnesen@gmail.com"
+	},
+	"repository": "github:carnesen/cli",
+	"bugs": {
+		"url": "https://github.com/carnesen/cli/issues"
+	},
+	"homepage": "https://cli.carnesen.com",
+	"license": "MIT"
 }

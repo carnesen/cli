@@ -1,65 +1,65 @@
 {
-  "name": "@carnesen/cli",
-  "description": "A framework for command-line interfaces in Node.js and the browser",
-  "version": "0.5.0-18",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "engines": {
-    "node": ">=10.0.0"
-  },
-  "scripts": {
-    "build": "rimraf lib/ && tsc",
-    "build-watch": "npm run build -- --watch",
-    "docs": "rimraf dist/ && typedoc --mode library --inputFiles src/index.ts --out dist --theme theme/",
-    "docs-serve": "browser-sync dist",
-    "docs-watch": "nodemon --ext ts,css --ignore dist/ --exec npm -- run docs",
-    "lint": "eslint --ext .ts src/",
-    "fix": "npm run lint -- --fix",
-    "test": "npm run lint && npm run unit-test && npm run build && npm run docs",
-    "unit-test": "jest src",
-    "prepublishOnly": "npm test"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@carnesen/coded-error": "0.1.1",
-    "@carnesen/run-and-catch": "0.4.0",
-    "@carnesen/tsconfig": "0.3.1",
-    "@types/jest": "26.0.0",
-    "@types/node": "14.0.13",
-    "browser-sync": "2.26.7",
-    "eslint": "7.2.0",
-    "eslint-config-carnesen": "4.1.0",
-    "jest": "26.0.1",
-    "nodemon": "2.0.4",
-    "rimraf": "3.0.2",
-    "ts-jest": "26.1.0",
-    "ts-node": "8.10.2",
-    "typedoc": "0.17.0-3",
-    "typescript": "3.9.5"
-  },
-  "files": [
-    "src",
-    "lib",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "tag": "next"
-  },
-  "keywords": [
-    "typescript",
-    "nodejs",
-    "cli",
-    "command-line-interface"
-  ],
-  "author": {
-    "name": "Chris Arnesen",
-    "email": "chris.arnesen@gmail.com"
-  },
-  "repository": "github:carnesen/cli",
-  "bugs": {
-    "url": "https://github.com/carnesen/cli/issues"
-  },
-  "homepage": "https://cli.carnesen.com",
-  "license": "MIT"
+	"name": "@carnesen/cli",
+	"description": "Command-line interfaces for Node.js and the browser",
+	"version": "0.5.0-19",
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"engines": {
+		"node": ">=10.0.0"
+	},
+	"scripts": {
+		"build": "rimraf lib/ && tsc",
+		"build-watch": "npm run build -- --watch",
+		"docs": "rimraf dist/ && typedoc --mode library --readme readme.md --inputFiles src/index.ts --out dist --theme theme/",
+		"docs-serve": "browser-sync dist",
+		"docs-watch": "nodemon --ext ts,css --ignore dist/ --exec npm -- run docs",
+		"lint": "eslint --ext .ts src/",
+		"fix": "npm run lint -- --fix",
+		"test": "npm run lint && npm run unit-test && npm run build && npm run docs",
+		"unit-test": "jest src",
+		"prepublishOnly": "npm test"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@carnesen/coded-error": "0.1.1",
+		"@carnesen/run-and-catch": "0.4.0",
+		"@carnesen/tsconfig": "0.3.1",
+		"@types/jest": "26.0.0",
+		"@types/node": "14.0.13",
+		"browser-sync": "2.26.7",
+		"eslint": "7.2.0",
+		"eslint-config-carnesen": "4.1.0",
+		"jest": "26.0.1",
+		"nodemon": "2.0.4",
+		"rimraf": "3.0.2",
+		"ts-jest": "26.1.0",
+		"ts-node": "8.10.2",
+		"typedoc": "0.17.0-3",
+		"typescript": "3.9.5"
+	},
+	"files": [
+		"src",
+		"lib",
+		"dist"
+	],
+	"publishConfig": {
+		"access": "public",
+		"tag": "next"
+	},
+	"keywords": [
+		"typescript",
+		"nodejs",
+		"cli",
+		"command-line-interface"
+	],
+	"author": {
+		"name": "Chris Arnesen",
+		"email": "chris.arnesen@gmail.com"
+	},
+	"repository": "github:carnesen/cli",
+	"bugs": {
+		"url": "https://github.com/carnesen/cli/issues"
+	},
+	"homepage": "https://cli.carnesen.com",
+	"license": "MIT"
 }

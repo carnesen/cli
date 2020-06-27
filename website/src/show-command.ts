@@ -25,7 +25,7 @@ export const showCommand = CliCommand({
 				break;
 			}
 			case '.': {
-				url = `https://github.com/carnesen/cli-website/blob/master/src/root-branch.ts`;
+				url = `https://github.com/carnesen/cli-website/blob/master/src/index.ts`;
 				break;
 			}
 			case 'history':

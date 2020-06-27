@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
@@ -23,22 +22,20 @@ module.exports = {
 		contentBase: './dist',
 	},
 	plugins: [
-		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
 			templateContent: `
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8"/>
-		<title>@carnesen/cli examples</title>
-		<link rel="stylesheet" href="/assets/css/fonts.css">
-		<style>
-			html { font-family: 'MonoLisa', sans-serif; }
-			a { color: inherit; text-decoration: inherit; }
-		</style>
+		<title>@carnesen/cli</title>
+		<link rel="stylesheet" href="assets/css/main.css">
   </head>
 	<body>
-			<h2><a href="https://cli.carnesen.com">@carnesen/cli</a> examples</h2>
+			<h3 style="text-align: center">
+				<a href="https://github.com/carnesen/cli">@carnesen/cli</a>:
+				command-line interfaces for Node.js and the browser
+			</h3>
 			<div id="terminal-container"></div>
   </body>
 </html>`,
@@ -46,8 +43,7 @@ module.exports = {
 	],
 	output: {
 		filename: 'main.js',
-		path: path.resolve(__dirname, 'examples'),
-		publicPath: '/examples',
+		path: path.resolve(__dirname, 'dist/'),
 	},
 	resolve: { extensions: ['.ts', '.tsx', '.js', '.json'] },
 };
