@@ -59,4 +59,3 @@ export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';
 
 // Advanced: Command tree
 export { TCliRoot, ICliNode, ICliLeaf } from './cli-tree';
-export { findCliNode, IFindCliNodeResult } from './find-cli-node';
