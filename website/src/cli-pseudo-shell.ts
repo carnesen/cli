@@ -9,13 +9,13 @@ import {
 } from '@carnesen/cli';
 
 import { CommandLineHistory } from './command-line-history';
-import { green, yellow, splitWords } from './util';
+import { green, yellow, splitWords, bold } from './util';
 import { HistoryCommand } from './history-command';
 import { autocomplete } from './autocomplete';
 
 const INDENTATION = '    ';
 
-export interface ICliPseudoShellOptions {
+export interface ICliReplOptions {
 	/** A short description of this branch for command-line usage */
 	description?: string;
 
@@ -29,7 +29,7 @@ type KeyEvent = { key: string; domEvent: KeyboardEvent };
 
 const PS1 = `${green('$')} `;
 
-export class CliPseudoShell {
+export class CliRepl {
 	private readonly terminal: Terminal;
 
 	private runningCommand = false;
@@ -49,7 +49,7 @@ export class CliPseudoShell {
 		subcommands,
 		terminal,
 		history,
-	}: ICliPseudoShellOptions) {
+	}: ICliReplOptions) {
 		this.terminal = terminal;
 		this.commandLineHistory = new CommandLineHistory(history);
 		this.line = this.commandLineHistory.current();
@@ -67,7 +67,7 @@ export class CliPseudoShell {
 		});
 
 		this.terminal.focus();
-		this.terminal.writeln('Hit "Enter" to get started.');
+		this.consoleLog(`Hit ${bold('"Enter"')} to get started.`);
 		this.prompt();
 	}
 

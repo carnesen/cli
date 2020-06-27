@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'MonoLisa';
+  src:  url('../fonts/MonoLisa-Regular.woff2') format('woff2'),
+        url('../fonts/MonoLisa-Regular.woff') format('woff'),
+        url('../fonts/MonoLisa-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'MonoLisa';
+  font-weight: bold;
+  src:  url('../fonts/MonoLisa-Bold.woff2') format('woff2'),
+        url('../fonts/MonoLisa-Bold.woff') format('woff'),
+        url('../fonts/MonoLisa-Bold.ttf') format('truetype');
+}
+
+html { 
+	font-family: 'MonoLisa', sans-serif; 
+}
+
+a { 
+	color: inherit; 
+	text-decoration: inherit;
+}

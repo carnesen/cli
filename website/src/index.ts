@@ -2,10 +2,12 @@ import { Terminal, ITerminalOptions } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { root as examples } from '@carnesen/cli-examples';
-import { CliPseudoShell } from './cli-pseudo-shell';
+import { CliRepl } from './cli-pseudo-shell';
+import { bold } from './util';
 
 import 'xterm/css/xterm.css';
 import { showCommand } from './show-command';
+import { docsCommand } from './docs-command';
 
 async function loadTerminalApplication() {
 	await (document as any).fonts.load('12px MonoLisa');
@@ -31,7 +33,7 @@ async function loadTerminalApplication() {
 	// element.style.height = '450px';
 	terminal.open(element);
 	fitAddon.fit();
-	const pseudoShell = new CliPseudoShell({
+	const pseudoShell = new CliRepl({
 		history: [
 			'advanced',
 			'show show',
@@ -42,10 +44,12 @@ async function loadTerminalApplication() {
 			'',
 		],
 		description: `
-				This is a special terminal that runs 
-				@carnesen/cli examples in your browser. Up and 
-				down arrows navigate command history. Tab auto-completes.`,
-		subcommands: [...examples.subcommands, showCommand],
+		This is a special terminal that runs ${bold(
+			'@carnesen/cli',
+		)} examples in your browser.
+
+		Up and down arrows navigate command history. Tab auto-completes.`,
+		subcommands: [docsCommand, ...examples.subcommands, showCommand],
 		terminal,
 	});
 
