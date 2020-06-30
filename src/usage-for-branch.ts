@@ -1,5 +1,5 @@
 import { ICliBranch } from './cli-branch';
-import { hardWrap } from './hard-wrap';
+import { hardWrapText } from './hard-wrap-text';
 import { UsageSubcommandRows } from './usage-subcommand-rows';
 import { TwoColumnTable } from './two-column-table';
 
@@ -14,11 +14,10 @@ export function UsageForBranch(
 	lines.push(`Usage: ${commandPath} <subcommand> ...`);
 	lines.push('');
 
-	const descriptionLines = hardWrap(
-		current.description,
+	const descriptionLines = hardWrapText(current.description, {
 		maxLineLength,
 		indentation,
-	);
+	});
 	if (descriptionLines.length > 0) {
 		lines.push(...descriptionLines);
 		lines.push('');
@@ -29,7 +28,13 @@ export function UsageForBranch(
 
 	const subcommandRows = UsageSubcommandRows(current);
 
-	lines.push(...TwoColumnTable(subcommandRows, maxLineLength, indentation));
+	lines.push(
+		...TwoColumnTable(subcommandRows, {
+			maxLineLength,
+			indentation,
+			maxParagraphs: 1,
+		}),
+	);
 
 	return lines;
 }
