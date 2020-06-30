@@ -21,7 +21,7 @@ export const showCommand = CliCommand({
 			case 'echo':
 			case 'multiply':
 			case 'throw-error': {
-				url = `https://github.com/carnesen/cli/blob/master/examples/src/${name}/index.ts`;
+				url = `https://github.com/carnesen/cli/blob/master/examples/src/${name}-command/index.ts`;
 				break;
 			}
 			case '.': {

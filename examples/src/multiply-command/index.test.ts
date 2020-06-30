@@ -1,8 +1,10 @@
-import { CliUsageError } from '@carnesen/cli';
+import { CliUsageError, Cli } from '@carnesen/cli';
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { cli } from '.';
+import { multiplyCommand } from '.';
 
-describe('readme example', () => {
+const cli = Cli(multiplyCommand);
+
+describe(multiplyCommand.name, () => {
 	it(`throws a ${CliUsageError.name} if no number is provided`, async () => {
 		const exception = await runAndCatch(cli);
 		expect(exception instanceof CliUsageError).toBe(true);

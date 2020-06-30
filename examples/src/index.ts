@@ -1,13 +1,25 @@
-import { CliBranch } from '@carnesen/cli';
-import { echo } from './echo';
-import { multiply } from './multiply';
-import { throwError } from './throw-error';
-import { advanced } from './advanced';
+/**
+ * Main export of the @carnesen/cli-examples package
+ */
 
-export const root = CliBranch({
-	name: 'examples',
+import { CliBranch } from '@carnesen/cli';
+import { echoCommand } from './echo-command';
+import { multiplyCommand } from './multiply-command';
+import { throwErrorCommand } from './throw-error-command';
+import { advancedBranch } from './advanced-branch';
+
+/**
+ * Root of the @carnesen/cli-examples command tree
+ * */
+export const carnesenCliExamplesBranch = CliBranch({
+	name: 'carnesen-cli-examples',
 	description: `
-	Examples that demonstrate @carnesen/cli features
+		Examples that demonstrate @carnesen/cli features.
 	`,
-	subcommands: [echo, multiply, throwError, advanced],
+	subcommands: [
+		echoCommand,
+		multiplyCommand,
+		throwErrorCommand,
+		advancedBranch,
+	],
 });

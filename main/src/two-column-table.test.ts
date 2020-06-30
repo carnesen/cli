@@ -1,7 +1,7 @@
-import { TwoColumnTable, TwoColumnTableRow } from './two-column-table';
+import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
 
 type Datum = {
-	rows: TwoColumnTableRow[];
+	rows: TTwoColumnTableRow[];
 	indentation?: string;
 	expectedResult: string[];
 };
@@ -18,7 +18,7 @@ const data: Datum[] = [
 describe(TwoColumnTable.name, () => {
 	for (const { rows, expectedResult, indentation } of data) {
 		it('Creates a usage string for a branch', () => {
-			const result = TwoColumnTable(rows, undefined, indentation);
+			const result = TwoColumnTable(rows, { indentation });
 			expect(result).toEqual(expectedResult);
 		});
 	}
