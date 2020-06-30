@@ -1,16 +1,30 @@
-import { hardWrap } from './hard-wrap';
+import { hardWrapText } from './hard-wrap-text';
 
 /** [cell0, description] */
-export type TwoColumnTableRow = [string, string | undefined];
+export type TTwoColumnTableRow = [string, string | undefined];
 
 const SEPARATOR = ' : ';
 
-/** Generate the lines for a two-column table */
+export interface ITwoColumnTableOptions {
+	indentation?: string;
+	maxLineLength?: number;
+	maxParagraphs?: number;
+}
+/**
+ * Generate the lines for a two-column table
+ * @param rows
+ * @param options An [[`ITwoColumnTableOptions`]] object
+ */
 export function TwoColumnTable(
-	rows: TwoColumnTableRow[],
-	maxLineLength = +Infinity,
-	indentation = '',
+	rows: TTwoColumnTableRow[],
+	options: ITwoColumnTableOptions = {},
 ): string[] {
+	const {
+		maxLineLength = +Infinity,
+		indentation = '',
+		maxParagraphs,
+	} = options;
+
 	if (rows.length === 0) {
 		return [];
 	}
@@ -22,9 +36,12 @@ export function TwoColumnTable(
 	);
 	const outputLines: string[] = [];
 	for (const [cell0, description] of rows) {
-		const [firstDescriptionLine, ...restDescriptionLines] = hardWrap(
+		const [firstDescriptionLine, ...restDescriptionLines] = hardWrapText(
 			description,
-			column1Width,
+			{
+				maxLineLength: column1Width,
+				maxParagraphs,
+			},
 		);
 		let firstOutputLine: string;
 		if (firstDescriptionLine) {

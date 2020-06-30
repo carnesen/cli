@@ -13,9 +13,11 @@
 	"scripts": {
 		"build": "rimraf lib/ && tsc",
 		"build-watch": "npm run build -- --watch",
+		"cli": "node lib/cli",
+		"dev": "ts-node src/cli",
 		"lint": "eslint --ext .ts src/",
 		"fix": "npm run lint -- --fix",
-		"test": "npm run lint && npm run unit-test && npm run build && node lib/cli.js echo ok",
+		"test": "npm run lint && npm run unit-test && npm run build && node lib/cli echo ok",
 		"unit-test": "jest src",
 		"prepublishOnly": "npm test"
 	},

@@ -1,8 +1,8 @@
 import { ICliBranch } from './cli-branch';
 import { wrapInSquareBrackets } from './util';
 import { ICliCommand } from './cli-command';
-import { hardWrap } from './hard-wrap';
-import { TwoColumnTable, TwoColumnTableRow } from './two-column-table';
+import { hardWrapText } from './hard-wrap-text';
+import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
 
 export function UsageForCommand(
 	current: ICliCommand,
@@ -22,7 +22,10 @@ export function UsageForCommand(
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionLines = hardWrap(description, maxLineLength, indentation);
+	const descriptionLines = hardWrapText(description, {
+		maxLineLength,
+		indentation,
+	});
 	if (descriptionLines.length > 0) {
 		lines.push(...descriptionLines);
 		lines.push('');
@@ -39,8 +42,7 @@ export function UsageForCommand(
 		lines.push(
 			...TwoColumnTable(
 				[[positionalArgGroup.placeholder, positionalArgGroup.description]],
-				maxLineLength,
-				indentation,
+				{ maxLineLength, indentation },
 			),
 		);
 	}
@@ -56,7 +58,7 @@ export function UsageForCommand(
 			firstLine += namedArgGroupsNotRequired ? ' [<options>]' : ' <options>';
 			lines.push('Options:');
 			lines.push('');
-			const rows: TwoColumnTableRow[] = namedArgGroupEntries.map(
+			const rows: TTwoColumnTableRow[] = namedArgGroupEntries.map(
 				([name, argGroup]) => {
 					let cell0 = `--${name}`;
 					if (argGroup.placeholder) {
@@ -69,7 +71,7 @@ export function UsageForCommand(
 				},
 			);
 
-			lines.push(...TwoColumnTable(rows, maxLineLength, indentation));
+			lines.push(...TwoColumnTable(rows, { maxLineLength, indentation }));
 		}
 	}
 
