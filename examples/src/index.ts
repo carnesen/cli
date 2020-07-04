@@ -14,7 +14,7 @@ import { advancedBranch } from './advanced-branch';
 export const carnesenCliExamplesBranch = CliBranch({
 	name: 'carnesen-cli-examples',
 	description: `
-		Examples that demonstrate @carnesen/cli features.
+		Examples that demonstrate @carnesen/cli features
 	`,
 	subcommands: [
 		echoCommand,
