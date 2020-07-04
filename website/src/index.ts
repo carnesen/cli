@@ -2,7 +2,7 @@ import { Terminal, ITerminalOptions } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { carnesenCliExamplesBranch } from '@carnesen/cli-examples';
-import { CliRepl } from './cli-pseudo-shell';
+import { CliRepl } from './cli-repl';
 import { bold } from './util';
 
 import 'xterm/css/xterm.css';
@@ -10,6 +10,8 @@ import { showCommand } from './show-command';
 import { docsCommand } from './docs-command';
 
 async function loadTerminalApplication() {
+	// Wait for web fonts to work around
+	// https://github.com/xtermjs/xterm.js/issues/1164
 	await (document as any).fonts.load('12px MonoLisa');
 
 	const terminalOptions: ITerminalOptions = {
@@ -30,9 +32,24 @@ async function loadTerminalApplication() {
 	}
 	element.style.width = '80%';
 	element.style.margin = 'auto';
-	// element.style.height = '450px';
 	terminal.open(element);
 	fitAddon.fit();
+
+	const urlParams = new URLSearchParams(window.location.search);
+	let line = '';
+	const lineParam = urlParams.get('line');
+	if (lineParam) {
+		const indexOfNewline = lineParam.indexOf('\n');
+		if (indexOfNewline >= 0) {
+			line = lineParam.substring(0, indexOfNewline);
+		} else {
+			line = lineParam;
+		}
+	}
+
+	const submitParam = urlParams.get('submit');
+	const submit = submitParam === 'true';
+
 	const pseudoShell = new CliRepl({
 		history: [
 			'advanced',
@@ -41,7 +58,6 @@ async function loadTerminalApplication() {
 			'multiply 2 3 4',
 			'echo foo bar baz',
 			'history',
-			'',
 		],
 		description: `
 		This is a special terminal that runs ${bold(
@@ -55,6 +71,8 @@ async function loadTerminalApplication() {
 			showCommand,
 		],
 		terminal,
+		line,
+		submit,
 	});
 
 	pseudoShell.start();

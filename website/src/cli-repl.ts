@@ -16,13 +16,18 @@ import { autocomplete } from './autocomplete';
 const INDENTATION = '    ';
 
 export interface ICliReplOptions {
-	/** A short description of this branch for command-line usage */
-	description?: string;
-
 	/** [[`ICliBranch`]] and/or [[`ICliCommand`]]s underneath this branch */
 	subcommands: (ICliBranch | ICliCommand<any, any, any>)[];
+	/** An XTerm.js Terminal to run the REPL in */
 	terminal: Terminal;
+	/** A short description of this branch for command-line usage */
+	description?: string;
+	/** History lines */
 	history?: string[];
+	/** Initial command line */
+	line?: string;
+	/** Whether or not to submit the initial line */
+	submit?: boolean;
 }
 
 type KeyEvent = { key: string; domEvent: KeyboardEvent };
@@ -40,6 +45,8 @@ export class CliRepl {
 
 	private line = '';
 
+	private submit: boolean;
+
 	private index = 0;
 
 	private readonly root: ICliBranch;
@@ -49,10 +56,13 @@ export class CliRepl {
 		subcommands,
 		terminal,
 		history,
+		line,
+		submit,
 	}: ICliReplOptions) {
 		this.terminal = terminal;
-		this.commandLineHistory = new CommandLineHistory(history);
+		this.commandLineHistory = new CommandLineHistory(history, line);
 		this.line = this.commandLineHistory.current();
+		this.submit = submit || false;
 		const builtInCommands = [HistoryCommand(this.commandLineHistory)];
 		this.root = CliBranch({
 			description,
@@ -67,12 +77,20 @@ export class CliRepl {
 		});
 
 		this.terminal.focus();
-		this.consoleLog(`Hit ${bold('"Enter"')} to get started.`);
+
+		if (!this.submit) {
+			this.consoleLog(`Hit ${bold('"Enter"')} to get started.`);
+		}
+
 		this.prompt();
+
+		if (this.submit) {
+			this.handleEnterKeyEvent();
+		}
 	}
 
 	private prompt() {
-		this.terminal.write(`\r\n${PS1}`);
+		this.terminal.write(`\r\n${PS1}${this.line}`);
 	}
 
 	private handleKeyEvent({ key, domEvent }: KeyEvent): void {
@@ -250,7 +268,6 @@ export class CliRepl {
 		}
 
 		const completions = autocomplete(this.root, args, search);
-		console.log(args, search);
 
 		switch (completions.length) {
 			case 0: {

@@ -2,12 +2,13 @@
  * State machine for command history in a [[`CliPseudoShell`]]
  */
 export class CommandLineHistory {
-	private lines: string[] = [];
+	private history: string[] = [];
 
 	private index = 0;
 
-	public constructor(lines: string[] = []) {
-		this.setLines(...lines.map((str) => str.trim()));
+	public constructor(history: string[] = [], line = '') {
+		this.setHistory(...history.map((str) => str.trim()));
+		this.current(line);
 	}
 
 	/**
@@ -16,9 +17,9 @@ export class CommandLineHistory {
 	 */
 	public current(line?: string): string {
 		if (typeof line === 'string') {
-			this.lines[this.index] = line;
+			this.history[this.index] = line;
 		}
-		return this.lines[this.index];
+		return this.history[this.index];
 	}
 
 	/**
@@ -31,10 +32,10 @@ export class CommandLineHistory {
 		this.current(trimmed);
 
 		// Remove duplicates
-		this.setLines(...this.lines.filter((l) => l !== trimmed));
+		this.setHistory(...this.history.filter((l) => l !== trimmed));
 
 		if (this.current() !== trimmed) {
-			this.setLines(...this.lines, trimmed);
+			this.setHistory(...this.history, trimmed);
 		}
 	}
 
@@ -66,24 +67,24 @@ export class CommandLineHistory {
 	 * @returns All non-empty lines
 	 */
 	public list(): string[] {
-		return this.lines.filter((line) => line.length > 0);
+		return this.history.filter((line) => line.length > 0);
 	}
 
 	/**
 	 * @returns Index of the last line
 	 */
 	private indexOfLastLine(): number {
-		return this.lines.length - 1;
+		return this.history.length - 1;
 	}
 
 	/**
 	 * Set the command-line history and put the cursor on a new line
-	 * @param lines New lines to set
+	 * @param history New lines to set
 	 */
-	private setLines(...lines: string[]): void {
+	private setHistory(...history: string[]): void {
 		// Don't write empty lines into history
-		this.lines = lines.filter((line) => line.length > 0);
-		this.lines.push('');
+		this.history = history.filter((line) => line.length > 0);
+		this.history.push('');
 		this.index = this.indexOfLastLine();
 	}
 }
