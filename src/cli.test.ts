@@ -62,7 +62,7 @@ describe(Cli.name, () => {
 			commandWithNoArguments.name,
 		);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
-		expect((exception as CliUsageError).node!.current).toBe(root);
+		expect((exception as CliUsageError).tree!.current).toBe(root);
 		expect(exception.message).toBeFalsy();
 	});
 

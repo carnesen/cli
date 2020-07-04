@@ -2,7 +2,7 @@ import { UsageString } from './usage-string';
 import { CliBranch } from './cli-branch';
 import { CliStringArgGroup } from './arg-group-factories/cli-string-arg-group';
 import { CliCommand } from './cli-command';
-import { ICliNode } from './cli-tree';
+import { ICliTree } from './cli-tree';
 
 const messageArgGroup = CliStringArgGroup({
 	description: 'A string message please',
@@ -42,7 +42,7 @@ describe(UsageString.name, () => {
 
 	it('Creates a usage string for a command without a parent', () => {
 		const usageString = UsageString({
-			current: current as ICliNode['current'],
+			current: current as ICliTree['current'],
 			parents: [],
 		});
 		expect(usageString).toMatch(messageArgGroup.description!);
@@ -51,7 +51,7 @@ describe(UsageString.name, () => {
 
 	it('Creates a usage string for a command without a parent branch', () => {
 		const usageString = UsageString({
-			current: current as ICliNode['current'],
+			current: current as ICliTree['current'],
 			parents: [branch],
 		});
 		expect(usageString).toMatchSnapshot();

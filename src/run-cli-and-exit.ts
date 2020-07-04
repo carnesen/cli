@@ -76,15 +76,15 @@ export async function runCliAndExit(
 			);
 		} else if (exception.code === CLI_USAGE_ERROR) {
 			const exceptionAsUsageError: CliUsageError = exception;
-			if (exceptionAsUsageError.node) {
-				const usageString = UsageString(exception.node, columns, '   ');
+			if (exceptionAsUsageError.tree) {
+				const usageString = UsageString(exception.tree, columns, '   ');
 				if (exception.message) {
 					consoleError(`${usageString}\n\n${RED_ERROR} ${exception.message}`);
 				} else {
 					consoleError(usageString);
 				}
 			} else {
-				// Handle case where "code" is CLI_USAGE_ERROR but "node" is undefined. Surely
+				// Handle case where "code" is CLI_USAGE_ERROR but "tree" is undefined. Surely
 				// this is a coding mistake on our part.
 				consoleError(exceptionAsUsageError);
 			}

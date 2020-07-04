@@ -58,4 +58,4 @@ export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';
 
 // Advanced: Command tree
-export { TCliRoot, ICliNode, ICliLeaf } from './cli-tree';
+export { TCliRoot, ICliTree, ICliLeaf } from './cli-tree';

@@ -1,5 +1,5 @@
 import { partitionArgs } from './partition-args';
-import { findCliNode } from './find-cli-node';
+import { findCliTree } from './find-cli-tree';
 import { parseArgs } from './parse-args';
 import { parseNamedArgs } from './parse-named-args';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
@@ -26,26 +26,26 @@ export interface ICli {
  */
 export function Cli(root: TCliRoot): ICli {
 	return async function cli(...args: string[]) {
-		const node = findCliNode(root, args);
+		const tree = findCliTree(root, args);
 
-		if (node.message || node.current.kind !== CLI_COMMAND) {
-			throw new CliUsageError(node.message, node);
+		if (tree.message || tree.current.kind !== CLI_COMMAND) {
+			throw new CliUsageError(tree.message, tree);
 		}
 
-		const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(node.args);
+		const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(tree.args);
 
 		// We found "--help" among the arguments
 		if (namedArgs.help) {
-			throw new CliUsageError(undefined, node);
+			throw new CliUsageError(undefined, tree);
 		}
 
-		const command = node.current;
+		const command = tree.current;
 
 		// Pre-validation for positional argument group
 		if (!command.positionalArgGroup && positionalArgs.length > 0) {
 			throw new CliUsageError(
 				`Unexpected argument "${positionalArgs[0]}" : Command "${command.name}" does not accept positional arguments`,
-				node,
+				tree,
 			);
 		}
 
@@ -59,7 +59,7 @@ export function Cli(root: TCliRoot): ICli {
 		}
 
 		// Calls to `parseArgs` and `action` in this try/catch block could throw
-		// `CliUsageError`, which we catch and enhance with the current `TCliNode`
+		// `CliUsageError`, which we catch and enhance with the current `TCliTree`
 		// context.
 		try {
 			let argsValue: any;
@@ -95,7 +95,7 @@ export function Cli(root: TCliRoot): ICli {
 			return result;
 		} catch (exception) {
 			if (exception && exception.code === CLI_USAGE_ERROR) {
-				exception.node = node;
+				exception.tree = tree;
 			}
 			throw exception;
 		}

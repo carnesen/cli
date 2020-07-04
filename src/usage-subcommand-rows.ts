@@ -1,4 +1,4 @@
-import { ICliNode } from './cli-tree';
+import { ICliTree } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { ICliBranch, CLI_BRANCH } from './cli-branch';
 import { TTwoColumnTableRow } from './two-column-table';
@@ -10,12 +10,12 @@ export function UsageSubcommandRows(branch: ICliBranch): TTwoColumnTableRow[] {
 }
 
 function RecursiveUsageSubcommandRows(
-	current: ICliNode['current'],
+	current: ICliTree['current'],
 	path: string,
 ): TTwoColumnTableRow[] {
 	if (current.hidden && path.length > 0) {
-		// We've walked to a hidden node. When path.length === 0 the user has
-		// specifically invoked a hidden node in which case we still want to show
+		// We've walked to a hidden tree. When path.length === 0 the user has
+		// specifically invoked a hidden tree in which case we still want to show
 		// them the usage.
 		return [];
 	}
