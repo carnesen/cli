@@ -1,5 +1,5 @@
 import { CLI_COMMAND, TCliRoot, CLI_BRANCH, ICliArgGroup } from '@carnesen/cli';
-import { findCliNode } from '@carnesen/cli/lib/find-cli-node';
+import { findCliTree } from '@carnesen/cli/lib/find-cli-tree';
 
 import { LongestLeadingSubstring } from './longest-leading-substring';
 
@@ -18,16 +18,16 @@ export function autocomplete(
 	if (args.includes('--help')) {
 		return [];
 	}
-	const node = findCliNode(root, args);
-	switch (node.current.kind) {
+	const tree = findCliTree(root, args);
+	switch (tree.current.kind) {
 		case CLI_BRANCH: {
-			if (node.args.length > 0) {
-				// findCliNode stopped at a branch node with args still remaining.
+			if (tree.args.length > 0) {
+				// findCliTree stopped at a branch with args still remaining.
 				// There's no way for us to autocomplete from that state.
 				return [];
 			}
 
-			const subcommandNames = node.current.subcommands.map(({ name }) => name);
+			const subcommandNames = tree.current.subcommands.map(({ name }) => name);
 			return autocompleteFromWordList([...subcommandNames], search);
 		}
 
@@ -35,7 +35,7 @@ export function autocomplete(
 			// E.g. The command line was "cloud users list --all --v"
 
 			// E.g. The command invoked e.g. "listCommand"
-			const command = node.current;
+			const command = tree.current;
 
 			// E.g. ["--all", "--verbose", "--version", "--help"]
 			const namedArgGroupSeparators = [
@@ -46,19 +46,19 @@ export function autocomplete(
 			];
 
 			// The argument _before_ the search term
-			const previousArg = node.args.slice(-1)[0];
+			const previousArg = tree.args.slice(-1)[0];
 
 			// This is perhaps an obscure sub-case to start with, but if the previous
 			// arg is "--", we can be sure we are currently searching at the start of
 			// the "escaped" argument group e.g. "cloud users list -- "
 			if (previousArg === '--') {
 				// We are in the escaped arg group
-				return autocompleteArgGroup(node.current.escapedArgGroup, [], search);
+				return autocompleteArgGroup(tree.current.escapedArgGroup, [], search);
 			}
 
 			// Otherwise if there's a "--" but we're not at the start of the argument
 			// group, just give up e.g. "cloud users list -- chris "
-			if (node.args.includes('--')) {
+			if (tree.args.includes('--')) {
 				return [];
 			}
 			// Now we know we are NOT in the escaped args group
@@ -79,7 +79,7 @@ export function autocomplete(
 			}
 
 			// We are AT a command e.g. "cloud users list "
-			if (node.args.length === 0) {
+			if (tree.args.length === 0) {
 				const { positionalArgGroup } = command;
 				const completions = autocompleteArgGroup(
 					positionalArgGroup,
@@ -104,12 +104,12 @@ export function autocomplete(
 
 			// E.g. "cloud users list --email chr"
 			if (previousArg.startsWith('--')) {
-				if (!node.current.namedArgGroups) {
+				if (!tree.current.namedArgGroups) {
 					return [];
 				}
 				// OK if undefined
 				const argGroup: ICliArgGroup | undefined =
-					node.current.namedArgGroups[previousArg.slice(2)];
+					tree.current.namedArgGroups[previousArg.slice(2)];
 				return autocompleteArgGroup(argGroup, [], search);
 			}
 
