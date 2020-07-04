@@ -1,11 +1,11 @@
-import { ICliNode, TCliRoot } from './cli-tree';
+import { ICliTree, TCliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { CLI_BRANCH } from './cli-branch';
 
 /**
- * The result of calling [[`findCliNode`]]
+ * The result of calling [[`findCliTree`]]
  */
-export interface IFindCliNodeResult extends ICliNode {
+export interface IFindCliTreeResult extends ICliTree {
 	/** Passed args past those used during navigation */
 	args: string[];
 	/** An error message describing why navigation stopped */
@@ -18,14 +18,14 @@ export interface IFindCliNodeResult extends ICliNode {
  * @param args - An array of command-line arguments
  * @returns The result of the search
  */
-export function findCliNode(
+export function findCliTree(
 	root: TCliRoot,
 	args: string[],
-): IFindCliNodeResult {
-	return recursiveFindCliNode({ current: root, parents: [], args });
+): IFindCliTreeResult {
+	return recursiveFindCliTree({ current: root, parents: [], args });
 }
 
-function recursiveFindCliNode(result: IFindCliNodeResult): IFindCliNodeResult {
+function recursiveFindCliTree(result: IFindCliTreeResult): IFindCliTreeResult {
 	// Terminate recursion if current is a command
 	if (result.current.kind === CLI_COMMAND) {
 		return result;
@@ -52,7 +52,7 @@ function recursiveFindCliNode(result: IFindCliNodeResult): IFindCliNodeResult {
 			return { ...result, message: `Bad command "${result.args[0]}"` };
 		}
 
-		return recursiveFindCliNode({
+		return recursiveFindCliTree({
 			parents: [...result.parents, result.current],
 			current: next,
 			args: result.args.slice(1),

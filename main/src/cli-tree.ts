@@ -10,15 +10,15 @@ export type TCliRoot =
 	| ICliCommand<ICliArgGroup, any, ICliArgGroup>;
 
 /**
- * A node in a command tree
+ * Data structure representing a node in a command tree
  * */
-export interface ICliNode {
+export interface ICliTree {
 	current: TCliRoot;
 	parents: ICliBranch[];
 }
 
 /**
- * A leaf node in a command tree
+ * Data structure representing a leaf node in a command tree
  * */
 export interface ICliLeaf {
 	current: ICliCommand;
