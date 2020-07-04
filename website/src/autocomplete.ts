@@ -3,67 +3,83 @@ import { findCliNode } from '@carnesen/cli/lib/find-cli-node';
 
 import { LongestLeadingSubstring } from './longest-leading-substring';
 
+/**
+ *
+ * @param root The root of the command tree for which to autocomplete
+ * @param args The arguments on the command line before the current word
+ * @param search The current word on the command line
+ * @returns Completions for the provided search word
+ */
 export function autocomplete(
 	root: TCliRoot,
 	args: string[],
 	search: string,
 ): string[] {
+	if (args.includes('--help')) {
+		return [];
+	}
 	const node = findCliNode(root, args);
 	switch (node.current.kind) {
 		case CLI_BRANCH: {
 			if (node.args.length > 0) {
-				// findCliNode stopped at a branch node with args still remaining. That
-				// either means --help or bad command.
+				// findCliNode stopped at a branch node with args still remaining.
+				// There's no way for us to autocomplete from that state.
 				return [];
 			}
 
 			const subcommandNames = node.current.subcommands.map(({ name }) => name);
-			return autocompleteFromWordList(subcommandNames, search);
+			return autocompleteFromWordList([...subcommandNames], search);
 		}
 
 		case CLI_COMMAND: {
-			// We are at or past a command e.g. "cloud users list --all".
+			// E.g. The command line was "cloud users list --all --v"
+
+			// E.g. The command invoked e.g. "listCommand"
 			const command = node.current;
-			const namedArgGroupSeparators = command.namedArgGroups
-				? Object.keys(command.namedArgGroups).map((name) => `--${name}`)
-				: [];
-			const lastArg = node.args.slice(-1)[0];
-			// This is perhaps an obscure sub-case to start with, but if the last arg
-			// is "--", we can be sure we are currently searching at the start of the
-			// "escaped" argument group.
-			if (lastArg === '--') {
+
+			// E.g. ["--all", "--verbose", "--version", "--help"]
+			const namedArgGroupSeparators = [
+				...(command.namedArgGroups
+					? Object.keys(command.namedArgGroups).map((name) => `--${name}`)
+					: []),
+				'--help',
+			];
+
+			// The argument _before_ the search term
+			const previousArg = node.args.slice(-1)[0];
+
+			// This is perhaps an obscure sub-case to start with, but if the previous
+			// arg is "--", we can be sure we are currently searching at the start of
+			// the "escaped" argument group e.g. "cloud users list -- "
+			if (previousArg === '--') {
 				// We are in the escaped arg group
 				return autocompleteArgGroup(node.current.escapedArgGroup, [], search);
 			}
 
 			// Otherwise if there's a "--" but we're not at the start of the argument
-			// group, just give up.
+			// group, just give up e.g. "cloud users list -- chris "
 			if (node.args.includes('--')) {
 				return [];
 			}
 			// Now we know we are NOT in the escaped args group
 
+			// E.g. "cloud users list -" or "cloud users list --"
 			if (search === '-' || search === '--') {
-				const words: string[] = [];
+				const suggestions: string[] = [];
 				if (command.escapedArgGroup) {
-					words.push('--');
+					suggestions.push('--');
 				}
-				words.push(...namedArgGroupSeparators);
-				return autocompleteFromWordList(words, search);
+				suggestions.push(...namedArgGroupSeparators);
+				return autocompleteFromWordList(suggestions, search);
 			}
 
+			// E.g. "cloud users list --em"
 			if (search.startsWith('--')) {
-				if (!node.current.namedArgGroups) {
-					return [];
-				}
-				return autocompleteFromWordList(
-					Object.keys(node.current.namedArgGroups),
-					search.slice(2),
-				);
+				return autocompleteFromWordList(namedArgGroupSeparators, search);
 			}
 
+			// We are AT a command e.g. "cloud users list "
 			if (node.args.length === 0) {
-				// We are AT a command e.g. "cloud users list "
 				const { positionalArgGroup } = command;
 				const completions = autocompleteArgGroup(
 					positionalArgGroup,
@@ -86,16 +102,21 @@ export function autocomplete(
 				return completions;
 			}
 
-			if (lastArg.startsWith('--')) {
+			// E.g. "cloud users list --email chr"
+			if (previousArg.startsWith('--')) {
 				if (!node.current.namedArgGroups) {
 					return [];
 				}
-				const argGroup = node.current.namedArgGroups[lastArg.slice(2)];
+				// OK if undefined
+				const argGroup: ICliArgGroup | undefined =
+					node.current.namedArgGroups[previousArg.slice(2)];
 				return autocompleteArgGroup(argGroup, [], search);
 			}
 
+			// All known completions have been exhausted
 			return [];
 		}
+
 		default: {
 			throw new Error('Unexpected kind');
 		}
@@ -119,9 +140,6 @@ function autocompleteArgGroup(
 }
 
 function autocompleteFromWordList(words: string[], search: string): string[] {
-	if (words.length === 0) {
-		return [];
-	}
 	const candidates = words
 		.filter((word) => word.startsWith(search))
 		.map((word) => word.slice(search.length));

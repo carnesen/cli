@@ -1,7 +1,7 @@
 import { Terminal, ITerminalOptions } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import { carnesenCliExamplesBranch as examples } from '@carnesen/cli-examples';
+import { carnesenCliExamplesBranch } from '@carnesen/cli-examples';
 import { CliRepl } from './cli-pseudo-shell';
 import { bold } from './util';
 
@@ -49,7 +49,11 @@ async function loadTerminalApplication() {
 		)} examples in your browser.
 
 		Up and down arrows navigate command history. Tab auto-completes.`,
-		subcommands: [docsCommand, ...examples.subcommands, showCommand],
+		subcommands: [
+			docsCommand,
+			...carnesenCliExamplesBranch.subcommands,
+			showCommand,
+		],
 		terminal,
 	});
 
