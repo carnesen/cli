@@ -1,13 +1,20 @@
 import { Terminal, ITerminalOptions } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import { carnesenCliExamplesBranch } from '@carnesen/cli-examples';
+import { Cli, runCliAndExit } from '@carnesen/cli';
+import { rootBranch as carnesenCliExamplesBranch } from '@carnesen/cli-examples';
 import { CliRepl } from './cli-repl';
 import { bold } from './util';
 
 import 'xterm/css/xterm.css';
 import { showCommand } from './show-command';
 import { docsCommand } from './docs-command';
+
+(window as any).cli = (line: string) => {
+	runCliAndExit(Cli(carnesenCliExamplesBranch), {
+		args: line.split(' ').filter((word) => word.length > 0),
+	});
+};
 
 async function loadTerminalApplication() {
 	// Wait for web fonts to work around
@@ -50,9 +57,10 @@ async function loadTerminalApplication() {
 	const submitParam = urlParams.get('submit');
 	const submit = submitParam === 'true';
 
-	const pseudoShell = new CliRepl({
+	const repl = new CliRepl({
 		history: [
 			'advanced',
+			`advanced parse-json '{"foo": "bar", "count": 3}'`,
 			'show show',
 			'throw-error --message Foo',
 			'multiply 2 3 4',
@@ -75,7 +83,7 @@ async function loadTerminalApplication() {
 		submit,
 	});
 
-	pseudoShell.start();
+	repl.start();
 }
 
 loadTerminalApplication().catch((exception) => {

@@ -8,10 +8,22 @@ import {
 	CliBranch,
 } from '@carnesen/cli';
 
-import { CommandLineHistory } from './command-line-history';
-import { green, yellow, splitWords, bold } from './util';
+import {
+	DELETE_KEY,
+	DOWN_ARROW_KEY,
+	ENTER_KEY,
+	LEFT_ARROW_KEY,
+	RIGHT_ARROW_KEY,
+	TAB_KEY,
+	UP_ARROW_KEY,
+} from './constants';
+import { CommandHistory } from './command-history';
+import { green, bold } from './util';
 import { HistoryCommand } from './history-command';
 import { autocomplete } from './autocomplete';
+import { CommandLine } from './command-line';
+
+const inspect = require('util-inspect');
 
 const INDENTATION = '    ';
 
@@ -41,13 +53,11 @@ export class CliRepl {
 
 	private settingCurrentLine = false;
 
-	private readonly commandLineHistory: CommandLineHistory;
+	private readonly commandHistory: CommandHistory;
 
-	private line = '';
+	private readonly commandLine: CommandLine;
 
 	private submit: boolean;
-
-	private index = 0;
 
 	private readonly root: ICliBranch;
 
@@ -60,14 +70,13 @@ export class CliRepl {
 		submit,
 	}: ICliReplOptions) {
 		this.terminal = terminal;
-		this.commandLineHistory = new CommandLineHistory(history, line);
-		this.line = this.commandLineHistory.current();
+		this.commandHistory = new CommandHistory(history, line);
+		this.commandLine = new CommandLine(this.commandHistory.current());
 		this.submit = submit || false;
-		const builtInCommands = [HistoryCommand(this.commandLineHistory)];
 		this.root = CliBranch({
 			description,
 			name: '',
-			subcommands: [...subcommands, ...builtInCommands],
+			subcommands: [...subcommands, HistoryCommand(this.commandHistory)],
 		});
 	}
 
@@ -84,13 +93,17 @@ export class CliRepl {
 
 		this.prompt();
 
+		if (this.commandLine.value()) {
+			this.terminal.write(this.commandLine.value());
+		}
+
 		if (this.submit) {
 			this.handleEnterKeyEvent();
 		}
 	}
 
 	private prompt() {
-		this.terminal.write(`\r\n${PS1}${this.line}`);
+		this.terminal.write(`\r\n${PS1}`);
 	}
 
 	private handleKeyEvent({ key, domEvent }: KeyEvent): void {
@@ -106,59 +119,44 @@ export class CliRepl {
 			!domEvent.altKey && !domEvent.ctrlKey && !domEvent.metaKey;
 		domEvent.preventDefault();
 		switch (domEvent.keyCode) {
-			case 8: {
-				// delete
-				if (this.index === 0) {
-					break;
+			case DELETE_KEY: {
+				if (this.commandLine.del()) {
+					this.terminal.write('\b \b');
 				}
-				const line =
-					this.line.substring(0, this.index - 1) +
-					this.line.substring(this.index, this.line.length);
-				this.setLine(line, this.index - 1);
 				break;
 			}
 
-			case 9: {
-				// tab
+			case TAB_KEY: {
 				this.autocomplete();
 				break;
 			}
 
-			case 13: {
-				// enter
+			case ENTER_KEY: {
 				this.handleEnterKeyEvent();
 				break;
 			}
 
-			case 37: {
-				// left arrow
-				if (this.index === 0) {
-					break;
+			case LEFT_ARROW_KEY: {
+				if (this.commandLine.previous()) {
+					this.terminal.write(key);
 				}
-				this.terminal.write(key);
-				this.index -= 1;
 				break;
 			}
 
-			case 38: {
-				// up arrow
-				this.setLine(this.commandLineHistory.previous(this.line));
+			case UP_ARROW_KEY: {
+				this.renderLine(this.commandHistory.previous(this.commandLine.value()));
 				break;
 			}
 
-			case 39: {
-				// right arrow
-				if (this.index === this.line.length) {
-					break;
+			case RIGHT_ARROW_KEY: {
+				if (this.commandLine.next()) {
+					this.terminal.write(key);
 				}
-				this.terminal.write(key);
-				this.index += 1;
 				break;
 			}
 
-			case 40: {
-				// down arrow
-				this.setLine(this.commandLineHistory.next(this.line));
+			case DOWN_ARROW_KEY: {
+				this.renderLine(this.commandHistory.next(this.commandLine.value()));
 				break;
 			}
 
@@ -171,34 +169,46 @@ export class CliRepl {
 	}
 
 	private consoleLog(arg: any) {
+		let str: string;
 		if (typeof arg === 'string') {
-			for (const ln of arg.split('\n')) {
-				this.terminal.writeln(ln);
-			}
-		} else if (typeof arg === 'number') {
-			this.terminal.writeln(yellow(String(arg)));
-		} else if (typeof arg === 'object' && typeof arg.stack === 'string') {
-			// Error object
-			for (const line of arg.stack.split('\n')) {
-				this.terminal.writeln(line);
+			if (arg.startsWith('\n')) {
+				str = `\r${arg}`;
+			} else if (arg.startsWith('\r\n')) {
+				str = arg;
+			} else {
+				str = `\r\n${arg}`;
 			}
 		} else {
-			this.terminal.writeln(String(arg));
+			str = inspect(arg, { colors: true }) || '';
 		}
+		const strWithNormalizedLineEndings = str.replace(/([^\r])\n/g, '$1\r\n');
+		this.terminal.write(strWithNormalizedLineEndings);
 	}
 
 	private consoleError(arg: any) {
 		this.consoleLog(arg);
 	}
 
-	private runCurrentLine() {
+	private runCurrentLine(): void {
+		const {
+			args,
+			singleQuoted,
+			doubleQuoted,
+		} = this.commandLine.splitIntoArgs();
+		if (singleQuoted || doubleQuoted) {
+			this.consoleError(
+				`Error: ${singleQuoted ? 'Single' : 'Double'} quotes are not balanced`,
+			);
+			this.prompt();
+			return;
+		}
 		const options: IRunCliAndExitOptions = {
-			args: splitWords(this.line),
-			consoleError: (...args: any[]) => {
-				this.consoleError(args[0]);
+			args,
+			consoleError: (..._args: any[]) => {
+				this.consoleError(_args[0]);
 			},
-			consoleLog: (...args: any[]) => {
-				this.consoleLog(args[0]);
+			consoleLog: (..._args: any[]) => {
+				this.consoleLog(_args[0]);
 			},
 			processExit() {},
 			columns: this.terminal.cols,
@@ -210,63 +220,36 @@ export class CliRepl {
 				console.log(err); // eslint-disable-line no-console
 			})
 			.then(() => {
-				this.line = '';
-				this.index = 0;
+				this.commandLine.reset();
 				this.runningCommand = false;
 				this.prompt();
 			});
 	}
 
-	private setLine(line: string, index?: number) {
-		if (line === this.line) {
-			return;
-		}
+	private renderLine(line: string, index?: number) {
 		this.settingCurrentLine = true;
-		const changeInLength = line.length - this.line.length;
-		let sequence = '';
-		sequence += '\r';
-		sequence += PS1;
-		sequence += line;
-		if (changeInLength < 0) {
-			sequence += ' '.repeat(-1 * changeInLength);
-			sequence += '\b'.repeat(-1 * changeInLength);
-		}
-		if (typeof index === 'number') {
-			sequence += '\b'.repeat(line.length - index);
-		}
+		const sequence = this.commandLine.setValue(line, index);
 		this.terminal.write(sequence, () => {
-			this.line = line;
-			this.index = typeof index === 'number' ? index : line.length;
 			this.settingCurrentLine = false;
 		});
 	}
 
 	private handleEnterKeyEvent() {
-		this.commandLineHistory.submit(this.line);
+		this.commandHistory.submit(this.commandLine.value());
 		this.runCurrentLine();
 	}
 
 	private addToLine(str: string) {
-		const line =
-			this.line.substring(0, this.index) +
-			str +
-			this.line.substring(this.index);
-		this.setLine(line, this.index + str.length);
+		this.terminal.write(this.commandLine.insert(str));
 	}
 
 	private autocomplete(): void {
-		const lineBeforeCursor = this.line.substring(0, this.index);
-		const wordsBeforeCursor = splitWords(lineBeforeCursor);
-		let args: string[];
-		let search = '';
-		if (lineBeforeCursor.endsWith(' ')) {
-			search = '';
-			args = wordsBeforeCursor;
-		} else {
-			[search = ''] = wordsBeforeCursor.slice(-1);
-			args = wordsBeforeCursor.slice(0, -1);
-		}
-
+		const {
+			args,
+			search,
+			singleQuoted,
+			doubleQuoted,
+		} = this.commandLine.splitIntoArgsAndSearch();
 		const completions = autocomplete(this.root, args, search);
 
 		switch (completions.length) {
@@ -274,20 +257,28 @@ export class CliRepl {
 				return;
 			}
 			case 1: {
-				this.addToLine(completions[0]);
+				let completion = completions[0];
+				if (completions[0].endsWith(' ')) {
+					const completionWithoutSpace = completion.substring(
+						0,
+						completions[0].length - 1,
+					);
+					if (singleQuoted) {
+						completion = `${completionWithoutSpace}' `;
+					} else if (doubleQuoted) {
+						completion = `${completionWithoutSpace}" `;
+					}
+				}
+				this.addToLine(completion);
 				break;
 			}
 			default: {
 				// Write out the completions
-				this.consoleLog('');
 				for (const completion of completions) {
 					this.consoleLog(`${INDENTATION}${search}${completion}`);
 				}
 				// Re-write line
-				const countAfterCursor = this.line.length - this.index;
-				this.terminal.write(
-					`${PS1}${this.line}${'\b'.repeat(countAfterCursor)}`,
-				);
+				this.prompt();
 			}
 		}
 	}
