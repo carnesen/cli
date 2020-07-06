@@ -20,11 +20,13 @@ export interface ICliJsonArgGroupOptions {
  * A factory for [[`ICliArgGroup`]]s that `JSON.parse`
  *
  * @example
+ * Suppose our CLI's positionalArgGroup is a CliJsonArgGroup here's how that
+ * behaves:
  * ```plaintext
- * $ cli --json '{"foo":true}' // named value "json" receives object `{ foo: true }`
- * $ cli --json                // usage error
- * $ cli --json '""' '""'      // usage error
- * $ cli --json foo            // error parsing JSON
+ * $ cli '{"foo":true}' // named value "json" receives object `{ foo: true }`
+ * $ cli                // usage error
+ * $ cli '""' '""'      // usage error
+ * $ cli foo            // error parsing JSON
  * ```
  *
  * @throws [[`CliUsageError`]]

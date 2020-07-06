@@ -1,7 +1,7 @@
-import { CommandLineHistory } from './command-line-history';
+import { CommandHistory } from './command-history';
 
 const data: {
-	operate: (subject: CommandLineHistory) => void;
+	operate: (subject: CommandHistory) => void;
 	expectedList?: string[];
 }[] = [
 	{
@@ -45,21 +45,21 @@ const data: {
 	},
 ];
 
-describe(CommandLineHistory.name, () => {
+describe(CommandHistory.name, () => {
 	it('Initializes with no lines if none are provided', () => {
-		const subject = new CommandLineHistory();
+		const subject = new CommandHistory();
 		expect(subject.list()).toEqual([]);
 	});
 
 	it('Initializes with the provided lines', () => {
 		const lines = ['foo'];
-		const subject = new CommandLineHistory(lines);
+		const subject = new CommandHistory(lines);
 		expect(subject.list()).toEqual(lines);
 	});
 
 	data.forEach(({ operate, expectedList }, index) => {
-		it(`${CommandLineHistory.name} programmatic test number ${index}`, () => {
-			const subject = new CommandLineHistory();
+		it(`${CommandHistory.name} programmatic test number ${index}`, () => {
+			const subject = new CommandHistory();
 			operate(subject);
 			if (expectedList) {
 				expect(subject.list()).toEqual(expectedList);

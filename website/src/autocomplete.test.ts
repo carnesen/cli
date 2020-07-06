@@ -52,7 +52,7 @@ const root = CliBranch({
 });
 
 const data: {
-	title?: string;
+	title: string;
 	args: string[];
 	search: string;
 	expectedCompletions: string[];
@@ -222,38 +222,9 @@ const data: {
 
 describe(`${autocomplete.name} returns`, () => {
 	data.forEach(({ title, args, search, expectedCompletions }) => {
-		it(
-			title ||
-				`${autocomplete.name}(root, [${args}], ${search}) => ${expectedCompletions}`,
-			() => {
-				const completions = autocomplete(root, args, search);
-				expect(completions).toEqual(expectedCompletions);
-			},
-		);
+		it(title, () => {
+			const completions = autocomplete(root, args, search);
+			expect(completions).toEqual(expectedCompletions);
+		});
 	});
 });
-
-// describe(`More tests of ${autocomplete.name}`, () => {
-// 	it('Returns no results but --help if there are none', () => {
-// 		// This test was written to test the fact that
-// 		const argGroupWithEmptySuggestions: ICliArgGroup<undefined, false> = {
-// 			placeholder: '<never use this for real>',
-// 			parse() {
-// 				return undefined;
-// 			},
-// 			_suggest() {
-// 				return [];
-// 			},
-// 		};
-// 		const completions = autocomplete(
-// 			CliCommand({
-// 				name: 'foo',
-// 				positionalArgGroup: argGroupWithEmptySuggestions,
-// 				action() {},
-// 			}),
-// 			[],
-// 			'',
-// 		);
-// 		expect(completions).toEqual(['--help']);
-// 	});
-// });

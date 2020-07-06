@@ -1,7 +1,7 @@
 /**
  * State machine for command history in a [[`CliPseudoShell`]]
  */
-export class CommandLineHistory {
+export class CommandHistory {
 	private history: string[] = [];
 
 	private index = 0;

@@ -2,24 +2,9 @@
  * Main export of the @carnesen/cli-examples package
  */
 
-import { CliBranch } from '@carnesen/cli';
-import { echoCommand } from './echo-command';
-import { multiplyCommand } from './multiply-command';
-import { throwErrorCommand } from './throw-error-command';
-import { advancedBranch } from './advanced-branch';
-
-/**
- * Root of the @carnesen/cli-examples command tree
- * */
-export const carnesenCliExamplesBranch = CliBranch({
-	name: 'carnesen-cli-examples',
-	description: `
-		Examples that demonstrate @carnesen/cli features
-	`,
-	subcommands: [
-		echoCommand,
-		multiplyCommand,
-		throwErrorCommand,
-		advancedBranch,
-	],
-});
+export { echoCommand } from './echo-command';
+export { multiplyCommand } from './multiply-command';
+export { throwErrorCommand } from './throw-error-command';
+export { advancedBranch } from './advanced-branch';
+export { parseJsonCommand } from './parse-json-command';
+export { rootBranch } from './root-branch';

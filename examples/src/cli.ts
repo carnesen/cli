@@ -10,9 +10,9 @@
  */
 
 import { runCliAndExit, Cli } from '@carnesen/cli';
-import { carnesenCliExamplesBranch } from './index';
+import { rootBranch } from './index';
 
-const cli = Cli(carnesenCliExamplesBranch);
+const cli = Cli(rootBranch);
 
 // The idiomatic Node.js expression `module === require.main` determines whether
 // this module is the one being run directly as `node <module file>` or if this
