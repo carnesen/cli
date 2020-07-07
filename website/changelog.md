@@ -1,5 +1,11 @@
 # @carnesen/cli-website changelog
 
+## 2020.7.0
+- Tab completion for argument groups
+- Support quotes and double-quotes in CommandLine
+- Attach `window.cli` as a "browser console CLI"
+- Use npm package "util-inspect" for console.logging in our Xterm.js pseudo-shell
+
 ## 2020.6.2
 - Support tab completion to arbitrary command depth
 

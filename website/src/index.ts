@@ -1,20 +1,11 @@
 import { Terminal, ITerminalOptions } from 'xterm';
+import 'xterm/css/xterm.css';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import { Cli, runCliAndExit } from '@carnesen/cli';
-import { rootBranch as carnesenCliExamplesBranch } from '@carnesen/cli-examples';
+import { INITIAL_HISTORY, rootCommand } from './root-command';
+import './browser-console-cli'; // Defines `window.cli`
 import { CliRepl } from './cli-repl';
 import { bold } from './util';
-
-import 'xterm/css/xterm.css';
-import { showCommand } from './show-command';
-import { docsCommand } from './docs-command';
-
-(window as any).cli = (line: string) => {
-	runCliAndExit(Cli(carnesenCliExamplesBranch), {
-		args: line.split(' ').filter((word) => word.length > 0),
-	});
-};
 
 async function loadTerminalApplication() {
 	// Wait for web fonts to work around
@@ -58,26 +49,14 @@ async function loadTerminalApplication() {
 	const submit = submitParam === 'true';
 
 	const repl = new CliRepl({
-		history: [
-			'advanced',
-			`advanced parse-json '{"foo": "bar", "count": 3}'`,
-			'show show',
-			'throw-error --message Foo',
-			'multiply 2 3 4',
-			'echo foo bar baz',
-			'history',
-		],
+		history: INITIAL_HISTORY,
 		description: `
 		This is a special terminal that runs ${bold(
 			'@carnesen/cli',
 		)} examples in your browser.
 
 		Up and down arrows navigate command history. Tab auto-completes.`,
-		subcommands: [
-			docsCommand,
-			...carnesenCliExamplesBranch.subcommands,
-			showCommand,
-		],
+		subcommands: rootCommand.subcommands,
 		terminal,
 		line,
 		submit,

@@ -9,7 +9,7 @@
  * The @carnesen/cli-examples Node.js executable CLI
  */
 
-import { runCliAndExit, Cli } from '@carnesen/cli';
+import { runCli, Cli } from '@carnesen/cli';
 import { rootBranch } from './index';
 
 const cli = Cli(rootBranch);
@@ -18,5 +18,5 @@ const cli = Cli(rootBranch);
 // this module is the one being run directly as `node <module file>` or if this
 // module is just being `require`d by another module.
 if (module === require.main) {
-	runCliAndExit(cli);
+	runCli(cli);
 }

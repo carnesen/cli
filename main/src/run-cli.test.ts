@@ -1,12 +1,13 @@
 import { CodedError } from '@carnesen/coded-error';
 import { CliCommand } from './cli-command';
-import { runCliAndExit, RED_ERROR } from './run-cli-and-exit';
+import { runCli, IRunCliOptions } from './run-cli';
 import { CliUsageError } from './cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 import { Cli } from './cli';
+import { ansiColors } from './util';
 
-async function runMocked(action: () => any) {
-	const result = {
+async function runMocked(action: () => any, options: IRunCliOptions = {}) {
+	const mockOptions = {
 		consoleLog: jest.fn(),
 		consoleError: jest.fn(),
 		processExit: jest.fn(),
@@ -19,32 +20,34 @@ async function runMocked(action: () => any) {
 
 	const cli = Cli(command);
 
-	await runCliAndExit(cli, {
+	await runCli(cli, {
 		args: [],
-		...result,
+		...mockOptions,
+		...options,
 	});
 
-	expect(result.processExit.mock.calls.length).toBe(1);
-	expect(result.processExit.mock.calls[0].length).toBe(1);
-	const exitCode = result.processExit.mock.calls[0][0];
+	expect(mockOptions.processExit.mock.calls.length).toBe(1);
+	expect(mockOptions.processExit.mock.calls[0].length).toBe(1);
+	const exitCode = mockOptions.processExit.mock.calls[0][0];
 
 	expect(
-		result.consoleError.mock.calls.length + result.consoleLog.mock.calls.length,
+		mockOptions.consoleError.mock.calls.length +
+			mockOptions.consoleLog.mock.calls.length,
 	).toBeLessThanOrEqual(1);
 	let errorMessage: any;
 	let logMessage: any;
-	if (result.consoleLog.mock.calls.length === 1) {
-		expect(result.consoleLog.mock.calls.length).toBe(1);
-		[[logMessage]] = result.consoleLog.mock.calls;
+	if (mockOptions.consoleLog.mock.calls.length === 1) {
+		expect(mockOptions.consoleLog.mock.calls.length).toBe(1);
+		[[logMessage]] = mockOptions.consoleLog.mock.calls;
 	}
-	if (result.consoleError.mock.calls.length === 1) {
-		expect(result.consoleError.mock.calls.length).toBe(1);
-		[[errorMessage]] = result.consoleError.mock.calls;
+	if (mockOptions.consoleError.mock.calls.length === 1) {
+		expect(mockOptions.consoleError.mock.calls.length).toBe(1);
+		[[errorMessage]] = mockOptions.consoleError.mock.calls;
 	}
 	return { exitCode, errorMessage, logMessage };
 }
 
-describe(runCliAndExit.name, () => {
+describe(runCli.name, () => {
 	it('exits 0 and does not console.log if action succeeds', async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			// do nothing
@@ -93,9 +96,20 @@ describe(runCliAndExit.name, () => {
 			throw new CliTerseError('foo');
 		});
 		expect(exitCode).toBe(1);
-		expect(errorMessage).toMatch(RED_ERROR);
+		expect(errorMessage).toMatch(ansiColors.red('Error:'));
 		expect(errorMessage).toMatch('foo');
 		expect(logMessage).toBe(undefined);
+	});
+
+	it('does not use red in the error message if color is false', async () => {
+		const { errorMessage } = await runMocked(
+			() => {
+				throw new CliTerseError('foo');
+			},
+			{ colors: false },
+		);
+		expect(errorMessage).not.toMatch(ansiColors.red('Error:'));
+		expect(errorMessage).toMatch('Error:');
 	});
 
 	it('exits 1 and console.errors the full error if action throws a TerseError without a message', async () => {
@@ -144,7 +158,7 @@ describe(runCliAndExit.name, () => {
 			},
 		});
 		const cli = Cli(command);
-		runCliAndExit(cli, { processExit: jest.fn(), args: [] });
+		runCli(cli, { processExit: jest.fn(), args: [] });
 	});
 
 	it('calls the system process.exit at the end by default', async () => {
@@ -158,7 +172,7 @@ describe(runCliAndExit.name, () => {
 			},
 		});
 		const cli = Cli(command);
-		await runCliAndExit(cli, { args: [] });
+		await runCli(cli, { args: [] });
 		expect(mockExit).toHaveBeenCalledWith(0);
 	});
 });

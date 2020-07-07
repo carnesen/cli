@@ -1,4 +1,4 @@
-import { IRunCliAndExitOptions, Cli, runCliAndExit } from '@carnesen/cli';
+import { IRunCliOptions, Cli, runCli } from '@carnesen/cli';
 import { hidingBranch, hiddenBranch, nonHiddenBranch } from '.';
 import { echoCommand } from '../echo-command';
 import { echoHiddenCommand } from '../echo-hidden-command';
@@ -14,7 +14,7 @@ describe(hidingBranch.name, () => {
 		let sawHiddenBranchEcho = false;
 		let sawNonHiddenBranchEcho = false;
 		let sawHiddenBranchSubcommands = false;
-		const runCliAndExitOptions: IRunCliAndExitOptions = {
+		const runCliOptions: IRunCliOptions = {
 			args: ['--help'],
 			processExit() {},
 			consoleError(arg) {
@@ -33,13 +33,13 @@ describe(hidingBranch.name, () => {
 			consoleLog() {},
 		};
 
-		await runCliAndExit(branchHidingCli, runCliAndExitOptions);
+		await runCli(branchHidingCli, runCliOptions);
 		expect(sawHiddenBranchEcho).toBe(false);
 		expect(sawHiddenBranchSubcommands).toBe(false);
 		expect(sawNonHiddenBranchEcho).toBe(true);
 
-		runCliAndExitOptions.args = [hiddenBranch.name, '--help'];
-		await runCliAndExit(branchHidingCli, runCliAndExitOptions);
+		runCliOptions.args = [hiddenBranch.name, '--help'];
+		await runCli(branchHidingCli, runCliOptions);
 		expect(sawHiddenBranchSubcommands).toBe(true);
 	});
 });

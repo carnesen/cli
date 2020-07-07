@@ -1,17 +1,14 @@
-# `@carnesen/www` change log
-## 2020.5.2
-- Define npm start script
+# @carnesen/cli-website-server changelog
 
-## 2020.5.1
-### Changed
-- Refactor as Node.js application with React server-side rendering
-- Add server-side Google Analytics tracking
+# 2020.7.0
+Update @carnesen/cli-website to 2020.7.0
 
-## 2020.5.0
-### Added
-- Google Analytics tracking
-- Serve /robots.txt
-- Use calendar versioning YYYY.M.#
+# 2020.6.4
+Update @carnesen/cli-website to 2020.6.4
 
-### Internal
-- Use GitHub Actions for CI
+# 2020.6.3
+Initial release!
+
+Implement a Node.js http server using [koa](https://koajs.com/) that serves `@carnesen/cli-website` and `@carnesen/cli/dist` as static sites.
+
+Previously the website was hosted as a static website on Google Cloud Platform. Serving it via a Node.js server will give us flexibility to more easily implement things like multiple version hosting, redirects, etc. all in everybody's favorite language TypeScript.

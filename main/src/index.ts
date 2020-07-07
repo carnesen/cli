@@ -2,7 +2,7 @@
 export { Cli, ICli } from './cli';
 
 // Command-line interface runner
-export { runCliAndExit, IRunCliAndExitOptions } from './run-cli-and-exit';
+export { runCli, IRunCliOptions } from './run-cli';
 
 // Branch factory
 export {
