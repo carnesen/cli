@@ -14,3 +14,9 @@ export function convertToNumber(rawValue: string): number {
 	}
 	return value;
 }
+
+export const ansiColors = {
+	red(message: string): string {
+		return `\u001b[31m${message}\u001b[39m`;
+	},
+};

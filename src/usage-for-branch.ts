@@ -11,7 +11,7 @@ export function UsageForBranch(
 ): string[] {
 	const commandPath = [...parents, current].map(({ name }) => name).join(' ');
 	const lines: string[] = [];
-	lines.push(`Usage: ${commandPath} <subcommand> ...`);
+	lines.push(`Usage: ${commandPath ? `${commandPath} ` : ''}<subcommand> ...`);
 	lines.push('');
 
 	const descriptionLines = hardWrapText(current.description, {

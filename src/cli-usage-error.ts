@@ -14,7 +14,7 @@ export class CliUsageError extends Error {
 	public tree?: ICliTree;
 
 	/**
-	 * @param message If provided, [[`runCliAndExit`]] will also print "Error: \<your
+	 * @param message If provided, [[`runCli`]] will also print "Error: \<your
 	 * message\>"
 	 * @param tree Used internally for constructing the command-line usage string
 	 */

@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli",
 	"description": "Command-line interfaces for Node.js and the browser",
-	"version": "0.5.0-19",
+	"version": "0.5.0-20",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"engines": {
@@ -24,18 +24,18 @@
 		"@carnesen/coded-error": "0.1.1",
 		"@carnesen/run-and-catch": "0.4.0",
 		"@carnesen/tsconfig": "0.3.1",
-		"@types/jest": "26.0.0",
-		"@types/node": "14.0.13",
+		"@types/jest": "26.0.4",
+		"@types/node": "14.0.18",
 		"browser-sync": "2.26.7",
-		"eslint": "7.2.0",
-		"eslint-config-carnesen": "4.2.0",
-		"jest": "26.0.1",
+		"eslint": "7.4.0",
+		"eslint-config-carnesen": "4.4.0",
+		"jest": "26.1.0",
 		"nodemon": "2.0.4",
 		"rimraf": "3.0.2",
-		"ts-jest": "26.1.0",
+		"ts-jest": "26.1.1",
 		"ts-node": "8.10.2",
 		"typedoc": "0.17.0-3",
-		"typescript": "3.9.5"
+		"typescript": "3.9.6"
 	},
 	"files": [
 		"src",
