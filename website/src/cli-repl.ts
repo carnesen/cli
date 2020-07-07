@@ -1,7 +1,7 @@
 import { Terminal } from 'xterm';
 import {
-	runCliAndExit,
-	IRunCliAndExitOptions,
+	runCli,
+	IRunCliOptions,
 	Cli,
 	ICliBranch,
 	ICliCommand,
@@ -170,6 +170,7 @@ export class CliRepl {
 
 	private consoleLog(arg: any) {
 		let str: string;
+		// Normalize line ending at the start of the string
 		if (typeof arg === 'string') {
 			if (arg.startsWith('\n')) {
 				str = `\r${arg}`;
@@ -178,6 +179,8 @@ export class CliRepl {
 			} else {
 				str = `\r\n${arg}`;
 			}
+		} else if (typeof arg.stack === 'string') {
+			str = arg.stack;
 		} else {
 			str = inspect(arg, { colors: true }) || '';
 		}
@@ -202,7 +205,7 @@ export class CliRepl {
 			this.prompt();
 			return;
 		}
-		const options: IRunCliAndExitOptions = {
+		const options: IRunCliOptions = {
 			args,
 			consoleError: (..._args: any[]) => {
 				this.consoleError(_args[0]);
@@ -215,7 +218,7 @@ export class CliRepl {
 		};
 		this.runningCommand = true;
 		this.terminal.write('\r\n');
-		runCliAndExit(Cli(this.root), options)
+		runCli(Cli(this.root), options)
 			.catch((err) => {
 				console.log(err); // eslint-disable-line no-console
 			})

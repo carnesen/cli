@@ -12,8 +12,8 @@ import { CLI_COMMAND } from './cli-command';
 export interface ICli {
 	/**
 	 * @param args The full set of command-line arguments. Defaults to
-	 * `process.argv.slice(2)` in [[`runCliAndExit`]].
-	 * @returns [Optional] The default CLI runner [[`runCliAndExit`]] will
+	 * `process.argv.slice(2)` in [[`runCli`]].
+	 * @returns [Optional] The default CLI runner [[`runCli`]] will
 	 * console.log the return value if there is one.
 	 */
 	(...args: string[]): Promise<any>;

@@ -1,9 +1,4 @@
-import {
-	Cli,
-	CliBranch,
-	runCliAndExit,
-	IRunCliAndExitOptions,
-} from '@carnesen/cli';
+import { Cli, CliBranch, runCli, IRunCliOptions } from '@carnesen/cli';
 
 import { echoHiddenCommand } from '.';
 
@@ -19,7 +14,7 @@ describe(echoHiddenCommand.name, () => {
 	it('only shows up in usage if specifically requested via --help', async () => {
 		const cli = Cli(CliBranch({ name: '', subcommands: [echoHiddenCommand] }));
 		let sawHiddenCommandNameInUsage = false;
-		const runCliAndExitOptions: IRunCliAndExitOptions = {
+		const runCliOptions: IRunCliOptions = {
 			args: ['--help'],
 			processExit() {},
 			consoleError(arg) {
@@ -30,12 +25,12 @@ describe(echoHiddenCommand.name, () => {
 			consoleLog() {},
 		};
 
-		await runCliAndExit(cli, runCliAndExitOptions);
+		await runCli(cli, runCliOptions);
 		expect(sawHiddenCommandNameInUsage).toBe(false);
 
 		// This is a bit hacky, but let's just mutate the options object
-		runCliAndExitOptions.args = [echoHiddenCommand.name, '--help'];
-		await runCliAndExit(cli, runCliAndExitOptions);
+		runCliOptions.args = [echoHiddenCommand.name, '--help'];
+		await runCli(cli, runCliOptions);
 		expect(sawHiddenCommandNameInUsage).toBe(true);
 	});
 });

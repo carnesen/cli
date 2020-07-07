@@ -1,21 +1,19 @@
-import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
 import { CLI_TERSE_ERROR } from './cli-terse-error';
 import { ICli } from './cli';
 import { UsageString } from './usage-string';
+import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
+import { ansiColors } from './util';
 
-function red(message: string) {
-	return `\u001b[31m${message}\u001b[39m`;
-}
-
-export const RED_ERROR = red('Error:');
-
-/** Options for [[`runCliAndExit`]] */
-export interface IRunCliAndExitOptions {
+/** Options for [[`runCli`]] */
+export interface IRunCliOptions {
 	/** Command-line arguments defaulting to `process.argv.slice(2)` */
 	args?: string[];
 
-	/** Called after the command has completed defaulting to `process.exit` */
-	processExit?: (code?: number) => any;
+	/** Defaults to `process.stdout.columns` */
+	columns?: number;
+
+	/** Use ANSI escape codes in usage. Defaults to true */
+	colors?: boolean;
 
 	/** Called on the result of the command defaulting to `console.log` */
 	consoleLog?: typeof console.log;
@@ -23,11 +21,12 @@ export interface IRunCliAndExitOptions {
 	/** Called on errors and exceptions defaulting to `console.error` */
 	consoleError?: typeof console.error;
 
-	/** Defaults to `process.stdout.columns` */
-	columns?: number;
+	/** Called after the command has completed defaulting to `process.exit` */
+	processExit?: (code?: number) => any;
 }
 
-// Default behavior that's convenient for Node.js but also safe for a browser
+// By default, runCli will call `process.exit` after the if `process` is defined in
+// the current global context and  (i.e. if we are in a Node.js environment) but also safe for a browser
 function DEFAULT_PROCESS_EXIT(code?: number): void {
 	if (typeof process === 'object' && typeof process.exit === 'function') {
 		process.exit(code);
@@ -47,22 +46,26 @@ const DEFAULT_COLUMNS =
 		: 80;
 
 /**
- * Run a command-line interface and call process.exit
+ * Run a command-line interface
  *
- * @param cli A CLI function
+ * @param cli An `[[ICli]]`
+ * @returns A Promise representing the command execution
  * */
-export async function runCliAndExit(
+export async function runCli(
 	cli: ICli,
-	options: IRunCliAndExitOptions = {},
-): Promise<void> {
+	options: IRunCliOptions = {},
+): Promise<number> {
 	const {
 		args = DEFAULT_ARGS,
-		processExit = DEFAULT_PROCESS_EXIT,
+		columns = DEFAULT_COLUMNS,
+		colors = true,
 		consoleLog = console.log, // eslint-disable-line no-console
 		consoleError = console.error, // eslint-disable-line no-console
-		columns = DEFAULT_COLUMNS,
+		processExit = DEFAULT_PROCESS_EXIT,
 	} = options;
 	let exitCode = 0;
+	const RED_ERROR = colors ? ansiColors.red('Error:') : 'Error:';
+
 	try {
 		const result = await cli(...args);
 		if (typeof result !== 'undefined') {
@@ -107,4 +110,5 @@ export async function runCliAndExit(
 			processExit(exitCode);
 		}
 	}
+	return exitCode;
 }
