@@ -93,17 +93,13 @@ export class CliRepl {
 
 		this.prompt();
 
-		if (this.commandLine.value()) {
-			this.terminal.write(this.commandLine.value());
-		}
-
 		if (this.submit) {
 			this.handleEnterKeyEvent();
 		}
 	}
 
 	private prompt() {
-		this.terminal.write(`\r\n${PS1}`);
+		this.terminal.write(`\r\n${PS1}${this.commandLine.sequence()}`);
 	}
 
 	private handleKeyEvent({ key, domEvent }: KeyEvent): void {
@@ -144,7 +140,7 @@ export class CliRepl {
 			}
 
 			case UP_ARROW_KEY: {
-				this.renderLine(this.commandHistory.previous(this.commandLine.value()));
+				this.setLine(this.commandHistory.previous(this.commandLine.value()));
 				break;
 			}
 
@@ -156,7 +152,7 @@ export class CliRepl {
 			}
 
 			case DOWN_ARROW_KEY: {
-				this.renderLine(this.commandHistory.next(this.commandLine.value()));
+				this.setLine(this.commandHistory.next(this.commandLine.value()));
 				break;
 			}
 
@@ -229,9 +225,9 @@ export class CliRepl {
 			});
 	}
 
-	private renderLine(line: string, index?: number) {
+	private setLine(line: string) {
 		this.settingCurrentLine = true;
-		const sequence = this.commandLine.setValue(line, index);
+		const sequence = this.commandLine.setValue(line);
 		this.terminal.write(sequence, () => {
 			this.settingCurrentLine = false;
 		});
