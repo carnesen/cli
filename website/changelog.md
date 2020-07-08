@@ -1,5 +1,9 @@
 # @carnesen/cli-website changelog
 
+## 2020.7.1
+- Fix a regression in autocompletion introduced by 2020.7.0
+- Expand coverage of "show" command
+
 ## 2020.7.0
 - Tab completion for argument groups
 - Support quotes and double-quotes in CommandLine

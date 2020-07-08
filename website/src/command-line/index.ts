@@ -5,7 +5,8 @@ export class CommandLine {
 
 	public constructor(line = '', index?: number) {
 		this.line = line;
-		this.index = this.indexInRange(index);
+		this.index =
+			typeof index === 'number' ? this.indexInRange(index) : this.line.length;
 	}
 
 	public splitIntoArgs(
@@ -60,10 +61,8 @@ export class CommandLine {
 		return { args, singleQuoted, doubleQuoted };
 	}
 
-	public indexInRange(index?: number): number {
-		return typeof index === 'number'
-			? Math.min(Math.max(0, index), this.line.length)
-			: this.line.length;
+	public indexInRange(index: number): number {
+		return Math.min(Math.max(0, index), this.line.length);
 	}
 
 	public splitIntoArgsAndSearch(): {
@@ -137,23 +136,30 @@ export class CommandLine {
 		this.index = 0;
 	}
 
-	public setValue(line: string, index?: number): string {
+	public setValue(line: string): string {
 		const changeInLength = line.length - this.line.length;
 
-		let sequence = '';
-		sequence += '\b'.repeat(this.index);
-		sequence += line;
+		let s = '';
+		s += '\b'.repeat(this.index);
+		s += line;
 		if (changeInLength < 0) {
-			sequence += ' '.repeat(-1 * changeInLength);
-			sequence += '\b'.repeat(-1 * changeInLength);
+			s += ' '.repeat(-1 * changeInLength);
+			s += '\b'.repeat(-1 * changeInLength);
 		}
 		// Now the cursor is at the end of the line
 		this.line = line;
-		this.index = this.indexInRange(index);
+		this.index = this.line.length;
 
 		// Add backspaces to move the cursor to the index
-		sequence += '\b'.repeat(line.length - this.index);
-		return sequence;
+		s += '\b'.repeat(line.length - this.index);
+		return s;
+	}
+
+	public sequence(): string {
+		let s = '';
+		s += this.line;
+		s += '\b'.repeat(this.line.length - this.index);
+		return s;
 	}
 
 	public value(): string {

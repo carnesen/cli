@@ -7,6 +7,9 @@ import './browser-console-cli'; // Defines `window.cli`
 import { CliRepl } from './cli-repl';
 import { bold } from './util';
 
+/**
+ * Create a new Xterm.js terminal and hook it up to the examples CliRepl
+ */
 async function loadTerminalApplication() {
 	// Wait for web fonts to work around
 	// https://github.com/xtermjs/xterm.js/issues/1164
