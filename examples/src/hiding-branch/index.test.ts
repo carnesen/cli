@@ -1,4 +1,4 @@
-import { IRunCliOptions, Cli, runCli } from '@carnesen/cli';
+import { Cli, ICliOptions } from '@carnesen/cli';
 import { hidingBranch, hiddenBranch, nonHiddenBranch } from '.';
 import { echoCommand } from '../echo-command';
 import { echoHiddenCommand } from '../echo-hidden-command';
@@ -6,16 +6,14 @@ import { echoHiddenCommand } from '../echo-hidden-command';
 describe(hidingBranch.name, () => {
 	it(`has a hidden command ${echoHiddenCommand.name}`, async () => {
 		const cli = Cli(hidingBranch);
-		expect(await cli(echoHiddenCommand.name, 'foo')).toBe('foo');
+		expect(await cli.api([echoHiddenCommand.name, 'foo'])).toBe('foo');
 	});
 
 	it(`only shows usage for commands in hidden branches if they're navigated to`, async () => {
-		const branchHidingCli = Cli(hidingBranch);
 		let sawHiddenBranchEcho = false;
 		let sawNonHiddenBranchEcho = false;
 		let sawHiddenBranchSubcommands = false;
-		const runCliOptions: IRunCliOptions = {
-			args: ['--help'],
+		const options: ICliOptions = {
 			processExit() {},
 			consoleError(arg) {
 				if (typeof arg === 'string') {
@@ -33,13 +31,13 @@ describe(hidingBranch.name, () => {
 			consoleLog() {},
 		};
 
-		await runCli(branchHidingCli, runCliOptions);
+		const cli = Cli(hidingBranch, options);
+		await cli.run(['--help']);
 		expect(sawHiddenBranchEcho).toBe(false);
 		expect(sawHiddenBranchSubcommands).toBe(false);
 		expect(sawNonHiddenBranchEcho).toBe(true);
 
-		runCliOptions.args = [hiddenBranch.name, '--help'];
-		await runCli(branchHidingCli, runCliOptions);
+		await cli.run([hiddenBranch.name, '--help']);
 		expect(sawHiddenBranchSubcommands).toBe(true);
 	});
 });

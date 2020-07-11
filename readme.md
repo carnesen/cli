@@ -23,7 +23,6 @@ import {
 	Cli,
 	CliCommand,
 	CliNumberArrayArgGroup,
-	runCli,
 } from '@carnesen/cli';
 
 const multiply = CliCommand({
@@ -41,7 +40,7 @@ const multiply = CliCommand({
 export const cli = Cli(multiply);
 
 if (require.main === module) {
-	runCli(cli);
+	cli.run();
 }
 ```
 Here's how that behaves as a CLI.

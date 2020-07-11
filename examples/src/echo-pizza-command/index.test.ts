@@ -5,10 +5,10 @@ const cli = Cli(echoPizzaCommand);
 
 describe(echoPizzaCommand.name, () => {
 	it('normally just echos', async () => {
-		expect(await cli('foo')).toEqual('foo');
+		expect(await cli.api(['foo'])).toEqual('foo');
 	});
 
 	it('has a hidden option "--pizza"', async () => {
-		expect(await cli('foo', '--pizza')).toMatch('__________');
+		expect(await cli.api(['foo', '--pizza'])).toMatch('__________');
 	});
 });

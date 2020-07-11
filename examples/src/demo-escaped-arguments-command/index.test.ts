@@ -5,7 +5,7 @@ const demoEscapedArguments = Cli(demoEscapedArgumentsCommand);
 
 describe(demoEscapedArgumentsCommand.name, () => {
 	it("doesn't interpret --foo after -- as a named argument separator", async () => {
-		const output = await demoEscapedArguments('--', 'echo', '--foo');
+		const output = await demoEscapedArguments.api(['--', 'echo', '--foo']);
 		expect(output).toMatch('Running echo --foo');
 	});
 });

@@ -1,11 +1,10 @@
 import { Terminal } from 'xterm';
 import {
-	runCli,
-	IRunCliOptions,
 	Cli,
 	ICliBranch,
 	ICliCommand,
 	CliBranch,
+	ICliOptions,
 } from '@carnesen/cli';
 
 import {
@@ -201,8 +200,7 @@ export class CliRepl {
 			this.prompt();
 			return;
 		}
-		const options: IRunCliOptions = {
-			args,
+		const options: ICliOptions = {
 			consoleError: (..._args: any[]) => {
 				this.consoleError(_args[0]);
 			},
@@ -214,7 +212,8 @@ export class CliRepl {
 		};
 		this.runningCommand = true;
 		this.terminal.write('\r\n');
-		runCli(Cli(this.root), options)
+		Cli(this.root, options)
+			.run(args)
 			.catch((err) => {
 				console.log(err); // eslint-disable-line no-console
 			})

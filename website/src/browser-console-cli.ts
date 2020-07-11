@@ -1,7 +1,11 @@
-import { Cli, runCli } from '@carnesen/cli';
+import { Cli, ICliOptions } from '@carnesen/cli';
 
 import { rootCommand } from './root-command';
 import { CommandLine } from './command-line';
+
+const options: ICliOptions = {
+	colors: false,
+};
 
 // Define `cli` in the browser's global JavaScript context
 (window as any).cli = function cli(line: string) {
@@ -12,8 +16,5 @@ import { CommandLine } from './command-line';
 			`Your ${doubleQuoted ? 'double' : 'single'} quotes are not balanced`,
 		);
 	}
-	runCli(Cli(rootCommand), {
-		args,
-		colors: false,
-	});
+	Cli(rootCommand, options).run(args);
 };
