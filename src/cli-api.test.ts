@@ -2,7 +2,7 @@ import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from './cli-branch';
 import { CliCommand } from './cli-command';
 import { dummyArgGroup } from './dummy-arg-groups-for-testing';
-import { Cli } from './cli';
+import { CliApi } from './cli-api';
 import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
 
 const commandWithNoArguments = CliCommand({
@@ -46,34 +46,35 @@ const root = CliBranch({
 	],
 });
 
-const cli = Cli(root);
+const cliApi = CliApi(root);
 
-describe(Cli.name, () => {
+describe(CliApi.name, () => {
 	it(`throws ${CLI_USAGE_ERROR} if --help is passed among the arguments of on an otherwise valid invocation`, async () => {
-		const exception = await runAndCatch(Cli(commandWithNoArguments), '--help');
+		const exception = await runAndCatch(CliApi(commandWithNoArguments), [
+			'--help',
+		]);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toBeFalsy();
 	});
 
 	it(`throws ${CLI_USAGE_ERROR} if --help is passed among the commands`, async () => {
-		const exception = await runAndCatch(
-			cli,
+		const exception = await runAndCatch(cliApi, [
 			'--help',
 			commandWithNoArguments.name,
-		);
+		]);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect((exception as CliUsageError).tree!.current).toBe(root);
 		expect(exception.message).toBeFalsy();
 	});
 
 	it('throws USAGE error with empty message if last command is a branch and no additional args is present', async () => {
-		const exception = await runAndCatch(cli);
+		const exception = await runAndCatch(cliApi, []);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toBeFalsy();
 	});
 
 	it('throws USAGE error "bad command" if last command is a branch and additional args is present', async () => {
-		const exception = await runAndCatch(cli, 'oops');
+		const exception = await runAndCatch(cliApi, ['oops']);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/bad command/i);
 		expect(exception.message).toMatch('"oops"');
@@ -81,11 +82,10 @@ describe(Cli.name, () => {
 	});
 
 	it('throws USAGE error "positional arguments" if last command is a command without positionalArgGroup property and additional args is present', async () => {
-		const exception = await runAndCatch(
-			cli,
+		const exception = await runAndCatch(cliApi, [
 			commandWithNamedArgGroups.name,
 			'oops',
-		);
+		]);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch('Unexpected argument "oops"');
 		expect(exception.message).toMatch(commandWithNamedArgGroups.name);
@@ -95,10 +95,10 @@ describe(Cli.name, () => {
 
 	it('Passes parsed positional value as first argument of the "action" function', async () => {
 		const positionalArgs = ['foo', 'bar'];
-		const result = await cli(
+		const result = await cliApi([
 			commandWithPositionalArgGroup.name,
 			...positionalArgs,
-		);
+		]);
 		expect(result).toEqual([
 			dummyArgGroup.parse(positionalArgs),
 			{},
@@ -108,7 +108,7 @@ describe(Cli.name, () => {
 
 	it('Passes parsed named values as second argument of the "action" function', async () => {
 		const namedArgs = ['--foo', 'bar'];
-		const result = await cli(commandWithNamedArgGroups.name, ...namedArgs);
+		const result = await cliApi([commandWithNamedArgGroups.name, ...namedArgs]);
 		expect(result).toEqual([
 			undefined,
 			{ foo: dummyArgGroup.parse(['bar']) },
@@ -117,18 +117,17 @@ describe(Cli.name, () => {
 	});
 
 	it(`Throws USAGE error 'does not allow "--"' if command does not have an "escaped" property`, async () => {
-		const exception = await runAndCatch(
-			cli,
+		const exception = await runAndCatch(cliApi, [
 			commandWithPositionalArgGroup.name,
 			'--',
-		);
+		]);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(commandWithPositionalArgGroup.name);
 		expect(exception.message).toMatch('does not allow "--"');
 	});
 
 	it('Passes parsed escaped value as third argument of the "action" function', async () => {
-		const result = await cli(commandWithEscapedArgGroup.name, '--');
+		const result = await cliApi([commandWithEscapedArgGroup.name, '--']);
 		expect(result).toEqual([
 			undefined,
 			{},

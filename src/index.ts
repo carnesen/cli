@@ -1,8 +1,8 @@
-// Command-line interface
-export { Cli, ICli } from './cli';
-
 // Command-line interface runner
-export { runCli, IRunCliOptions } from './run-cli';
+export { Cli, ICli, ICliOptions } from './cli';
+
+// Command-line interface API
+export { ICliApi } from './cli-api';
 
 // Branch factory
 export {
