@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli-website-server",
 	"description": "Node.js server for cli.carnesen.com",
-	"version": "2020.7.1",
+	"version": "2020.7.2",
 	"scripts": {
 		"build": "rimraf lib/ && tsc",
 		"lint": "eslint --ext .ts,.tsx src",
@@ -12,8 +12,8 @@
 		"prepublishOnly": "npm run test"
 	},
 	"dependencies": {
-		"@carnesen/cli": "0.5.0-20",
-		"@carnesen/cli-website": "2020.7.1",
+		"@carnesen/cli": "0.5.0-21",
+		"@carnesen/cli-website": "2020.7.2",
 		"@types/koa-mount": "4.0.0",
 		"http-status-codes": "1.4.0",
 		"koa": "2.13.0",

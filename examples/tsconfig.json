@@ -1,13 +1,13 @@
 {
 	"ts-node": {
-    "transpileOnly": true
-  },
+		"transpileOnly": true
+	},
 	"extends": "@carnesen/tsconfig",
-  "include": [
-    "src"
-  ],
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "lib"
-  }
+	"include": [
+		"src"
+	],
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "lib"
+	}
 }
