@@ -1,12 +1,11 @@
 import { CodedError } from '@carnesen/coded-error';
-import { CliCommand } from './cli-command';
-import { runCli, IRunCliOptions } from './run-cli';
-import { CliUsageError } from './cli-usage-error';
-import { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
-import { Cli } from './cli';
-import { ansiColors } from './util';
+import { CliCommand } from '../cli-command';
+import { CliUsageError } from '../cli-usage-error';
+import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
+import { ansiColors } from '../util';
+import { ICliOptions, Cli } from '.';
 
-async function runMocked(action: () => any, options: IRunCliOptions = {}) {
+async function runMocked(action: () => any, options: ICliOptions = {}) {
 	const mockOptions = {
 		consoleLog: jest.fn(),
 		consoleError: jest.fn(),
@@ -18,13 +17,9 @@ async function runMocked(action: () => any, options: IRunCliOptions = {}) {
 		action,
 	});
 
-	const cli = Cli(command);
+	const cli = Cli(command, { ...mockOptions, ...options });
 
-	await runCli(cli, {
-		args: [],
-		...mockOptions,
-		...options,
-	});
+	await cli.run([]);
 
 	expect(mockOptions.processExit.mock.calls.length).toBe(1);
 	expect(mockOptions.processExit.mock.calls[0].length).toBe(1);
@@ -47,7 +42,7 @@ async function runMocked(action: () => any, options: IRunCliOptions = {}) {
 	return { exitCode, errorMessage, logMessage };
 }
 
-describe(runCli.name, () => {
+describe(Cli.name, () => {
 	it('exits 0 and does not console.log if action succeeds', async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			// do nothing
@@ -150,17 +145,6 @@ describe(runCli.name, () => {
 		expect(logMessage).toBe(undefined);
 	});
 
-	it('uses sensible defaults for all options', async () => {
-		const command = CliCommand({
-			name: 'cli',
-			action() {
-				// do nothing
-			},
-		});
-		const cli = Cli(command);
-		runCli(cli, { processExit: jest.fn(), args: [] });
-	});
-
 	it('calls the system process.exit at the end by default', async () => {
 		const mockExit = jest
 			.spyOn(process, 'exit')
@@ -171,8 +155,8 @@ describe(runCli.name, () => {
 				// do nothing
 			},
 		});
-		const cli = Cli(command);
-		await runCli(cli, { args: [] });
+		const exitCode = await Cli(command).run([]);
 		expect(mockExit).toHaveBeenCalledWith(0);
+		expect(exitCode).toBe(0);
 	});
 });

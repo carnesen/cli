@@ -5,7 +5,7 @@ const cli = Cli(echoCommand);
 
 describe(echoCommand.name, () => {
 	it('" "-joins and returns the provided positional args', async () => {
-		const returnValue = await cli('foo', 'bar', 'baz');
+		const returnValue = await cli.api(['foo', 'bar', 'baz']);
 		expect(returnValue).toBe('foo bar baz');
 	});
 });

@@ -1,4 +1,4 @@
-import { Cli, CliBranch, runCli, IRunCliOptions } from '@carnesen/cli';
+import { Cli, CliBranch, ICliOptions } from '@carnesen/cli';
 
 import { echoHiddenCommand } from '.';
 
@@ -8,14 +8,12 @@ const BRANCH_WITH_ECHO_AS_HIDDEN_SUBCOMMAND =
 describe(echoHiddenCommand.name, () => {
 	it('behaves like normal echo', async () => {
 		const echoAsHidden = Cli(echoHiddenCommand);
-		expect(await echoAsHidden('foo')).toBe('foo');
+		expect(await echoAsHidden.api(['foo'])).toBe('foo');
 	});
 
 	it('only shows up in usage if specifically requested via --help', async () => {
-		const cli = Cli(CliBranch({ name: '', subcommands: [echoHiddenCommand] }));
 		let sawHiddenCommandNameInUsage = false;
-		const runCliOptions: IRunCliOptions = {
-			args: ['--help'],
+		const options: ICliOptions = {
 			processExit() {},
 			consoleError(arg) {
 				if (typeof arg === 'string' && arg.includes(echoHiddenCommand.name)) {
@@ -24,13 +22,12 @@ describe(echoHiddenCommand.name, () => {
 			},
 			consoleLog() {},
 		};
-
-		await runCli(cli, runCliOptions);
+		const root = CliBranch({ name: '', subcommands: [echoHiddenCommand] });
+		const cli = Cli(root, options);
+		await cli.run(['--help']);
 		expect(sawHiddenCommandNameInUsage).toBe(false);
 
-		// This is a bit hacky, but let's just mutate the options object
-		runCliOptions.args = [echoHiddenCommand.name, '--help'];
-		await runCli(cli, runCliOptions);
+		await cli.run([echoHiddenCommand.name, '--help']);
 		expect(sawHiddenCommandNameInUsage).toBe(true);
 	});
 });

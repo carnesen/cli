@@ -9,14 +9,14 @@ import { CLI_COMMAND } from './cli-command';
 /**
  * A command-line interface (CLI) function
  * */
-export interface ICli {
+export interface ICliApi {
 	/**
 	 * @param args The full set of command-line arguments. Defaults to
 	 * `process.argv.slice(2)` in [[`runCli`]].
 	 * @returns [Optional] The default CLI runner [[`runCli`]] will
 	 * console.log the return value if there is one.
 	 */
-	(...args: string[]): Promise<any>;
+	(args: string[]): Promise<any>;
 }
 
 /**
@@ -24,8 +24,8 @@ export interface ICli {
  *
  * @param root The root of this command-line interface's command tree
  */
-export function Cli(root: TCliRoot): ICli {
-	return async function cli(...args: string[]) {
+export function CliApi(root: TCliRoot): ICliApi {
+	return async function cliApi(args: string[]) {
 		const tree = findCliTree(root, args);
 
 		if (tree.message || tree.current.kind !== CLI_COMMAND) {
