@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli",
 	"description": "Command-line interfaces for Node.js and the browser",
-	"version": "0.5.0-21",
+	"version": "0.5.0-22",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"engines": {
@@ -10,9 +10,9 @@
 	"scripts": {
 		"build": "rimraf lib/ && tsc",
 		"build-watch": "npm run build -- --watch",
-		"docs": "rimraf dist/ && typedoc --mode library --readme readme.md --inputFiles src/index.ts --out dist --theme theme/",
+		"docs": "rimraf dist/ && mkdir dist/ && typedoc --mode library --readme readme.md --inputFiles src/index.ts --out dist --theme theme/ && cp -r images/ dist/images/",
 		"docs-serve": "browser-sync dist",
-		"docs-watch": "nodemon --ext ts,css --ignore dist/ --exec npm -- run docs",
+		"docs-watch": "nodemon --ext ts,css,md --ignore dist/ --exec npm -- run docs",
 		"lint": "eslint --ext .ts src/",
 		"fix": "npm run lint -- --fix",
 		"test": "npm run lint && npm run unit-test && npm run build && npm run docs",

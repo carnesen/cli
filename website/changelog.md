@@ -1,5 +1,8 @@
 # @carnesen/cli-website changelog
 
+## 2020.7.3
+- Promote line-splitting functionality to @carnesen/cli
+
 ## 2020.7.2
 - Update dependencies
 

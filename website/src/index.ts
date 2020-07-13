@@ -4,6 +4,7 @@ import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { INITIAL_HISTORY, rootCommand } from './root-command';
 import './browser-console-cli'; // Defines `window.cli`
+import './multiply-console-cli'; // Defines `window.multiply`
 import { CliRepl } from './cli-repl';
 import { bold } from './util';
 

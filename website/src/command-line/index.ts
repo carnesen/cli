@@ -1,3 +1,4 @@
+import { splitCommandLine } from '@carnesen/cli/lib/split-command-line';
 export class CommandLine {
 	private line: string;
 
@@ -12,53 +13,12 @@ export class CommandLine {
 	public splitIntoArgs(
 		line = this.line,
 	): { args: string[]; singleQuoted: boolean; doubleQuoted: boolean } {
-		const args: string[] = [];
-		let arg: string | undefined;
-		function append(char: string) {
-			if (arg) {
-				arg += char;
-			} else {
-				arg = char;
-			}
-		}
-		let singleQuoted = false;
-		let doubleQuoted = false;
-		for (const char of line) {
-			switch (char) {
-				case '"': {
-					if (singleQuoted) {
-						append(char);
-					} else {
-						doubleQuoted = !doubleQuoted;
-					}
-					break;
-				}
-				case "'": {
-					if (doubleQuoted) {
-						append(char);
-					} else {
-						singleQuoted = !singleQuoted;
-					}
-					break;
-				}
-				case ' ': {
-					if (singleQuoted || doubleQuoted) {
-						append(char);
-					} else if (typeof arg === 'string') {
-						args.push(arg);
-						arg = undefined;
-					}
-					break;
-				}
-				default: {
-					append(char);
-				}
-			}
-		}
-		if (arg) {
-			args.push(arg);
-		}
-		return { args, singleQuoted, doubleQuoted };
+		const { args, quoteChar } = splitCommandLine(line);
+		return {
+			args,
+			singleQuoted: quoteChar === "'",
+			doubleQuoted: quoteChar === '"',
+		};
 	}
 
 	public indexInRange(index: number): number {

@@ -4,17 +4,17 @@ import { ICliTree } from './cli-tree';
 export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
 
 /**
- * Thrown to print command usage and an error message but not a `stack`
+ * Thrown to print usage documentation and an error message
  */
 export class CliUsageError extends Error {
 	/** The string constant [[`CLI_USAGE_ERROR`]] */
 	public readonly code: typeof CLI_USAGE_ERROR;
 
-	/** Used internally for constructing the command-line usage string */
+	/** Used internally for generating usage documentation */
 	public tree?: ICliTree;
 
 	/**
-	 * @param message If provided, [[`runCli`]] will also print "Error: \<your
+	 * @param message If provided, [[`ICli.run`]] will also print "Error: \<your
 	 * message\>"
 	 * @param tree Used internally for constructing the command-line usage string
 	 */

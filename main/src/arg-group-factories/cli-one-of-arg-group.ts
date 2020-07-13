@@ -9,17 +9,17 @@ export interface ICliOneOfArgGroupOptions<TValues extends string[]> {
 	/** Allowed values for this argument. For strict typing do e.g. `['foo' as const]` */
 	values: TValues;
 
-	/** [[`ICliArgGroup.required`]] */
+	/** See [[`ICliArgGroup.required`]] */
 	required?: boolean;
 
-	/** [[`ICliArgGroup.description`]] with "Allowed values: ..." appended automatically
+	/** See [[`ICliArgGroup.description`]] with "Allowed values: ..." appended automatically
 	 * */
 	description?: string;
 
-	/** [[`ICliArgGroup.placeholder`]] defaulting to "\<value\>" */
+	/** See [[`ICliArgGroup.placeholder`]] defaulting to "\<value\>" */
 	placeholder?: string;
 
-	/** [[`ICliArgGroup.hidden`]] */
+	/** See [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }
 
