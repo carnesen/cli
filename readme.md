@@ -1,56 +1,11 @@
-# @carnesen/cli
-Command-line interfaces for Node.js and the browser
-
-[![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://www.npmjs.com/package/@carnesen/cli) [![build status badge](https://github.com/carnesen/cli/workflows/test/badge.svg)](https://github.com/carnesen/cli/actions?query=workflow%3Atest+branch%3Amaster)
-
-The @carnesen/cli package includes runtime JavaScript files for Node.js >=v10 and type declarations for TypeScript >=v3.8. API documentation is available on the web at [cli.carnesen.com/docs](https://cli.carnesen.com/docs). This library has _no_ dependencies, so it works in a browser too! Check out [the live online examples](https://cli.carnesen.com).
-
-## Stability
-This library has 99% test coverage and heavy usage by its author but should be considered 0.x beta software.
-
-## Usage
-Install this package as a dependency of your project using `npm`:
-
-```
-npm install @carnesen/cli
-```
-
-Here is [a CLI](examples/src/multiply/index.ts) that does some basic arithmetic:
-
-```typescript
-// examples/src/multiply/index.ts
-import {
-	Cli,
-	CliCommand,
-	CliNumberArrayArgGroup,
-} from '@carnesen/cli';
-
-const multiply = CliCommand({
-	name: 'multiply',
-	description: 'Multiply numbers and print the result',
-	positionalArgGroup: CliNumberArrayArgGroup({
-		required: true,
-	}),
-	action(numbers) {
-		return numbers.reduce((a, b) => a * b, 1);
-	},
-});
-
-// Export for unit testing
-export const cli = Cli(multiply);
-
-if (require.main === module) {
-	cli.run();
-}
-```
-Here's how that behaves as a CLI.
-
-![screen recording of "multiply" CLI](demo.gif)
-
-Check out [examples/src](examples/src) and [cli.carnesen.com](https://cli.carnesen.com) for more examples.
+Welcome to the `carnesen/cli` monorepo! Here you'll find the source code for the following `npm` packages:
+- [@carnesen/cli](main): The core library 
+- [@carnesen/cli-examples](examples): Examples of how to use `@carnesen/cli`
+- [@carnesen/cli-website](website): The [cli.carnesen.com](https://cli.carnesen.com) browser application
+- [@carnesen/cli-website-server](website-server): The [cli.carnesen.com](https://cli.carnesen.com) Node.js server application
 
 ## More information
-If you have questions, encounter bugs, or would like to request a feature, please don't hesitate to file an issue or submit a pull request on [this project's repository on GitHub](https://github.com/carnesen/cli).
+For more information please check out this project's [homepage](https://cli.carnesen.com/) and [online documentation](https://cli.carnesen.com/docs). If you have questions, encounter bugs, or would like to request a feature, please don't hesitate to [file an issue](https://github.com/carnesen/cli/issues/new) or [submit a pull request](https://github.com/carnesen/cli/compare) on [this project's repository on GitHub](https://github.com/carnesen/cli).
 
 ## License
 MIT © [Chris Arnesen](https://www.carnesen.com)

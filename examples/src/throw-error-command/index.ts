@@ -23,13 +23,13 @@ export const throwErrorCommand = CliCommand({
 			description: `
 			Throw a normal Error (default), a UsageError, or a TerseError
 			
-			By default, if your command throws an Error, runCli console.log's it
+			By default, if your command throws an Error, cli.run console.log's it
 			including the stack trace.
 			
 			If instead your command (or custom argument parser) throws a UsageError, 
-			runCli prints your command's auto-generated usage document.
+			cli.run prints your command's auto-generated usage documentation.
 
-			TerseError tells runCli to simply print the "message", no
+			TerseError tells cli.run to simply print the "message", no
 			usage or stack trace.
 			`,
 		}),

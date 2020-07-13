@@ -4,6 +4,7 @@ import { CliUsageError } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
 import { ansiColors } from '../util';
 import { ICliOptions, Cli } from '.';
+import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
 async function runMocked(action: () => any, options: ICliOptions = {}) {
 	const mockOptions = {
@@ -158,5 +159,34 @@ describe(Cli.name, () => {
 		const exitCode = await Cli(command).run([]);
 		expect(mockExit).toHaveBeenCalledWith(0);
 		expect(exitCode).toBe(0);
+	});
+
+	it('has a runLine method that parses the command-line', async () => {
+		const command = CliCommand({
+			name: 'cli',
+			positionalArgGroup: CliStringArgGroup(),
+			action(str) {
+				expect(str).toBe('foo');
+			},
+		});
+		const exitCode = await Cli(command, { processExit: () => {} }).runLine(
+			'"foo"',
+		);
+		expect(exitCode).toBe(0);
+	});
+
+	it("runLine consoleErrors if there's an unterminated quote", async () => {
+		const spy = jest.fn();
+		const command = CliCommand({
+			name: 'cli',
+			action() {},
+		});
+		const exitCode = await Cli(command, {
+			processExit: () => {},
+			consoleError: spy,
+			colors: false,
+		}).runLine('"foo');
+		expect(exitCode).not.toBe(0);
+		expect(spy).toHaveBeenCalledWith('Error: Unterminated "-quoted string');
 	});
 });

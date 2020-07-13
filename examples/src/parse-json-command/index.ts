@@ -21,7 +21,7 @@ export const parseJsonCommand = CliCommand({
 		arg group automatically parses the JSON and passes it into your command
 		action as type "any" since JSON can represent arbitrary data.
 		
-		To pretty-print an object simply return the object and let runCli
+		To pretty-print an object simply return the object and let cli.run
 		take care of the rest. Behind the scenes, we use Node.js' util.inspect 
 		[https://nodejs.org/api/util.html#util_util_inspect_object_options]
 		(or a browser replacement [https://www.npmjs.com/package/util-inspect]) 

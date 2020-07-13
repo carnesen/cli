@@ -3,16 +3,16 @@ import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliStringArrayArgGroup`]] */
 export interface ICliStringArrayArgGroupOptions {
-	/** [[`ICliArgGroup.description`]] */
+	/** See [[`ICliArgGroup.description`]] */
 	description?: string;
 
-	/** [[`ICliArgGroup.required`]] */
+	/** See [[`ICliArgGroup.required`]] */
 	required?: boolean;
 
-	/** [[`ICliArgGroup.required`]] */
+	/** See [[`ICliArgGroup.required`]] */
 	hidden?: boolean;
 
-	/** [[`ICliArgGroup.placeholder`]] defaulting to "\<str0\> [...]" */
+	/** See [[`ICliArgGroup.placeholder`]] defaulting to "\<str0\> [...]" */
 	placeholder?: string;
 }
 
