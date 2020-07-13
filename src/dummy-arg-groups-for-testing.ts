@@ -1,9 +1,7 @@
 import { ICliArgGroup } from './cli-arg-group';
-import { CliUsageError } from './cli-usage-error';
 
 export const DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED = 'undefined was passed';
 export const DUMMY_ARG_GROUP_EMPTY_ARRAY_WAS_PASSED = 'undefined was passed';
-export const DUMMY_ARG_GROUP_USAGE_ERROR = 'usage error';
 export const DUMMY_ARG_GROUP_THROWN_INTENTIONALLY = 'thrown intentionally';
 export const DUMMY_ARG_GROUP_THROW = 'throw';
 export const DUMMY_ARG_GROUP_THROW_NON_TRUTHY = 'throw-non-truthy';
@@ -24,9 +22,6 @@ export const dummyArgGroup: ICliArgGroup<string, false> = {
 			case DUMMY_ARG_GROUP_THROW_NON_TRUTHY: {
 				// eslint-disable-next-line no-throw-literal
 				throw '';
-			}
-			case DUMMY_ARG_GROUP_USAGE_ERROR: {
-				throw new CliUsageError('Bad bad argument');
 			}
 			default: {
 				return args[0];

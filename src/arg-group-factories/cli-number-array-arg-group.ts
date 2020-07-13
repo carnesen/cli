@@ -4,16 +4,16 @@ import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliNumberArrayArgGroup`]] */
 export interface ICliNumberArrayArgGroupOptions {
-	/** [[`ICliArgGroup.description`]] */
+	/** See [[`ICliArgGroup.description`]] */
 	description?: string;
 
-	/** [[`ICliArgGroup.required`]] */
+	/** See [[`ICliArgGroup.required`]] */
 	required?: boolean;
 
-	/** [[`ICliArgGroup.placeholder`]] defaulting to "\<num0\> [...]" */
+	/** See [[`ICliArgGroup.placeholder`]] defaulting to "\<num0\> [...]" */
 	placeholder?: string;
 
-	/** [[`ICliArgGroup.hidden`]] */
+	/** See [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }
 

@@ -3,16 +3,16 @@ import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliJsonArgGroup`]] */
 export interface ICliJsonArgGroupOptions {
-	/** [[`ICliArgGroup.description`]] */
+	/** See [[`ICliArgGroup.description`]] */
 	description?: string;
 
-	/** [[`ICliArgGroup.required`]] */
+	/** See [[`ICliArgGroup.required`]] */
 	required?: boolean;
 
-	/** [[`ICliArgGroup.placeholder`]]. Defaults to "\<json\>" */
+	/** See [[`ICliArgGroup.placeholder`]]. Defaults to "\<json\>" */
 	placeholder?: string;
 
-	/** [[`ICliArgGroup.hidden`]] */
+	/** See [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }
 
@@ -20,7 +20,7 @@ export interface ICliJsonArgGroupOptions {
  * A factory for [[`ICliArgGroup`]]s that `JSON.parse`
  *
  * @example
- * Suppose our CLI's positionalArgGroup is a CliJsonArgGroup here's how that
+ * Suppose our CLI's positionalArgGroup is a CliJsonArgGroup. Here's how that
  * behaves:
  * ```plaintext
  * $ cli '{"foo":true}' // named value "json" receives object `{ foo: true }`

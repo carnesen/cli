@@ -29,17 +29,18 @@ export interface ICliArgGroup<
 	 * */
 	placeholder: string;
 
-	/** A sentence or two describing this argument group for command-line usage */
+	/** A text description of this argument group. Paragraphs are re-wrapped when
+	 * printed to the terminal so don't worry about whitespace. */
 	description?: string;
 
 	/**
-	 * If `true`, command-line usage will not normally show this arg group.
+	 * If `true`, command-line usage will not normally show this arg group
 	 * */
 	hidden?: boolean;
 
 	/**
-	 * If `true` a [[`CliUsageError`]] is thrown if no arg is provided for this
-	 * group.
+	 * If `true`, throw a [[`CliUsageError`]] if no argument is provided for this
+	 * group
 	 * */
 	required?: TRequired;
 

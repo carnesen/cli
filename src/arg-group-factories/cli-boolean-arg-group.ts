@@ -5,9 +5,9 @@ import { CliUsageError } from '../cli-usage-error';
  * Options for [[`CliBooleanArgGroup`]]
  */
 export interface ICliBooleanArgGroupOptions {
-	/** [[`ICliArgGroup.description`]] */
+	/** See [[`ICliArgGroup.description`]] */
 	description?: string;
-	/** [[`ICliArgGroup.hidden`]] */
+	/** See [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }
 

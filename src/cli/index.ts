@@ -4,15 +4,11 @@ import { UsageString } from '../usage-string';
 import { CLI_USAGE_ERROR, CliUsageError } from '../cli-usage-error';
 import { ansiColors } from '../util';
 import { TCliRoot } from '../cli-tree';
+import { splitCommandLine } from '../split-command-line';
 
-export interface ICli {
-	api: ICliApi;
-	run: (args?: string[]) => Promise<number>;
-}
-
-/** Options for [[`runCli`]] */
+/** Options for [[`Cli`]] */
 export interface ICliOptions {
-	/** Defaults to `process.stdout.columns` */
+	/** Defaults to `process.stdout.columns` or 80 */
 	columns?: number;
 
 	/** Use ANSI escape codes in usage. Defaults to true */
@@ -28,7 +24,43 @@ export interface ICliOptions {
 	processExit?: (code?: number) => any;
 }
 
-// By default, runCli will call `process.exit` after the if `process` is defined in
+/**
+ * Type of an [[`ICli.run`]]
+ */
+export interface ICliRun {
+	/**
+	 * @param args Command line arguments parsed and passed into the command
+	 * action. Defaults to `process.argv.slice(2)` in Node.js.
+	 * @returns The resolved value of the command action
+	 * */
+	(args?: string[]): Promise<number>;
+}
+
+/**
+ * Type of an [[`ICli.runLine`]]
+ */
+export interface ICliRunLine {
+	/**
+	 * @param line A command line parsed and split into args for [[`run.cli`]]
+	 * @returns The resolved value of the command's action
+	 * */
+
+	(line?: string): Promise<number>;
+}
+
+/**
+ * A command-line interface (CLI) created by [[`Cli`]]
+ */
+export interface ICli {
+	/** Programmatic interface for the CLI, useful for unit testing */
+	api: ICliApi;
+	/** Run the command-line interface, console.log the result, and exit */
+	run: ICliRun;
+	/** Split a command line into args and call [[`ICli.run`]] */
+	runLine: ICliRunLine;
+}
+
+// By default, cli.run will call `process.exit` after the if `process` is defined in
 // the current global context and  (i.e. if we are in a Node.js environment) but also safe for a browser
 function DEFAULT_PROCESS_EXIT(code?: number): void {
 	if (typeof process === 'object' && typeof process.exit === 'function') {
@@ -49,28 +81,44 @@ const DEFAULT_COLUMNS =
 		: 80;
 
 /**
- * Run a command-line interface
+ * A factory for [[`ICli`]]s
  *
  * @param root The root of this command-line interface's command tree
- * @returns A Promise representing the command execution
+ * @param options Optional properties and callbacks
+ * @returns A command-line interface object
  * */
 export function Cli(root: TCliRoot, options: ICliOptions = {}): ICli {
+	const {
+		columns = DEFAULT_COLUMNS,
+		colors = true,
+		consoleLog = console.log, // eslint-disable-line no-console
+		consoleError = console.error, // eslint-disable-line no-console
+		processExit = DEFAULT_PROCESS_EXIT,
+	} = options;
+
+	const RED_ERROR = colors ? ansiColors.red('Error:') : 'Error:';
+
 	const api = CliApi(root);
+
 	return {
 		api,
 		run,
+		runLine,
 	};
-	async function run(args = DEFAULT_ARGS) {
-		const {
-			columns = DEFAULT_COLUMNS,
-			colors = true,
-			consoleLog = console.log, // eslint-disable-line no-console
-			consoleError = console.error, // eslint-disable-line no-console
-			processExit = DEFAULT_PROCESS_EXIT,
-		} = options;
-		let exitCode = 0;
-		const RED_ERROR = colors ? ansiColors.red('Error:') : 'Error:';
 
+	async function runLine(line = '') {
+		const { args, quoteChar } = splitCommandLine(line);
+		if (quoteChar) {
+			consoleError(`${RED_ERROR} Unterminated ${quoteChar}-quoted string`);
+			const exitCode = 1;
+			processExit(exitCode);
+			return exitCode;
+		}
+		return await run(args);
+	}
+
+	async function run(args = DEFAULT_ARGS) {
+		let exitCode = 0;
 		try {
 			const result = await api(args);
 			if (typeof result !== 'undefined') {

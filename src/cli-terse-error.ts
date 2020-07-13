@@ -2,7 +2,7 @@
 export const CLI_TERSE_ERROR = 'CLI_TERSE_ERROR';
 
 /**
- * Thrown to print an error message but not a `stack`.
+ * Thrown to print an error message but not a `stack`
  */
 export class CliTerseError extends Error {
 	/** The string constant [[`CLI_TERSE_ERROR`]] */

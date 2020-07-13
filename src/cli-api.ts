@@ -7,14 +7,12 @@ import { TCliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 
 /**
- * A command-line interface (CLI) function
+ * A programmatic interface for a CLI, useful for unit testing
  * */
 export interface ICliApi {
 	/**
-	 * @param args The full set of command-line arguments. Defaults to
-	 * `process.argv.slice(2)` in [[`runCli`]].
-	 * @returns [Optional] The default CLI runner [[`runCli`]] will
-	 * console.log the return value if there is one.
+	 * @param args Command-line arguments
+	 * @returns The resolved value of the command action
 	 */
 	(args: string[]): Promise<any>;
 }

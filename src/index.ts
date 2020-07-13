@@ -1,5 +1,5 @@
 // Command-line interface runner
-export { Cli, ICli, ICliOptions } from './cli';
+export { Cli, ICli, ICliRun, ICliRunLine, ICliOptions } from './cli';
 
 // Command-line interface API
 export { ICliApi } from './cli-api';
