@@ -211,12 +211,8 @@ export class CliRepl {
 			columns: this.terminal.cols,
 		};
 		this.runningCommand = true;
-		this.terminal.write('\r\n');
 		Cli(this.root, options)
 			.run(args)
-			.catch((err) => {
-				console.log(err); // eslint-disable-line no-console
-			})
 			.then(() => {
 				this.commandLine.reset();
 				this.runningCommand = false;

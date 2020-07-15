@@ -11,7 +11,7 @@ const data: Datum[] = [
 		result: {
 			positionalArgs: ['foo', 'bar'],
 			namedArgs: { baz: ['jane', 'doe'] },
-			escapedArgs: undefined,
+			doubleDashArgs: undefined,
 		},
 	},
 	{
@@ -19,7 +19,7 @@ const data: Datum[] = [
 		result: {
 			positionalArgs: ['foo', 'bar'],
 			namedArgs: { baz: ['jane', 'doe'] },
-			escapedArgs: undefined,
+			doubleDashArgs: undefined,
 		},
 	},
 	{
@@ -27,7 +27,7 @@ const data: Datum[] = [
 		result: {
 			positionalArgs: [],
 			namedArgs: {},
-			escapedArgs: ['--foo', '--bar'],
+			doubleDashArgs: ['--foo', '--bar'],
 		},
 	},
 	{
@@ -35,7 +35,7 @@ const data: Datum[] = [
 		result: {
 			positionalArgs: [],
 			namedArgs: {},
-			escapedArgs: [],
+			doubleDashArgs: [],
 		},
 	},
 	{
@@ -43,7 +43,7 @@ const data: Datum[] = [
 		result: {
 			positionalArgs: [],
 			namedArgs: { foo: [] },
-			escapedArgs: undefined,
+			doubleDashArgs: undefined,
 		},
 	},
 	{
@@ -53,7 +53,7 @@ const data: Datum[] = [
 			namedArgs: {
 				help: ['baz'],
 			},
-			escapedArgs: undefined,
+			doubleDashArgs: undefined,
 		},
 	},
 	{
@@ -61,7 +61,7 @@ const data: Datum[] = [
 		result: {
 			positionalArgs: [],
 			namedArgs: {},
-			escapedArgs: ['--help', 'baz'],
+			doubleDashArgs: ['--help', 'baz'],
 		},
 	},
 ];

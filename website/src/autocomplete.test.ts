@@ -15,7 +15,7 @@ const command = CliCommand({
 		name: oneOfArgGroup,
 		str: CliStringArgGroup(),
 	},
-	escapedArgGroup: oneOfArgGroup,
+	doubleDashArgGroup: oneOfArgGroup,
 	action() {},
 });
 
@@ -31,7 +31,7 @@ const requiredPositionalArgGroupCommand = CliCommand({
 		values: ['foo', 'bar'],
 		required: true,
 	}),
-	escapedArgGroup: oneOfArgGroup,
+	doubleDashArgGroup: oneOfArgGroup,
 });
 
 const branch0 = CliBranch({ name: 'branch0', subcommands: [command] });
@@ -118,7 +118,8 @@ const data: {
 		expectedCompletions: ['ommand '],
 	},
 	{
-		title: 'completions taken from positional, named, and escaped arguments',
+		title:
+			'completions taken from positional, named, and double-dash arguments',
 		args: ['command'],
 		search: '',
 		expectedCompletions: [
@@ -133,13 +134,13 @@ const data: {
 	},
 	{
 		title:
-			'the completions of the escaped arg group if we are at the start of it',
+			'the completions of the double-dash arg group if we are at the start of it',
 		args: ['command', '--'],
 		search: '',
 		expectedCompletions: ['foo', 'bar', 'baz'],
 	},
 	{
-		title: 'nothing if we are past the start of the escaped arg group',
+		title: 'nothing if we are past the start of the double-dash arg group',
 		args: ['command', '--', 'foo'],
 		search: 'b',
 		expectedCompletions: [],

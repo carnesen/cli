@@ -3,7 +3,7 @@
  */
 
 export { advancedBranch } from './advanced-branch';
-export { demoEscapedArgumentsCommand } from './demo-escaped-arguments-command';
+export { demoDoubleDashArgumentsCommand } from './demo-double-dash-arguments-command';
 export { echoCommand } from './echo-command';
 export { echoHiddenCommand } from './echo-hidden-command';
 export { echoPizzaCommand } from './echo-pizza-command';
