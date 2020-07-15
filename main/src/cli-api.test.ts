@@ -28,9 +28,9 @@ const commandWithPositionalArgGroup = CliCommand({
 	},
 });
 
-const commandWithEscapedArgGroup = CliCommand({
-	name: 'command-with-escaped-arg-group',
-	escapedArgGroup: dummyArgGroup,
+const commandWithDoubleDashArgGroup = CliCommand({
+	name: 'command-with-double-dash-arg-group',
+	doubleDashArgGroup: dummyArgGroup,
 	action(...args) {
 		return args;
 	},
@@ -42,7 +42,7 @@ const root = CliBranch({
 		commandWithNoArguments,
 		commandWithPositionalArgGroup,
 		commandWithNamedArgGroups,
-		commandWithEscapedArgGroup,
+		commandWithDoubleDashArgGroup,
 	],
 });
 
@@ -116,7 +116,7 @@ describe(CliApi.name, () => {
 		]);
 	});
 
-	it(`Throws USAGE error 'does not allow "--"' if command does not have an "escaped" property`, async () => {
+	it(`Throws USAGE error 'does not allow "--"' if command does not have an "doubleDashArgGroup" property`, async () => {
 		const exception = await runAndCatch(cliApi, [
 			commandWithPositionalArgGroup.name,
 			'--',
@@ -126,12 +126,12 @@ describe(CliApi.name, () => {
 		expect(exception.message).toMatch('does not allow "--"');
 	});
 
-	it('Passes parsed escaped value as third argument of the "action" function', async () => {
-		const result = await cliApi([commandWithEscapedArgGroup.name, '--']);
+	it('Passes parsed double-dash value as third argument of the "action" function', async () => {
+		const result = await cliApi([commandWithDoubleDashArgGroup.name, '--']);
 		expect(result).toEqual([
 			undefined,
 			{},
-			commandWithEscapedArgGroup.escapedArgGroup!.parse([]),
+			commandWithDoubleDashArgGroup.doubleDashArgGroup!.parse([]),
 		]);
 	});
 });

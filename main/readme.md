@@ -7,80 +7,25 @@ The `carnesen/cli` package includes:
 - TypeScript type declarations (3.7+)
 - HTML API documentation
 
-This library has _no_ dependencies and is known to work with Node.js 10+ and all modern web browsers. For more information please check out our:
+This library has _no_ dependencies and is known to work with Node.js 10+ and all modern web browsers.
+
+## Features
+- **Easy to use**: We ❤️ CLI's and want to use them everywhere for everything. This library makes it easy as can be to create beautiful easy-to-use CLIs for Node.js and for web browsers.
+
+- **Automatic documentation**: Build your CLI with our factories, and we'll take care of the rest. If you add descriptions to your commands, we'll automatically re-wrap the text to fit the user's terminal.
+
+- **Intelligent types**: This is first and foremost a TypeScript library. All components are intelligently typed, and our built-in argument parsers ensure that the types are respected at runtime.
+
+- **Automatic autocomplete** (Coming soon!): [Autocomplete](https://en.wikipedia.org/wiki/Autocomplete) supercharges a CLI. We've implemented automatic autocomplete in [the live examples](https://cli.carnesen.com) and plan to [add this as a feature to the core library](https://github.com/carnesen/cli/issues/32) in the next release.
+
+## Stability
+This library has 99% test coverage and heavy usage by its authors but should be considered 0.x beta software.
+
+## More information
+Questions, bugs, feature requests? Please [file an issue](https://github.com/carnesen/cli/issues/new) or [submit a pull request](https://github.com/carnesen/cli/compare) on [this project's repository on GitHub](https://github.com/carnesen/cli#readme), and check out our:
 - [Interactive examples](https://cli.carnesen.com/)
 - [Online documentation](https://cli.carnesen.com/docs)
-- [Repository on GitHub](https://github.com/carnesen/cli)
 - [Example project](https://github.com/carnesen/cli/tree/master/examples)
 
-### Usage
-Install this library using `npm`:
-
-```
-npm install @carnesen/cli
-```
-
-Here is a TypeScript Node.js CLI that does some basic arithmetic:
-
-```typescript
-// src/multiply.ts
-import {
-   Cli,
-   CliCommand,
-   CliNumberArrayArgGroup,
-} from '@carnesen/cli';
-
-const multiplyCommand = CliCommand({
-   name: 'multiply',
-   description: 'Multiply numbers and print the result',
-   positionalArgGroup: CliNumberArrayArgGroup({
-      required: true,
-   }),
-   action(numbers) {
-      return numbers.reduce((a, b) => a * b, 1);
-   },
-});
-
-// Export for unit testing
-export const cli = Cli(multiplyCommand);
-
-// If this module is the entrypoint for this Node.js process
-if (require.main === module) {
-   cli.run();
-}
-```
-
-Here's how that Node.js CLI behaves in a terminal:
-<p><img width="400" src="images/multiply-nodejs.jpg" alt="Multiple CLI in Node.js"></p>
-
-The only Node.js-specific code is the `if (require.main === module)` block. To instead make a web browser console CLI, replace that with:
-
-```typescript
-(window as any).multiply = (line: string) => {
-	cli.runLine(line);
-};
-```
-
-Here's how that behaves as a web browser console CLI:
-<p><img width="400" src="images/multiply-browser-console.jpg" alt="Multiple CLI in browser console"></p>
-
-Like an exit code in a shell, the resolved value of `0` means the command finished successfully. Anything else e.g. `1` is an error code. Try it you yourself at [cli.carnesen.com](https://cli.carnesen.com). (How to open the console in [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Opening_the_Web_Console) and [Google Chrome](https://stackoverflow.com/a/66434/2793540))
-
-### Features
-All components of `@carnesen/cli` are intelligently typed e.g. `action`'s `numbers` argument has type `number[]`.
-
-### Core concepts
-The general structure of a `@carnesen/cli` is:
-```
-<branch> <command> <positional-args> --name <named-args> -- <escaped-args>
-```
-Only `<command>` is required.
-
-### Stability
-This library has 99% test coverage and heavy usage by its author but should be considered 0.x beta software.
-
-### More information
-If you have questions, encounter bugs, or would like to request a feature, please don't hesitate to [file an issue](https://github.com/carnesen/cli/issues/new) or [submit a pull request](https://github.com/carnesen/cli/compare) on [this project's repository on GitHub](https://github.com/carnesen/cli).
-
-### License
-MIT © [Chris Arnesen](https://www.carnesen.com)
+## License
+[MIT](https://en.wikipedia.org/wiki/MIT_License) © [Chris Arnesen](https://www.carnesen.com)

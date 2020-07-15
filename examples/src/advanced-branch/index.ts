@@ -1,6 +1,6 @@
 import { CliBranch } from '@carnesen/cli';
 import { hidingBranch } from '../hiding-branch';
-import { demoEscapedArgumentsCommand } from '../demo-escaped-arguments-command';
+import { demoDoubleDashArgumentsCommand } from '../demo-double-dash-arguments-command';
 import { parseJsonCommand } from '../parse-json-command';
 
 export const advancedBranch = CliBranch({
@@ -8,5 +8,5 @@ export const advancedBranch = CliBranch({
 	description: `
 		Examples of advanced @carnesen/cli features
 	`,
-	subcommands: [demoEscapedArgumentsCommand, hidingBranch, parseJsonCommand],
+	subcommands: [demoDoubleDashArgumentsCommand, hidingBranch, parseJsonCommand],
 });

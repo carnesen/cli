@@ -11,7 +11,7 @@ export interface ICliCommandOptions<
 	} = {
 		[name: string]: ICliArgGroup;
 	},
-	TEscapedArgGroup extends ICliArgGroup = ICliArgGroup
+	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup
 > {
 	/** Identifier for this command in command-line usage */
 	name: string;
@@ -22,7 +22,7 @@ export interface ICliCommandOptions<
 		namedValues: {
 			[K in keyof TNamedArgGroups]: TValueFromCliArgGroup<TNamedArgGroups[K]>;
 		},
-		escapedValue: TValueFromCliArgGroup<TEscapedArgGroup>,
+		doubleDashValue: TValueFromCliArgGroup<TDoubleDashArgGroup>,
 	) => any;
 
 	/** A [[`ICliArgGroup`]] for the arguments before the first separator argument */
@@ -32,7 +32,7 @@ export interface ICliCommandOptions<
 	namedArgGroups?: TNamedArgGroups;
 
 	/** A [[`ICliArgGroup`]] for the arguments after a lone "--" */
-	escapedArgGroup?: TEscapedArgGroup;
+	doubleDashArgGroup?: TDoubleDashArgGroup;
 
 	/** A sentence or two about this command for command-line usage */
 	description?: string;
@@ -49,12 +49,12 @@ export interface ICliCommand<
 	} = {
 		[name: string]: ICliArgGroup;
 	},
-	TEscapedArgGroup extends ICliArgGroup = ICliArgGroup
+	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup
 >
 	extends ICliCommandOptions<
 		TPositionalArgGroup,
 		TNamedArgGroups,
-		TEscapedArgGroup
+		TDoubleDashArgGroup
 	> {
 	/** The string literal [[`CLI_COMMAND`]] */
 	kind: typeof CLI_COMMAND;
@@ -68,14 +68,14 @@ export function CliCommand<
 	} = {
 		[name: string]: ICliArgGroup;
 	},
-	TEscapedArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>
+	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>
 >(
 	options: ICliCommandOptions<
 		TPositionalArgGroup,
 		TNamedArgGroups,
-		TEscapedArgGroup
+		TDoubleDashArgGroup
 	>,
-): ICliCommand<TPositionalArgGroup, TNamedArgGroups, TEscapedArgGroup> {
+): ICliCommand<TPositionalArgGroup, TNamedArgGroups, TDoubleDashArgGroup> {
 	return {
 		...options,
 		kind: CLI_COMMAND,

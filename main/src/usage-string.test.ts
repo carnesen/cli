@@ -11,7 +11,7 @@ const positionalArgGroup = CliStringArgGroup({
 	description: 'A word',
 	placeholder: '<word>',
 });
-const escapedArgGroup = CliStringArgGroup({
+const doubleDashArgGroup = CliStringArgGroup({
 	description: 'Another word',
 	required: true,
 });
@@ -22,7 +22,7 @@ const current = CliCommand({
 	namedArgGroups: {
 		message: messageArgGroup,
 	},
-	escapedArgGroup,
+	doubleDashArgGroup,
 	action(foo) {
 		return foo;
 	},

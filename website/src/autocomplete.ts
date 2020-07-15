@@ -50,10 +50,14 @@ export function autocomplete(
 
 			// This is perhaps an obscure sub-case to start with, but if the previous
 			// arg is "--", we can be sure we are currently searching at the start of
-			// the "escaped" argument group e.g. "cloud users list -- "
+			// the "double dash" argument group e.g. "cloud users list -- "
 			if (previousArg === '--') {
-				// We are in the escaped arg group
-				return autocompleteArgGroup(tree.current.escapedArgGroup, [], search);
+				// We are in the double-dash arg group
+				return autocompleteArgGroup(
+					tree.current.doubleDashArgGroup,
+					[],
+					search,
+				);
 			}
 
 			// Otherwise if there's a "--" but we're not at the start of the argument
@@ -61,12 +65,12 @@ export function autocomplete(
 			if (tree.args.includes('--')) {
 				return [];
 			}
-			// Now we know we are NOT in the escaped args group
+			// Now we know we are NOT in the double-dash args group
 
 			// E.g. "cloud users list -" or "cloud users list --"
 			if (search === '-' || search === '--') {
 				const suggestions: string[] = [];
-				if (command.escapedArgGroup) {
+				if (command.doubleDashArgGroup) {
 					suggestions.push('--');
 				}
 				suggestions.push(...namedArgGroupSeparators);
@@ -93,7 +97,7 @@ export function autocomplete(
 
 				const suggestions: string[] = [];
 				if (search === '') {
-					if (command.escapedArgGroup) {
+					if (command.doubleDashArgGroup) {
 						suggestions.push('--');
 					}
 					suggestions.push(...namedArgGroupSeparators);
