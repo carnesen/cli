@@ -30,7 +30,9 @@ export function CliApi(root: TCliRoot): ICliApi {
 			throw new CliUsageError(tree.message, tree);
 		}
 
-		const { positionalArgs, namedArgs, escapedArgs } = partitionArgs(tree.args);
+		const { positionalArgs, namedArgs, doubleDashArgs } = partitionArgs(
+			tree.args,
+		);
 
 		// We found "--help" among the arguments
 		if (namedArgs.help) {
@@ -49,8 +51,8 @@ export function CliApi(root: TCliRoot): ICliApi {
 
 		// All validation for named argument groups is done during parsing
 
-		// Pre-validation for escaped argument group
-		if (!command.escapedArgGroup && escapedArgs) {
+		// Pre-validation for double-dash argument group
+		if (!command.doubleDashArgGroup && doubleDashArgs) {
 			throw new CliUsageError(
 				`Command "${command.name}" does not allow "--" as an argument`,
 			);
@@ -60,15 +62,15 @@ export function CliApi(root: TCliRoot): ICliApi {
 		// `CliUsageError`, which we catch and enhance with the current `TCliTree`
 		// context.
 		try {
-			let argsValue: any;
+			let positionalValue: any;
 			if (command.positionalArgGroup) {
-				// Note that for named and escaped args, we distinguish between
-				// `undefined` and `[]`. For example, "cli" gives an escaped args
-				// `undefined` whereas "cli --" gives an escaped args `[]`. For the
+				// Note that for named and double-dash args, we distinguish between
+				// `undefined` and `[]`. For example, "cli" gives an double-dash args
+				// `undefined` whereas "cli --" gives an double-dash args `[]`. For the
 				// "positionalArgs", however, there is no such distinction. By convention,
 				// we elect here to pass in `undefined` rather than an empty array when no
 				// positional arguments are passed.
-				argsValue = await parseArgs(
+				positionalValue = await parseArgs(
 					command.positionalArgGroup,
 					positionalArgs.length > 0 ? positionalArgs : undefined,
 					undefined,
@@ -80,16 +82,20 @@ export function CliApi(root: TCliRoot): ICliApi {
 				namedArgs,
 			);
 
-			let escapedValue: any;
-			if (command.escapedArgGroup) {
-				escapedValue = await parseArgs(
-					command.escapedArgGroup,
-					escapedArgs,
+			let doubleDashValue: any;
+			if (command.doubleDashArgGroup) {
+				doubleDashValue = await parseArgs(
+					command.doubleDashArgGroup,
+					doubleDashArgs,
 					'--',
 				);
 			}
 
-			const result = await command.action(argsValue, namedValues, escapedValue);
+			const result = await command.action(
+				positionalValue,
+				namedValues,
+				doubleDashValue,
+			);
 			return result;
 		} catch (exception) {
 			if (exception && exception.code === CLI_USAGE_ERROR) {

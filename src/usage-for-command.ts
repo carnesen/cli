@@ -13,7 +13,7 @@ export function UsageForCommand(
 	const {
 		positionalArgGroup,
 		namedArgGroups,
-		escapedArgGroup,
+		doubleDashArgGroup,
 		description,
 	} = current;
 	const commandPathString = [...parents, current]
@@ -75,15 +75,17 @@ export function UsageForCommand(
 		}
 	}
 
-	if (escapedArgGroup && !escapedArgGroup.hidden) {
-		const { placeholder, required } = escapedArgGroup;
+	if (doubleDashArgGroup && !doubleDashArgGroup.hidden) {
+		const { placeholder, required } = doubleDashArgGroup;
 		const fullPlaceholder = `-- ${placeholder}`;
 		firstLine += ` ${
 			required ? fullPlaceholder : wrapInSquareBrackets(fullPlaceholder)
 		}`;
 		lines.push('Special arguments:');
 		lines.push('');
-		lines.push(...TwoColumnTable([[placeholder, escapedArgGroup.description]]));
+		lines.push(
+			...TwoColumnTable([[placeholder, doubleDashArgGroup.description]]),
+		);
 	}
 
 	return [firstLine, '', ...lines];

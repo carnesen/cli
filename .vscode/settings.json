@@ -1,8 +1,15 @@
 {
-  "cSpell.words": [
+	"cSpell.words": [
 		"cli",
 		"cli's",
+		"clis",
 		"subcommand",
-		"subcommands"
-	]
+		"subcommands",
+		"typedoc"
+	],
+	"[markdown]": {
+		"editor.wordWrap": "on",
+		"editor.insertSpaces": true,
+		"editor.quickSuggestions": false
+	}
 }

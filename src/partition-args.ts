@@ -1,26 +1,26 @@
 export type TPartitioned = {
 	positionalArgs: string[];
 	namedArgs: { [argName: string]: string[] | undefined };
-	escapedArgs: string[] | undefined;
+	doubleDashArgs: string[] | undefined;
 };
 /**
  * Partitions the provided raw args into groups based on separators:
- * <branch> <command> <positional arg> --named-arg <value> -- <escaped args>
+ * <branch> <command> <positional arg> --named-arg <value> -- <double-dash args>
  * @param args Raw command-line arguments including separators
  */
 export function partitionArgs(args: string[]): TPartitioned {
 	const partitioned: TPartitioned = {
 		positionalArgs: [],
 		namedArgs: {},
-		escapedArgs: undefined,
+		doubleDashArgs: undefined,
 	};
 	let currentArgs = partitioned.positionalArgs;
 	for (let i = 0; i < args.length; i += 1) {
 		const arg = args[i].trim();
 
 		if (arg === '--') {
-			// Everything after -- goes into "escaped"
-			partitioned.escapedArgs = args.slice(i + 1);
+			// Everything after -- goes into "double dash"
+			partitioned.doubleDashArgs = args.slice(i + 1);
 			break;
 		}
 
