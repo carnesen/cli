@@ -19,7 +19,7 @@ export const echoPizzaCommand = CliCommand({
 	name: 'echo-pizza',
 	positionalArgGroup: CliStringArrayArgGroup(),
 	description: `
-		Just like "echo" but with a hidden flag "--pizza"
+		Same as echo but with a hidden flag --pizza
 
 		A hidden option doesn't appear in the command's usage documentation.
 		Hidden options could be "easter eggs" like this one or internal or

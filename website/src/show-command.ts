@@ -59,7 +59,7 @@ export const showCommand = CliCommand({
 			}
 		}
 		// Set tab size in GitHub rendering
-		const fullUrl = `${url}?ts=4`;
+		const fullUrl = `${url}?ts=3`;
 		window.open(fullUrl, '_blank');
 		return `Opened ${fullUrl} in a new tab`;
 	},
