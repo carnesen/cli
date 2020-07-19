@@ -3,5 +3,8 @@
 		"autocompletions",
 		"subcommand",
 		"subcommands"
-	]
+	],
+	"[markdown]": {
+		"editor.insertSpaces": true
+	}
 }

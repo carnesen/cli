@@ -5,13 +5,13 @@
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"bin": {
-		"cli-examples": "lib/cli.js"
+		"carnesen-cli-examples": "lib/cli.js"
 	},
 	"engines": {
 		"node": ">=10.0.0"
 	},
 	"scripts": {
-		"build": "rimraf lib/ && tsc",
+		"build": "rimraf lib/ && tsc --project tsconfig.json",
 		"build-watch": "npm run build -- --watch",
 		"cli": "node lib/cli",
 		"dev": "ts-node src/cli",
