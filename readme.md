@@ -12,7 +12,7 @@ This library has _no_ dependencies and is known to work with Node.js 10+ and all
 ## Features
 - **Easy to use**: We ❤️ CLI's and want to use them everywhere for everything. This library makes it easy as can be to create beautiful easy-to-use CLIs for Node.js and for web browsers.
 
-- **Automatic documentation**: Build your CLI with our factories, and we'll take care of the rest. If you add descriptions to your commands, we'll automatically re-wrap the text to fit the user's terminal.
+- **Automatic documentation**: Build your CLI with our factories, and we'll take care of the rest. If you add descriptions to your commands, we'll re-wrap the text to fit the user's terminal. Not ready to expose a feature yet? Simply add "hidden=true" to any command/branch/argument specification, and we'll hide it in the automatic documentation.
 
 - **Intelligent types**: This is first and foremost a TypeScript library. All components are intelligently typed, and our built-in argument parsers ensure that the types are respected at runtime.
 
