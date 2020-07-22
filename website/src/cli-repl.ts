@@ -93,7 +93,7 @@ export class CliRepl {
 		this.prompt();
 
 		if (this.submit) {
-			this.handleEnterKeyEvent();
+			this.runCurrentLine();
 		}
 	}
 
@@ -127,7 +127,7 @@ export class CliRepl {
 			}
 
 			case ENTER_KEY: {
-				this.handleEnterKeyEvent();
+				this.runCurrentLine();
 				break;
 			}
 
@@ -167,13 +167,7 @@ export class CliRepl {
 		let str: string;
 		// Normalize line ending at the start of the string
 		if (typeof arg === 'string') {
-			if (arg.startsWith('\n')) {
-				str = `\r${arg}`;
-			} else if (arg.startsWith('\r\n')) {
-				str = arg;
-			} else {
-				str = `\r\n${arg}`;
-			}
+			str = arg.startsWith('\n') ? `\r${arg}` : arg;
 		} else if (typeof arg.stack === 'string') {
 			str = arg.stack;
 		} else {
@@ -188,6 +182,8 @@ export class CliRepl {
 	}
 
 	private runCurrentLine(): void {
+		this.terminal.write('\r\n');
+		this.commandHistory.submit(this.commandLine.value());
 		const {
 			args,
 			singleQuoted,
@@ -207,7 +203,6 @@ export class CliRepl {
 			consoleLog: (..._args: any[]) => {
 				this.consoleLog(_args[0]);
 			},
-			processExit() {},
 			columns: this.terminal.cols,
 		};
 		this.runningCommand = true;
@@ -226,11 +221,6 @@ export class CliRepl {
 		this.terminal.write(sequence, () => {
 			this.settingCurrentLine = false;
 		});
-	}
-
-	private handleEnterKeyEvent() {
-		this.commandHistory.submit(this.commandLine.value());
-		this.runCurrentLine();
 	}
 
 	private addToLine(str: string) {
