@@ -34,7 +34,7 @@ export const throwErrorCommand = CliCommand({
 			`,
 		}),
 	},
-	action(_, { message, kind }) {
+	action({ namedValues: { message, kind } }) {
 		switch (kind) {
 			case 'usage': {
 				throw new CliUsageError(message);

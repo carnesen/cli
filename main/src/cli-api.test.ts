@@ -81,7 +81,7 @@ describe(CliApi.name, () => {
 		expect(exception.message).toMatchSnapshot();
 	});
 
-	it('throws USAGE error "positional arguments" if last command is a command without positionalArgGroup property and additional args is present', async () => {
+	it('throws USAGE error "positional arguments" if last command is a command without positionalArgGroup property and additional args are present', async () => {
 		const exception = await runAndCatch(cliApi, [
 			commandWithNamedArgGroups.name,
 			'oops',
@@ -93,26 +93,29 @@ describe(CliApi.name, () => {
 		expect(exception.message).toMatchSnapshot();
 	});
 
-	it('Passes parsed positional value as first argument of the "action" function', async () => {
+	it('Passes parsed positionalValue to the "action" function', async () => {
 		const positionalArgs = ['foo', 'bar'];
 		const result = await cliApi([
 			commandWithPositionalArgGroup.name,
 			...positionalArgs,
 		]);
 		expect(result).toEqual([
-			dummyArgGroup.parse(positionalArgs),
-			{},
-			undefined,
+			{
+				positionalValue: dummyArgGroup.parse(positionalArgs),
+				namedValues: {},
+				dashDashValue: undefined,
+			},
 		]);
 	});
 
-	it('Passes parsed named values as second argument of the "action" function', async () => {
+	it('Passes parsed namedValues to the "action" function', async () => {
 		const namedArgs = ['--foo', 'bar'];
 		const result = await cliApi([commandWithNamedArgGroups.name, ...namedArgs]);
 		expect(result).toEqual([
-			undefined,
-			{ foo: dummyArgGroup.parse(['bar']) },
-			undefined,
+			{
+				doubleDashValue: undefined,
+				namedValues: { foo: dummyArgGroup.parse(['bar']) },
+			},
 		]);
 	});
 
@@ -126,12 +129,15 @@ describe(CliApi.name, () => {
 		expect(exception.message).toMatch('does not allow "--"');
 	});
 
-	it('Passes parsed double-dash value as third argument of the "action" function', async () => {
+	it('Passes parsed doubleDashValue to the "action" function', async () => {
 		const result = await cliApi([commandWithDoubleDashArgGroup.name, '--']);
 		expect(result).toEqual([
-			undefined,
-			{},
-			commandWithDoubleDashArgGroup.doubleDashArgGroup!.parse([]),
+			{
+				doubleDashValue: commandWithDoubleDashArgGroup.doubleDashArgGroup!.parse(
+					[],
+				),
+				namedValues: {},
+			},
 		]);
 	});
 });

@@ -165,7 +165,7 @@ describe(Cli.name, () => {
 		const command = CliCommand({
 			name: 'cli',
 			positionalArgGroup: CliStringArgGroup(),
-			action(str) {
+			action({ positionalValue: str }) {
 				expect(str).toBe('foo');
 			},
 		});

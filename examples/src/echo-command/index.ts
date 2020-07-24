@@ -9,7 +9,7 @@ export const echoCommand = CliCommand({
 	positionalArgGroup: CliStringArrayArgGroup({
 		required: true,
 	}),
-	action(messages) {
+	action({ positionalValue: messages }) {
 		const text = messages.join(' ');
 		return text;
 	},

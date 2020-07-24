@@ -33,7 +33,7 @@ export const showCommand = CliCommand({
 		placeholder: '<command>',
 		required: true,
 	}),
-	action(name) {
+	action({ namedValues: { name } }) {
 		let url: string;
 		switch (name) {
 			case echoCommand.name:

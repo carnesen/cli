@@ -24,7 +24,7 @@ export const demoDoubleDashArgumentsCommand = CliCommand({
 		required: true,
 		placeholder: '<command> [<arguments>]',
 	}),
-	action(_, __, args) {
+	action({ doubleDashValue: args }) {
 		return `
 Running ${args.join(' ')}
 

@@ -2,7 +2,7 @@ import { Terminal, ITerminalOptions } from 'xterm';
 import 'xterm/css/xterm.css';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import { INITIAL_HISTORY, rootCommand } from './root-command';
+import { INITIAL_HISTORY, rootBranch } from './root-branch';
 import './browser-console-cli'; // Defines `window.cli`
 import './multiply-console-cli'; // Defines `window.multiply`
 import { CliRepl } from './cli-repl';
@@ -60,7 +60,7 @@ async function loadTerminalApplication() {
 		)} examples in your browser.
 
 		Up and down arrows navigate command history. Tab auto-completes.`,
-		subcommands: rootCommand.subcommands,
+		subcommands: rootBranch.subcommands,
 		terminal,
 		line,
 		submit,

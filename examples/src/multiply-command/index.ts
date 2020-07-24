@@ -9,7 +9,7 @@ export const multiplyCommand = CliCommand({
 	positionalArgGroup: CliNumberArrayArgGroup({
 		required: true,
 	}),
-	action(numbers) {
+	action({ positionalValue: numbers }) {
 		return numbers.reduce((a, b) => a * b, 1);
 	},
 });

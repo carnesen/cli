@@ -15,7 +15,7 @@ import { bold } from './util';
 /**
  * Root of the @carnesen/cli website examples CLI
  */
-export const rootCommand = CliBranch({
+export const rootBranch = CliBranch({
 	name: 'cli',
 	description: `
 		This is ${bold('@carnesen/cli')} examples running in your browser console.`,

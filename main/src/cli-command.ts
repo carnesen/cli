@@ -17,13 +17,13 @@ export interface ICliCommandOptions<
 	name: string;
 
 	/** Function or async function that implements the command */
-	action: (
-		positionalValue: TValueFromCliArgGroup<TPositionalArgGroup>,
+	action: (input: {
+		positionalValue: TValueFromCliArgGroup<TPositionalArgGroup>;
 		namedValues: {
 			[K in keyof TNamedArgGroups]: TValueFromCliArgGroup<TNamedArgGroups[K]>;
-		},
-		doubleDashValue: TValueFromCliArgGroup<TDoubleDashArgGroup>,
-	) => any;
+		};
+		doubleDashValue: TValueFromCliArgGroup<TDoubleDashArgGroup>;
+	}) => any;
 
 	/** A [[`ICliArgGroup`]] for the arguments before the first separator argument */
 	positionalArgGroup?: TPositionalArgGroup;
