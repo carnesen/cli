@@ -17,7 +17,7 @@ export const echoHiddenCommand = CliCommand({
 	positionalArgGroup: CliStringArrayArgGroup({
 		required: true,
 	}),
-	action(messages) {
+	action({ positionalValue: messages }) {
 		return messages.join(' ');
 	},
 });

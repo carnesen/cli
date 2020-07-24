@@ -31,7 +31,7 @@ export const parseJsonCommand = CliCommand({
 	positionalArgGroup: CliJsonArgGroup({
 		required: true,
 	}),
-	action(parsed) {
+	action({ positionalValue: parsed }) {
 		return parsed;
 	},
 });

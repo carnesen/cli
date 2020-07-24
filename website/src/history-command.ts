@@ -9,7 +9,7 @@ export function HistoryCommand(
 	const history = CliCommand({
 		name: HISTORY_COMMAND_NAME,
 		description: "List the commands in this terminal's history file",
-		action: () => {
+		action() {
 			return commandHistory
 				.list()
 				.map((line, index) => `${index} ${line}`)

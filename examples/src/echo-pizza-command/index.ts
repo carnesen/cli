@@ -28,7 +28,7 @@ export const echoPizzaCommand = CliCommand({
 	namedArgGroups: {
 		pizza: CliBooleanArgGroup({ hidden: true }),
 	},
-	action(messages, { pizza }) {
+	action({ positionalValue: messages, namedValues: { pizza } }) {
 		let text = messages ? messages.join(' ') : '';
 		if (pizza) {
 			text += PIZZA_MESSAGE;
