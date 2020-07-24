@@ -91,11 +91,11 @@ export function CliApi(root: TCliRoot): ICliApi {
 				);
 			}
 
-			const result = await command.action(
+			const result = await command.action({
 				positionalValue,
 				namedValues,
 				doubleDashValue,
-			);
+			});
 			return result;
 		} catch (exception) {
 			if (exception && exception.code === CLI_USAGE_ERROR) {
