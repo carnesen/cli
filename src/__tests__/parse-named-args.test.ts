@@ -1,11 +1,11 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { parseNamedArgs } from './parse-named-args';
+import { parseNamedArgs } from '../parse-named-args';
 import {
 	dummyRequiredArgGroup,
 	dummyArgGroup,
 	DUMMY_ARG_GROUP_THROW,
-} from './dummy-arg-groups-for-testing';
-import { CLI_USAGE_ERROR } from './cli-usage-error';
+} from '../dummy-arg-groups';
+import { CLI_USAGE_ERROR } from '../cli-usage-error';
 
 describe(parseNamedArgs.name, () => {
 	it(`returns object of named values`, async () => {

@@ -1,4 +1,4 @@
-import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
+import { TwoColumnTable, TTwoColumnTableRow } from '../two-column-table';
 
 type Datum = {
 	rows: TTwoColumnTableRow[];

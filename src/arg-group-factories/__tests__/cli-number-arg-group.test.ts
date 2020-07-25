@@ -1,26 +1,26 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CLI_USAGE_ERROR } from '../cli-usage-error';
-import { CliStringArgGroup } from './cli-string-arg-group';
+import { CliNumberArgGroup } from '../cli-number-arg-group';
+import { CLI_USAGE_ERROR } from '../../cli-usage-error';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
 const required = false;
 
-const argGroup = CliStringArgGroup({
+const argGroup = CliNumberArgGroup({
 	required,
 	description,
 	hidden,
 	placeholder,
 });
 
-describe(CliStringArgGroup.name, () => {
+describe(CliNumberArgGroup.name, () => {
 	it('returns `undefined` if args is `undefined` and no defaultValue has been provided', () => {
 		expect(argGroup.parse(undefined)).toBe(undefined);
 	});
 
 	it('parse returns the zeroth element of args', () => {
-		expect(argGroup.parse(['1'])).toBe('1');
+		expect(argGroup.parse(['1'])).toBe(1);
 	});
 
 	it('throws UsageError "expected just one" if args has more than one element', async () => {
@@ -45,6 +45,6 @@ describe(CliStringArgGroup.name, () => {
 	});
 
 	it('config is not required', () => {
-		CliStringArgGroup();
+		CliNumberArgGroup();
 	});
 });

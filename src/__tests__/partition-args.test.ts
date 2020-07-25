@@ -1,4 +1,4 @@
-import { partitionArgs } from './partition-args';
+import { partitionArgs } from '../partition-args';
 
 type Datum = {
 	args: string[];

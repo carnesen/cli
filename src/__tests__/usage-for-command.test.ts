@@ -1,5 +1,5 @@
-import { CliCommand } from './cli-command';
-import { UsageForCommand } from './usage-for-command';
+import { CliCommand } from '../cli-command';
+import { UsageForCommand } from '../usage-for-command';
 
 const command = CliCommand({
 	name: 'list',

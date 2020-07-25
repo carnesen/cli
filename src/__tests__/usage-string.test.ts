@@ -1,8 +1,8 @@
-import { UsageString } from './usage-string';
-import { CliBranch } from './cli-branch';
-import { CliStringArgGroup } from './arg-group-factories/cli-string-arg-group';
-import { CliCommand } from './cli-command';
-import { ICliTree } from './cli-tree';
+import { UsageString } from '../usage-string';
+import { CliBranch } from '../cli-branch';
+import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
+import { CliCommand } from '../cli-command';
+import { ICliTree } from '../cli-tree';
 
 const messageArgGroup = CliStringArgGroup({
 	description: 'A string message please',

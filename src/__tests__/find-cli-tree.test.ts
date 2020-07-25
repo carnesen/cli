@@ -1,7 +1,7 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { findCliTree } from './find-cli-tree';
-import { CliBranch } from './cli-branch';
-import { CliCommand } from './cli-command';
+import { findCliTree } from '../find-cli-tree';
+import { CliBranch } from '../cli-branch';
+import { CliCommand } from '../cli-command';
 
 const command = CliCommand({
 	name: 'echo',
