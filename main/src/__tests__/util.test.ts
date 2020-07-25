@@ -1,5 +1,5 @@
-import { convertToNumber } from './util';
-import { CLI_USAGE_ERROR } from './cli-usage-error';
+import { convertToNumber } from '../util';
+import { CLI_USAGE_ERROR } from '../cli-usage-error';
 
 describe(convertToNumber.name, () => {
 	it('converts the provided string to a number', () => {

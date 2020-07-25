@@ -3,7 +3,7 @@ import { CliCommand } from '../cli-command';
 import { CliUsageError } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
 import { ansiColors } from '../util';
-import { ICliOptions, Cli } from '.';
+import { ICliOptions, Cli } from '../cli';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
 async function runMocked(action: () => any, options: ICliOptions = {}) {

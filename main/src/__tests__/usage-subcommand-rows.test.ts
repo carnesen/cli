@@ -1,7 +1,7 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { UsageSubcommandRows } from './usage-subcommand-rows';
-import { CliBranch } from './cli-branch';
-import { CliCommand } from './cli-command';
+import { UsageSubcommandRows } from '../usage-subcommand-rows';
+import { CliBranch } from '../cli-branch';
+import { CliCommand } from '../cli-command';
 
 const command = CliCommand({
 	name: 'list',

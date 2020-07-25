@@ -1,9 +1,9 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliBranch } from './cli-branch';
-import { CliCommand } from './cli-command';
-import { dummyArgGroup } from './dummy-arg-groups-for-testing';
-import { CliApi } from './cli-api';
-import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
+import { CliBranch } from '../cli-branch';
+import { CliCommand } from '../cli-command';
+import { dummyArgGroup } from '../dummy-arg-groups';
+import { CliApi } from '../cli-api';
+import { CLI_USAGE_ERROR, CliUsageError } from '../cli-usage-error';
 
 const commandWithNoArguments = CliCommand({
 	name: 'command-with-no-args',
