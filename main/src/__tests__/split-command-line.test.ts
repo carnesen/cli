@@ -1,4 +1,4 @@
-import { splitCommandLine } from '.';
+import { splitCommandLine } from '../split-command-line';
 
 const splitData: {
 	title: string;

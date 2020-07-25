@@ -1,22 +1,22 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliNumberArrayArgGroup } from './cli-number-array-arg-group';
-import { CLI_USAGE_ERROR } from '../cli-usage-error';
+import { CLI_USAGE_ERROR } from '../../cli-usage-error';
+import { CliStringArrayArgGroup } from '../cli-string-array-arg-group';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
 const required = false;
 
-const argGroup = CliNumberArrayArgGroup({
+const argGroup = CliStringArrayArgGroup({
 	description,
 	hidden,
 	placeholder,
 	required,
 });
 
-describe(CliNumberArrayArgGroup.name, () => {
+describe(CliStringArrayArgGroup.name, () => {
 	it('parse returns is args converted to numbers', () => {
-		expect(argGroup.parse(['0', '1', '2'])).toEqual([0, 1, 2]);
+		expect(argGroup.parse(['0', '1', '2'])).toEqual(['0', '1', '2']);
 	});
 
 	it('parse returns `undefined` if args is', () => {
@@ -38,6 +38,6 @@ describe(CliNumberArrayArgGroup.name, () => {
 	});
 
 	it('config is not required', () => {
-		CliNumberArrayArgGroup();
+		CliStringArrayArgGroup();
 	});
 });

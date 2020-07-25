@@ -1,14 +1,14 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
-import { parseArgs } from './parse-args';
-import { CLI_USAGE_ERROR } from './cli-usage-error';
+import { parseArgs } from '../parse-args';
+import { CLI_USAGE_ERROR } from '../cli-usage-error';
 import {
 	dummyArgGroup,
 	dummyRequiredArgGroup,
 	DUMMY_ARG_GROUP_THROWN_INTENTIONALLY,
 	DUMMY_ARG_GROUP_THROW,
 	DUMMY_ARG_GROUP_THROW_NON_TRUTHY,
-} from './dummy-arg-groups-for-testing';
+} from '../dummy-arg-groups';
 
 describe(parseArgs.name, () => {
 	it(`returns parse(args) if an args with length >= 1 is passed`, async () => {

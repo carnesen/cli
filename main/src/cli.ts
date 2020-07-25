@@ -1,10 +1,10 @@
-import { CLI_TERSE_ERROR } from '../cli-terse-error';
-import { ICliApi, CliApi } from '../cli-api';
-import { UsageString } from '../usage-string';
-import { CLI_USAGE_ERROR, CliUsageError } from '../cli-usage-error';
-import { ansiColors } from '../util';
-import { TCliRoot } from '../cli-tree';
-import { splitCommandLine } from '../split-command-line';
+import { CLI_TERSE_ERROR } from './cli-terse-error';
+import { ICliApi, CliApi } from './cli-api';
+import { UsageString } from './usage-string';
+import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
+import { ansiColors } from './util';
+import { TCliRoot } from './cli-tree';
+import { splitCommandLine } from './split-command-line';
 
 /** Options for [[`Cli`]] */
 export interface ICliOptions {

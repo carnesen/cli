@@ -1,4 +1,4 @@
-import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
+import { CliUsageError, CLI_USAGE_ERROR } from '../cli-usage-error';
 
 describe(CliUsageError.name, () => {
 	it('Constructs an error object with property "code" set to "USAGE"', () => {

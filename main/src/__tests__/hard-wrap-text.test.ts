@@ -1,4 +1,4 @@
-import { hardWrapText } from './hard-wrap-text';
+import { hardWrapText } from '../hard-wrap-text';
 
 const data: {
 	text?: string;
