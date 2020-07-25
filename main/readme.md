@@ -7,7 +7,7 @@ The `carnesen/cli` package includes:
 - TypeScript type declarations (3.7+)
 - HTML API documentation
 
-This library has _no_ dependencies and is known to work with Node.js 10+ and all modern web browsers.
+This library has _no_ dependencies and is known to work with Node.js 12+ and all modern web browsers.
 
 ## Features
 - **Easy to use**: We ❤️ CLI's and want to use them everywhere for everything. This library makes it easy as can be to create beautiful easy-to-use CLIs for Node.js and for web browsers.
