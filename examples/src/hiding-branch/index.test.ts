@@ -14,21 +14,23 @@ describe(hidingBranch.name, () => {
 		let sawNonHiddenBranchEcho = false;
 		let sawHiddenBranchSubcommands = false;
 		const options: ICliOptions = {
-			processExit() {},
-			consoleError(arg) {
-				if (typeof arg === 'string') {
-					if (arg.includes(`${hiddenBranch.name} ${echoCommand.name}`)) {
-						sawHiddenBranchEcho = true;
+			done() {},
+			console: {
+				error(arg) {
+					if (typeof arg === 'string') {
+						if (arg.includes(`${hiddenBranch.name} ${echoCommand.name}`)) {
+							sawHiddenBranchEcho = true;
+						}
+						if (arg.includes(`${nonHiddenBranch.name} ${echoCommand.name}`)) {
+							sawNonHiddenBranchEcho = true;
+						}
+						if (arg.includes(`${hiddenBranch.name} <subcommand>`)) {
+							sawHiddenBranchSubcommands = true;
+						}
 					}
-					if (arg.includes(`${nonHiddenBranch.name} ${echoCommand.name}`)) {
-						sawNonHiddenBranchEcho = true;
-					}
-					if (arg.includes(`${hiddenBranch.name} <subcommand>`)) {
-						sawHiddenBranchSubcommands = true;
-					}
-				}
+				},
+				log() {},
 			},
-			consoleLog() {},
 		};
 
 		const cli = Cli(hidingBranch, options);
