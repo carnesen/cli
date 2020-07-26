@@ -3,7 +3,8 @@ import { CliCommand } from '../cli-command';
 import { CliUsageError } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
 import { ansiColors } from '../util';
-import { ICliOptions, Cli } from '../cli';
+import { Cli } from '../cli';
+import { ICliOptions } from '../cli-interface';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
 async function runMocked(action: () => any, options: ICliOptions = {}) {
@@ -102,7 +103,7 @@ describe(Cli.name, () => {
 			() => {
 				throw new CliTerseError('foo');
 			},
-			{ colors: false },
+			{ ansi: false },
 		);
 		expect(errorMessage).not.toMatch(ansiColors.red('Error:'));
 		expect(errorMessage).toMatch('Error:');
@@ -148,7 +149,7 @@ describe(Cli.name, () => {
 
 	it('calls the system process.exit at the end by default', async () => {
 		const mockExit = jest
-			.spyOn(process, 'exit')
+			.spyOn((globalThis as any).process, 'exit')
 			.mockImplementation((() => {}) as any);
 		const command = CliCommand({
 			name: 'cli',
@@ -184,7 +185,7 @@ describe(Cli.name, () => {
 		const exitCode = await Cli(command, {
 			processExit: () => {},
 			consoleError: spy,
-			colors: false,
+			ansi: false,
 		}).runLine('"foo');
 		expect(exitCode).not.toBe(0);
 		expect(spy).toHaveBeenCalledWith('Error: Unterminated "-quoted string');
