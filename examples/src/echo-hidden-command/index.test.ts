@@ -14,13 +14,15 @@ describe(echoHiddenCommand.name, () => {
 	it('only shows up in usage if specifically requested via --help', async () => {
 		let sawHiddenCommandNameInUsage = false;
 		const options: ICliOptions = {
-			processExit() {},
-			consoleError(arg) {
-				if (typeof arg === 'string' && arg.includes(echoHiddenCommand.name)) {
-					sawHiddenCommandNameInUsage = true;
-				}
+			done() {},
+			console: {
+				error(arg) {
+					if (typeof arg === 'string' && arg.includes(echoHiddenCommand.name)) {
+						sawHiddenCommandNameInUsage = true;
+					}
+				},
+				log() {},
 			},
-			consoleLog() {},
 		};
 		const root = CliBranch({ name: '', subcommands: [echoHiddenCommand] });
 		const cli = Cli(root, options);

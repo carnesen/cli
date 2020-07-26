@@ -2,16 +2,15 @@ import { CodedError } from '@carnesen/coded-error';
 import { CliCommand } from '../cli-command';
 import { CliUsageError } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
-import { ansiColors } from '../util';
 import { Cli } from '../cli';
 import { ICliOptions } from '../cli-interface';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
+import { CliAnsi, CliNoAnsi } from '../cli-ansi';
 
 async function runMocked(action: () => any, options: ICliOptions = {}) {
 	const mockOptions = {
-		consoleLog: jest.fn(),
-		consoleError: jest.fn(),
-		processExit: jest.fn(),
+		console: { log: jest.fn(), error: jest.fn() },
+		done: jest.fn(),
 	};
 
 	const command = CliCommand({
@@ -23,23 +22,23 @@ async function runMocked(action: () => any, options: ICliOptions = {}) {
 
 	await cli.run([]);
 
-	expect(mockOptions.processExit.mock.calls.length).toBe(1);
-	expect(mockOptions.processExit.mock.calls[0].length).toBe(1);
-	const exitCode = mockOptions.processExit.mock.calls[0][0];
+	expect(mockOptions.done.mock.calls.length).toBe(1);
+	expect(mockOptions.done.mock.calls[0].length).toBe(1);
+	const exitCode = mockOptions.done.mock.calls[0][0];
 
 	expect(
-		mockOptions.consoleError.mock.calls.length +
-			mockOptions.consoleLog.mock.calls.length,
+		mockOptions.console.error.mock.calls.length +
+			mockOptions.console.log.mock.calls.length,
 	).toBeLessThanOrEqual(1);
 	let errorMessage: any;
 	let logMessage: any;
-	if (mockOptions.consoleLog.mock.calls.length === 1) {
-		expect(mockOptions.consoleLog.mock.calls.length).toBe(1);
-		[[logMessage]] = mockOptions.consoleLog.mock.calls;
+	if (mockOptions.console.log.mock.calls.length === 1) {
+		expect(mockOptions.console.log.mock.calls.length).toBe(1);
+		[[logMessage]] = mockOptions.console.log.mock.calls;
 	}
-	if (mockOptions.consoleError.mock.calls.length === 1) {
-		expect(mockOptions.consoleError.mock.calls.length).toBe(1);
-		[[errorMessage]] = mockOptions.consoleError.mock.calls;
+	if (mockOptions.console.error.mock.calls.length === 1) {
+		expect(mockOptions.console.error.mock.calls.length).toBe(1);
+		[[errorMessage]] = mockOptions.console.error.mock.calls;
 	}
 	return { exitCode, errorMessage, logMessage };
 }
@@ -93,7 +92,7 @@ describe(Cli.name, () => {
 			throw new CliTerseError('foo');
 		});
 		expect(exitCode).toBe(1);
-		expect(errorMessage).toMatch(ansiColors.red('Error:'));
+		expect(errorMessage).toMatch(CliAnsi().red('Error:'));
 		expect(errorMessage).toMatch('foo');
 		expect(logMessage).toBe(undefined);
 	});
@@ -103,9 +102,9 @@ describe(Cli.name, () => {
 			() => {
 				throw new CliTerseError('foo');
 			},
-			{ ansi: false },
+			{ ansi: CliNoAnsi() },
 		);
-		expect(errorMessage).not.toMatch(ansiColors.red('Error:'));
+		expect(errorMessage).not.toMatch(CliAnsi().red('Error:'));
 		expect(errorMessage).toMatch('Error:');
 	});
 
@@ -170,9 +169,7 @@ describe(Cli.name, () => {
 				expect(str).toBe('foo');
 			},
 		});
-		const exitCode = await Cli(command, { processExit: () => {} }).runLine(
-			'"foo"',
-		);
+		const exitCode = await Cli(command, { done: () => {} }).runLine('"foo"');
 		expect(exitCode).toBe(0);
 	});
 
@@ -183,9 +180,12 @@ describe(Cli.name, () => {
 			action() {},
 		});
 		const exitCode = await Cli(command, {
-			processExit: () => {},
-			consoleError: spy,
-			ansi: false,
+			done: () => {},
+			console: {
+				error: spy,
+				log: jest.fn(),
+			},
+			ansi: CliNoAnsi(),
 		}).runLine('"foo');
 		expect(exitCode).not.toBe(0);
 		expect(spy).toHaveBeenCalledWith('Error: Unterminated "-quoted string');

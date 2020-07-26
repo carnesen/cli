@@ -197,11 +197,13 @@ export class CliRepl {
 			return;
 		}
 		const options: ICliOptions = {
-			consoleError: (..._args: any[]) => {
-				this.consoleError(_args[0]);
-			},
-			consoleLog: (..._args: any[]) => {
-				this.consoleLog(_args[0]);
+			console: {
+				error: (..._args: any[]) => {
+					this.consoleError(_args[0]);
+				},
+				log: (..._args: any[]) => {
+					this.consoleLog(_args[0]);
+				},
 			},
 			columns: this.terminal.cols,
 		};

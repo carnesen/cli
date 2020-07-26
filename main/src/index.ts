@@ -49,10 +49,13 @@ export {
 } from './arg-group-factories/cli-string-array-arg-group';
 
 // Advanced: Universal console interface
-export { ICliConsole } from './cli-console';
+export { ICliConsole, CliConsole } from './cli-console';
 
 // Advanced: Universal process interface
-export { ICliProcess } from './cli-process';
+export { ICliProcess, CliProcess } from './cli-process';
+
+// Advanced: Text decoration
+export { ICliAnsi, CliAnsi, CliNoAnsi } from './cli-ansi';
 
 // Advanced: Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';

@@ -33,7 +33,7 @@ export const showCommand = CliCommand({
 		placeholder: '<command>',
 		required: true,
 	}),
-	action({ namedValues: { name } }) {
+	action({ positionalValue: name }) {
 		let url: string;
 		switch (name) {
 			case echoCommand.name:
@@ -45,7 +45,7 @@ export const showCommand = CliCommand({
 				break;
 			}
 			case '.': {
-				url = `https://github.com/carnesen/cli/blob/master/website/src/root-command.ts`;
+				url = `https://github.com/carnesen/cli/blob/master/website/src/root-branch.ts`;
 				break;
 			}
 			case docsCommand.name:

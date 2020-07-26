@@ -1,5 +1,5 @@
 /**
- * A browser-safe implementation of the Node.js global `process`
+ * A universal implementation of the Node.js global `process`
  */
 export interface ICliProcess {
 	argv: string[];

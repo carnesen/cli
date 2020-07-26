@@ -99,24 +99,17 @@ describe(CliApi.name, () => {
 			commandWithPositionalArgGroup.name,
 			...positionalArgs,
 		]);
-		expect(result).toEqual([
-			{
-				positionalValue: dummyArgGroup.parse(positionalArgs),
-				namedValues: {},
-				dashDashValue: undefined,
-			},
-		]);
+		expect(result[0].positionalValue).toEqual(
+			dummyArgGroup.parse(positionalArgs),
+		);
 	});
 
 	it('Passes parsed namedValues to the "action" function', async () => {
 		const namedArgs = ['--foo', 'bar'];
 		const result = await cliApi([commandWithNamedArgGroups.name, ...namedArgs]);
-		expect(result).toEqual([
-			{
-				doubleDashValue: undefined,
-				namedValues: { foo: dummyArgGroup.parse(['bar']) },
-			},
-		]);
+		expect(result[0].namedValues).toEqual({
+			foo: dummyArgGroup.parse(['bar']),
+		});
 	});
 
 	it(`Throws USAGE error 'does not allow "--"' if command does not have an "doubleDashArgGroup" property`, async () => {
@@ -131,13 +124,8 @@ describe(CliApi.name, () => {
 
 	it('Passes parsed doubleDashValue to the "action" function', async () => {
 		const result = await cliApi([commandWithDoubleDashArgGroup.name, '--']);
-		expect(result).toEqual([
-			{
-				doubleDashValue: commandWithDoubleDashArgGroup.doubleDashArgGroup!.parse(
-					[],
-				),
-				namedValues: {},
-			},
-		]);
+		expect(result[0].doubleDashValue).toEqual(
+			commandWithDoubleDashArgGroup.doubleDashArgGroup!.parse([]),
+		);
 	});
 });
