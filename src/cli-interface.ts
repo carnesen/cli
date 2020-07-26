@@ -1,5 +1,6 @@
 import { ICliConsole } from './cli-console';
 import { ICliProcess } from './cli-process';
+import { ICliAnsi } from './cli-ansi';
 
 /**
  * A command-line interface (CLI) created by [[`Cli`]]
@@ -32,18 +33,15 @@ export interface ICli {
  * Options for [[`Cli`]]
  * */
 export interface ICliOptions {
-	/** Use ANSI escape codes in usage. Defaults to true */
-	ansi?: boolean;
+	/** ANSI escape code methods */
+	ansi?: ICliAnsi;
 
 	/** Defaults to `process.stdout.columns` or 100 */
 	columns?: number;
 
-	/** Called on the result of the command defaulting to `console.log` */
-	consoleLog?: ICliConsole['log'];
+	/** `console.log` is called on the result, `console.error` on error */
+	console?: ICliConsole;
 
-	/** Called on errors and exceptions defaulting to `console.error` */
-	consoleError?: ICliConsole['error'];
-
-	/** Called after the command has completed defaulting to `process.exit` */
-	processExit?: ICliProcess['exit'];
+	/** Called after the command has completed. Defaults to `process.exit` */
+	done?: ICliProcess['exit'];
 }

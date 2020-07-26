@@ -6,17 +6,18 @@ import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { TCliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { ICli, ICliOptions } from './cli-interface';
+import { CliConsole } from './cli-console';
+import { CliAnsi } from './cli-ansi';
 
 /**
  * A factory for [[`ICli.api`]]s
  *
  * @param root The root of this command-line interface's command tree
- * @param _options
+ * @param options
  */
-export function CliApi(
-	root: TCliRoot,
-	_options: ICliOptions = {},
-): ICli['api'] {
+export function CliApi(root: TCliRoot, options: ICliOptions = {}): ICli['api'] {
+	const { console = CliConsole(), ansi = CliAnsi() } = options;
+
 	return async function cliApi(args: string[]) {
 		const tree = findCliTree(root, args);
 
@@ -89,6 +90,8 @@ export function CliApi(
 				positionalValue,
 				namedValues,
 				doubleDashValue,
+				console,
+				ansi,
 			});
 			return result;
 		} catch (exception) {

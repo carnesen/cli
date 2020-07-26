@@ -1,10 +1,10 @@
 import { CLI_TERSE_ERROR } from './cli-terse-error';
 import { UsageString } from './usage-string';
 import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
-import { ansiColors } from './util';
 import { CliConsole } from './cli-console';
 import { CliProcess } from './cli-process';
 import { ICli, ICliOptions } from './cli-interface';
+import { CliAnsi } from './cli-ansi';
 
 /**
  * A factory for [[`ICli`]]s
@@ -17,61 +17,66 @@ export function CliRun(
 	api: ICli['api'],
 	options: ICliOptions = {},
 ): ICli['run'] {
-	const console = CliConsole();
 	const process = CliProcess();
 	const {
-		ansi = true,
 		columns = process.stdout.columns,
-		consoleLog = console.log,
-		consoleError = console.error,
-		processExit = process.exit,
+		console = CliConsole(),
+		done = process.exit,
+		ansi = CliAnsi(),
 	} = options;
-
-	const RED_ERROR = ansi ? ansiColors.red('Error:') : 'Error:';
 
 	return async function run(args = process.argv.slice(2)) {
 		let exitCode = 0;
 		try {
 			const result = await api(args);
 			if (typeof result !== 'undefined') {
-				consoleLog(result);
+				console.log(result);
 			}
 		} catch (exception) {
 			exitCode = 1;
 			if (!exception) {
-				consoleError(
-					`${RED_ERROR} Encountered non-truthy exception "${exception}". Please contact the author of this command-line interface`,
+				console.error(
+					`${ansi.red(
+						'Error:',
+					)} Encountered non-truthy exception "${exception}". Please contact the author of this command-line interface`,
 				);
 			} else if (exception.code === CLI_USAGE_ERROR) {
 				const exceptionAsUsageError: CliUsageError = exception;
 				if (exceptionAsUsageError.tree) {
 					const usageString = UsageString(exception.tree, columns, '   ');
 					if (exception.message) {
-						consoleError(`${usageString}\n\n${RED_ERROR} ${exception.message}`);
+						console.error(
+							`${usageString}\n\n${ansi.red('Error:')} ${exception.message}`,
+						);
 					} else {
-						consoleError(usageString);
+						console.error(usageString);
 					}
 				} else {
 					// Handle case where "code" is CLI_USAGE_ERROR but "tree" is undefined. Surely
 					// this is a coding mistake on our part.
-					consoleError(exceptionAsUsageError);
+					console.error(exceptionAsUsageError);
 				}
 			} else if (exception.code === CLI_TERSE_ERROR) {
 				if (!exception.message) {
-					consoleError(exception);
+					console.error(exception);
 				} else {
-					consoleError(`${RED_ERROR} ${exception.message}`);
+					console.error(`${ansi.red('Error:')} ${exception.message}`);
 				}
 			} else if (typeof exception.code === 'number') {
 				exitCode = exception.code;
 				if (exception.message) {
-					consoleError(exception.message);
+					console.error(exception.message);
 				}
 			} else {
-				consoleError(exception);
+				console.error(exception);
 			}
 		}
-		processExit(exitCode);
+		try {
+			done(exitCode);
+		} catch (exception) {
+			console.error('"done" callback threw');
+			console.error(exception);
+		}
 		return exitCode;
 	};
 }

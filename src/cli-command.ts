@@ -1,4 +1,6 @@
 import { TValueFromCliArgGroup, ICliArgGroup } from './cli-arg-group';
+import { ICliConsole } from './cli-console';
+import { ICliAnsi } from './cli-ansi';
 
 /** "kind" of a [[`ICliCommand`]] */
 export const CLI_COMMAND = 'CLI_COMMAND';
@@ -23,6 +25,8 @@ export interface ICliCommandOptions<
 			[K in keyof TNamedArgGroups]: TValueFromCliArgGroup<TNamedArgGroups[K]>;
 		};
 		doubleDashValue: TValueFromCliArgGroup<TDoubleDashArgGroup>;
+		console: ICliConsole;
+		ansi: ICliAnsi;
 	}) => any;
 
 	/** A [[`ICliArgGroup`]] for the arguments before the first separator argument */

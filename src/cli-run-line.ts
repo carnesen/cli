@@ -1,8 +1,8 @@
-import { ansiColors } from './util';
 import { splitCommandLine } from './split-command-line';
 import { CliConsole } from './cli-console';
 import { CliProcess } from './cli-process';
 import { ICli, ICliOptions } from './cli-interface';
+import { CliAnsi } from './cli-ansi';
 
 /**
  * A factory for [[`ICli.runLine`]]s
@@ -15,22 +15,25 @@ export function CliRunLine(
 	run: ICli['run'],
 	options: ICliOptions = {},
 ): ICli['runLine'] {
-	const console = CliConsole();
-	const process = CliProcess();
 	const {
-		ansi = true,
-		consoleError = console.error,
-		processExit = process.exit,
+		console = CliConsole(),
+		ansi = CliAnsi(),
+		done = CliProcess().exit,
 	} = options;
-
-	const RED_ERROR = ansi ? ansiColors.red('Error:') : 'Error:';
 
 	return async function runLine(line = '') {
 		const { args, quoteChar } = splitCommandLine(line);
 		if (quoteChar) {
-			consoleError(`${RED_ERROR} Unterminated ${quoteChar}-quoted string`);
+			console.error(
+				`${ansi.red('Error:')} Unterminated ${quoteChar}-quoted string`,
+			);
 			const exitCode = 1;
-			processExit(exitCode);
+			try {
+				done(exitCode);
+			} catch (exception) {
+				console.error('"done" callback threw');
+				console.error(exception);
+			}
 			return exitCode;
 		}
 		return await run(args);
