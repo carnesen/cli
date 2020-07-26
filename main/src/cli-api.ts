@@ -5,24 +5,18 @@ import { parseNamedArgs } from './parse-named-args';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { TCliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
+import { ICli, ICliOptions } from './cli-interface';
 
 /**
- * A programmatic interface for a CLI, useful for unit testing
- * */
-export interface ICliApi {
-	/**
-	 * @param args Command-line arguments
-	 * @returns The resolved value of the command action
-	 */
-	(args: string[]): Promise<any>;
-}
-
-/**
- * A factory for [[`ICli`]]s
+ * A factory for [[`ICli.api`]]s
  *
  * @param root The root of this command-line interface's command tree
+ * @param _options
  */
-export function CliApi(root: TCliRoot): ICliApi {
+export function CliApi(
+	root: TCliRoot,
+	_options: ICliOptions = {},
+): ICli['api'] {
 	return async function cliApi(args: string[]) {
 		const tree = findCliTree(root, args);
 
