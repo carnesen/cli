@@ -3,7 +3,7 @@ import { Cli, ICliOptions } from '@carnesen/cli';
 import { rootBranch } from './root-branch';
 
 const options: ICliOptions = {
-	colors: false,
+	ansi: false,
 };
 
 // Define `cli` in the browser's global JavaScript context
