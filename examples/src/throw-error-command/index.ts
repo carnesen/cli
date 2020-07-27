@@ -1,6 +1,6 @@
 import {
 	CliCommand,
-	CliOneOfArgGroup,
+	CliStringChoiceArgGroup,
 	CliStringArgGroup,
 	CliUsageError,
 	CliTerseError,
@@ -17,8 +17,8 @@ export const throwErrorCommand = CliCommand({
 			description: 'A message',
 			required: true,
 		}),
-		kind: CliOneOfArgGroup({
-			values: ['normal' as const, 'terse' as const, 'usage' as const],
+		kind: CliStringChoiceArgGroup({
+			choices: ['normal' as const, 'terse' as const, 'usage' as const],
 			required: false,
 			description: `
 			Throw a normal Error (default), a UsageError, or a TerseError
