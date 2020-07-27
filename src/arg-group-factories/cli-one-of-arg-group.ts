@@ -2,17 +2,22 @@ import { ICliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
 /**
- * Options for [[`CliOneOfArgGroup`]]
- * @typeParam TValues Type of the "values" option
+ * Options for [[`CliStringChoiceArgGroup`]]
+ * @typeParam TChoices Type of the "choices" option
  */
-export interface ICliOneOfArgGroupOptions<TValues extends string[]> {
-	/** Allowed values for this argument. For strict typing do e.g. `['foo' as const]` */
-	values: TValues;
+export interface ICliStringChoiceArgGroupOptions<TChoices extends string[]> {
+	/**
+	 * Choices for this argument. For strict typing do e.g.
+	 *
+	 * choices: ['foo' as const, 'bar' as const]
+	 *
+	 * */
+	choices: TChoices;
 
 	/** See [[`ICliArgGroup.required`]] */
 	required?: boolean;
 
-	/** See [[`ICliArgGroup.description`]] with "Allowed values: ..." appended automatically
+	/** See [[`ICliArgGroup.description`]] with "Choices: ..." appended automatically
 	 * */
 	description?: string;
 
@@ -24,38 +29,38 @@ export interface ICliOneOfArgGroupOptions<TValues extends string[]> {
 }
 
 /**
- * A factory for required [[`ICliArgGroup`]]s whose value is one of the values
+ * A factory for required [[`ICliArgGroup`]]s whose value is one of the choices
  * provided
- * @typeParam TValues Type of the provided values
+ * @typeParam TChoices Type of the provided choices
  * */
-function CliOneOfArgGroup<TValues extends string[]>(
-	options: ICliOneOfArgGroupOptions<TValues> & { required: true },
-): ICliArgGroup<TValues[number], true>;
+function CliStringChoiceArgGroup<TChoices extends string[]>(
+	options: ICliStringChoiceArgGroupOptions<TChoices> & { required: true },
+): ICliArgGroup<TChoices[number], true>;
 
 /**
- * A factory for optional [[`ICliArgGroup`]]s whose value is one of the values
+ * A factory for optional [[`ICliArgGroup`]]s whose value is one of the choices
  * provided
- * @typeParam TValues Type of the provided values
+ * @typeParam TChoices Type of the provided choices
  * */
-function CliOneOfArgGroup<TValues extends string[]>(
-	options: ICliOneOfArgGroupOptions<TValues>,
-): ICliArgGroup<TValues[number] | undefined, false>;
+function CliStringChoiceArgGroup<TChoices extends string[]>(
+	options: ICliStringChoiceArgGroupOptions<TChoices>,
+): ICliArgGroup<TChoices[number] | undefined, false>;
 
 // Implementation
-function CliOneOfArgGroup(
-	config: ICliOneOfArgGroupOptions<string[]>,
+function CliStringChoiceArgGroup(
+	options: ICliStringChoiceArgGroupOptions<string[]>,
 ): ICliArgGroup<string | undefined> {
-	const valuesString = config.values.join(', ');
+	const valuesString = options.choices.join(', ');
 	const {
 		required = false,
 		description,
 		placeholder = '<value>',
 		hidden = false,
-	} = config;
+	} = options;
 
 	const argGroup: ICliArgGroup<string | undefined> = {
 		required,
-		placeholder: config.placeholder || '<value>',
+		placeholder: options.placeholder || '<value>',
 		hidden,
 		parse(args) {
 			if (!args) {
@@ -68,22 +73,22 @@ function CliOneOfArgGroup(
 				);
 			}
 
-			if (!config.values.includes(args[0])) {
+			if (!options.choices.includes(args[0])) {
 				throw new CliUsageError(
 					`Invalid argument "${args[0]}". Expected ${placeholder} to be one of ${valuesString}`,
 				);
 			}
 			return args[0];
 		},
-		description: `${description || ''}\n\nAllowed values: ${valuesString}`,
+		description: `${description || ''}\n\nChoices: ${valuesString}`,
 		_suggest(args) {
 			if (args.length > 0) {
 				return [];
 			}
-			return config.values;
+			return options.choices;
 		},
 	};
 	return argGroup;
 }
 
-export { CliOneOfArgGroup };
+export { CliStringChoiceArgGroup };

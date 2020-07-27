@@ -36,8 +36,8 @@ export {
 	ICliNumberArrayArgGroupOptions,
 } from './arg-group-factories/cli-number-array-arg-group';
 export {
-	CliOneOfArgGroup,
-	ICliOneOfArgGroupOptions,
+	CliStringChoiceArgGroup,
+	ICliStringChoiceArgGroupOptions,
 } from './arg-group-factories/cli-one-of-arg-group';
 export {
 	CliStringArgGroup,
