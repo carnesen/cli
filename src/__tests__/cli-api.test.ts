@@ -1,7 +1,10 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliBranch } from '../cli-branch';
 import { CliCommand } from '../cli-command';
-import { dummyArgGroup } from '../dummy-arg-groups';
+import {
+	dummyArgGroup,
+	DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED,
+} from '../dummy-arg-groups';
 import { CliApi } from '../cli-api';
 import { CLI_USAGE_ERROR, CliUsageError } from '../cli-usage-error';
 
@@ -126,6 +129,13 @@ describe(CliApi.name, () => {
 		const result = await cliApi([commandWithDoubleDashArgGroup.name, '--']);
 		expect(result[0].doubleDashValue).toEqual(
 			commandWithDoubleDashArgGroup.doubleDashArgGroup!.parse([]),
+		);
+	});
+
+	it('Passes undefined as the positionalValue when no positional args are passed', async () => {
+		const result = await cliApi([commandWithPositionalArgGroup.name]);
+		expect(result[0].positionalValue).toEqual(
+			DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED,
 		);
 	});
 });

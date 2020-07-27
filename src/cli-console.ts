@@ -1,5 +1,5 @@
 /**
- * A browser-safe implementation of the Node.js global `console`
+ * A universal subset of the usual global `console` object
  */
 export interface ICliConsole {
 	log: (message?: any, ...optionalParams: any[]) => void;
@@ -11,12 +11,28 @@ export interface ICliConsole {
  * @param options
  */
 export function CliConsole(): ICliConsole {
+	const { console } = globalThis as { console: ICliConsole };
 	return {
 		log(message, ...optionalParams) {
-			(globalThis as any).console.log(message, ...optionalParams);
+			console.log(message, ...optionalParams);
 		},
 		error(message, ...optionalParams) {
-			(globalThis as any).console.error(message, ...optionalParams);
+			console.error(message, ...optionalParams);
+		},
+	};
+}
+
+/**
+ * A factory for [[`ICliConsole`]]s that do not actually write to console
+ * @param options
+ */
+export function CliNoConsole(): ICliConsole {
+	return {
+		log() {
+			// do nothing
+		},
+		error() {
+			// do nothing
 		},
 	};
 }

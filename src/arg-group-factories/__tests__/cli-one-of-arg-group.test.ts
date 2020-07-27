@@ -45,4 +45,9 @@ describe(CliOneOfArgGroup.name, () => {
 		expect(argGroup.placeholder).toBe(placeholder);
 		expect(argGroup.required).toBe(required);
 	});
+
+	it('has experimental _suggest api', async () => {
+		const suggestions = await argGroup._suggest!([]);
+		expect(suggestions).toEqual(['foo', 'bar']);
+	});
 });

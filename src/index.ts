@@ -49,7 +49,7 @@ export {
 } from './arg-group-factories/cli-string-array-arg-group';
 
 // Advanced: Universal console interface
-export { ICliConsole, CliConsole } from './cli-console';
+export { ICliConsole, CliConsole, CliNoConsole } from './cli-console';
 
 // Advanced: Universal process interface
 export { ICliProcess, CliProcess } from './cli-process';
