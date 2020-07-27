@@ -2,10 +2,10 @@ import { CodedError } from '@carnesen/coded-error';
 import { CliCommand } from '../cli-command';
 import { CliUsageError } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
-import { Cli } from '../cli';
 import { ICliOptions } from '../cli-interface';
-import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 import { CliAnsi, CliNoAnsi } from '../cli-ansi';
+import { CliApi } from '../cli-api';
+import { CliRun } from '../cli-run';
 
 async function runMocked(action: () => any, options: ICliOptions = {}) {
 	const mockOptions = {
@@ -18,9 +18,11 @@ async function runMocked(action: () => any, options: ICliOptions = {}) {
 		action,
 	});
 
-	const cli = Cli(command, { ...mockOptions, ...options });
+	const api = CliApi(command, { ...mockOptions, ...options });
 
-	await cli.run([]);
+	const cliRun = CliRun(api, { ...mockOptions, ...options });
+
+	await cliRun([]);
 
 	expect(mockOptions.done.mock.calls.length).toBe(1);
 	expect(mockOptions.done.mock.calls[0].length).toBe(1);
@@ -43,7 +45,7 @@ async function runMocked(action: () => any, options: ICliOptions = {}) {
 	return { exitCode, errorMessage, logMessage };
 }
 
-describe(Cli.name, () => {
+describe(CliRun.name, () => {
 	it('exits 0 and does not console.log if action succeeds', async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			// do nothing
@@ -156,38 +158,8 @@ describe(Cli.name, () => {
 				// do nothing
 			},
 		});
-		const exitCode = await Cli(command).run([]);
+		const exitCode = await CliRun(CliApi(command))([]);
 		expect(mockExit).toHaveBeenCalledWith(0);
 		expect(exitCode).toBe(0);
-	});
-
-	it('has a runLine method that parses the command-line', async () => {
-		const command = CliCommand({
-			name: 'cli',
-			positionalArgGroup: CliStringArgGroup(),
-			action({ positionalValue: str }) {
-				expect(str).toBe('foo');
-			},
-		});
-		const exitCode = await Cli(command, { done: () => {} }).runLine('"foo"');
-		expect(exitCode).toBe(0);
-	});
-
-	it("runLine consoleErrors if there's an unterminated quote", async () => {
-		const spy = jest.fn();
-		const command = CliCommand({
-			name: 'cli',
-			action() {},
-		});
-		const exitCode = await Cli(command, {
-			done: () => {},
-			console: {
-				error: spy,
-				log: jest.fn(),
-			},
-			ansi: CliNoAnsi(),
-		}).runLine('"foo');
-		expect(exitCode).not.toBe(0);
-		expect(spy).toHaveBeenCalledWith('Error: Unterminated "-quoted string');
 	});
 });
