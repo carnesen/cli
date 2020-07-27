@@ -2,9 +2,9 @@ import { ICliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
 /**
- * Options for [[`CliBooleanArgGroup`]]
+ * Options for [[`CliFlagArgGroup`]]
  */
-export interface ICliBooleanArgGroupOptions {
+export interface ICliFlagArgGroupOptions {
 	/** See [[`ICliArgGroup.description`]] */
 	description?: string;
 	/** See [[`ICliArgGroup.hidden`]] */
@@ -23,8 +23,8 @@ export interface ICliBooleanArgGroupOptions {
  *
  * @throws [[`CliUsageError`]]
  */
-export function CliBooleanArgGroup(
-	options: ICliBooleanArgGroupOptions = {},
+export function CliFlagArgGroup(
+	options: ICliFlagArgGroupOptions = {},
 ): ICliArgGroup<boolean, false> {
 	const { description, hidden = false } = options;
 	const argGroup: ICliArgGroup<boolean, false> = {
