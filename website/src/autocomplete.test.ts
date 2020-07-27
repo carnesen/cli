@@ -1,12 +1,14 @@
 import {
 	CliBranch,
 	CliCommand,
-	CliOneOfArgGroup,
+	CliStringChoiceArgGroup,
 	CliStringArgGroup,
 } from '@carnesen/cli';
 import { autocomplete } from './autocomplete';
 
-const oneOfArgGroup = CliOneOfArgGroup({ values: ['foo', 'bar', 'baz'] });
+const oneOfArgGroup = CliStringChoiceArgGroup({
+	choices: ['foo', 'bar', 'baz'],
+});
 
 const command = CliCommand({
 	name: 'command',
@@ -27,8 +29,8 @@ const emptyCommand = CliCommand({
 const requiredPositionalArgGroupCommand = CliCommand({
 	name: 'required-positional-arg-group-command',
 	action() {},
-	positionalArgGroup: CliOneOfArgGroup({
-		values: ['foo', 'bar'],
+	positionalArgGroup: CliStringChoiceArgGroup({
+		choices: ['foo', 'bar'],
 		required: true,
 	}),
 	doubleDashArgGroup: oneOfArgGroup,

@@ -5,7 +5,7 @@ import {
 	throwErrorCommand,
 	parseJsonCommand,
 } from '@carnesen/cli-examples';
-import { CliCommand, CliOneOfArgGroup } from '@carnesen/cli';
+import { CliCommand, CliStringChoiceArgGroup } from '@carnesen/cli';
 
 import { docsCommand } from './docs-command';
 
@@ -18,8 +18,8 @@ const SHOW_COMMAND_NAME = 'show';
 export const showCommand = CliCommand({
 	name: SHOW_COMMAND_NAME,
 	description: 'Show the source code of a command',
-	positionalArgGroup: CliOneOfArgGroup({
-		values: [
+	positionalArgGroup: CliStringChoiceArgGroup({
+		choices: [
 			'.',
 			docsCommand.name,
 			echoCommand.name,

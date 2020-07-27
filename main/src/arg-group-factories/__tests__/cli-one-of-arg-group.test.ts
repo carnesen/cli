@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliOneOfArgGroup } from '../cli-one-of-arg-group';
+import { CliStringChoiceArgGroup } from '../cli-one-of-arg-group';
 import { CLI_USAGE_ERROR } from '../../cli-usage-error';
 
 const description = 'foo bar baz';
@@ -7,15 +7,15 @@ const hidden = true;
 const placeholder = '<special>';
 const required = false;
 
-const argGroup = CliOneOfArgGroup({
-	values: ['foo', 'bar'],
+const argGroup = CliStringChoiceArgGroup({
+	choices: ['foo', 'bar'],
 	description,
 	hidden,
 	placeholder,
 	required,
 });
 
-describe(CliOneOfArgGroup.name, () => {
+describe(CliStringChoiceArgGroup.name, () => {
 	it('parse returns the zeroth element of args', () => {
 		expect(argGroup.parse(['foo'])).toBe('foo');
 	});
@@ -35,7 +35,7 @@ describe(CliOneOfArgGroup.name, () => {
 	});
 
 	it('returns undefined if args is', () => {
-		const argGroup2 = CliOneOfArgGroup({ values: ['foo', 'bar'] });
+		const argGroup2 = CliStringChoiceArgGroup({ choices: ['foo', 'bar'] });
 		expect(argGroup2.parse(undefined)).toBe(undefined);
 	});
 
