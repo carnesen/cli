@@ -1,5 +1,5 @@
 import {
-	CliBooleanArgGroup,
+	CliFlagArgGroup,
 	CliCommand,
 	CliStringArrayArgGroup,
 } from '@carnesen/cli';
@@ -26,7 +26,7 @@ export const echoPizzaCommand = CliCommand({
 		experimental features, anything that you don't want to expose as part of the
 		command's public API.`,
 	namedArgGroups: {
-		pizza: CliBooleanArgGroup({ hidden: true }),
+		pizza: CliFlagArgGroup({ hidden: true }),
 	},
 	action({ positionalValue: messages, namedValues: { pizza } }) {
 		let text = messages ? messages.join(' ') : '';

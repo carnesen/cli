@@ -20,9 +20,9 @@ export {
 
 // Argument group factories
 export {
-	CliBooleanArgGroup,
-	ICliBooleanArgGroupOptions,
-} from './arg-group-factories/cli-boolean-arg-group';
+	CliFlagArgGroup,
+	ICliFlagArgGroupOptions,
+} from './arg-group-factories/cli-flag-arg-group';
 export {
 	CliJsonArgGroup,
 	ICliJsonArgGroupOptions,

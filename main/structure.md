@@ -42,18 +42,18 @@ The [[`CliStringArrayArgGroup`]] parser throws a [[`CliUsageError`]] when `requi
 ### Named arguments
 An [[`ICliCommand`]]'s `namedArgGroups` receive all the command-line arguments of the form `--name value`. The parsed values are passed into the command's `action` as the `namedValues` property, an object of the form `{ name: parsedValue, ... }`. For example, building on `cloud-cli users list` from above, let's provide a command-line flag to limit the list to only active users:
 ```typescript
-import { CliCommand, CliBooleanArgGroup } from '@carnesen/cli';
+import { CliCommand, CliFlagArgGroup } from '@carnesen/cli';
 
 export const listCommand = CliCommand({
    name: 'list',
    namedArgGroups: {
-      active: CliBooleanArgGroup(),
+      active: CliFlagArgGroup(),
    },
    async action({ namedValues: { active } }) {
       // This command does not define a positionalArgGroup. So name
       // the first function parameter "_" to signify it's unused.
 
-      // The CliBooleanArgGroup parser returns false unless the user 
+      // The CliFlagArgGroup parser returns false unless the user 
       // passes --active in which case it returns true.
 
       // Fetch the users and return an array of their usernames ...

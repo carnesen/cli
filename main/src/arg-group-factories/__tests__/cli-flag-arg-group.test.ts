@@ -1,13 +1,13 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliBooleanArgGroup } from '../cli-boolean-arg-group';
+import { CliFlagArgGroup } from '../cli-flag-arg-group';
 import { CLI_USAGE_ERROR } from '../../cli-usage-error';
 
 const description = 'foo bar baz';
 const hidden = true;
 
-const argGroup = CliBooleanArgGroup({ description, hidden });
+const argGroup = CliFlagArgGroup({ description, hidden });
 
-describe(CliBooleanArgGroup.name, () => {
+describe(CliFlagArgGroup.name, () => {
 	it('always has "required" set to false', () => {
 		expect(argGroup.required).toBe(false);
 	});
@@ -33,6 +33,6 @@ describe(CliBooleanArgGroup.name, () => {
 	});
 
 	it('config is optional', () => {
-		expect(CliBooleanArgGroup().hidden).toBe(false);
+		expect(CliFlagArgGroup().hidden).toBe(false);
 	});
 });
