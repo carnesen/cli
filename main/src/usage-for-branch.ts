@@ -1,21 +1,22 @@
 import { ICliBranch } from './cli-branch';
-import { hardWrapText } from './hard-wrap-text';
+import { reWrapText } from './re-wrap-text';
 import { UsageSubcommandRows } from './usage-subcommand-rows';
 import { TwoColumnTable } from './two-column-table';
+import { IUsageOptions } from './usage-options';
+import { DescriptionText } from './cli-description';
+import { CliAnsi } from './cli-ansi';
 
 export function UsageForBranch(
-	current: ICliBranch,
-	parents: ICliBranch[] = [],
-	maxLineLength = +Infinity,
-	indentation = '',
+	{ current, parents }: { current: ICliBranch; parents: ICliBranch[] },
+	{ indentation, ansi, columns }: IUsageOptions,
 ): string[] {
 	const commandPath = [...parents, current].map(({ name }) => name).join(' ');
 	const lines: string[] = [];
 	lines.push(`Usage: ${commandPath ? `${commandPath} ` : ''}<subcommand> ...`);
 	lines.push('');
-
-	const descriptionLines = hardWrapText(current.description, {
-		maxLineLength,
+	const description = DescriptionText(current.description, { ansi });
+	const descriptionLines = reWrapText(description, {
+		columns,
 		indentation,
 	});
 	if (descriptionLines.length > 0) {
@@ -26,11 +27,11 @@ export function UsageForBranch(
 	lines.push('Subcommands:');
 	lines.push('');
 
-	const subcommandRows = UsageSubcommandRows(current);
+	const subcommandRows = UsageSubcommandRows(current, { ansi: CliAnsi() });
 
 	lines.push(
 		...TwoColumnTable(subcommandRows, {
-			maxLineLength,
+			columns,
 			indentation,
 			maxParagraphs: 1,
 		}),

@@ -3,6 +3,7 @@
  */
 
 export { advancedBranch } from './advanced-branch';
+export { ansiEchoCommand } from './ansi-echo-command';
 export { demoDoubleDashArgumentsCommand } from './demo-double-dash-arguments-command';
 export { echoCommand } from './echo-command';
 export { echoHiddenCommand } from './echo-hidden-command';

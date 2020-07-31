@@ -1,15 +1,17 @@
-import { ICliBranch } from './cli-branch';
 import { wrapInSquareBrackets } from './util';
-import { ICliCommand } from './cli-command';
-import { hardWrapText } from './hard-wrap-text';
+import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
+import { CliAnsi } from './cli-ansi';
+import { DescriptionText, IDescriptionInput } from './cli-description';
+import { ICliLeaf } from './cli-tree';
+import { IUsageOptions } from './usage-options';
 
 export function UsageForCommand(
-	current: ICliCommand,
-	parents: ICliBranch[] = [],
-	maxLineLength = +Infinity,
-	indentation = '',
+	leaf: ICliLeaf,
+	options: IUsageOptions,
 ): string[] {
+	const { current, parents } = leaf;
+	const { columns = +Infinity, indentation = '', ansi = CliAnsi() } = options;
 	const {
 		positionalArgGroup,
 		namedArgGroups,
@@ -19,15 +21,23 @@ export function UsageForCommand(
 	const commandPathString = [...parents, current]
 		.map(({ name }) => name)
 		.join(' ');
+
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionLines = hardWrapText(description, {
-		maxLineLength,
+	const descriptionInput: IDescriptionInput = { ansi };
+	const commandDescriptionText: string = DescriptionText(
+		description,
+		descriptionInput,
+	);
+
+	const commandDescriptionLines = reWrapText(commandDescriptionText, {
+		columns,
 		indentation,
 	});
-	if (descriptionLines.length > 0) {
-		lines.push(...descriptionLines);
+
+	if (commandDescriptionLines.length > 0) {
+		lines.push(...commandDescriptionLines);
 		lines.push('');
 	}
 
@@ -37,14 +47,23 @@ export function UsageForCommand(
 		} else {
 			firstLine += ` ${wrapInSquareBrackets(positionalArgGroup.placeholder)}`;
 		}
+		const positionalArgGroupDescriptionText = DescriptionText(
+			positionalArgGroup.description,
+			descriptionInput,
+		);
+
 		lines.push('Positional arguments:');
 		lines.push('');
 		lines.push(
 			...TwoColumnTable(
-				[[positionalArgGroup.placeholder, positionalArgGroup.description]],
-				{ maxLineLength, indentation },
+				[[positionalArgGroup.placeholder, positionalArgGroupDescriptionText]],
+				{
+					columns,
+					indentation,
+				},
 			),
 		);
+		lines.push('');
 	}
 
 	if (namedArgGroups) {
@@ -60,6 +79,10 @@ export function UsageForCommand(
 			lines.push('');
 			const rows: TTwoColumnTableRow[] = namedArgGroupEntries.map(
 				([name, argGroup]) => {
+					const argGroupDescriptionText = DescriptionText(
+						argGroup.description,
+						descriptionInput,
+					);
 					let cell0 = `--${name}`;
 					if (argGroup.placeholder) {
 						cell0 += ` ${argGroup.placeholder}`;
@@ -67,11 +90,11 @@ export function UsageForCommand(
 					if (!argGroup.required) {
 						cell0 = wrapInSquareBrackets(cell0);
 					}
-					return [cell0, argGroup.description];
+					return [cell0, argGroupDescriptionText];
 				},
 			);
 
-			lines.push(...TwoColumnTable(rows, { maxLineLength, indentation }));
+			lines.push(...TwoColumnTable(rows, { columns, indentation }));
 		}
 	}
 
@@ -84,7 +107,12 @@ export function UsageForCommand(
 		lines.push('Special arguments:');
 		lines.push('');
 		lines.push(
-			...TwoColumnTable([[placeholder, doubleDashArgGroup.description]]),
+			...TwoColumnTable([
+				[
+					placeholder,
+					DescriptionText(doubleDashArgGroup.description, descriptionInput),
+				],
+			]),
 		);
 	}
 

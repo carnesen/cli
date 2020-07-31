@@ -1,6 +1,7 @@
 import { TValueFromCliArgGroup, ICliArgGroup } from './cli-arg-group';
 import { ICliConsole } from './cli-console';
 import { ICliAnsi } from './cli-ansi';
+import { TCliDescription } from './cli-description';
 
 /** "kind" of a [[`ICliCommand`]] */
 export const CLI_COMMAND = 'CLI_COMMAND';
@@ -39,7 +40,7 @@ export interface ICliCommandOptions<
 	doubleDashArgGroup?: TDoubleDashArgGroup;
 
 	/** A sentence or two about this command for command-line usage */
-	description?: string;
+	description?: TCliDescription;
 
 	/** If `true`, don't show this command in command-line usage */
 	hidden?: boolean;

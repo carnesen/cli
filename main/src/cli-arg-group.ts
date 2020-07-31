@@ -1,3 +1,5 @@
+import { TCliDescription } from './cli-description';
+
 /**
  * Defines the type of the args passed to an [[`ICliArgGroup`]]
  * @typeParam TRequired If `true`, the `args` parameter might be `undefined`
@@ -31,7 +33,7 @@ export interface ICliArgGroup<
 
 	/** A text description of this argument group. Paragraphs are re-wrapped when
 	 * printed to the terminal so don't worry about whitespace. */
-	description?: string;
+	description?: TCliDescription;
 
 	/**
 	 * If `true`, command-line usage will not normally show this arg group

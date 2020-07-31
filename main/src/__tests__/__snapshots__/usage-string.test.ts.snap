@@ -16,6 +16,7 @@ exports[`UsageString Creates a usage string for a command without a parent 1`] =
 Positional arguments:
 
 <word> : A word
+
 Options:
 
 [--message <str>] : A string message please
@@ -30,6 +31,7 @@ exports[`UsageString Creates a usage string for a command without a parent branc
 Positional arguments:
 
 <word> : A word
+
 Options:
 
 [--message <str>] : A string message please

@@ -1,12 +1,13 @@
 import { ICliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
+import { TCliDescription } from '../cli-description';
 
 /**
  * Options for [[`CliFlagArgGroup`]]
  */
 export interface ICliFlagArgGroupOptions {
 	/** See [[`ICliArgGroup.description`]] */
-	description?: string;
+	description?: TCliDescription;
 	/** See [[`ICliArgGroup.hidden`]] */
 	hidden?: boolean;
 }

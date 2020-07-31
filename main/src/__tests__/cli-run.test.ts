@@ -2,8 +2,8 @@ import { CodedError } from '@carnesen/coded-error';
 import { CliCommand } from '../cli-command';
 import { CliUsageError } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
-import { ICliOptions } from '../cli-interface';
-import { CliAnsi, CliNoAnsi } from '../cli-ansi';
+import { ICliOptions } from '../cli-options';
+import { CliAnsi } from '../cli-ansi';
 import { CliApi } from '../cli-api';
 import { CliRun } from '../cli-run';
 
@@ -99,14 +99,14 @@ describe(CliRun.name, () => {
 		expect(logMessage).toBe(undefined);
 	});
 
-	it('does not use red in the error message if color is false', async () => {
+	it('does not use red in the error message if ansi is false', async () => {
 		const { errorMessage } = await runMocked(
 			() => {
 				throw new CliTerseError('foo');
 			},
-			{ ansi: CliNoAnsi() },
+			{ ansi: false },
 		);
-		expect(errorMessage).not.toMatch(CliAnsi().red('Error:'));
+		expect(errorMessage).not.toMatch(CliAnsi(true).red('Error:'));
 		expect(errorMessage).toMatch('Error:');
 	});
 

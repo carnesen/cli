@@ -4,6 +4,7 @@ import {
 	echoPizzaCommand,
 	throwErrorCommand,
 	parseJsonCommand,
+	ansiEchoCommand,
 } from '@carnesen/cli-examples';
 import { CliCommand, CliStringChoiceArgGroup } from '@carnesen/cli';
 
@@ -23,6 +24,7 @@ export const showCommand = CliCommand({
 			'.',
 			docsCommand.name,
 			echoCommand.name,
+			ansiEchoCommand.name,
 			echoPizzaCommand.name,
 			HISTORY_COMMAND_NAME,
 			multiplyCommand.name,
@@ -37,11 +39,12 @@ export const showCommand = CliCommand({
 		let url: string;
 		switch (name) {
 			case echoCommand.name:
+			case ansiEchoCommand.name:
 			case echoPizzaCommand.name:
 			case multiplyCommand.name:
 			case parseJsonCommand.name:
 			case throwErrorCommand.name: {
-				url = `https://github.com/carnesen/cli/blob/master/examples/src/${name}-command/index.ts`;
+				url = `https://github.com/carnesen/cli/blob/master/examples/src/${name}-command.ts`;
 				break;
 			}
 			case '.': {
