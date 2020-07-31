@@ -1,10 +1,9 @@
 import { CliCommand } from '../cli-command';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
-import { CliNoAnsi } from '../cli-ansi';
 import { CliRunLine } from '../cli-run-line';
 import { CliApi } from '../cli-api';
 import { CliRun } from '../cli-run';
-import { ICliOptions } from '../cli-interface';
+import { ICliOptions } from '../cli-options';
 
 describe(CliRunLine.name, () => {
 	it('has a runLine method that parses the command-line', async () => {
@@ -34,7 +33,6 @@ describe(CliRunLine.name, () => {
 				error: spy,
 				log: jest.fn(),
 			},
-			ansi: CliNoAnsi(),
 		};
 		const api = CliApi(command, options);
 		const run = CliRun(api, options);
@@ -58,7 +56,6 @@ describe(CliRunLine.name, () => {
 				error: spy,
 				log: jest.fn(),
 			},
-			ansi: CliNoAnsi(),
 		};
 		const api = CliApi(command, options);
 		const run = CliRun(api, options);

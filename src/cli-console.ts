@@ -21,18 +21,3 @@ export function CliConsole(): ICliConsole {
 		},
 	};
 }
-
-/**
- * A factory for [[`ICliConsole`]]s that do not actually write to console
- * @param options
- */
-export function CliNoConsole(): ICliConsole {
-	return {
-		log() {
-			// do nothing
-		},
-		error() {
-			// do nothing
-		},
-	};
-}

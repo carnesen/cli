@@ -1,8 +1,10 @@
+import { stripAnsi } from './strip-ansi';
+
 export interface IHardWrapTextOptions {
 	/** A prefix for every line */
 	indentation?: string;
 	/** Target line width */
-	maxLineLength?: number;
+	columns?: number;
 	/** Paragraphs after this many will be dropped */
 	maxParagraphs?: number;
 }
@@ -16,24 +18,20 @@ export interface IHardWrapTextOptions {
  * @param options An [[`IHardWrapTextOptions`]] object
  * @returns An array of wrapped lines with empty-line paragraph separators
  */
-export function hardWrapText(
+export function reWrapText(
 	text = '',
 	options: IHardWrapTextOptions = {},
 ): string[] {
 	if (!text) {
 		return [];
 	}
-	const {
-		maxLineLength = +Infinity,
-		indentation = '',
-		maxParagraphs,
-	} = options;
+	const { columns = +Infinity, indentation = '', maxParagraphs } = options;
 	// Trim leading and trailing whitespace to handle things like:
 	// text = `
 	// blah blah
 	// more blah
 	// `
-	const usableMaxLineLength = maxLineLength - indentation.length;
+	const usableMaxLineLength = columns - indentation.length;
 	const trimmedText = text.trim();
 	if (!trimmedText) {
 		return [];
@@ -44,6 +42,7 @@ export function hardWrapText(
 
 	// The line currently being built
 	let currentLine = '';
+	let currentLineLength = 0;
 	const outputLines: string[] = [];
 	let paragraphIndex = 0;
 	let previousLineWasEmpty = false;
@@ -64,7 +63,7 @@ export function hardWrapText(
 
 			// It should be the case that outputLines has content because of the other
 			// trims and conditionals in place.
-			if (currentLine.length === 0) {
+			if (currentLineLength === 0) {
 				throw new Error('Expected output line to have length >=0');
 			}
 
@@ -78,30 +77,31 @@ export function hardWrapText(
 			// empty output line even if there is another empty input line.
 			outputLines.push(currentLine, '');
 			currentLine = '';
+			currentLineLength = 0;
 			paragraphIndex += 1;
 		} else {
 			previousLineWasEmpty = false;
 			const words = inputLine.split(' ');
-			for (let word of words) {
-				// Correct for unlikely event that a single word is longer than the max
-				// line width
-				word = word.substring(0, usableMaxLineLength);
-
+			for (const word of words) {
+				const wordLength = stripAnsi(word).length;
 				// Handle case where current line is empty
-				if (currentLine.length === 0) {
+				if (currentLineLength === 0) {
 					currentLine = word;
+					currentLineLength = wordLength;
 					continue;
 				}
 
 				// Try to fit word onto current line, which is not empty
-				if (currentLine.length + 1 + word.length <= usableMaxLineLength) {
+				if (currentLineLength + 1 + wordLength <= usableMaxLineLength) {
 					currentLine = `${currentLine} ${word}`;
+					currentLineLength += wordLength + 1;
 					continue;
 				}
 
 				// Word does not fit on this line. Let's start a new one.
 				outputLines.push(currentLine);
 				currentLine = word;
+				currentLineLength = wordLength;
 			}
 		}
 	}

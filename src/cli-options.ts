@@ -1,6 +1,5 @@
 import { ICliConsole } from './cli-console';
 import { ICliProcess } from './cli-process';
-import { ICliAnsi } from './cli-ansi';
 
 /**
  * A command-line interface (CLI) created by [[`Cli`]]
@@ -33,10 +32,15 @@ export interface ICli {
  * Options for [[`Cli`]]
  * */
 export interface ICliOptions {
-	/** ANSI escape code methods */
-	ansi?: ICliAnsi;
+	/**
+	 * Enable/disable ANSI text decoration. Defaults to `process.stdout.isTTY &&
+	 * process.stderr.isTTY`
+	 * */
+	ansi?: boolean;
 
-	/** Defaults to `process.stdout.columns` or 100 */
+	/**
+	 * Number of terminal columns. Defaults to `process.stdout.columns || 100`
+	 * */
 	columns?: number;
 
 	/** `console.log` is called on the result, `console.error` on error */

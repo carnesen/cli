@@ -5,7 +5,7 @@ import { parseNamedArgs } from './parse-named-args';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { TCliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
-import { ICli, ICliOptions } from './cli-interface';
+import { ICli, ICliOptions } from './cli-options';
 import { CliConsole } from './cli-console';
 import { CliAnsi } from './cli-ansi';
 
@@ -16,7 +16,9 @@ import { CliAnsi } from './cli-ansi';
  * @param options
  */
 export function CliApi(root: TCliRoot, options: ICliOptions = {}): ICli['api'] {
-	const { console = CliConsole(), ansi = CliAnsi() } = options;
+	const { console = CliConsole() } = options;
+
+	const ansi = CliAnsi(options.ansi);
 
 	return async function cliApi(args: string[]) {
 		const tree = findCliTree(root, args);

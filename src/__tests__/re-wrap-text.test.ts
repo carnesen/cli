@@ -1,14 +1,19 @@
-import { hardWrapText } from '../hard-wrap-text';
+import { reWrapText } from '../re-wrap-text';
+import { CliAnsi } from '../cli-ansi';
 
 const data: {
 	text?: string;
 	indentation?: string;
-	maxLineLength?: number;
+	columns?: number;
 	maxParagraphs?: number;
-	lines: ReturnType<typeof hardWrapText>;
+	lines: ReturnType<typeof reWrapText>;
 }[] = [
 	{
 		text: '',
+		lines: [],
+	},
+	{
+		text: ' ',
 		lines: [],
 	},
 	{
@@ -30,12 +35,12 @@ const data: {
 	{
 		text: `This is a line longer than the max width.`,
 		lines: ['This is a line longer than the', 'max width.'],
-		maxLineLength: 30,
+		columns: 30,
 	},
 	{
 		text: `This is a line longer than the max width.`,
 		lines: ['   This is a line longer than', '   the max width.'],
-		maxLineLength: 30,
+		columns: 30,
 		indentation: '   ',
 	},
 	{
@@ -61,21 +66,26 @@ const data: {
 		maxParagraphs: 1,
 		lines: ['A short subject line'],
 	},
+	{
+		text: `${CliAnsi(true).red('f ').repeat(3)}`,
+		columns: 10,
+		lines: [CliAnsi(true).red('f ').repeat(3).trim()],
+	},
 ];
 
-describe(hardWrapText.name, () => {
+describe(reWrapText.name, () => {
 	for (const {
 		text: description,
 		lines: expectedResult,
-		maxLineLength,
+		columns,
 		indentation,
 		maxParagraphs,
 	} of data) {
 		it(`${JSON.stringify(description)} ==> ${JSON.stringify(
 			expectedResult,
 		)}`, () => {
-			const result = hardWrapText(description, {
-				maxLineLength,
+			const result = reWrapText(description, {
+				columns,
 				indentation,
 				maxParagraphs,
 			});

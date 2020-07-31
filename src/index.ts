@@ -1,6 +1,6 @@
 // Command-line interface runner
 export { Cli } from './cli';
-export { ICli, ICliOptions } from './cli-interface';
+export { ICli, ICliOptions } from './cli-options';
 
 // Branch factory
 export {
@@ -49,13 +49,13 @@ export {
 } from './arg-group-factories/cli-string-array-arg-group';
 
 // Advanced: Universal console interface
-export { ICliConsole, CliConsole, CliNoConsole } from './cli-console';
+export { ICliConsole } from './cli-console';
 
 // Advanced: Universal process interface
-export { ICliProcess, CliProcess } from './cli-process';
+export { ICliProcess } from './cli-process';
 
 // Advanced: Text decoration
-export { ICliAnsi, CliAnsi, CliNoAnsi } from './cli-ansi';
+export { ICliAnsi, CliAnsi } from './cli-ansi';
 
 // Advanced: Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
