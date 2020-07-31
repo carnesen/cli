@@ -1,6 +1,6 @@
 import { CliApi } from './cli-api';
 import { TCliRoot } from './cli-tree';
-import { ICli, ICliOptions } from './cli-interface';
+import { ICli, ICliOptions } from './cli-options';
 import { CliRun } from './cli-run';
 import { CliRunLine } from './cli-run-line';
 

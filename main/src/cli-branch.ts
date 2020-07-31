@@ -1,4 +1,5 @@
 import { ICliCommand } from './cli-command';
+import { TCliDescription } from './cli-description';
 
 /** "kind" of an [[`ICliBranch`]] */
 export const CLI_BRANCH = 'CLI_BRANCH';
@@ -9,7 +10,7 @@ export interface ICliBranchOptions {
 	name: string;
 
 	/** A short description of this branch for command-line usage */
-	description?: string;
+	description?: TCliDescription;
 
 	/** If `true`, this branch will not appear in command-line usage */
 	hidden?: boolean;

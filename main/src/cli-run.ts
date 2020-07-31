@@ -3,7 +3,7 @@ import { UsageString } from './usage-string';
 import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
 import { CliConsole } from './cli-console';
 import { CliProcess } from './cli-process';
-import { ICli, ICliOptions } from './cli-interface';
+import { ICli, ICliOptions } from './cli-options';
 import { CliAnsi } from './cli-ansi';
 
 /**
@@ -22,8 +22,9 @@ export function CliRun(
 		columns = process.stdout.columns,
 		console = CliConsole(),
 		done = process.exit,
-		ansi = CliAnsi(),
 	} = options;
+
+	const ansi = CliAnsi(options.ansi);
 
 	return async function run(args = process.argv.slice(2)) {
 		let exitCode = 0;
@@ -43,7 +44,11 @@ export function CliRun(
 			} else if (exception.code === CLI_USAGE_ERROR) {
 				const exceptionAsUsageError: CliUsageError = exception;
 				if (exceptionAsUsageError.tree) {
-					const usageString = UsageString(exception.tree, columns, '   ');
+					const usageString = UsageString(exceptionAsUsageError.tree, {
+						columns,
+						indentation: '   ',
+						ansi,
+					});
 					if (exception.message) {
 						console.error(
 							`${usageString}\n\n${ansi.red('Error:')} ${exception.message}`,

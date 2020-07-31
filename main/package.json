@@ -10,12 +10,12 @@
 	"scripts": {
 		"build": "rimraf lib/ && tsc",
 		"build-watch": "npm run build -- --watch",
-		"docs": "rimraf dist/ && mkdir dist/ && cat readme.md usage.md structure.md footer.md > docs.md && typedoc --mode library --readme docs.md --inputFiles src/index.ts --out dist --theme theme/ && cp -r images/ dist/images/",
+		"docs": "rimraf dist/ && mkdir dist/ && cat readme.md usage.md > typedoc.md && typedoc --mode library --readme typedoc.md --inputFiles src/index.ts --out dist --theme theme/ && cp -r images/ dist/images/",
 		"docs-serve": "browser-sync dist",
-		"docs-watch": "nodemon --ext ts,css,md --ignore dist/ --ignore docs.md --exec npm -- run docs",
+		"docs-watch": "nodemon --ext ts,css,md --ignore dist/ --ignore typedoc.md --exec npm -- run docs",
 		"lint": "eslint --ext .ts src/",
 		"fix": "npm run lint -- --fix",
-		"test": "npm run lint && npm run unit-test && npm run build && npm run docs",
+		"test": "npm run lint && npm run build && npm run unit-test && npm run docs",
 		"unit-test": "jest src",
 		"prepublishOnly": "npm test"
 	},
@@ -41,7 +41,7 @@
 		"src",
 		"lib",
 		"dist",
-		"docs.md"
+		"usage.md"
 	],
 	"publishConfig": {
 		"access": "public",

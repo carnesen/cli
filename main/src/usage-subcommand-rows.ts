@@ -2,16 +2,20 @@ import { ICliTree } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { ICliBranch, CLI_BRANCH } from './cli-branch';
 import { TTwoColumnTableRow } from './two-column-table';
-
+import { DescriptionText, IDescriptionInput } from './cli-description';
 /** [command path, description] */
 
-export function UsageSubcommandRows(branch: ICliBranch): TTwoColumnTableRow[] {
-	return RecursiveUsageSubcommandRows(branch, '');
+export function UsageSubcommandRows(
+	branch: ICliBranch,
+	input: IDescriptionInput,
+): TTwoColumnTableRow[] {
+	return RecursiveUsageSubcommandRows(branch, '', input);
 }
 
 function RecursiveUsageSubcommandRows(
 	current: ICliTree['current'],
 	path: string,
+	options: IDescriptionInput,
 ): TTwoColumnTableRow[] {
 	if (current.hidden && path.length > 0) {
 		// We've walked to a hidden tree. When path.length === 0 the user has
@@ -21,7 +25,10 @@ function RecursiveUsageSubcommandRows(
 	}
 
 	if (current.kind === CLI_COMMAND) {
-		return [[path, current.description]];
+		const text = DescriptionText(current.description, {
+			ansi: options.ansi,
+		});
+		return [[path, text]];
 	}
 
 	if (current.kind === CLI_BRANCH) {
@@ -31,6 +38,7 @@ function RecursiveUsageSubcommandRows(
 				...RecursiveUsageSubcommandRows(
 					subcommand,
 					path ? `${path} ${subcommand.name}` : subcommand.name,
+					options,
 				),
 			);
 		}

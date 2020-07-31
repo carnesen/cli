@@ -87,7 +87,7 @@ export class CliRepl {
 		this.terminal.focus();
 
 		if (!this.submit) {
-			this.consoleLog(`Hit ${bold('"Enter"')} to get started.`);
+			this.consoleLog(`Welcome! Hit ${bold('"Enter"')} to get started ...`);
 		}
 
 		this.prompt();
@@ -98,7 +98,7 @@ export class CliRepl {
 	}
 
 	private prompt() {
-		this.terminal.write(`\r\n${PS1}${this.commandLine.sequence()}`);
+		this.terminal.write(`${PS1}${this.commandLine.sequence()}`);
 	}
 
 	private handleKeyEvent({ key, domEvent }: KeyEvent): void {
@@ -173,8 +173,11 @@ export class CliRepl {
 		} else {
 			str = inspect(arg, { colors: true }) || '';
 		}
-		const strWithNormalizedLineEndings = str.replace(/([^\r])\n/g, '$1\r\n');
-		this.terminal.write(strWithNormalizedLineEndings);
+		str = str.replace(/([^\r])\n/g, '$1\r\n');
+		if (!str.endsWith('\r\n')) {
+			str += '\r\n';
+		}
+		this.terminal.write(str);
 	}
 
 	private consoleError(arg: any) {
@@ -260,6 +263,7 @@ export class CliRepl {
 			}
 			default: {
 				// Write out the completions
+				this.consoleLog('');
 				for (const completion of completions) {
 					this.consoleLog(`${INDENTATION}${search}${completion}`);
 				}

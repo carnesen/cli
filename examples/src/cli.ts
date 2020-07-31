@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 // ^^ This "shebang" line [https://en.wikipedia.org/wiki/Shebang_(Unix)] is
-//  mandatory for this file to be an npm executable. Note that the shebang line
-//  references "node" not "ts-node"!
+//  mandatory for this file to be an proper cross-platform npm executable.
 //
-// Reference: https://docs.npmjs.com/files/package.json#bin
+// See also https://docs.npmjs.com/files/package.json#bin
 
 /**
  * The @carnesen/cli-examples Node.js executable CLI
