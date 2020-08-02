@@ -1,5 +1,6 @@
 Welcome to the `carnesen/cli` monorepo! Here you'll find the source code for the following `npm` packages:
 - [@carnesen/cli](main): The core library 
+- [@carnesen/cli-docs](main): API docs for the core library
 - [@carnesen/cli-examples](examples): Examples of how to use `@carnesen/cli`
 - [@carnesen/cli-website](website): The [cli.carnesen.com](https://cli.carnesen.com) browser application
 - [@carnesen/cli-website-server](website-server): The [cli.carnesen.com](https://cli.carnesen.com) Node.js server application

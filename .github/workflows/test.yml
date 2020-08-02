@@ -20,14 +20,12 @@ jobs:
       run: |
         npm ci
         npm test
-        npm pack
     - name: Build and test @carnesen/cli-examples
       working-directory: ./examples
       run: |
         npm ci
         npm install ../main/carnesen-cli*.tgz
         npm test
-        npm pack
     - name: Build and test @carnesen/cli-website
       working-directory: ./website
       run: |
@@ -35,10 +33,10 @@ jobs:
         npm install ../main/carnesen-cli*.tgz
         npm install ../examples/carnesen-cli*.tgz
         npm test
-        npm pack
     - name: Build and test @carnesen/cli-website-server
       working-directory: ./website-server
       run: |
         npm ci
+        npm install ../main/docs/carnesen-cli*.tgz
         npm install ../website/carnesen-cli*.tgz
         npm test

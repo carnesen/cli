@@ -27,7 +27,7 @@ cd ..
 
 cd website-server
 npm ci
-npm install @carnesen/cli@next
+npm install @carnesen/cli-docs@next
 npm install @carnesen/cli-website@latest
 npm publish
 cd ..

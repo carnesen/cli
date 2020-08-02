@@ -48,6 +48,13 @@ export {
 	ICliStringArrayArgGroupOptions,
 } from './arg-group-factories/cli-string-array-arg-group';
 
+// Advanced: Description functions
+export {
+	TCliDescription,
+	IDescriptionInput,
+	TCliDescriptionFunction,
+} from './cli-description';
+
 // Advanced: Universal console interface
 export { ICliConsole } from './cli-console';
 
@@ -66,3 +73,6 @@ export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';
 
 // Advanced: Command tree
 export { TCliRoot, ICliTree, ICliLeaf } from './cli-tree';
+
+// Branding
+export { CliWordMark } from './cli-word-mark';

@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli-website-server",
 	"description": "Node.js server for cli.carnesen.com",
-	"version": "2020.7.5",
+	"version": "2020.8.0",
 	"engines": {
 		"node": ">=12.0.0"
 	},
@@ -10,13 +10,13 @@
 		"lint": "eslint --ext .ts,.tsx src",
 		"start": "node lib/server.js",
 		"watch": "nodemon --exec ts-node --transpile-only --ext ts src/server.ts",
-		"test": "npm run lint && npm run unit-test && npm run build",
+		"test": "npm run lint && npm run unit-test && npm run build && npm pack",
 		"unit-test": "jest src",
 		"prepublishOnly": "npm run test"
 	},
 	"dependencies": {
-		"@carnesen/cli": "0.5.0-24",
-		"@carnesen/cli-website": "2020.7.5",
+		"@carnesen/cli-docs": "0.5.0-25",
+		"@carnesen/cli-website": "2020.8.0",
 		"@types/koa-mount": "4.0.0",
 		"http-status-codes": "1.4.0",
 		"koa": "2.13.0",
