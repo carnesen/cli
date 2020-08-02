@@ -10,7 +10,9 @@ cd ..
 cd main
 npm link
 npm run build
-cd ..
+cd docs
+npm link
+cd ../..
 
 cd examples
 npm link
@@ -27,8 +29,7 @@ cd ..
 
 cd website-server
 npm link
-npm link @carnesen/cli
-npm link @carnesen/cli-examples
+npm link @carnesen/cli-docs
 npm link @carnesen/cli-website
 npm run build
 cd ..

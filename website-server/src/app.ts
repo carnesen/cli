@@ -40,9 +40,9 @@ const websiteStaticMiddleware = serveStatic(
 	path.join(carnesenCliWebsiteDir, 'dist/'),
 );
 
-const carnesenCliDir = dirname(require.resolve('@carnesen/cli/package.json'));
+const docsDir = dirname(require.resolve('@carnesen/cli-docs/package.json'));
 
-const docsStaticMiddleware = serveStatic(path.join(carnesenCliDir, 'dist/'));
+const docsStaticMiddleware = serveStatic(docsDir);
 
 const app = new Koa();
 

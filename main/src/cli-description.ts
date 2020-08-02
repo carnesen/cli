@@ -4,10 +4,9 @@ export interface IDescriptionInput {
 	ansi: ICliAnsi;
 }
 
-export type TCliDescription =
-	| undefined
-	| string
-	| ((input: IDescriptionInput) => string);
+export type TCliDescriptionFunction = (input: IDescriptionInput) => string;
+
+export type TCliDescription = undefined | string | TCliDescriptionFunction;
 
 export function DescriptionText(
 	description: TCliDescription,
