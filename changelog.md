@@ -1,20 +1,22 @@
-# @carnesen/cli changelog
+# **@carnesen/cli** changelog
 
-## Unreleased 0.5.0
+## 0.5.0 - Unreleased
 
 ### Breaking
-Tweak the exported names to make the concepts easier to understand:
-- "input" --> "arg parser" ("getValue" --> "parse")
-- "ArgvInterface" --> "RunCli"
-- "leaf" --> "command"
+We completely overhauled the API in this release with the goal of making it as easy as possible to understand and use, but also with an eye on achieving 100% backwards compatibility by 1.0.
 
-### Added
-- Documentation via TSDoc and TypeDoc both in the dist directory of the package and on the web at [https://cli.carnesen.com](https://cli.carnesen.com).
+A user of v0.3 would scarcely recognize this library's public API, but they'd be in luck because now it's 100% documented both in the source code and online. If you were an early adopter of **@carnesen/cli**, thank you! We'd be happy to help you upgrade to 0.5, just [file an issue on this project's repository on GitHub](https://github.com/carnesen/cli/issues/new) asking for assistance.
 
-### Changes
-- Split off examples into a separate package `@carnesen/cli-examples` (source code still in this repo).
+### Features
+- API docs built from source using TypeDoc, published as the npm package `@carnesen/cli-docs` and on the web at [https://cli.carnesen.com](https://cli.carnesen.com)
+- Browser compatibility: We've removed all runtime dependencies on third-party packages and Node.js-specific global variables like `process`, nor do we depend on `@types/node` (except for in unit tests).
+- Re-wrap the argument/branch/command description text to fit the user's terminal in command-line usage
+- Built-in ANSI text decoration in `description` and `action`
 
-## 2020-05-15 0.4.0
+### Other
+- Split out the examples into a separate top-level sub-directory `examples` in the `carnesen/cli` monorepo and publish as separate package `@carnesen/cli-examples`.
+
+## 0.4.0 - 2020-05-15
 
 ### Breaking
 Numerous tweaks to make the API more expressive and grepable, e.g. CliCommand instead of just Command. The docs are still a work-in-progress but the TypeScript types are spot-on. Let them be your guide!

@@ -5,14 +5,13 @@ Command-line interfaces for Node.js and the browser
 The `carnesen/cli` package includes:
 - Runtime JavaScript files (ES2019 + CommonJS)
 - TypeScript type declarations (3.7+)
-- HTML API documentation
 
 This library has _no_ dependencies and is known to work with Node.js 12+ and all modern web browsers.
 
 ## Features
 - **Easy to use**: We ❤️ CLI's and want to use them everywhere for everything. This library makes it easy as can be to create beautiful easy-to-use CLIs for Node.js and for web browsers.
 
-- **Browser compatible**: As far as we know, this is the universe's _only_ [universal JavaScript](https://en.wikipedia.org/wiki/Isomorphic_JavaScript) CLI framework that actively supports the web browser as an execution environment. Your application can run in a [terminal emulator](https://xtermjs.org/) like our [online examples](https://cli.carnesen.com/), or use the browser's built-in terminal, [the JavaScript console](https://developers.google.com/web/tools/chrome-devtools/console)!
+- **Browser compatible**: As far as we know, this is the universe's _only_ [universal/isomorphic JavaScript](https://en.wikipedia.org/wiki/Isomorphic_JavaScript) CLI framework that actively supports the web browser as an execution environment. Your application can run in a [terminal emulator](https://xtermjs.org/) like our [online examples](https://cli.carnesen.com/), or use the browser's built-in terminal, [the JavaScript console](https://developers.google.com/web/tools/chrome-devtools/console)!
 
 - **Intelligent types**: This is first and foremost a TypeScript library. All components are intelligently typed, and our built-in argument parsers ensure that the types are respected at runtime.
 
