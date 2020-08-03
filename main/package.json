@@ -40,7 +40,9 @@
 	},
 	"files": [
 		"src",
-		"lib"
+		"!src/**/__tests__",
+		"lib",
+		"!lib/**/__tests__"
 	],
 	"publishConfig": {
 		"access": "public",
