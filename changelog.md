@@ -8,8 +8,8 @@ We completely overhauled the API in this release with the goal of making it as e
 A user of v0.3 would scarcely recognize this library's public API, but they'd be in luck because now it's 100% documented both in the source code and online. If you were an early adopter of **@carnesen/cli**, thank you! We'd be happy to help you upgrade to 0.5, just [file an issue on this project's repository on GitHub](https://github.com/carnesen/cli/issues/new) asking for assistance.
 
 ### Features
+- Browser compatibility: We've removed all runtime dependencies on third-party packages and Node.js-specific global variables like `process`, nor do we depend on `@types/node` (except internally for unit tests) nor the `DOM` TypeScript lib.
 - API docs built from source using TypeDoc, published as the npm package `@carnesen/cli-docs` and on the web at [https://cli.carnesen.com](https://cli.carnesen.com)
-- Browser compatibility: We've removed all runtime dependencies on third-party packages and Node.js-specific global variables like `process`, nor do we depend on `@types/node` (except for in unit tests).
 - Re-wrap the argument/branch/command description text to fit the user's terminal in command-line usage
 - Built-in ANSI text decoration in `description` and `action`
 
