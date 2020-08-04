@@ -43,26 +43,29 @@ The only Node.js-specific code is the `if (require.main === module)` block. To i
 
 ```typescript
 (window as any).multiply = (line: string) => {
-	cli.runLine(line);
+   cli.runLine(line);
 };
 ```
 
-Here's how that behaves as a web browser console CLI:
+Here's how that behaves in Google Chrome:
 <p><img width="400" src="images/multiply-browser-console.jpg" alt="Multiple CLI in browser console"></p>
 
-Like an exit code in a shell, the resolved value of `0` means the command finished successfully. Anything else is an error code. Try it you yourself at [cli.carnesen.com](https://cli.carnesen.com)! Here's how to open the console in [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Opening_the_Web_Console) and [Google Chrome](https://stackoverflow.com/a/66434/2793540).
+The resolved value of `0` means the command finished successfully. A non-zero exit code means an error occurred. Try it you yourself at [cli.carnesen.com](https://cli.carnesen.com)! Here's how to open the console in [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Opening_the_Web_Console) and [Google Chrome](https://stackoverflow.com/a/66434/2793540).
 
 ## Structure
 
 The general structure of a `@carnesen/cli` command line is:
 ```
-<branch> <command> <positional-args> --name <args> -- <double-dash-args>
+<branch> <command> \
+   <positional-args> \
+   --name <args> \
+   -- <double-dash-args>
 ```
-Only `<command>` is required. This section of the documentation describes each of these pieces in more detail. In the code snippets that follow we omit `description`s for brevity.
+Only `<command>` is required. This section of the documentation describes each of these pieces in more detail.
 
 ### Command
 
-A command defines an action `function` or `async function` and its command-line arguments. In `cloud users list`, for example, the command is `list`. Some commands don't have any arguments:
+A command defines an action `function` or `async function` and together with its command-line arguments. For example, in `cloud users list`, the command is `list`. Some commands don't have any arguments:
 
 ```typescript
 import { CliCommand } from '@carnesen/cli';
@@ -70,20 +73,20 @@ import { CliCommand } from '@carnesen/cli';
 export const listUsersCommand = CliCommand({
    name: 'list',
    async action() {
-      // Fetch all users and return an array of usernames
+      // Fetch all users
    }
 })
 ```
-[[`CliCommand`]] is a factory function (not a constructor) that returns an object literal of shape [[`ICliCommand`]].
+[[`CliCommand`]] is a factory function (not a constructor) that returns an object of shape [[`ICliCommand`]].
 
-Most commands define arguments through the `positionalArgGroup`, `namedArgGroups`, and/or `doubleDashArgGroup` as described below.
+Most commands define arguments through the `positionalArgGroup`, `namedArgGroups`, and/or `doubleDashArgGroup` properties as described below.
 
 ### Branch
 
 Branches provide a way of organizing commands as a tree for a CLI. For example, in `cloud users list`, `cloud` and `users` are branches and `list` is a subcommand. Branches are optional. Organize your CLI to suit your needs and taste:
 
 - `list-cloud-users`: No branches
-- `cloud list-users`: A single root branch with a bunch of commands underneath: 
+- `cloud list-users`: Command leaves under a root branch
 - `cloud users list`: A hierarchical command tree
 
 ```typescript
@@ -101,11 +104,11 @@ export const rootBranch = CliBranch({
 })
 ```
 
-[[`CliBranch`]] is a factory function (not a constructor) that returns an object literal of shape [[`ICliBranch`]].
+[[`CliBranch`]] is a factory function (not a constructor) that returns an object of shape [[`ICliBranch`]].
 
 ### Positional arguments
 
-A command's `positionalArgGroup` receives all the command-line arguments after the command name but before the first argument that starts with `--`. For example in `cloud users delete carl karen --force`, the positional arguments are `carl` and `karen`. The argument group provides a well-typed value as the `positionalValue` property:
+A command's `positionalArgGroup` receives all the command-line arguments after the command but before the first argument that starts with `--`. For example, in `cloud users delete carl karen --force`, the positional arguments are `carl` and `karen`. The argument group's parsed value is the `positionalValue` property of the action input:
 
 ```typescript
 import { CliCommand, CliStringArrayArgGroup } from '@carnesen/cli';
@@ -121,11 +124,11 @@ export const deleteCommand = CliCommand({
 })
 ```
 
-The [[`CliStringArrayArgGroup`]] parser throws a [[`CliUsageError`]] when `required` is set to `true` and no argument is provided. If `required` is _not_ set and no argument is provided, the `action` receives a value `undefined`. This distinction is captured by the types too, i.e. `usernames` would have type `string[] | undefined` instead of `string[]` if we hadn't set `required` to `true`.
+The [[`CliStringArrayArgGroup`]] parser throws a [[`CliUsageError`]] when `required` is set to `true` and no argument is provided. Conversely, if `required=false` and no argument is provided, `positionalValue` is `undefined`.
 
 ### Named arguments
 
-A command's `namedArgGroups` receives all the command-line arguments of the form `--name value`. The values are passed into the command's action as `namedValues` of shape `{ name: <value>, ... }`. Building on `cloud users list` from above, let's define a command-line flag to limit the list to only active users:
+A command's `namedArgGroups` receives all the command-line arguments of the form `--name value`. The parsed values are passed into the command's action as a property called `namedValues` of shape `{ name: <value>, ... }`. For example, in `cloud users list` let's add a command-line flag to filter out inactive users:
 
 ```typescript
 import { CliCommand, CliFlagArgGroup } from '@carnesen/cli';
@@ -136,20 +139,15 @@ export const listCommand = CliCommand({
       active: CliFlagArgGroup(),
    },
    async action({ namedValues: { active } }) {
-      // This command does not define a positionalArgGroup. So name
-      // the first function parameter "_" to signify it's unused.
-
-      // The CliFlagArgGroup parser returns false unless the user 
-      // passes --active in which case it returns true.
-
-      // Fetch the users and return an array of their usernames ...
+      // CliFlagArgGroup returns false unless --active was passed
+      // Fetch the users ...
    }
 })
 ```
 
 ### Double-dash arguments
 
-All command-line arguments after a lone `--` are passed to the command's `doubleDashArgGroup` which provides the `doubleDashValue` property. After the lone `--`, things like `--name` aren't interpreted as argument group separators. This is particularly useful for passing arguments through to another CLI like `do -- git --version`:
+All command-line arguments after a lone `--` are passed to the command's `doubleDashArgGroup`. After the lone `--`, things like `--name` aren't interpreted as argument group separators. This is particularly useful for passing arguments through to another CLI like `do -- git --version`. The argument group's return value is the `doubleDashValue` property of the action's input:
 
 ```typescript
 import { CliCommand, CliStringArrayArgGroup } from '@carnesen/cli';
@@ -158,7 +156,7 @@ export const doCommand = CliCommand({
    name: 'do',
    doubleDashArgGroup: CliStringArrayArgGroup(),
    async action({ doubleDashValue: args }) {
-      // Do stuff with the args ...
+      // Do stuff ...
    }
 })
 ```
