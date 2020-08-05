@@ -7,9 +7,10 @@
 	},
 	"scripts": {
 		"build": "rimraf lib/ && tsc",
-		"lint": "eslint --ext .ts,.tsx src",
+		"lint": "eslint --ext .js,.jsx,.ts,.tsx src jest.config.js",
+		"fix": "npm run lint -- --fix",
 		"start": "node lib/server.js",
-		"watch": "nodemon --exec ts-node --transpile-only --ext ts src/server.ts",
+		"start-watch": "nodemon --exec ts-node --ext ts src/server.ts",
 		"test": "npm run lint && npm run unit-test && npm run build && npm pack",
 		"unit-test": "jest src",
 		"prepublishOnly": "npm run test"
@@ -24,19 +25,19 @@
 		"koa-static": "5.0.0"
 	},
 	"devDependencies": {
-		"@carnesen/tsconfig": "0.3.1",
-		"@types/jest": "26.0.3",
+		"@carnesen/tsconfig": "0.4.0",
+		"@types/jest": "26.0.8",
 		"@types/koa": "2.11.3",
 		"@types/koa-static": "4.0.1",
-		"@types/node": "14.0.14",
-		"eslint": "7.3.1",
-		"eslint-config-carnesen": "4.1.0",
-		"jest": "26.1.0",
+		"@types/node": "14.0.27",
+		"eslint": "7.6.0",
+		"eslint-config-carnesen": "4.4.0",
+		"jest": "26.2.2",
 		"nodemon": "2.0.4",
 		"rimraf": "3.0.2",
-		"ts-jest": "26.1.1",
+		"ts-jest": "26.1.4",
 		"ts-node": "8.10.2",
-		"typescript": "3.9.5"
+		"typescript": "3.9.7"
 	},
 	"publishConfig": {
 		"access": "public"
