@@ -1,15 +1,19 @@
-Examples of how to use [@carnesen/cli](https://github.com/carnesen/cli)
+An example project that shows how to use [**@carnesen/cli**](https://github.com/carnesen/cli)
 
 [![build status badge](https://github.com/carnesen/cli/workflows/test/badge.svg)](https://github.com/carnesen/cli/actions?query=workflow%3Atest+branch%3Amaster) [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli-examples.svg)](https://www.npmjs.com/package/@carnesen/cli-examples) [![github stars badge](https://img.shields.io/github/stars/carnesen/cli)](https://github.com/carnesen/cli)
 
 ## Usage
-Together with [cli.carnesen.com/docs](https://cli.carnesen.com/docs), this package documents how to use **@carnesen/cli**. Inspect the code [on GitHub](https://github.com/carnesen/cli/tree/master/examples), or clone the repo and run it locally using [Node.js](https://nodejs.org/). This package is published to the npm registry as [@carnesen/cli-examples](https://www.npmjs.com/package/@carnesen/cli-examples). You can use npx to run a package without having to install it:
-```plaintext
-npx -q @carnesen/cli-examples
-```
-Many of these examples are online too at [cli.carnesen.com](https://cli.carnesen.com/).
+This project is crafted as a [Node.js](https://nodejs.org/) CLI, but most of the commands are [universal JavaScript](https://en.wikipedia.org/wiki/Universal_JavaScript/).
 
-## Source code
+Inspect the code:
+- On the web: [GitHub](https://github.com/carnesen/cli/tree/master/examples)
+- Locally: `git clone` [the carnesen/cli monorepo](https://github.com/carnesen/cli) and `cd cli/examples`
+
+Run the examples:
+- On the web: [cli.carnesen.com](https://cli.carnesen.com/)
+- Locally with [Node.js](https://nodejs.org/): `npx -q @carnesen/cli-examples`
+
+## Content
 - [**package.json**](package.json): Defines package configuration, dependencies, development and build scripts. Feel free to use any of the **@carnesen/*** packages for your own projects. They're all actively maintained.
 
 - [**src**](src): `.ts` TypeScript source code
