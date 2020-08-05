@@ -37,7 +37,7 @@ if (require.main === module) {
 ```
 
 Here's how that Node.js CLI behaves in a terminal:
-<p><img width="400" src="images/multiply-nodejs.jpg" alt="Multiple CLI in Node.js"></p>
+<p><img width="400" src="images/multiply-nodejs.jpg" alt="Multiply CLI in Node.js"></p>
 
 The only Node.js-specific code is the `if (require.main === module)` block. To instead make a web browser console CLI, replace that with:
 
@@ -47,8 +47,8 @@ The only Node.js-specific code is the `if (require.main === module)` block. To i
 };
 ```
 
-Here's how that behaves in Google Chrome:
-<p><img width="400" src="images/multiply-browser-console.jpg" alt="Multiple CLI in browser console"></p>
+Here's that CLI in a JavaScript console:
+<p><img width="400" src="images/multiply-browser-console.jpg" alt="Multiply CLI in a web browser console"></p>
 
 The resolved value of `0` means the command finished successfully. A non-zero exit code means an error occurred. Try it you yourself at [cli.carnesen.com](https://cli.carnesen.com)! Here's how to open the console in [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Opening_the_Web_Console) and [Google Chrome](https://stackoverflow.com/a/66434/2793540).
 
