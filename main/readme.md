@@ -21,7 +21,7 @@ and TypeScript type declarations (3.7+). It has _no_ npm dependencies and is kno
 - **Automatic autocomplete** (Coming soon!): [Autocomplete](https://en.wikipedia.org/wiki/Autocomplete) supercharges a CLI. We've implemented automatic autocomplete in [the live examples](https://cli.carnesen.com) and plan to [add this as a feature to the core library](https://github.com/carnesen/cli/issues/32) for the next release.
 
 ## Stability
-This library has 98% test coverage and heavy usage by its authors but should be considered 0.x beta software.
+This library has 99% test coverage and heavy usage by its authors but should be considered 0.x beta software.
 
 ## More information
 Questions, bugs, feature requests? Please [file an issue](https://github.com/carnesen/cli/issues/new) or [submit a pull request](https://github.com/carnesen/cli/compare) on [this project's repository on GitHub](https://github.com/carnesen/cli#readme), and check out our:
