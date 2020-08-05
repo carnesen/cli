@@ -57,8 +57,8 @@ export function CliRun(
 						console.error(usageString);
 					}
 				} else {
-					// Handle case where "code" is CLI_USAGE_ERROR but "tree" is undefined. Surely
-					// this is a coding mistake on our part.
+					// Handle case where "code" is CLI_USAGE_ERROR but "tree" is
+					// undefined. Surely this is a coding mistake on our part.
 					console.error(exceptionAsUsageError);
 				}
 			} else if (exception.code === CLI_TERSE_ERROR) {

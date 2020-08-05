@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliStringChoiceArgGroup } from '../cli-one-of-arg-group';
+import { CliStringChoiceArgGroup } from '../cli-string-choice-arg-group';
 import { CLI_USAGE_ERROR } from '../../cli-usage-error';
 
 const description = 'foo bar baz';
@@ -47,7 +47,7 @@ describe(CliStringChoiceArgGroup.name, () => {
 	});
 
 	it('has experimental _suggest api', async () => {
-		const suggestions = await argGroup._suggest!([]);
-		expect(suggestions).toEqual(['foo', 'bar']);
+		expect(await argGroup._suggest!([])).toEqual(['foo', 'bar']);
+		expect(await argGroup._suggest!(['foo'])).toEqual([]);
 	});
 });

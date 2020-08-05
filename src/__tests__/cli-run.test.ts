@@ -1,10 +1,11 @@
 import { CodedError } from '@carnesen/coded-error';
-import { CliCommand } from '../cli-command';
-import { CliUsageError } from '../cli-usage-error';
-import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
-import { ICliOptions } from '../cli-options';
 import { CliAnsi } from '../cli-ansi';
 import { CliApi } from '../cli-api';
+import { CliCommand } from '../cli-command';
+import { CliConsole } from '../cli-console';
+import { CliUsageError, CLI_USAGE_ERROR } from '../cli-usage-error';
+import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
+import { ICliOptions } from '../cli-options';
 import { CliRun } from '../cli-run';
 
 async function runMocked(action: () => any, options: ICliOptions = {}) {
@@ -161,5 +162,72 @@ describe(CliRun.name, () => {
 		const exitCode = await CliRun(CliApi(command))([]);
 		expect(mockExit).toHaveBeenCalledWith(0);
 		expect(exitCode).toBe(0);
+	});
+
+	it(`console.errors an exception that has code=${CLI_USAGE_ERROR} but tree=undefined`, async () => {
+		const command = CliCommand({
+			name: 'cli',
+			action() {
+				return 'something';
+			},
+		});
+		const spy = jest.fn();
+		const codedError = new CodedError('Ah!', CLI_USAGE_ERROR);
+		const options: ICliOptions = {
+			done: () => {},
+			console: {
+				log() {
+					throw codedError;
+				},
+				error: spy,
+			},
+		};
+		const cliRun = CliRun(CliApi(command, options), options);
+		const exitCode = await cliRun([]);
+		expect(exitCode).not.toBe(0);
+		expect(spy).toHaveBeenCalledWith(codedError);
+	});
+
+	it(`handles it gracefully if the "done" callback throws`, async () => {
+		const command = CliCommand({
+			name: 'cli',
+			action() {
+				// nothing;
+			},
+		});
+		const spy = jest.fn();
+		const error = new Error('Ah!');
+		const options: ICliOptions = {
+			done: () => {
+				throw error;
+			},
+			console: {
+				log() {
+					// nothing
+				},
+				error: spy,
+			},
+		};
+		const cliRun = CliRun(CliApi(command, options), options);
+		const exitCode = await cliRun([]);
+		expect(exitCode).toBe(0);
+		expect(spy).toHaveBeenCalledWith(error);
+	});
+
+	it(`sets args to process.argv.slice(2) by default`, async () => {
+		const spy = jest.fn();
+		const options: ICliOptions = {
+			done: () => {
+				// nothing
+			},
+			console: {
+				log: spy,
+				error: CliConsole().error,
+			},
+		};
+		const cliRun = CliRun((args) => Promise.resolve(args), options);
+		const exitCode = await cliRun();
+		expect(exitCode).toBe(0);
+		expect(spy).toHaveBeenCalledWith(process.argv.slice(2));
 	});
 });
