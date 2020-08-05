@@ -10,7 +10,7 @@ cd "${PROJECT_DIR}"
 
 npm run lint
 npm run build
-npm run unit-test
+npm run unit-test -- --coverage
 npm pack
 cd docs
 npm pack

@@ -38,7 +38,7 @@ export {
 export {
 	CliStringChoiceArgGroup,
 	ICliStringChoiceArgGroupOptions,
-} from './arg-group-factories/cli-one-of-arg-group';
+} from './arg-group-factories/cli-string-choice-arg-group';
 export {
 	CliStringArgGroup,
 	ICliStringArgGroupOptions,
