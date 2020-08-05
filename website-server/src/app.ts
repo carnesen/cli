@@ -3,7 +3,6 @@ import { OK } from 'http-status-codes';
 import serveStatic = require('koa-static');
 import mount = require('koa-mount');
 import path = require('path');
-import { dirname } from 'path';
 import { consoleLog } from './util';
 
 const loggerMiddleware: Koa.Middleware = async (ctx, next) => {
@@ -32,15 +31,18 @@ function RedirectMiddleware(from: string, to: string): Koa.Middleware {
 	};
 }
 
-const carnesenCliWebsiteDir = dirname(
+const publicDir = path.join(path.dirname(__dirname), 'public');
+const publicStaticMiddleware = serveStatic(publicDir);
+
+const websiteDir = path.dirname(
 	require.resolve('@carnesen/cli-website/package.json'),
 );
 
-const websiteStaticMiddleware = serveStatic(
-	path.join(carnesenCliWebsiteDir, 'dist/'),
-);
+const websiteStaticMiddleware = serveStatic(path.join(websiteDir, 'dist/'));
 
-const docsDir = dirname(require.resolve('@carnesen/cli-docs/package.json'));
+const docsDir = path.dirname(
+	require.resolve('@carnesen/cli-docs/package.json'),
+);
 
 const docsStaticMiddleware = serveStatic(docsDir);
 
@@ -48,6 +50,7 @@ const app = new Koa();
 
 app.use(loggerMiddleware);
 app.use(googleCloudAppEngineMiddleware);
+app.use(publicStaticMiddleware);
 app.use(websiteStaticMiddleware);
 app.use(RedirectMiddleware('/docs', '/docs/latest/'));
 app.use(RedirectMiddleware('/docs/latest', '/docs/latest/'));
