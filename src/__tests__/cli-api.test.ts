@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliBranch } from '../cli-branch';
+import { CliCommandGroup } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
 import {
 	dummyArgGroup,
@@ -39,7 +39,7 @@ const commandWithDoubleDashArgGroup = CliCommand({
 	},
 });
 
-const root = CliBranch({
+const root = CliCommandGroup({
 	name: 'cli',
 	subcommands: [
 		commandWithNoArguments,
@@ -70,13 +70,13 @@ describe(CliApi.name, () => {
 		expect(exception.message).toBeFalsy();
 	});
 
-	it('throws USAGE error with empty message if last command is a branch and no additional args is present', async () => {
+	it('throws USAGE error with empty message if last command is a command group and no additional args is present', async () => {
 		const exception = await runAndCatch(cliApi, []);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toBeFalsy();
 	});
 
-	it('throws USAGE error "bad command" if last command is a branch and additional args is present', async () => {
+	it('throws USAGE error "bad command" if last command is a command group and additional args is present', async () => {
 		const exception = await runAndCatch(cliApi, ['oops']);
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/bad command/i);

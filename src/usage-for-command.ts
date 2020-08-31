@@ -2,7 +2,10 @@ import { wrapInSquareBrackets } from './util';
 import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
 import { CliAnsi } from './cli-ansi';
-import { DescriptionText, IDescriptionInput } from './cli-description';
+import {
+	DescriptionText,
+	ICliDescriptionFunctionInput,
+} from './cli-description';
 import { ICliLeaf } from './cli-tree';
 import { IUsageOptions } from './usage-options';
 
@@ -25,7 +28,7 @@ export function UsageForCommand(
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionInput: IDescriptionInput = { ansi };
+	const descriptionInput: ICliDescriptionFunctionInput = { ansi };
 	const commandDescriptionText: string = DescriptionText(
 		description,
 		descriptionInput,

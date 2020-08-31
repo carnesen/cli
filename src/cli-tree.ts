@@ -1,4 +1,4 @@
-import { ICliBranch } from './cli-branch';
+import { ICliCommandGroup } from './cli-command-group';
 import { ICliCommand } from './cli-command';
 import { ICliArgGroup } from './cli-arg-group';
 
@@ -6,7 +6,7 @@ import { ICliArgGroup } from './cli-arg-group';
  * The root of a command tree
  */
 export type TCliRoot =
-	| ICliBranch
+	| ICliCommandGroup
 	| ICliCommand<ICliArgGroup, any, ICliArgGroup>;
 
 /**
@@ -14,7 +14,7 @@ export type TCliRoot =
  * */
 export interface ICliTree {
 	current: TCliRoot;
-	parents: ICliBranch[];
+	parents: ICliCommandGroup[];
 }
 
 /**
@@ -22,5 +22,5 @@ export interface ICliTree {
  * */
 export interface ICliLeaf {
 	current: ICliCommand;
-	parents: ICliBranch[];
+	parents: ICliCommandGroup[];
 }

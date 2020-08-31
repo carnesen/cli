@@ -1,4 +1,4 @@
-import { ICliBranch } from './cli-branch';
+import { ICliCommandGroup } from './cli-command-group';
 import { reWrapText } from './re-wrap-text';
 import { UsageSubcommandRows } from './usage-subcommand-rows';
 import { TwoColumnTable } from './two-column-table';
@@ -6,8 +6,11 @@ import { IUsageOptions } from './usage-options';
 import { DescriptionText } from './cli-description';
 import { CliAnsi } from './cli-ansi';
 
-export function UsageForBranch(
-	{ current, parents }: { current: ICliBranch; parents: ICliBranch[] },
+export function UsageForCommandGroup(
+	{
+		current,
+		parents,
+	}: { current: ICliCommandGroup; parents: ICliCommandGroup[] },
 	{ indentation, ansi, columns }: IUsageOptions,
 ): string[] {
 	const commandPath = [...parents, current].map(({ name }) => name).join(' ');

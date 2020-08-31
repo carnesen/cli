@@ -1,16 +1,18 @@
 import { ICliAnsi } from './cli-ansi';
 
-export interface IDescriptionInput {
+export interface ICliDescriptionFunctionInput {
 	ansi: ICliAnsi;
 }
 
-export type TCliDescriptionFunction = (input: IDescriptionInput) => string;
+export type TCliDescriptionFunction = (
+	input: ICliDescriptionFunctionInput,
+) => string;
 
 export type TCliDescription = undefined | string | TCliDescriptionFunction;
 
 export function DescriptionText(
 	description: TCliDescription,
-	input: IDescriptionInput,
+	input: ICliDescriptionFunctionInput,
 ): string {
 	let text = '';
 	switch (typeof description) {

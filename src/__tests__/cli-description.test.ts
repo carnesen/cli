@@ -1,7 +1,7 @@
 import {
 	DescriptionText,
 	TCliDescription,
-	IDescriptionInput,
+	ICliDescriptionFunctionInput,
 } from '../cli-description';
 import { CliAnsi } from '../cli-ansi';
 
@@ -36,7 +36,7 @@ const data: {
 	},
 ];
 
-const input: IDescriptionInput = {
+const input: ICliDescriptionFunctionInput = {
 	ansi: {
 		...CliAnsi(false),
 		red() {

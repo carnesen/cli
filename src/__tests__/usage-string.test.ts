@@ -1,5 +1,5 @@
 import { UsageString } from '../usage-string';
-import { CliBranch } from '../cli-branch';
+import { CliCommandGroup } from '../cli-command-group';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 import { CliCommand } from '../cli-command';
 import { ICliTree } from '../cli-tree';
@@ -32,7 +32,7 @@ const current = CliCommand({
 	},
 });
 
-const branch = CliBranch({
+const commandGroup = CliCommandGroup({
 	name: 'cli',
 	description: 'This is a CLI',
 	subcommands: [current],
@@ -45,8 +45,11 @@ const options: IUsageOptions = {
 };
 
 describe(UsageString.name, () => {
-	it('Creates a usage string for a branch', () => {
-		const usageString = UsageString({ current: branch, parents: [] }, options);
+	it('Creates a usage string for a command group', () => {
+		const usageString = UsageString(
+			{ current: commandGroup, parents: [] },
+			options,
+		);
 		expect(usageString).toMatchSnapshot();
 	});
 
@@ -62,11 +65,11 @@ describe(UsageString.name, () => {
 		expect(usageString).toMatchSnapshot();
 	});
 
-	it('Creates a usage string for a command without a parent branch', () => {
+	it('Creates a usage string for a command without a parent command group', () => {
 		const usageString = UsageString(
 			{
 				current: current as ICliTree['current'],
-				parents: [branch],
+				parents: [commandGroup],
 			},
 			options,
 		);

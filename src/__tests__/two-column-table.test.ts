@@ -17,7 +17,7 @@ const data: Datum[] = [
 ];
 describe(TwoColumnTable.name, () => {
 	for (const { rows, expectedResult, indentation } of data) {
-		it('Creates a usage string for a branch', () => {
+		it('Creates a usage string for a command group', () => {
 			const result = TwoColumnTable(rows, { indentation });
 			expect(result).toEqual(expectedResult);
 		});
