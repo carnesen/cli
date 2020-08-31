@@ -56,7 +56,7 @@ The resolved value of `0` means the command finished successfully. A non-zero ex
 
 The general structure of a `@carnesen/cli` command line is:
 ```
-<branch> <command> \
+<command group> <command> \
    <positional-args> \
    --name <args> \
    -- <double-dash-args>
@@ -81,30 +81,30 @@ export const listUsersCommand = CliCommand({
 
 Most commands define arguments through the `positionalArgGroup`, `namedArgGroups`, and/or `doubleDashArgGroup` properties as described below.
 
-### Branch
+### CommandGroup
 
-Branches provide a way of organizing commands as a tree for a CLI. For example, in `cloud users list`, `cloud` and `users` are branches and `list` is a subcommand. Branches are optional. Organize your CLI to suit your needs and taste:
+Command groups provide a way to organize the commands in your CLI. For example, in `cloud users list`, `cloud` and `users` are command groups and `list` is a command. Command groups are optional. Organize your CLI to suit your needs and taste:
 
-- `list-cloud-users`: No branches
-- `cloud list-users`: Command leaves under a root branch
+- `list-cloud-users`: No command groups
+- `cloud list-users`: A single command group
 - `cloud users list`: A hierarchical command tree
 
 ```typescript
-import { CliBranch } from '@carnesen/cli';
+import { CliCommandGroup } from '@carnesen/cli';
 import { listUsersCommand } from './list-users-command';
 
-export const usersBranch = CliBranch({
+export const usersCommandGroup = CliCommandGroup({
    name: 'users',
    subcommands: [ listUsersCommand ]
 })
 
-export const rootBranch = CliBranch({
+export const rootCommandGroup = CliCommandGroup({
    name: 'cloud',
-   subcommands: [ usersBranch ]
+   subcommands: [ usersCommandGroup ]
 })
 ```
 
-[[`CliBranch`]] is a factory function (not a constructor) that returns an object of shape [[`ICliBranch`]].
+[[`CliCommandGroup`]] is a factory function (not a constructor) that returns an object of shape [[`ICliCommandGroup`]].
 
 ### Positional arguments
 

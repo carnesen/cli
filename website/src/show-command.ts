@@ -48,7 +48,7 @@ export const showCommand = CliCommand({
 				break;
 			}
 			case '.': {
-				url = `https://github.com/carnesen/cli/blob/master/website/src/root-branch.ts`;
+				url = `https://github.com/carnesen/cli/blob/master/website/src/root-command-group.ts`;
 				break;
 			}
 			case docsCommand.name:

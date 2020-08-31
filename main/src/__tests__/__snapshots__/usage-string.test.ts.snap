@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UsageString Creates a usage string for a branch 1`] = `
+exports[`UsageString Creates a usage string for a command group 1`] = `
 "Usage: cli <subcommand> ...
 
 This is a CLI
@@ -25,7 +25,7 @@ Special arguments:
 <str> : Another word"
 `;
 
-exports[`UsageString Creates a usage string for a command without a parent branch 1`] = `
+exports[`UsageString Creates a usage string for a command without a parent command group 1`] = `
 "Usage: cli echo [<word>] [<options>] -- <str>
 
 Positional arguments:

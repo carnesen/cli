@@ -1,9 +1,9 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { UsageSubcommandRows } from '../usage-subcommand-rows';
-import { CliBranch } from '../cli-branch';
+import { CliCommandGroup } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
 import { CliAnsi } from '../cli-ansi';
-import { IDescriptionInput } from '../cli-description';
+import { ICliDescriptionFunctionInput } from '../cli-description';
 
 const command = CliCommand({
 	name: 'list',
@@ -17,15 +17,15 @@ const hiddenCommand = CliCommand({
 	action() {},
 });
 
-const branch = CliBranch({
+const commandGroup = CliCommandGroup({
 	name: 'users',
 	subcommands: [command, hiddenCommand],
 });
-const root = CliBranch({ name: 'cloud', subcommands: [branch] });
-const options: IDescriptionInput = { ansi: CliAnsi() };
+const root = CliCommandGroup({ name: 'cloud', subcommands: [commandGroup] });
+const options: ICliDescriptionFunctionInput = { ansi: CliAnsi() };
 
 describe(UsageSubcommandRows.name, () => {
-	it('lists all commands underneath the provided branch, recursive', () => {
+	it('lists all commands underneath the provided command group, recursive', () => {
 		const rows = UsageSubcommandRows(root, options);
 		// This also verifies that hidden commands do not show up
 		expect(rows.length).toBe(1);

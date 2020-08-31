@@ -4,8 +4,10 @@ export type TPartitioned = {
 	doubleDashArgs: string[] | undefined;
 };
 /**
- * Partitions the provided raw args into groups based on separators:
- * <branch> <command> <positional arg> --named-arg <value> -- <double-dash args>
+ * Partitions the provided raw args into groups based on "--" separators
+ *
+ * <command group> <command> <positional arg> --named-arg <value> --
+ * <double-dash args>
  * @param args Raw command-line arguments including separators
  */
 export function partitionArgs(args: string[]): TPartitioned {

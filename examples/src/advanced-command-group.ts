@@ -1,10 +1,10 @@
-import { CliBranch } from '@carnesen/cli';
-import { hidingBranch } from './hiding-branch';
+import { CliCommandGroup } from '@carnesen/cli';
+import { hidingCommandGroup } from './hiding-command-group';
 import { demoDoubleDashArgumentsCommand } from './demo-double-dash-arguments-command';
 import { parseJsonCommand } from './parse-json-command';
 import { ansiEchoCommand } from './ansi-echo-command';
 
-export const advancedBranch = CliBranch({
+export const advancedCommandGroup = CliCommandGroup({
 	name: 'advanced',
 	description({ ansi }) {
 		return `
@@ -14,7 +14,7 @@ export const advancedBranch = CliBranch({
 	subcommands: [
 		ansiEchoCommand,
 		demoDoubleDashArgumentsCommand,
-		hidingBranch,
+		hidingCommandGroup,
 		parseJsonCommand,
 	],
 });

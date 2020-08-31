@@ -1,9 +1,9 @@
 import { Terminal } from 'xterm';
 import {
 	Cli,
-	ICliBranch,
+	ICliCommandGroup,
 	ICliCommand,
-	CliBranch,
+	CliCommandGroup,
 	ICliOptions,
 } from '@carnesen/cli';
 
@@ -27,11 +27,11 @@ const inspect = require('util-inspect');
 const INDENTATION = '    ';
 
 export interface ICliReplOptions {
-	/** [[`ICliBranch`]] and/or [[`ICliCommand`]]s underneath this branch */
-	subcommands: (ICliBranch | ICliCommand<any, any, any>)[];
+	/** [[`ICliCommandGroup`]] and/or [[`ICliCommand`]]s underneath this command group */
+	subcommands: (ICliCommandGroup | ICliCommand<any, any, any>)[];
 	/** An XTerm.js Terminal to run the REPL in */
 	terminal: Terminal;
-	/** A short description of this branch for command-line usage */
+	/** A short description of this command group for command-line usage */
 	description?: string;
 	/** History lines */
 	history?: string[];
@@ -58,7 +58,7 @@ export class CliRepl {
 
 	private submit: boolean;
 
-	private readonly root: ICliBranch;
+	private readonly root: ICliCommandGroup;
 
 	public constructor({
 		description,
@@ -72,7 +72,7 @@ export class CliRepl {
 		this.commandHistory = new CommandHistory(history, line);
 		this.commandLine = new CommandLine(this.commandHistory.current());
 		this.submit = submit || false;
-		this.root = CliBranch({
+		this.root = CliCommandGroup({
 			description,
 			name: '',
 			subcommands: [...subcommands, HistoryCommand(this.commandHistory)],

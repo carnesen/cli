@@ -9,9 +9,9 @@
  */
 
 import { Cli } from '@carnesen/cli';
-import { rootBranch } from './index';
+import { rootCommandGroup } from './index';
 
-const cli = Cli(rootBranch);
+const cli = Cli(rootCommandGroup);
 
 // The idiomatic Node.js expression `module === require.main` determines whether
 // this module is the one being run directly as `node <module file>` or if this
