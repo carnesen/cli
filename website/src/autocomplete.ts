@@ -1,4 +1,9 @@
-import { CLI_COMMAND, TCliRoot, CLI_BRANCH, ICliArgGroup } from '@carnesen/cli';
+import {
+	CLI_COMMAND,
+	TCliRoot,
+	CLI_COMMAND_GROUP,
+	ICliArgGroup,
+} from '@carnesen/cli';
 import { findCliTree } from '@carnesen/cli/lib/find-cli-tree';
 
 import { LongestLeadingSubstring } from './longest-leading-substring';
@@ -20,7 +25,7 @@ export function autocomplete(
 	}
 	const tree = findCliTree(root, args);
 	switch (tree.current.kind) {
-		case CLI_BRANCH: {
+		case CLI_COMMAND_GROUP: {
 			if (tree.args.length > 0) {
 				// findCliTree stopped at a branch with args still remaining.
 				// There's no way for us to autocomplete from that state.

@@ -1,14 +1,18 @@
-// Command-line interface runner
+/**
+ * This module is the main entrypoint for the **@carnesen/cli** package
+ */
+
+// Command-line interface (CLI) runner
 export { Cli } from './cli';
 export { ICli, ICliOptions } from './cli-options';
 
-// Branch factory
+// Command group factory
 export {
-	CliBranch,
-	ICliBranch,
-	ICliBranchOptions,
-	CLI_BRANCH,
-} from './cli-branch';
+	CliCommandGroup,
+	ICliCommandGroup,
+	ICliCommandGroupOptions,
+	CLI_COMMAND_GROUP,
+} from './cli-command-group';
 
 // Command factory
 export {
@@ -48,30 +52,32 @@ export {
 	ICliStringArrayArgGroupOptions,
 } from './arg-group-factories/cli-string-array-arg-group';
 
-// Advanced: Description functions
+// Advanced
+
+// Description functions
 export {
 	TCliDescription,
-	IDescriptionInput,
 	TCliDescriptionFunction,
+	ICliDescriptionFunctionInput,
 } from './cli-description';
 
-// Advanced: Universal console interface
+// Universal console interface
 export { ICliConsole } from './cli-console';
 
-// Advanced: Universal process interface
+// Universal process interface
 export { ICliProcess } from './cli-process';
 
-// Advanced: Text decoration
+// Text decoration
 export { ICliAnsi, CliAnsi } from './cli-ansi';
 
-// Advanced: Error constructors
+// Error constructors
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
-// Advanced: Custom ArgGroup
+// Custom ArgGroup
 export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';
 
-// Advanced: Command tree
+// Command tree
 export { TCliRoot, ICliTree, ICliLeaf } from './cli-tree';
 
 // Branding

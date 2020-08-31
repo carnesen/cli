@@ -1,5 +1,5 @@
 import {
-	CliBranch,
+	CliCommandGroup,
 	CliCommand,
 	CliStringChoiceArgGroup,
 	CliStringArgGroup,
@@ -36,17 +36,20 @@ const requiredPositionalArgGroupCommand = CliCommand({
 	doubleDashArgGroup: oneOfArgGroup,
 });
 
-const branch0 = CliBranch({ name: 'branch0', subcommands: [command] });
-const branch1 = CliBranch({
-	name: 'branch1',
-	subcommands: [branch0, command],
+const commandGroup0 = CliCommandGroup({
+	name: 'group-0',
+	subcommands: [command],
+});
+const commandGroup1 = CliCommandGroup({
+	name: 'group-1',
+	subcommands: [commandGroup0, command],
 });
 
-const root = CliBranch({
+const root = CliCommandGroup({
 	name: 'root',
 	subcommands: [
-		branch0,
-		branch1,
+		commandGroup0,
+		commandGroup1,
 		command,
 		emptyCommand,
 		requiredPositionalArgGroupCommand,
@@ -64,8 +67,8 @@ const data: {
 		args: [],
 		search: '',
 		expectedCompletions: [
-			'branch0',
-			'branch1',
+			'group-0',
+			'group-1',
 			'command',
 			'empty',
 			requiredPositionalArgGroupCommand.name,
@@ -80,8 +83,8 @@ const data: {
 	{
 		title: 'the longest leading substring if there are multiple matches',
 		args: [],
-		search: 'b',
-		expectedCompletions: ['ranch'],
+		search: 'g',
+		expectedCompletions: ['roup-'],
 	},
 	{
 		title: 'a unique subcommand name matching the search if there is one',
@@ -92,7 +95,7 @@ const data: {
 	{
 		title: 'a space if the search is a 100% match',
 		args: [],
-		search: 'branch0',
+		search: 'group-0',
 		expectedCompletions: [' '],
 	},
 	{
@@ -109,13 +112,13 @@ const data: {
 	},
 	{
 		title: 'the command name and space if there is only one command',
-		args: ['branch0'],
+		args: ['group-0'],
 		search: '',
 		expectedCompletions: ['command '],
 	},
 	{
-		title: 'the matching command name even deep two branches',
-		args: ['branch1', 'branch0'],
+		title: 'the matching command name even deep two command groups',
+		args: ['group-1', 'group-0'],
 		search: 'c',
 		expectedCompletions: ['ommand '],
 	},

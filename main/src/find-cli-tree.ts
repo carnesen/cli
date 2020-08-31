@@ -1,6 +1,6 @@
 import { ICliTree, TCliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
-import { CLI_BRANCH } from './cli-branch';
+import { CLI_COMMAND_GROUP } from './cli-command-group';
 
 /**
  * The result of calling [[`findCliTree`]]
@@ -31,7 +31,7 @@ function recursiveFindCliTree(result: IFindCliTreeResult): IFindCliTreeResult {
 		return result;
 	}
 
-	if (result.current.kind === CLI_BRANCH) {
+	if (result.current.kind === CLI_COMMAND_GROUP) {
 		if (result.args.length === 0) {
 			// Example: Full command is "cli user login". They've done "cli user". In
 			// this case we want to print the usage string but not an error message.

@@ -1,5 +1,5 @@
-Welcome to the **carnesen/cli** monorepo! Here you'll find the source code for:
-- [**@carnesen/cli**](main): Command-line interfaces for Node.js and the browser
+Welcome to the **carnesen/cli** monorepo! Here you'll find the source code for the following npm packages:
+- [**@carnesen/cli**](main): Command-line interfaces for Node.js and the web
 - [**@carnesen/cli-docs**](main): [HTML API documentation](https://cli.carnesen.com/docs) for **@carnesen/cli**
 - [**@carnesen/cli-examples**](examples): A **@carnesen/cli** example project
 - [**@carnesen/cli-website**](website): The [cli.carnesen.com](https://cli.carnesen.com) web browser application

@@ -1,9 +1,6 @@
-import { Cli, CliBranch, ICliOptions } from '@carnesen/cli';
+import { Cli, CliCommandGroup, ICliOptions } from '@carnesen/cli';
 
 import { echoHiddenCommand } from '../echo-hidden-command';
-
-const BRANCH_WITH_ECHO_AS_HIDDEN_SUBCOMMAND =
-	'branch-with-echo-as-hidden-subcommand';
 
 describe(echoHiddenCommand.name, () => {
 	it('behaves like normal echo', async () => {
@@ -24,7 +21,10 @@ describe(echoHiddenCommand.name, () => {
 				log() {},
 			},
 		};
-		const root = CliBranch({ name: '', subcommands: [echoHiddenCommand] });
+		const root = CliCommandGroup({
+			name: '',
+			subcommands: [echoHiddenCommand],
+		});
 		const cli = Cli(root, options);
 		await cli.run(['--help']);
 		expect(sawHiddenCommandNameInUsage).toBe(false);

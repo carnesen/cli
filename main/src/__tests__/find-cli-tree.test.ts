@@ -1,6 +1,6 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { findCliTree } from '../find-cli-tree';
-import { CliBranch } from '../cli-branch';
+import { CliCommandGroup } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
 
 const command = CliCommand({
@@ -10,16 +10,19 @@ const command = CliCommand({
 	},
 });
 
-const branch = CliBranch({
+const commandGroup = CliCommandGroup({
 	name: 'cli',
 	subcommands: [command],
 });
 
 describe(findCliTree.name, () => {
 	it('finds a command in a tree based on command-line arguments', () => {
-		const { current, parents, args } = findCliTree(branch, ['echo', 'foo']);
+		const { current, parents, args } = findCliTree(commandGroup, [
+			'echo',
+			'foo',
+		]);
 		expect(current).toBe(command);
-		expect(parents[0]).toBe(branch);
+		expect(parents[0]).toBe(commandGroup);
 		expect(args).toEqual(['foo']);
 	});
 

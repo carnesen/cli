@@ -1,6 +1,6 @@
-import { CliBranch } from '@carnesen/cli';
+import { CliCommandGroup } from '@carnesen/cli';
 import {
-	advancedBranch,
+	advancedCommandGroup,
 	multiplyCommand,
 	echoCommand,
 	echoPizzaCommand,
@@ -16,7 +16,7 @@ import { bold } from './util';
 /**
  * Root of the @carnesen/cli website examples CLI
  */
-export const rootBranch = CliBranch({
+export const rootCommandGroup = CliCommandGroup({
 	name: 'cli',
 	description: `
 		This is ${bold('@carnesen/cli')} examples running in your browser console.`,
@@ -26,7 +26,7 @@ export const rootBranch = CliBranch({
 		multiplyCommand,
 		showCommand,
 		throwErrorCommand,
-		advancedBranch,
+		advancedCommandGroup,
 	],
 });
 
@@ -34,13 +34,13 @@ export const rootBranch = CliBranch({
  * Initial command-line history for the examples terminal
  */
 export const INITIAL_HISTORY = [
-	advancedBranch.name,
-	`${advancedBranch.name} ${echoPizzaCommand.name} --pizza`,
-	`${advancedBranch.name} ${echoPizzaCommand.name} pizza`,
-	`${advancedBranch.name} ${echoPizzaCommand.name} --help`,
-	`${advancedBranch.name} ${parseJsonCommand.name} '{"foo": "bar", "count": 3}'`,
-	`${advancedBranch.name} ${parseJsonCommand.name} '["foo", 2, true]'`,
-	`${advancedBranch.name} ${ansiEchoCommand.name} foo bar baz --blue`,
+	advancedCommandGroup.name,
+	`${advancedCommandGroup.name} ${echoPizzaCommand.name} --pizza`,
+	`${advancedCommandGroup.name} ${echoPizzaCommand.name} pizza`,
+	`${advancedCommandGroup.name} ${echoPizzaCommand.name} --help`,
+	`${advancedCommandGroup.name} ${parseJsonCommand.name} '{"foo": "bar", "count": 3}'`,
+	`${advancedCommandGroup.name} ${parseJsonCommand.name} '["foo", 2, true]'`,
+	`${advancedCommandGroup.name} ${ansiEchoCommand.name} foo bar baz --blue`,
 	`${throwErrorCommand.name} --message "Oh no!" --kind terse`,
 	`${throwErrorCommand.name} --message "Oh no!"`,
 	`${multiplyCommand.name} 2 3 4`,
