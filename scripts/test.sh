@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# This script is invoked by "npm test". It was getting to be too much to fit on
+# one line in package.json.
+
 set -eo pipefail
 
 SCRIPT_PATH="${BASH_SOURCE[0]}"

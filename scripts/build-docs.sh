@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+# This script generates the documentation package contents from the source code
 
+set -eo pipefail
 SCRIPT_PATH="${BASH_SOURCE[0]}"
 SCRIPT_DIR="$( cd "$( dirname "${SCRIPT_PATH}" )" >/dev/null 2>&1 && pwd )"
 PROJECT_DIR="${SCRIPT_DIR}/.."
