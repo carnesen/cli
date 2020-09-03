@@ -6,10 +6,5 @@
 		"subcommand",
 		"subcommands",
 		"typedoc"
-	],
-	"[markdown]": {
-		"editor.wordWrap": "on",
-		"editor.insertSpaces": true,
-		"editor.quickSuggestions": false
-	}
+	]
 }
