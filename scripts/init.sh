@@ -1,11 +1,15 @@
 #!/bin/bash
 
-set -exo pipefail
+# This script calls "npm link" (https://docs.npmjs.com/cli/link) on this
+# monorepo's packages to link them together for local development.
+
+set -eo pipefail # exit on error
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+REPO_DIR="$(dirname "${SCRIPT_DIR}")"
+cd "${REPO_DIR}"
 
-cd "${SCRIPT_DIR}"
-cd ..
+set -o xtrace # print each command before it's executed
 
 cd main
 npm link
@@ -15,7 +19,8 @@ npm link
 cd ../..
 
 cd examples
-npm link
+# Use --no-bin-links otherwise this step fails when lib/cli.js does not exist
+npm link --no-bin-links
 npm link @carnesen/cli
 npm run build
 cd ..
