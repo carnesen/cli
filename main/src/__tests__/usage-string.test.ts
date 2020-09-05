@@ -1,3 +1,4 @@
+import { runAndCatchSync } from '@carnesen/run-and-catch';
 import { UsageString } from '../usage-string';
 import { CliCommandGroup } from '../cli-command-group';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
@@ -83,5 +84,14 @@ describe(UsageString.name, () => {
 			options,
 		);
 		expect(usageString).toMatchSnapshot();
+	});
+
+	it('Throws "unexpected kind" if passed an object of unknown kind', () => {
+		const exception = runAndCatchSync(
+			UsageString,
+			{ current: {} } as any,
+			{} as any,
+		);
+		expect(exception.message).toMatch(/unexpected kind/i);
 	});
 });
