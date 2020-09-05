@@ -1,7 +1,6 @@
 import { wrapInSquareBrackets } from './util';
 import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
-import { CliAnsi } from './cli-ansi';
 import {
 	DescriptionText,
 	ICliDescriptionFunctionInput,
@@ -14,7 +13,7 @@ export function UsageForCommand(
 	options: IUsageOptions,
 ): string[] {
 	const { current, parents } = leaf;
-	const { columns = +Infinity, indentation = '', ansi = CliAnsi() } = options;
+	const { columns, indentation, ansi } = options;
 	const {
 		positionalArgGroup,
 		namedArgGroups,
@@ -34,10 +33,15 @@ export function UsageForCommand(
 		descriptionInput,
 	);
 
-	const commandDescriptionLines = reWrapText(commandDescriptionText, {
+	const twoColumnTableOptions = {
 		columns,
 		indentation,
-	});
+	};
+
+	const commandDescriptionLines = reWrapText(
+		commandDescriptionText,
+		twoColumnTableOptions,
+	);
 
 	if (commandDescriptionLines.length > 0) {
 		lines.push(...commandDescriptionLines);
@@ -60,10 +64,7 @@ export function UsageForCommand(
 		lines.push(
 			...TwoColumnTable(
 				[[positionalArgGroup.placeholder, positionalArgGroupDescriptionText]],
-				{
-					columns,
-					indentation,
-				},
+				twoColumnTableOptions,
 			),
 		);
 		lines.push('');
@@ -77,8 +78,10 @@ export function UsageForCommand(
 			const namedArgGroupsNotRequired = namedArgGroupEntries.every(
 				([_, argGroup]) => !argGroup.required,
 			);
-			firstLine += namedArgGroupsNotRequired ? ' [<options>]' : ' <options>';
-			lines.push('Options:');
+			firstLine += namedArgGroupsNotRequired
+				? ' [<named args>]'
+				: ' <named args>';
+			lines.push('Named arguments:');
 			lines.push('');
 			const rows: TTwoColumnTableRow[] = namedArgGroupEntries.map(
 				([name, argGroup]) => {
@@ -97,7 +100,8 @@ export function UsageForCommand(
 				},
 			);
 
-			lines.push(...TwoColumnTable(rows, { columns, indentation }));
+			lines.push(...TwoColumnTable(rows, twoColumnTableOptions));
+			lines.push('');
 		}
 	}
 
@@ -107,15 +111,18 @@ export function UsageForCommand(
 		firstLine += ` ${
 			required ? fullPlaceholder : wrapInSquareBrackets(fullPlaceholder)
 		}`;
-		lines.push('Special arguments:');
+		lines.push('"Double dash" arguments:');
 		lines.push('');
 		lines.push(
-			...TwoColumnTable([
+			...TwoColumnTable(
 				[
-					placeholder,
-					DescriptionText(doubleDashArgGroup.description, descriptionInput),
+					[
+						placeholder,
+						DescriptionText(doubleDashArgGroup.description, descriptionInput),
+					],
 				],
-			]),
+				twoColumnTableOptions,
+			),
 		);
 	}
 

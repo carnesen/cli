@@ -61,11 +61,8 @@ export function reWrapText(
 			}
 			previousLineWasEmpty = true;
 
-			// It should be the case that outputLines has content because of the other
-			// trims and conditionals in place.
-			if (currentLineLength === 0) {
-				throw new Error('Expected output line to have length >=0');
-			}
+			// It's not easy to see but at this point in the code we are sure that
+			// currentLineLength > 0.
 
 			if (maxParagraphs && paragraphIndex === maxParagraphs - 1) {
 				break;
