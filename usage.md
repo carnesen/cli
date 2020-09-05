@@ -81,7 +81,7 @@ export const listUsersCommand = CliCommand({
 
 Most commands define arguments through the `positionalArgGroup`, `namedArgGroups`, and/or `doubleDashArgGroup` properties as described below.
 
-### CommandGroup
+### Command group
 
 Command groups provide a way to organize the commands in your CLI. For example, in `cloud users list`, `cloud` and `users` are command groups and `list` is a command. Command groups are optional. Organize your CLI to suit your needs and taste:
 
@@ -124,7 +124,7 @@ export const deleteCommand = CliCommand({
 })
 ```
 
-The [[`CliStringArrayArgGroup`]] parser throws a [[`CliUsageError`]] when `required` is set to `true` and no argument is provided. Conversely, if `required=false` and no argument is provided, `positionalValue` is `undefined`.
+The [[`CliStringArrayArgGroup`]] parser throws a [[`CliUsageError`]] when `required == true` and no argument is provided. Conversely, if `required == false` and no argument is provided, `positionalValue` is `undefined`.
 
 ### Named arguments
 

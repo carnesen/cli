@@ -11,31 +11,33 @@ echo"
 `;
 
 exports[`UsageString Creates a usage string for a command without a parent 1`] = `
-"Usage: echo [<word>] [<options>] -- <str>
+"Usage: echo [<word>] [<named args>] -- <str>
 
 Positional arguments:
 
 <word> : A word
 
-Options:
+Named arguments:
 
 [--message <str>] : A string message please
-Special arguments:
+
+\\"Double dash\\" arguments:
 
 <str> : Another word"
 `;
 
 exports[`UsageString Creates a usage string for a command without a parent command group 1`] = `
-"Usage: cli echo [<word>] [<options>] -- <str>
+"Usage: cli echo [<word>] [<named args>] -- <str>
 
 Positional arguments:
 
 <word> : A word
 
-Options:
+Named arguments:
 
 [--message <str>] : A string message please
-Special arguments:
+
+\\"Double dash\\" arguments:
 
 <str> : Another word"
 `;

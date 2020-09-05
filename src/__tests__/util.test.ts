@@ -1,3 +1,4 @@
+import { runAndCatchSync } from '@carnesen/run-and-catch';
 import { convertToNumber } from '../util';
 import { CLI_USAGE_ERROR } from '../cli-usage-error';
 
@@ -6,13 +7,15 @@ describe(convertToNumber.name, () => {
 		expect(convertToNumber('1')).toBe(1);
 	});
 
-	it('throws a usage error if the string value cannot be converted', () => {
-		try {
-			convertToNumber('foo');
-			throw new Error('This line should never be reached');
-		} catch (ex) {
-			expect(ex.code).toBe(CLI_USAGE_ERROR);
-			expect(ex.message).toMatch('not a number');
-		}
+	it('throws a usage error if a non-numeric string value is passed', () => {
+		const ex = runAndCatchSync(convertToNumber, 'foo');
+		expect(ex.code).toBe(CLI_USAGE_ERROR);
+		expect(ex.message).toMatch('not a number');
+	});
+
+	it('throws a usage error if an empty string is passed', () => {
+		const ex = runAndCatchSync(convertToNumber, '');
+		expect(ex.code).toBe(CLI_USAGE_ERROR);
+		expect(ex.message).toMatch('not a number');
 	});
 });
