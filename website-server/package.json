@@ -6,7 +6,7 @@
 		"node": ">=12.0.0"
 	},
 	"scripts": {
-		"build": "rimraf lib/ && tsc",
+		"build": "./build.sh",
 		"lint": "eslint --ext .js,.jsx,.ts,.tsx src jest.config.js",
 		"fix": "npm run lint -- --fix",
 		"start": "node lib/server.js",
@@ -34,7 +34,6 @@
 		"eslint-config-carnesen": "4.4.0",
 		"jest": "26.2.2",
 		"nodemon": "2.0.4",
-		"rimraf": "3.0.2",
 		"ts-jest": "26.1.4",
 		"ts-node": "8.10.2",
 		"typescript": "3.9.7"
@@ -43,8 +42,10 @@
 		"access": "public"
 	},
 	"files": [
-		"src",
+		"dist",
 		"lib",
+		"public",
+		"src",
 		"package-lock.json"
 	],
 	"repository": {
