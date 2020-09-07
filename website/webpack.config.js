@@ -34,7 +34,7 @@ module.exports = {
 	<body>
 			<h3 style="text-align: center">
 				<a href="https://github.com/carnesen/cli">@carnesen/cli</a>:
-				command-line interfaces for Node.js and the browser
+				A command-line interface (CLI) framework for Node.js and web browser
 			</h3>
 			<div id="terminal-container"></div>
   </body>

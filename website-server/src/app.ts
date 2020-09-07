@@ -34,6 +34,9 @@ function RedirectMiddleware(from: string, to: string): Koa.Middleware {
 const publicDir = path.join(path.dirname(__dirname), 'public');
 const publicStaticMiddleware = serveStatic(publicDir);
 
+const distDir = path.join(path.dirname(__dirname), 'dist');
+const distStaticMiddleware = serveStatic(distDir);
+
 const websiteDir = path.dirname(
 	require.resolve('@carnesen/cli-website/package.json'),
 );
@@ -50,8 +53,10 @@ const app = new Koa();
 
 app.use(loggerMiddleware);
 app.use(googleCloudAppEngineMiddleware);
-app.use(publicStaticMiddleware);
 app.use(websiteStaticMiddleware);
+app.use(publicStaticMiddleware);
+app.use(distStaticMiddleware);
+app.use(RedirectMiddleware('/docs/', '/docs/latest/'));
 app.use(RedirectMiddleware('/docs', '/docs/latest/'));
 app.use(RedirectMiddleware('/docs/latest', '/docs/latest/'));
 app.use(mount('/docs/latest', docsStaticMiddleware));
