@@ -2,7 +2,15 @@
  * This module is the main entrypoint for the **@carnesen/cli** package
  */
 
-// Command-line interface (CLI) runner
+// Command factory
+export {
+	CliCommand,
+	ICliCommand,
+	ICliCommandOptions,
+	CLI_COMMAND,
+} from './cli-command';
+
+// Command-line interface (CLI) factory
 export { Cli } from './cli';
 export { ICli, ICliOptions } from './cli-options';
 
@@ -13,14 +21,6 @@ export {
 	ICliCommandGroupOptions,
 	CLI_COMMAND_GROUP,
 } from './cli-command-group';
-
-// Command factory
-export {
-	CliCommand,
-	ICliCommand,
-	ICliCommandOptions,
-	CLI_COMMAND,
-} from './cli-command';
 
 // Argument group factories
 export {
@@ -52,7 +52,7 @@ export {
 	ICliStringArrayArgGroupOptions,
 } from './arg-group-factories/cli-string-array-arg-group';
 
-// Advanced
+// The rest of the exports are advanced features
 
 // Description functions
 export {
@@ -61,10 +61,10 @@ export {
 	ICliDescriptionFunctionInput,
 } from './cli-description';
 
-// Universal console interface
+// Isomorphic console interface
 export { ICliConsole } from './cli-console';
 
-// Universal process interface
+// Isomorphic process interface
 export { ICliProcess } from './cli-process';
 
 // Text decoration

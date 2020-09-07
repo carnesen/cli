@@ -61,17 +61,18 @@ export function reWrapText(
 			}
 			previousLineWasEmpty = true;
 
-			// It's not easy to see but at this point in the code we are sure that
+			// It's not easy to see, but at this point in the code we are sure that
 			// currentLineLength > 0.
 
 			if (maxParagraphs && paragraphIndex === maxParagraphs - 1) {
 				break;
-				// The currentLine will still get written at the end if it has content
+				// currentLine will still get written at the end if it has content
 			}
-			// In this state we know there is more text to come because we never end
-			// on an empty line due to trimming. So let's push the current line and a
-			// empty line and make sure via `previousLineWasEmpty` that we don't push another
-			// empty output line even if there is another empty input line.
+			// In this state we know there is more text to come because we never
+			// end on an empty line due to trimming. So let's push the current line
+			// and a empty line and make sure via `previousLineWasEmpty` that we
+			// don't push another empty output line even if there is another empty
+			// input line.
 			outputLines.push(currentLine, '');
 			currentLine = '';
 			currentLineLength = 0;

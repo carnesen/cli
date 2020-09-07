@@ -65,7 +65,7 @@ Only `<command>` is required. This section of the documentation describes each o
 
 ### Command
 
-A command defines an action `function` or `async function` and together with its command-line arguments. For example, in `cloud users list`, the command is `list`. Some commands don't have any arguments:
+A command defines an action `function` or `async function` together with its command-line arguments. For example, in `cloud users list`, the command is `list`. Some commands don't have any arguments. For example:
 
 ```typescript
 import { CliCommand } from '@carnesen/cli';
@@ -83,7 +83,7 @@ Most commands define arguments through the `positionalArgGroup`, `namedArgGroups
 
 ### Command group
 
-Command groups provide a way to organize the commands in your CLI. For example, in `cloud users list`, `cloud` and `users` are command groups and `list` is a command. Command groups are optional. Organize your CLI to suit your needs and taste:
+You can use command groups to organize the commands in your CLI. For example, in `cloud users list`, `cloud` and `users` are command groups and `list` is a command. Command groups are optional. Organize your CLI to suit your needs and taste:
 
 - `list-cloud-users`: No command groups
 - `cloud list-users`: A single command group
