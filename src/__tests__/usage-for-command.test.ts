@@ -26,7 +26,6 @@ describe(UsageForCommand.name, () => {
 			{ current: command as any, parents: [] },
 			{ columns: 100, indentation, ansi: CliAnsi() },
 		);
-		console.log(lines);
 		expect(lines.length).toBe(15);
 		expect(lines[0]).toMatch(`-- ${argGroup.placeholder}`);
 		expect(lines[1]).toBe('');
