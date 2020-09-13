@@ -22,7 +22,7 @@ export const rootCommandGroup = CliCommandGroup({
 		This is ${bold('@carnesen/cli')} examples running in your browser console.`,
 	subcommands: [
 		docsCommand,
-		echoCommand,
+		echoCommand as any,
 		multiplyCommand,
 		showCommand,
 		throwErrorCommand,
