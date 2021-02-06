@@ -19,7 +19,10 @@ npm link
 cd ../..
 
 cd examples
-# Use --no-bin-links otherwise this step fails when lib/cli.js does not exist
+# We need to run "npm install" explicitly because we use the --no-bin-links
+# option when running "npm link" below
+npm install
+#  Use --no-bin-links otherwise this step fails when lib/cli.js does not exist
 npm link --no-bin-links
 npm link @carnesen/cli
 npm run build
