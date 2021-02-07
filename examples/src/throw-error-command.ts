@@ -4,6 +4,7 @@ import {
 	CliStringArgGroup,
 	CliUsageError,
 	CliTerseError,
+	CliNumberArgGroup,
 } from '@carnesen/cli';
 
 /**
@@ -33,19 +34,29 @@ export const throwErrorCommand = CliCommand({
 			usage or stack trace.
 			`,
 		}),
+		exitCode: CliNumberArgGroup({
+			description: 'Numeric status code to exit with',
+		}),
 	},
-	action({ namedValues: { message, kind } }) {
+	action({ namedValues: { message, kind, exitCode } }) {
+		let error: any;
 		switch (kind) {
 			case 'usage': {
-				throw new CliUsageError(message);
+				error = new CliUsageError(message);
+				break;
 			}
 			case 'terse': {
-				throw new CliTerseError(message);
+				error = new CliTerseError(message);
+				break;
 			}
 			case 'normal':
 			default: {
-				throw new Error(message);
+				error = new Error(message);
 			}
 		}
+		if (typeof exitCode !== 'undefined') {
+			error.exitCode = exitCode;
+		}
+		throw error;
 	},
 });
