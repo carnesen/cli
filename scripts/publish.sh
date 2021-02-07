@@ -11,16 +11,16 @@ cd "${REPO_DIR}"
 
 set -o xtrace # print each command before it's executed
 
-cd main
-npm ci
-npm publish
-cd ..
+# cd main
+# npm ci
+# npm publish
+# cd ..
 
-cd examples
-npm ci
-npm install @carnesen/cli@next
-npm publish
-cd ..
+# cd examples
+# npm ci
+# npm install @carnesen/cli@next
+# npm publish
+# cd ..
 
 cd website
 npm ci

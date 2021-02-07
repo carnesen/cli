@@ -1,4 +1,7 @@
-# @carnesen/cli-website-server changelog
+# **@carnesen/cli-website-server** changelog
+
+## 2021.2.1
+Upgrade to @carnesen/cli@0.5.1
 
 # 2020.7.3
 Update @carnesen/cli-website to 2020.7.3
