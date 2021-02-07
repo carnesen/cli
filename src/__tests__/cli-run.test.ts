@@ -121,22 +121,12 @@ describe(CliRun.name, () => {
 		expect(logMessage).toBe(undefined);
 	});
 
-	it('exits with the specified code if the code is a number', async () => {
-		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
-			throw new CodedError('', 123);
+	it('exits with the specified code if exitCode is a number', async () => {
+		const error = new CliTerseError('', 123);
+		const { exitCode } = await runMocked(() => {
+			throw error;
 		});
 		expect(exitCode).toBe(123);
-		expect(errorMessage).toBe(undefined);
-		expect(logMessage).toBe(undefined);
-	});
-
-	it('exits with the specified code if the code is a number and console.errors the message if there is one', async () => {
-		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
-			throw new CodedError('foo', 123);
-		});
-		expect(exitCode).toBe(123);
-		expect(errorMessage).toBe('foo');
-		expect(logMessage).toBe(undefined);
 	});
 
 	it('console.errors any other error thrown and exits 1', async () => {

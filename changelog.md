@@ -1,5 +1,10 @@
 # **@carnesen/cli** changelog
 
+## 0.5.1 - 2020-02-06
+
+### Fixes
+- Unexpected handling of exception with numeric "code" property (https://github.com/carnesen/cli/issues/166)
+
 ## 0.5.0 - 2020-09-12
 
 ### Breaking

@@ -161,4 +161,13 @@ export const doCommand = CliCommand({
 })
 ```
 
+### Error handling
+
+By default, `@carnesen/cli` `console.error`'s the full exception thrown by the `action` function or argument parser, stack trace and all. Two special error objects have non-default handling:
+
+- `CliUsageError`: Throw this if you want to print the selected command's usage and exit without showing a stack trace. This is useful for defining custom argument parsers.
+- `CliTerseError`: Throw this if you want to prints the object's `message` and exit without showing a stack trace
+
+In any case, the command runner exits (returns) a non-zero numeric status code (`1`) or the thrown exception's `exitCode` if it's a number. `CliTerseError`'s second argument is `exitCode`.
+
 [Go back to top](#)

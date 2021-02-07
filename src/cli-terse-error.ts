@@ -8,9 +8,13 @@ export class CliTerseError extends Error {
 	/** The string constant [[`CLI_TERSE_ERROR`]] */
 	public readonly code: typeof CLI_TERSE_ERROR;
 
-	constructor(message: string) {
+	/** Numeric code with which to return/exit */
+	public readonly exitCode: number;
+
+	constructor(message: string, exitCode = 1) {
 		super(message);
 		this.code = CLI_TERSE_ERROR;
+		this.exitCode = exitCode;
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
 }
