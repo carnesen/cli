@@ -1,5 +1,11 @@
 # @carnesen/cli-website changelog
 
+## 2021.2.1
+Upgrade to @carnesen/cli@0.5.1
+
+## 2021.2.0
+DOA
+
 ## 2020.7.3
 - Promote line-splitting functionality to @carnesen/cli
 

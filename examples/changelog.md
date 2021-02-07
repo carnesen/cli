@@ -1,6 +1,11 @@
-# @carnesen/cli-examples changelog
+# **@carnesen/cli-examples** changelog
 
-## 0.5.0 - Unreleased
+## 0.5.1 - 2020-02-06
+
+Upgrade @carnesen/cli to 0.5.0. Add exitCode argument to throw-error command
+
+## 0.5.0 - 2020-09-12
+
 This initial release implements examples of using `@carnesen/cli` to build command-line interfaces. The purpose of this package is primarily documentary, but it also serves as a test suite from the end user's perspective. Among other things it helps verify the packaging process. This package is [universal JavaScript](https://en.wikipedia.org/wiki/Universal_JavaScript) except the `src/cli.ts` entrypoint, this package's ["bin" executable](https://docs.npmjs.com/files/package.json#bin).
 
 The initial top-level example commands are:
