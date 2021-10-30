@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-# This script generates the documentation package contents from the source code
+# This script generates the documentation package contents from the source code.
+# It uses TypeDoc in "library mode", which was released in an 0.20 beta but
+# didn't make it into the actual release since --mode was removed. For more
+# information see https://github.com/TypeStrong/typedoc/pull/1184 and
+# https://github.com/TypeStrong/typedoc/releases/tag/v0.20.0
 
 set -eo pipefail
 SCRIPT_PATH="${BASH_SOURCE[0]}"

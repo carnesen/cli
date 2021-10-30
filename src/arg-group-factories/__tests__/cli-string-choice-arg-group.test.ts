@@ -8,7 +8,7 @@ const placeholder = '<special>';
 const required = false;
 
 const argGroup = CliStringChoiceArgGroup({
-	choices: ['foo', 'bar'],
+	choices: ['foo', 'bar'] as const,
 	description,
 	hidden,
 	placeholder,

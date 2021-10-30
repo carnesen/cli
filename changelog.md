@@ -1,8 +1,15 @@
 # **@carnesen/cli** changelog
 
+## Upcoming
+
+### Fixes
+
+- CliStringChoicesArgGroup factory should allow readonly string array choices [#193](https://github.com/carnesen/cli/issues/193)
+
 ## 0.5.1 - 2020-02-06
 
 ### Fixes
+
 - Unexpected handling of exception with numeric "code" property (https://github.com/carnesen/cli/issues/166)
 
 ## 0.5.0 - 2020-09-12

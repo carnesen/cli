@@ -1,15 +1,19 @@
 import { ICliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
+export type CliStringChoices = string[] | readonly string[];
+
 /**
  * Options for [[`CliStringChoiceArgGroup`]]
  * @typeParam TChoices Type of the "choices" option
  */
-export interface ICliStringChoiceArgGroupOptions<TChoices extends string[]> {
+export interface ICliStringChoiceArgGroupOptions<
+	TChoices extends CliStringChoices
+> {
 	/**
 	 * Choices for this argument. For strict typing do e.g.
 	 *
-	 * choices: ['foo' as const, 'bar' as const]
+	 * choices: ['foo', 'bar'] as const
 	 *
 	 * */
 	choices: TChoices;
@@ -29,26 +33,23 @@ export interface ICliStringChoiceArgGroupOptions<TChoices extends string[]> {
 }
 
 /**
- * A factory for required [[`ICliArgGroup`]]s whose value is one of the choices
- * provided
- * @typeParam TChoices Type of the provided choices
+ * A factory for [[`ICliArgGroup`]]s whose value is one of the choices provided
+ * @typeParam TChoices Type of the provided choices.
  * */
-function CliStringChoiceArgGroup<TChoices extends string[]>(
+
+// required = true overload
+function CliStringChoiceArgGroup<TChoices extends CliStringChoices>(
 	options: ICliStringChoiceArgGroupOptions<TChoices> & { required: true },
 ): ICliArgGroup<TChoices[number], true>;
 
-/**
- * A factory for optional [[`ICliArgGroup`]]s whose value is one of the choices
- * provided
- * @typeParam TChoices Type of the provided choices
- * */
-function CliStringChoiceArgGroup<TChoices extends string[]>(
+// required = false overload
+function CliStringChoiceArgGroup<TChoices extends CliStringChoices>(
 	options: ICliStringChoiceArgGroupOptions<TChoices>,
 ): ICliArgGroup<TChoices[number] | undefined, false>;
 
 // Implementation
 function CliStringChoiceArgGroup(
-	options: ICliStringChoiceArgGroupOptions<string[]>,
+	options: ICliStringChoiceArgGroupOptions<CliStringChoices>,
 ): ICliArgGroup<string | undefined> {
 	const valuesString = options.choices.join(', ');
 	const {
@@ -85,7 +86,7 @@ function CliStringChoiceArgGroup(
 			if (args.length > 0) {
 				return [];
 			}
-			return options.choices;
+			return options.choices as string[];
 		},
 	};
 	return argGroup;
