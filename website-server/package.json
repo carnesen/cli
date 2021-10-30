@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli-website-server",
 	"description": "Node.js server for cli.carnesen.com",
-	"version": "2021.2.1",
+	"version": "2021.10.0",
 	"engines": {
 		"node": ">=12.0.0"
 	},
@@ -16,8 +16,8 @@
 		"prepublishOnly": "npm run test"
 	},
 	"dependencies": {
-		"@carnesen/cli-docs": "0.5.1",
-		"@carnesen/cli-website": "2021.2.1",
+		"@carnesen/cli-docs": "0.5.2",
+		"@carnesen/cli-website": "2021.10.0",
 		"@types/koa-mount": "4.0.0",
 		"http-status-codes": "1.4.0",
 		"koa": "2.13.0",
