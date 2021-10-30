@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli-examples",
 	"description": "Examples of how to use @carnesen/cli",
-	"version": "0.5.1",
+	"version": "0.5.2",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"bin": {
@@ -22,7 +22,7 @@
 		"prepublishOnly": "npm test"
 	},
 	"dependencies": {
-		"@carnesen/cli": "0.5.1"
+		"@carnesen/cli": "0.5.2"
 	},
 	"devDependencies": {
 		"@carnesen/run-and-catch": "0.4.0",
@@ -45,7 +45,7 @@
 	],
 	"publishConfig": {
 		"access": "public",
-		"tag": "next"
+		"tag": "latest"
 	},
 	"author": {
 		"name": "Chris Arnesen",
