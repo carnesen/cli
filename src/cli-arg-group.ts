@@ -16,7 +16,7 @@ export type TCliArgGroupArgs<TRequired extends boolean> = TRequired extends true
  */
 export interface ICliArgGroup<
 	TValue = unknown,
-	TRequired extends boolean = boolean
+	TRequired extends boolean = boolean,
 > {
 	/**
 	 * Function or async function that parses a well-typed value from string
