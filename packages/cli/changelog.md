@@ -1,10 +1,13 @@
 # **@carnesen/cli** changelog
 
-## Upcoming 
+## Upcoming
+
+## carnesen-cli-0.6.0 (2022-02-26)
 
 - Fix: CliStringChoicesArgGroup factory should allow readonly string array choices [#193](https://github.com/carnesen/cli/issues/193)
 
 - Internal: Update dependencies. Use @carnesen/dev to release.
+
 ## 0.5.1 - 2020-02-06
 
 ### Fixes
