@@ -52,7 +52,7 @@ describe(DescriptionText.name, () => {
 		});
 	}
 	it('throws if provided an invalid description', () => {
-		expect(() => DescriptionText((42 as any) as string, input)).toThrow(
+		expect(() => DescriptionText(42 as any as string, input)).toThrow(
 			'Unexpected description',
 		);
 	});

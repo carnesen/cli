@@ -10,4 +10,4 @@ cd "${REPO_DIR}"
 
 set -o xtrace # print each command before it's executed
 
-rm -rf **/node_modules **/lib
+rm -rf packages/**/node_modules packages/**/lib

@@ -11,14 +11,17 @@ cd "${REPO_DIR}"
 
 set -o xtrace # print each command before it's executed
 
-cd main
+cd packages
+
+cd cli
+npm install
 npm link
 npm run build
 cd docs
 npm link
 cd ../..
 
-cd examples
+cd cli-examples
 # We need to run "npm install" explicitly because we use the --no-bin-links
 # option when running "npm link" below
 npm install
@@ -28,14 +31,14 @@ npm link @carnesen/cli
 npm run build
 cd ..
 
-cd website
+cd cli-website
 npm link
 npm link @carnesen/cli
 npm link @carnesen/cli-examples
 npm run build
 cd ..
 
-cd website-server
+cd cli-website-server
 npm link
 npm link @carnesen/cli-docs
 npm link @carnesen/cli-website

@@ -8,7 +8,7 @@ export type CliStringChoices = string[] | readonly string[];
  * @typeParam TChoices Type of the "choices" option
  */
 export interface ICliStringChoiceArgGroupOptions<
-	TChoices extends CliStringChoices
+	TChoices extends CliStringChoices,
 > {
 	/**
 	 * Choices for this argument. For strict typing do e.g.

@@ -11,32 +11,37 @@ jobs:
     steps:
     - name: Checkout source
       uses: actions/checkout@master
+
     - name: Install Node.js
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
     - name: Build and test @carnesen/cli
-      working-directory: ./main
+      working-directory: ./packages/cli
       run: |
         npm ci
         npm test
+
     - name: Build and test @carnesen/cli-examples
-      working-directory: ./examples
+      working-directory: ./packages/cli-examples
       run: |
         npm ci
-        npm install ../main/carnesen-cli*.tgz
+        npm install ../cli/carnesen-cli*.tgz
         npm test
+
     - name: Build and test @carnesen/cli-website
-      working-directory: ./website
+      working-directory: ./packages/cli-website
       run: |
         npm ci
-        npm install ../main/carnesen-cli*.tgz
-        npm install ../examples/carnesen-cli*.tgz
+        npm install ../cli/carnesen-cli*.tgz
+        npm install ../cli-examples/carnesen-cli*.tgz
         npm test
+
     - name: Build and test @carnesen/cli-website-server
-      working-directory: ./website-server
+      working-directory: ./packages/cli-website-server
       run: |
         npm ci
-        npm install ../main/docs/carnesen-cli*.tgz
-        npm install ../website/carnesen-cli*.tgz
+        npm install ../cli/docs/carnesen-cli*.tgz
+        npm install ../cli-website/carnesen-cli*.tgz
         npm test
