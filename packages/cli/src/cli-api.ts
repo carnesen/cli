@@ -96,7 +96,7 @@ export function CliApi(root: TCliRoot, options: ICliOptions = {}): ICli['api'] {
 				ansi,
 			});
 			return result;
-		} catch (exception) {
+		} catch (exception: any) {
 			if (exception && exception.code === CLI_USAGE_ERROR) {
 				exception.tree = tree;
 			}

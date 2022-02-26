@@ -44,17 +44,17 @@ export const showCommand = CliCommand({
 			case multiplyCommand.name:
 			case parseJsonCommand.name:
 			case throwErrorCommand.name: {
-				url = `https://github.com/carnesen/cli/blob/master/examples/src/${name}-command.ts`;
+				url = `https://github.com/carnesen/cli/blob/master/packages/cli-examples/src/${name}-command.ts`;
 				break;
 			}
 			case '.': {
-				url = `https://github.com/carnesen/cli/blob/master/website/src/root-command-group.ts`;
+				url = `https://github.com/carnesen/cli/blob/master/packages/cli-website/src/root-command-group.ts`;
 				break;
 			}
 			case docsCommand.name:
 			case HISTORY_COMMAND_NAME:
 			case SHOW_COMMAND_NAME: {
-				url = `https://github.com/carnesen/cli/blob/master/website/src/${name}-command.ts`;
+				url = `https://github.com/carnesen/cli/blob/master/packages/cli-website/src/${name}-command.ts`;
 				break;
 			}
 			default: {
@@ -63,7 +63,7 @@ export const showCommand = CliCommand({
 		}
 		// Set tab size in GitHub rendering
 		const fullUrl = `${url}?ts=3`;
-		window.open(fullUrl, '_blank');
-		return `Opened ${fullUrl} in a new tab`;
+		window.location.assign(fullUrl);
+		return `Navigating to ${fullUrl}`;
 	},
 });

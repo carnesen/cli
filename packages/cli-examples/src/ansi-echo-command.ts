@@ -51,13 +51,11 @@ export const ansiEchoCommand = CliCommand({
 		// https://en.wikipedia.org/wiki/ANSI_escape_code when the terminal
 		// is fully interactive (both stdout and stderr are a TTY).
 		let text = messages.join(' ');
-		const namedValueEntries: [
-			AnsiMethodName,
-			boolean,
-		][] = ANSI_METHOD_NAMES.map((methodName) => [
-			methodName,
-			namedValues[methodName],
-		]);
+		const namedValueEntries: [AnsiMethodName, boolean][] =
+			ANSI_METHOD_NAMES.map((methodName) => [
+				methodName,
+				namedValues[methodName],
+			]);
 		const methodNames = namedValueEntries
 			.filter(([_name, value]) => value)
 			.map(([name]) => name);

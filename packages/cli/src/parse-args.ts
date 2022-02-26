@@ -23,7 +23,7 @@ export async function parseArgs(
 	}
 	try {
 		return await argGroup.parse(args);
-	} catch (exception) {
+	} catch (exception: any) {
 		if (exception && typeof exception.message === 'string') {
 			exception.message = `${prefix}${exception.message}`;
 		}
