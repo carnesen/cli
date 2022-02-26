@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-cli-website-server-2022.2.0 (2022-02-26)
+
 - Internal: Upgrade dependencies
 
 ## 2021.2.1
