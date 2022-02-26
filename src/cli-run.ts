@@ -28,7 +28,7 @@ export function CliRun(
 			if (typeof result !== 'undefined') {
 				console.log(result);
 			}
-		} catch (exception) {
+		} catch (exception: any) {
 			handleExceptionThrownByApi(exception, options);
 			exitCode =
 				typeof exception.exitCode === 'number' && exception.exitCode !== 0

@@ -54,7 +54,7 @@ export function CliJsonArgGroup(
 			try {
 				const parsed = JSON.parse(args[0]);
 				return parsed;
-			} catch (exception) {
+			} catch (exception: any) {
 				throw new CliUsageError(exception.message);
 			}
 		},

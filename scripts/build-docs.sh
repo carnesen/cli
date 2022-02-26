@@ -48,7 +48,7 @@ cat readme.md usage.md > typedoc.md
 cp -r images/ docs/images/
 
 "${SCRIPT_DIR}/print-docs-package-json.js" > docs/package.json
-cp license.txt docs/
+cp license.md changelog.md docs/
 echo > docs/.npmignore
 
 > docs/readme.md cat <<EOF
