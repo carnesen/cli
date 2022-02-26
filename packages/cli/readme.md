@@ -7,6 +7,7 @@ CommonJS) and TypeScript type declarations (3.7+). It has _no_ npm dependencies
 and is known to work with Node.js 12+ and all modern web browsers.
 
 ## Features
+
 - **Easy to use**: We ❤️ CLIs and want to use them everywhere for everything. This library makes it easy to create beautiful well-behaved CLIs for Node.js and for web browsers.
 
 - **Isomorphic**: As far as we know, this is the _only_ [isomorphic JavaScript](https://en.wikipedia.org/wiki/Universal_JavaScript) CLI framework. Run your browser CLI in a [terminal emulator](https://xtermjs.org/) like our [online examples](https://cli.carnesen.com/) or in the browser's built-in terminal, [the JavaScript console](https://developers.google.com/web/tools/chrome-devtools/console)!
@@ -22,13 +23,16 @@ and is known to work with Node.js 12+ and all modern web browsers.
 - **Automatic autocomplete** (Coming soon!): [Autocomplete](https://en.wikipedia.org/wiki/Autocomplete) supercharges a CLI. We've implemented automatic autocomplete in [the live examples](https://cli.carnesen.com) and plan to [add this as a feature to the core library](https://github.com/carnesen/cli/issues/32) for the next release.
 
 ## Stability
+
 This library has 100% test coverage and heavy usage by its authors but should be considered 0.x beta software.
 
 ## More information
+
 Questions, bugs, feature requests? Please [file an issue](https://github.com/carnesen/cli/issues/new) or [submit a pull request](https://github.com/carnesen/cli/compare) on [this project's repository on GitHub](https://github.com/carnesen/cli#readme), and check out our:
 - [Homepage](https://cli.carnesen.com)
 - [Online documentation](https://cli.carnesen.com/docs)
 - [Example project](https://github.com/carnesen/cli/tree/master/examples)
 
 ## License
+
 [MIT](https://en.wikipedia.org/wiki/MIT_License) © [Chris Arnesen](https://www.carnesen.com)
