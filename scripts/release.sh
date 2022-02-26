@@ -9,19 +9,26 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 cd "${REPO_DIR}"
 
+SEMVER_BUMP=${1:-""}
+
+if [ "${SEMVER_BUMP}" = "" ]; then
+	echo "Usage: ${SCRIPT_PATH} <semver bump>"
+	exit 1
+fi
+
 set -o xtrace # print each command before it's executed
 
 cd packages
 
 cd cli
 npm ci
-npm publish
+./scripts/release.sh "${SEMVER_BUMP}"
 cd ..
 
 cd cli-examples
 npm ci
 npm install @carnesen/cli@latest
-npm publish
+npm run release -- "${SEMVER_BUMP}"
 cd ..
 
 cd cli-website

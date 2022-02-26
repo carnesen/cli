@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli",
 	"description": "A command-line interface framework for Node.js and web browser",
-	"version": "0.5.2",
+	"version": "0.5.3-1",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"engines": {
@@ -10,32 +10,31 @@
 	"scripts": {
 		"build": "npm run build-lib && npm run build-docs",
 		"build-lib": "rm -rf lib/ && tsc",
-		"build-lib-watch": "tsc --watch",
+		"build-lib:watch": "tsc --watch",
 		"build-docs": "./scripts/build-docs.sh",
-		"build-docs-watch": "./scripts/build-docs.sh --watch",
+		"build-docs:watch": "./scripts/build-docs.sh --watch",
 		"serve-docs": "browser-sync docs",
 		"lint": "eslint --ext .ts src/",
 		"fix": "npm run lint -- --fix",
 		"test": "./scripts/test.sh",
-		"unit-test": "jest src",
-		"prepublishOnly": "npm test",
-		"postpublish": "cd docs && npm publish"
+		"unit-test": "jest src"
 	},
 	"devDependencies": {
-		"@carnesen/coded-error": "0.1.1",
-		"@carnesen/run-and-catch": "0.4.0",
-		"@carnesen/tsconfig": "0.3.1",
-		"@types/jest": "26.0.4",
-		"@types/node": "14.0.18",
-		"browser-sync": "2.26.7",
+		"@carnesen/coded-error": "0.4.0",
+		"@carnesen/dev": "0.1.1",
+		"@carnesen/run-and-catch": "0.4.3",
+		"@carnesen/tsconfig": "0.4.1",
+		"@types/jest": "27.4.1",
+		"@types/node": "17.0.21",
+		"browser-sync": "2.27.7",
 		"eslint": "7.32.0",
 		"eslint-config-carnesen": "7.0.0",
-		"jest": "26.1.0",
-		"nodemon": "2.0.4",
-		"ts-jest": "26.1.1",
-		"ts-node": "8.10.2",
+		"jest": "27.5.1",
+		"nodemon": "2.0.15",
+		"ts-jest": "27.1.3",
+		"ts-node": "10.5.0",
 		"typedoc": "0.17.0-3",
-		"typescript": "3.9.6"
+		"typescript": "4.5.5"
 	},
 	"files": [
 		"src",

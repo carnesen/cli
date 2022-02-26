@@ -1,5 +1,9 @@
 # **@carnesen/cli-website-server** changelog
 
+## Upcoming
+
+- Internal: Upgrade dependencies
+
 ## 2021.2.1
 Upgrade to @carnesen/cli@0.5.1
 

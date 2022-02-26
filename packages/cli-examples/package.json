@@ -11,31 +11,31 @@
 		"node": ">=12.0.0"
 	},
 	"scripts": {
-		"build": "rimraf lib/ && tsc --project tsconfig.json",
-		"build-watch": "npm run build -- --watch",
+		"build": "rm -rf lib/ && tsc --project tsconfig.json",
+		"build:watch": "npm run build -- --watch",
 		"cli": "node lib/cli",
 		"dev": "ts-node src/cli",
 		"lint": "eslint --ext .ts src/",
-		"fix": "npm run lint -- --fix",
+		"lint:fix": "npm run lint -- --fix",
+		"release": "carnesen-dev release --semverBump",
 		"test": "npm run lint && npm run unit-test && npm run build && node lib/cli echo ok && ts-node src/multiply 2 3 4 && npm pack",
-		"unit-test": "jest src",
-		"prepublishOnly": "npm test"
+		"unit-test": "jest src"
 	},
 	"dependencies": {
 		"@carnesen/cli": "0.5.2"
 	},
 	"devDependencies": {
-		"@carnesen/run-and-catch": "0.4.0",
-		"@carnesen/tsconfig": "0.3.1",
-		"@types/jest": "26.0.4",
-		"@types/node": "14.0.18",
-		"eslint": "7.4.0",
-		"eslint-config-carnesen": "4.4.0",
-		"jest": "26.1.0",
-		"rimraf": "3.0.2",
-		"ts-jest": "26.1.1",
-		"ts-node": "8.10.2",
-		"typescript": "3.7.5"
+		"@carnesen/dev": "0.1.1",
+		"@carnesen/run-and-catch": "0.4.3",
+		"@carnesen/tsconfig": "0.4.1",
+		"@types/jest": "27.4.1",
+		"@types/node": "17.0.21",
+		"eslint": "7.32.0",
+		"eslint-config-carnesen": "7.0.0",
+		"jest": "27.5.1",
+		"ts-jest": "27.1.3",
+		"ts-node": "10.5.0",
+		"typescript": "4.5.5"
 	},
 	"keywords": [
 		"typescript",

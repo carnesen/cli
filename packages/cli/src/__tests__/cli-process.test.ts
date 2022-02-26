@@ -3,7 +3,7 @@ import { CliProcess } from '../cli-process';
 describe(CliProcess.name, () => {
 	it('works even if there is no global process', () => {
 		const originalProcess = globalThis.process;
-		delete globalThis.process;
+		delete (globalThis as any).process;
 		CliProcess().exit();
 		globalThis.process = originalProcess;
 	});
@@ -52,7 +52,7 @@ describe(CliProcess.name, () => {
 
 	it('stdout.columns returns 100 if not process.stdout', () => {
 		const originalStdout = globalThis.process.stdout;
-		delete globalThis.process.stdout;
+		delete (globalThis as any).process.stdout;
 		expect(CliProcess().stdout.columns).toBe(100);
 		globalThis.process.stdout = originalStdout;
 	});

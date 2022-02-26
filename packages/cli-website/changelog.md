@@ -1,4 +1,10 @@
-# @carnesen/cli-website changelog
+# **@carnesen/cli-website** changelog
+
+# Upcoming
+
+- Feature: Have "docs" and "show" commands navigate in the current window to avoid being thwarted by popup blockers
+
+- Internal: Upgrade dependencies
 
 ## 2021.2.1
 Upgrade to @carnesen/cli@0.5.1
