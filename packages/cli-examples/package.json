@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli-examples",
 	"description": "Examples of how to use @carnesen/cli",
-	"version": "0.5.2",
+	"version": "0.7.0",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"bin": {
@@ -22,7 +22,7 @@
 		"unit-test": "jest src"
 	},
 	"dependencies": {
-		"@carnesen/cli": "0.5.2"
+		"@carnesen/cli": "0.6.0"
 	},
 	"devDependencies": {
 		"@carnesen/dev": "0.1.1",

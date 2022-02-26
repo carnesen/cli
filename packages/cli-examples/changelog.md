@@ -1,5 +1,11 @@
 # **@carnesen/cli-examples** changelog
 
+## Upcoming
+
+## carnesen-cli-examples-0.7.0 (2022-02-26)
+
+Update dependencies
+
 ## 0.5.1 - 2020-02-06
 
 Upgrade @carnesen/cli to 0.5.0. Add exitCode argument to throw-error command
