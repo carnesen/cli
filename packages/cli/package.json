@@ -13,9 +13,10 @@
 		"build-lib:watch": "tsc --watch",
 		"build-docs": "./scripts/build-docs.sh",
 		"build-docs:watch": "./scripts/build-docs.sh --watch",
-		"serve-docs": "browser-sync docs",
 		"lint": "eslint --ext .ts src/",
-		"fix": "npm run lint -- --fix",
+		"lint:fix": "npm run lint -- --fix",
+		"release": "./scripts/release.sh",
+		"serve-docs": "browser-sync docs",
 		"test": "./scripts/test.sh",
 		"unit-test": "jest src"
 	},
