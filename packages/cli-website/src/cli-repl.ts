@@ -187,11 +187,8 @@ export class CliRepl {
 	private runCurrentLine(): void {
 		this.terminal.write('\r\n');
 		this.commandHistory.submit(this.commandLine.value());
-		const {
-			args,
-			singleQuoted,
-			doubleQuoted,
-		} = this.commandLine.splitIntoArgs();
+		const { args, singleQuoted, doubleQuoted } =
+			this.commandLine.splitIntoArgs();
 		if (singleQuoted || doubleQuoted) {
 			this.consoleError(
 				`Error: ${singleQuoted ? 'Single' : 'Double'} quotes are not balanced`,
@@ -233,12 +230,8 @@ export class CliRepl {
 	}
 
 	private autocomplete(): void {
-		const {
-			args,
-			search,
-			singleQuoted,
-			doubleQuoted,
-		} = this.commandLine.splitIntoArgsAndSearch();
+		const { args, search, singleQuoted, doubleQuoted } =
+			this.commandLine.splitIntoArgsAndSearch();
 		const completions = autocomplete(this.root, args, search);
 
 		switch (completions.length) {

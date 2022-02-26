@@ -1,6 +1,7 @@
-export function splitCommandLine(
-	line: string,
-): { args: string[]; quoteChar: string } {
+export function splitCommandLine(line: string): {
+	args: string[];
+	quoteChar: string;
+} {
 	const args: string[] = [];
 	let arg: string | undefined;
 	function append(char: string) {

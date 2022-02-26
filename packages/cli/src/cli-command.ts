@@ -14,7 +14,7 @@ export interface ICliCommandOptions<
 	} = {
 		[name: string]: ICliArgGroup;
 	},
-	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup
+	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup,
 > {
 	/** Identifier for this command in command-line usage */
 	name: string;
@@ -54,9 +54,8 @@ export interface ICliCommand<
 	} = {
 		[name: string]: ICliArgGroup;
 	},
-	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup
->
-	extends ICliCommandOptions<
+	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup,
+> extends ICliCommandOptions<
 		TPositionalArgGroup,
 		TNamedArgGroups,
 		TDoubleDashArgGroup
@@ -73,7 +72,7 @@ export function CliCommand<
 	} = {
 		[name: string]: ICliArgGroup;
 	},
-	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>
+	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>,
 >(
 	options: ICliCommandOptions<
 		TPositionalArgGroup,

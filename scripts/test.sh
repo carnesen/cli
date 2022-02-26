@@ -9,18 +9,20 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 cd "${REPO_DIR}"
 
-cd main
+cd packages
+
+cd cli
 npm test
 cd ..
 
-cd examples
+cd cli-examples
 npm test
 cd ..
 
-cd website
+cd cli-website
 npm test
 cd ..
 
-cd website-server
+cd cli-website-server
 npm test
 cd ..

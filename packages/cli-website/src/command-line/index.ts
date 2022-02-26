@@ -10,9 +10,11 @@ export class CommandLine {
 			typeof index === 'number' ? this.indexInRange(index) : this.line.length;
 	}
 
-	public splitIntoArgs(
-		line = this.line,
-	): { args: string[]; singleQuoted: boolean; doubleQuoted: boolean } {
+	public splitIntoArgs(line = this.line): {
+		args: string[];
+		singleQuoted: boolean;
+		doubleQuoted: boolean;
+	} {
 		const { args, quoteChar } = splitCommandLine(line);
 		return {
 			args,
