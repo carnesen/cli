@@ -6,7 +6,7 @@ import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { TCliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { ICli, ICliOptions } from './cli-options';
-import { CliConsole } from './cli-console';
+import { CliConsole } from './cli-logger';
 import { CliAnsi } from './cli-ansi';
 
 /**
@@ -16,7 +16,7 @@ import { CliAnsi } from './cli-ansi';
  * @param options
  */
 export function CliApi(root: TCliRoot, options: ICliOptions = {}): ICli['api'] {
-	const { console = CliConsole() } = options;
+	const { console = CliLogger.create() } = options;
 
 	const ansi = CliAnsi(options.ansi);
 

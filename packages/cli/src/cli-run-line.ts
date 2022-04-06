@@ -1,5 +1,5 @@
 import { splitCommandLine } from './split-command-line';
-import { CliConsole } from './cli-console';
+import { CliConsole } from './cli-logger';
 import { CliProcess } from './cli-process';
 import { ICli, ICliOptions } from './cli-options';
 import { CliAnsi } from './cli-ansi';
@@ -16,7 +16,7 @@ export function CliRunLine(
 	options: ICliOptions = {},
 ): ICli['runLine'] {
 	const process = CliProcess();
-	const { console = CliConsole(), done = process.exit } = options;
+	const { console = CliLogger.create(), done = process.exit } = options;
 
 	const ansi = CliAnsi(options.ansi);
 

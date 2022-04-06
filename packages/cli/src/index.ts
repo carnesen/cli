@@ -62,7 +62,7 @@ export {
 } from './cli-description';
 
 // Isomorphic console interface
-export { ICliConsole } from './cli-console';
+export { ICliLogger as ICliConsole } from './cli-logger';
 
 // Isomorphic process interface
 export { ICliProcess } from './cli-process';

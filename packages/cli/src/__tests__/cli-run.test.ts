@@ -2,7 +2,7 @@ import { CodedError } from '@carnesen/coded-error';
 import { CliAnsi } from '../cli-ansi';
 import { CliApi } from '../cli-api';
 import { CliCommand } from '../cli-command';
-import { CliConsole } from '../cli-console';
+import { CliConsole } from '../cli-logger';
 import { CliUsageError, CLI_USAGE_ERROR } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
 import { ICliOptions } from '../cli-options';
@@ -212,7 +212,7 @@ describe(CliRun.name, () => {
 			},
 			console: {
 				log: spy,
-				error: CliConsole().error,
+				error: CliLogger.create().error,
 			},
 		};
 		const cliRun = CliRun((args) => Promise.resolve(args), options);

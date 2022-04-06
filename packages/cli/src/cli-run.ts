@@ -1,7 +1,7 @@
 import { CLI_TERSE_ERROR } from './cli-terse-error';
 import { UsageString } from './usage-string';
 import { CLI_USAGE_ERROR, CliUsageError } from './cli-usage-error';
-import { CliConsole } from './cli-console';
+import { CliConsole } from './cli-logger';
 import { CliProcess } from './cli-process';
 import { ICli, ICliOptions } from './cli-options';
 import { CliAnsi } from './cli-ansi';
@@ -18,7 +18,7 @@ export function CliRun(
 	options: ICliOptions = {},
 ): ICli['run'] {
 	const process = CliProcess();
-	const { console = CliConsole(), done = process.exit } = options;
+	const { console = CliLogger.create(), done = process.exit } = options;
 
 	return async function run(args = process.argv.slice(2)) {
 		let exitCode = 0;
@@ -55,7 +55,8 @@ function handleExceptionThrownByApi(
 	exception: any,
 	options: ICliOptions,
 ): void {
-	const { columns = process.stdout.columns, console = CliConsole() } = options;
+	const { columns = process.stdout.columns, console = CliLogger.create() } =
+		options;
 	const ansi = CliAnsi(options.ansi);
 
 	// This should never happen

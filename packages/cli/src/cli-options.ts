@@ -1,4 +1,4 @@
-import { ICliConsole } from './cli-console';
+import { ICliConsole } from './cli-logger';
 import { ICliProcess } from './cli-process';
 
 /**

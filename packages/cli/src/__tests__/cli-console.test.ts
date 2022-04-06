@@ -1,7 +1,7 @@
-import { CliConsole } from '../cli-console';
+import { CliConsole } from '../cli-logger';
 
 describe(CliConsole.name, () => {
-	const cliConsole = CliConsole();
+	const cliConsole = CliLogger.create();
 	it('"log" delegates to global console.log', () => {
 		const spy = jest.spyOn(console, 'log').mockImplementation(() => {});
 		cliConsole.log('foo');

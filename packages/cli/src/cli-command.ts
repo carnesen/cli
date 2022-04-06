@@ -1,5 +1,5 @@
 import { TValueFromCliArgGroup, ICliArgGroup } from './cli-arg-group';
-import { ICliConsole } from './cli-console';
+import { ICliConsole } from './cli-logger';
 import { ICliAnsi } from './cli-ansi';
 import { TCliDescription } from './cli-description';
 
