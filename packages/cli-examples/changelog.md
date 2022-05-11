@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-cli-examples-0.7.1 (2022-05-10)
+
 - Breaking: Drop official support for Node.js 12
 
 - Internal: Upgrade dev dependencies
