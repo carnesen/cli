@@ -18,6 +18,7 @@ const ANSI_METHOD_NAMES = Object.keys(CliAnsi()).filter(
 	(propertyName) => propertyName !== 'enabled',
 ) as AnsiMethodName[];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const NAMED_ARG_GROUPS_AS_ANY: any = {};
 
 for (const methodName of ANSI_METHOD_NAMES) {

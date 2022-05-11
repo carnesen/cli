@@ -18,7 +18,11 @@ export const echoCommand = CliCommand({
 			description: 'Print to stderr instead of stdout',
 		}),
 	},
-	action({ positionalValue: messages, namedValues: { stderr }, console }) {
+	action({
+		positionalValue: messages,
+		namedValues: { stderr },
+		console: logger,
+	}) {
 		// In addition to the parsed argument values, the action also receives a
 		// `console` object for writing to the terminal. By default, the injected
 		// `console` just delegates to the global one, and you can always just use
@@ -30,9 +34,9 @@ export const echoCommand = CliCommand({
 		//   examples that use a non-default `console`
 		const text = messages.join(' ');
 		if (stderr) {
-			console.error(text);
+			logger.error(text);
 		} else {
-			console.log(text);
+			logger.log(text);
 		}
 	},
 });

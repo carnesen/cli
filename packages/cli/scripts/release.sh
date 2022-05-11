@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# This script is invoked by "npm test". It was getting to be too much to fit on
-# one line in package.json.
+# This script publishes the @carnesen/cli package to the npm registry
 
 set -eo pipefail
 
