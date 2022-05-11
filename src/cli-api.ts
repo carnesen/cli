@@ -16,7 +16,7 @@ import { CliAnsi } from './cli-ansi';
  * @param options
  */
 export function CliApi(root: TCliRoot, options: ICliOptions = {}): ICli['api'] {
-	const { console = CliConsole() } = options;
+	const { console: cliConsole = CliConsole() } = options;
 
 	const ansi = CliAnsi(options.ansi);
 
@@ -92,7 +92,7 @@ export function CliApi(root: TCliRoot, options: ICliOptions = {}): ICli['api'] {
 				positionalValue,
 				namedValues,
 				doubleDashValue,
-				console,
+				console: cliConsole,
 				ansi,
 			});
 			return result;

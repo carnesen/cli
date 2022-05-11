@@ -15,23 +15,24 @@ export function CliRunLine(
 	run: ICli['run'],
 	options: ICliOptions = {},
 ): ICli['runLine'] {
-	const process = CliProcess();
-	const { console = CliConsole(), done = process.exit } = options;
+	const cliProcess = CliProcess();
+	const { console: cliConsole = CliConsole(), done = cliProcess.exit } =
+		options;
 
 	const ansi = CliAnsi(options.ansi);
 
 	return async function runLine(line = '') {
 		const { args, quoteChar } = splitCommandLine(line);
 		if (quoteChar) {
-			console.error(
+			cliConsole.error(
 				`${ansi.red('Error:')} Unterminated ${quoteChar}-quoted string`,
 			);
 			const exitCode = 1;
 			try {
 				done(exitCode);
 			} catch (exception) {
-				console.error('"done" callback threw');
-				console.error(exception);
+				cliConsole.error('"done" callback threw');
+				cliConsole.error(exception);
 			}
 			return exitCode;
 		}

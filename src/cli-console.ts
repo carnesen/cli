@@ -11,13 +11,15 @@ export interface ICliConsole {
  * @param options
  */
 export function CliConsole(): ICliConsole {
-	const { console } = globalThis as { console: ICliConsole };
+	const { console: globalConsole } = globalThis as unknown as {
+		console: ICliConsole;
+	};
 	return {
 		log(message, ...optionalParams) {
-			console.log(message, ...optionalParams);
+			globalConsole.log(message, ...optionalParams);
 		},
 		error(message, ...optionalParams) {
-			console.error(message, ...optionalParams);
+			globalConsole.error(message, ...optionalParams);
 		},
 	};
 }

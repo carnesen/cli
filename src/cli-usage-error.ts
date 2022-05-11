@@ -18,7 +18,7 @@ export class CliUsageError extends Error {
 	 * message\>"
 	 * @param tree Used internally for constructing the command-line usage string
 	 */
-	constructor(message?: string, tree?: ICliTree) {
+	public constructor(message?: string, tree?: ICliTree) {
 		super(message);
 		this.code = CLI_USAGE_ERROR;
 		this.tree = tree;

@@ -2,6 +2,14 @@
 
 ## Upcoming
 
+- Breaking: Drop official support for Node.js 12
+
+- Internal: Run the TypeScript compiler explicitly avoiding @types/node to make sure this code is truly isomorphic
+
+- Fix: A browser-only bug where CliRun made an unqualified reference to `process`
+
+- Internal: Upgrade dev dependencies
+
 ## carnesen-cli-0.6.0 (2022-02-26)
 
 - Fix: CliStringChoicesArgGroup factory should allow readonly string array choices [#193](https://github.com/carnesen/cli/issues/193)

@@ -7,6 +7,7 @@ import { CliUsageError, CLI_USAGE_ERROR } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
 import { ICliOptions } from '../cli-options';
 import { CliRun } from '../cli-run';
+import { CliProcess } from '../cli-process';
 
 async function runMocked(action: () => any, options: ICliOptions = {}) {
 	const mockOptions = {
@@ -218,6 +219,7 @@ describe(CliRun.name, () => {
 		const cliRun = CliRun((args) => Promise.resolve(args), options);
 		const exitCode = await cliRun();
 		expect(exitCode).toBe(0);
-		expect(spy).toHaveBeenCalledWith(process.argv.slice(2));
+		const cliProcess = CliProcess();
+		expect(spy).toHaveBeenCalledWith(cliProcess.argv.slice(2));
 	});
 });
