@@ -11,7 +11,7 @@ export class CliTerseError extends Error {
 	/** Numeric code with which to return/exit */
 	public readonly exitCode: number;
 
-	constructor(message: string, exitCode = 1) {
+	public constructor(message: string, exitCode = 1) {
 		super(message);
 		this.code = CLI_TERSE_ERROR;
 		this.exitCode = exitCode;

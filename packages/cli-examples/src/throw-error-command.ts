@@ -39,6 +39,7 @@ export const throwErrorCommand = CliCommand({
 		}),
 	},
 	action({ namedValues: { message, kind, exitCode } }) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		let error: any;
 		switch (kind) {
 			case 'usage': {

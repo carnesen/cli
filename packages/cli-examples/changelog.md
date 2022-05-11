@@ -2,9 +2,15 @@
 
 ## Upcoming
 
+- Breaking: Drop official support for Node.js 12
+
+- Internal: Upgrade dev dependencies
+
 ## carnesen-cli-examples-0.7.0 (2022-02-26)
 
-Update dependencies
+This package was mistakenly published at 0.7.0 instead of 0.6.0. We'll pick back up with the correct number on 0.6.1 then skip 0.7.0 when we get to it.
+
+- Update dependencies
 
 ## 0.5.1 - 2020-02-06
 

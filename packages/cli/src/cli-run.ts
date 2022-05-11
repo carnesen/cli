@@ -17,16 +17,17 @@ export function CliRun(
 	api: ICli['api'],
 	options: ICliOptions = {},
 ): ICli['run'] {
-	const process = CliProcess();
-	const { console = CliConsole(), done = process.exit } = options;
+	const cliProcess = CliProcess();
+	const { console: cliConsole = CliConsole(), done = cliProcess.exit } =
+		options;
 
-	return async function run(args = process.argv.slice(2)) {
+	return async function run(args = cliProcess.argv.slice(2)) {
 		let exitCode = 0;
 		try {
 			// Invoke the `api` function with the provided string args
 			const result = await api(args);
 			if (typeof result !== 'undefined') {
-				console.log(result);
+				cliConsole.log(result);
 			}
 		} catch (exception: any) {
 			handleExceptionThrownByApi(exception, options);
@@ -38,8 +39,8 @@ export function CliRun(
 			try {
 				done(exitCode);
 			} catch (exception) {
-				console.error('"done" callback threw');
-				console.error(exception);
+				cliConsole.error('"done" callback threw');
+				cliConsole.error(exception);
 			}
 		}
 		return exitCode;
@@ -55,12 +56,16 @@ function handleExceptionThrownByApi(
 	exception: any,
 	options: ICliOptions,
 ): void {
-	const { columns = process.stdout.columns, console = CliConsole() } = options;
+	const cliProcess = CliProcess();
+	const {
+		columns = cliProcess.stdout.columns,
+		console: cliConsole = CliConsole(),
+	} = options;
 	const ansi = CliAnsi(options.ansi);
 
 	// This should never happen
 	if (!exception) {
-		console.error(
+		cliConsole.error(
 			`${ansi.red(
 				'Error:',
 			)} Encountered non-truthy exception "${exception}". Please contact the author of this command-line interface`,
@@ -79,29 +84,29 @@ function handleExceptionThrownByApi(
 					ansi,
 				});
 				if (exception.message) {
-					console.error(
+					cliConsole.error(
 						`${usageString}\n\n${ansi.red('Error:')} ${exception.message}`,
 					);
 				} else {
-					console.error(usageString);
+					cliConsole.error(usageString);
 				}
 			} else {
 				// Handle case where "code" is CLI_USAGE_ERROR but "tree" is
 				// undefined. Surely this is a coding mistake on our part.
-				console.error(exceptionAsUsageError);
+				cliConsole.error(exceptionAsUsageError);
 			}
 			break;
 		}
 		case CLI_TERSE_ERROR: {
 			if (!exception.message) {
-				console.error(exception);
+				cliConsole.error(exception);
 			} else {
-				console.error(`${ansi.red('Error:')} ${exception.message}`);
+				cliConsole.error(`${ansi.red('Error:')} ${exception.message}`);
 			}
 			break;
 		}
 		default: {
-			console.error(exception);
+			cliConsole.error(exception);
 		}
 	}
 }
