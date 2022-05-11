@@ -2,6 +2,10 @@
 
 ## Upcoming
 
+## carnesen-cli-website-2022.5.0 (2022-05-10)
+
+
+
 ## carnesen-cli-website-2022.2.1 (2022-02-26)
 
 - Feature: Have "docs" and "show" commands navigate in the current window to avoid being thwarted by popup blockers
