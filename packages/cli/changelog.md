@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-cli-0.7.1 (2022-05-10)
+
 - Breaking: Drop official support for Node.js 12
 
 - Internal: Run the TypeScript compiler explicitly avoiding @types/node to make sure this code is truly isomorphic
