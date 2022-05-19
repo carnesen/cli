@@ -1,24 +1,24 @@
-import { ICliTree } from './cli-tree';
+import { CliTree } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { ICliCommandGroup, CLI_COMMAND_GROUP } from './cli-command-group';
 import { TTwoColumnTableRow } from './two-column-table';
 import {
 	DescriptionText,
-	ICliDescriptionFunctionInput,
+	CliDescriptionFunctionInput,
 } from './cli-description';
 /** [command path, description] */
 
 export function UsageSubcommandRows(
 	commandGroup: ICliCommandGroup,
-	input: ICliDescriptionFunctionInput,
+	input: CliDescriptionFunctionInput,
 ): TTwoColumnTableRow[] {
 	return RecursiveUsageSubcommandRows(commandGroup, '', input);
 }
 
 function RecursiveUsageSubcommandRows(
-	current: ICliTree['current'],
+	current: CliTree['current'],
 	path: string,
-	options: ICliDescriptionFunctionInput,
+	options: CliDescriptionFunctionInput,
 ): TTwoColumnTableRow[] {
 	if (current.hidden && path.length > 0) {
 		// We've walked to a hidden tree. When path.length === 0 the user has

@@ -3,17 +3,17 @@ import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
 import {
 	DescriptionText,
-	ICliDescriptionFunctionInput,
+	CliDescriptionFunctionInput,
 } from './cli-description';
-import { ICliLeaf } from './cli-tree';
-import { IUsageOptions } from './usage-options';
+import { CliLeaf } from './cli-tree';
+import { UsageOptions } from './usage-options';
 
-export function UsageForCommand(
-	leaf: ICliLeaf,
-	options: IUsageOptions,
+export function usageForCommand(
+	leaf: CliLeaf,
+	options: UsageOptions,
 ): string[] {
 	const { current, parents } = leaf;
-	const { columns, indentation, ansi } = options;
+	const { columns, indentation, color: ansi } = options;
 	const {
 		positionalArgGroup,
 		namedArgGroups,
@@ -27,7 +27,7 @@ export function UsageForCommand(
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionInput: ICliDescriptionFunctionInput = { ansi };
+	const descriptionInput: CliDescriptionFunctionInput = { ansi };
 	const commandDescriptionText: string = DescriptionText(
 		description,
 		descriptionInput,

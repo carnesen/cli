@@ -1,42 +1,42 @@
-import { ICliArgGroup } from '../cli-arg-group';
+import { CliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliStringArgGroup`]] */
-export interface ICliStringArgGroupOptions {
-	/** See [[`ICliArgGroup.required`]] */
+export type CliStringArgGroupOptions = {
+	/** See [[`CliArgGroup.required`]] */
 	required?: boolean;
 
-	/** See [[`ICliArgGroup.description`]] */
+	/** See [[`CliArgGroup.description`]] */
 	description?: string;
 
-	/** See [[`ICliArgGroup.hidden`]] */
+	/** See [[`CliArgGroup.hidden`]] */
 	hidden?: boolean;
 
-	/** See [[`ICliArgGroup.placeholder`]] defaulting to "\<str\>" */
+	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<str\>" */
 	placeholder?: string;
-}
+};
 
-/** A factory for required `string`-valued [[`ICliArgGroup`]]s */
+/** A factory for required `string`-valued [[`CliArgGroup`]]s */
 function CliStringArgGroup(
-	options: ICliStringArgGroupOptions & { required: true },
-): ICliArgGroup<string, true>;
+	options: CliStringArgGroupOptions & { required: true },
+): CliArgGroup<string, true>;
 
-/** A factory for optional `string | undefined`-valued [[`ICliArgGroup`]]s */
+/** A factory for optional `string | undefined`-valued [[`CliArgGroup`]]s */
 function CliStringArgGroup(
-	options?: ICliStringArgGroupOptions,
-): ICliArgGroup<string | undefined, false>;
+	options?: CliStringArgGroupOptions,
+): CliArgGroup<string | undefined, false>;
 
 // Implementation
 function CliStringArgGroup(
-	options: ICliStringArgGroupOptions = {},
-): ICliArgGroup<string | undefined> {
+	options: CliStringArgGroupOptions = {},
+): CliArgGroup<string | undefined> {
 	const {
 		required = false,
 		description,
 		placeholder = '<str>',
 		hidden = false,
 	} = options;
-	const argGroup: ICliArgGroup<string | undefined> = {
+	const argGroup: CliArgGroup<string | undefined> = {
 		hidden,
 		placeholder,
 		required,

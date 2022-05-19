@@ -1,12 +1,12 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliCommandGroup } from '../cli-command-group';
+import { cliCommandGroupFactory } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
 import {
 	dummyArgGroup,
 	DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED,
 } from '../dummy-arg-groups';
-import { CliApi } from '../cli-api';
 import { CLI_USAGE_ERROR, CliUsageError } from '../cli-usage-error';
+import { Cli } from '../cli';
 
 const commandWithNoArguments = CliCommand({
 	name: 'command-with-no-args',
@@ -39,7 +39,7 @@ const commandWithDoubleDashArgGroup = CliCommand({
 	},
 });
 
-const root = CliCommandGroup({
+const root = cliCommandGroupFactory({
 	name: 'cli',
 	subcommands: [
 		commandWithNoArguments,
@@ -49,13 +49,14 @@ const root = CliCommandGroup({
 	],
 });
 
-const cliApi = CliApi(root);
+const cli = Cli.create(root);
+const cliApi = async (args: string[]) => await cli.api(args);
 
-describe(CliApi.name, () => {
+describe(Cli.prototype.api.name, () => {
 	it(`throws ${CLI_USAGE_ERROR} if --help is passed among the arguments of on an otherwise valid invocation`, async () => {
-		const exception = await runAndCatch(CliApi(commandWithNoArguments), [
-			'--help',
-		]);
+		const exception = await runAndCatch(async () => {
+			await Cli.create(commandWithNoArguments).api(['--help']);
+		});
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toBeFalsy();
 	});

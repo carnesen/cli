@@ -18,9 +18,10 @@
 		"release": "./scripts/release.sh",
 		"serve-docs": "browser-sync docs",
 		"test": "./scripts/test.sh",
-		"unit-test": "jest src"
+		"type-check": "tsc --noEmit",
+		"unit-test": "jest src",
+		"unit-test:watch": "npm run unit-test -- --watch"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@carnesen/coded-error": "0.4.0",
 		"@carnesen/dev": "0.3.1",

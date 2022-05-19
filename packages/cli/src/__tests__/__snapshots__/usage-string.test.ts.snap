@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UsageString Creates a usage string for a command group 1`] = `
+exports[`usageFactory Creates a usage string for a command group 1`] = `
 "Usage: cli <subcommand> ...
 
 This is a CLI
@@ -10,7 +10,7 @@ Subcommands:
 echo"
 `;
 
-exports[`UsageString Creates a usage string for a command without a parent 1`] = `
+exports[`usageFactory Creates a usage string for a command without a parent 1`] = `
 "Usage: echo [<word>] [<named args>] -- <str>
 
 Positional arguments:
@@ -26,7 +26,7 @@ Named arguments:
 <str> : Another word"
 `;
 
-exports[`UsageString Creates a usage string for a command without a parent command group 1`] = `
+exports[`usageFactory Creates a usage string for a command without a parent command group 1`] = `
 "Usage: cli echo [<word>] [<named args>] -- <str>
 
 Positional arguments:
@@ -42,7 +42,7 @@ Named arguments:
 <str> : Another word"
 `;
 
-exports[`UsageString Does not write usage for named argGroups if there are none 1`] = `
+exports[`usageFactory Does not write usage for named argGroups if there are none 1`] = `
 "Usage: foo
 "
 `;

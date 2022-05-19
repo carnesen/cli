@@ -1,43 +1,43 @@
-import { ICliArgGroup } from '../cli-arg-group';
+import { CliArgGroup } from '../cli-arg-group';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliNumberArrayArgGroup`]] */
-export interface ICliNumberArrayArgGroupOptions {
-	/** See [[`ICliArgGroup.description`]] */
+export type CliNumberArrayArgGroupOptions = {
+	/** See [[`CliArgGroup.description`]] */
 	description?: string;
 
-	/** See [[`ICliArgGroup.required`]] */
+	/** See [[`CliArgGroup.required`]] */
 	required?: boolean;
 
-	/** See [[`ICliArgGroup.placeholder`]] defaulting to "\<num0\> [...]" */
+	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<num0\> [...]" */
 	placeholder?: string;
 
-	/** See [[`ICliArgGroup.hidden`]] */
+	/** See [[`CliArgGroup.hidden`]] */
 	hidden?: boolean;
-}
+};
 
-/** A factory for required `number[]`-valued [[`ICliArgGroup`]]s */
+/** A factory for required `number[]`-valued [[`CliArgGroup`]]s */
 function CliNumberArrayArgGroup(
-	options: ICliNumberArrayArgGroupOptions & { required: true },
-): ICliArgGroup<number[], true>;
+	options: CliNumberArrayArgGroupOptions & { required: true },
+): CliArgGroup<number[], true>;
 
-/** A factory for optional `number[] | undefined`-valued [[`ICliArgGroup`]]s */
+/** A factory for optional `number[] | undefined`-valued [[`CliArgGroup`]]s */
 function CliNumberArrayArgGroup(
-	options?: ICliNumberArrayArgGroupOptions,
-): ICliArgGroup<number[] | undefined, boolean>;
+	options?: CliNumberArrayArgGroupOptions,
+): CliArgGroup<number[] | undefined, boolean>;
 
 // Implementation
 function CliNumberArrayArgGroup(
-	options: ICliNumberArrayArgGroupOptions = {},
-): ICliArgGroup<number[] | undefined> {
+	options: CliNumberArrayArgGroupOptions = {},
+): CliArgGroup<number[] | undefined> {
 	const {
 		required = false,
 		description,
 		placeholder = '<num0> [...]',
 		hidden = false,
 	} = options;
-	const argGroup: ICliArgGroup<number[] | undefined> = {
+	const argGroup: CliArgGroup<number[] | undefined> = {
 		required,
 		hidden,
 		parse(args) {

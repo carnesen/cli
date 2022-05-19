@@ -1,11 +1,11 @@
-import { ICliTree, TCliRoot } from './cli-tree';
+import { CliTree, CliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { CLI_COMMAND_GROUP } from './cli-command-group';
 
 /**
  * The result of calling [[`findCliTree`]]
  */
-export interface IFindCliTreeResult extends ICliTree {
+export interface IFindCliTreeResult extends CliTree {
 	/** Passed args past those used during navigation */
 	args: string[];
 	/** An error message describing why navigation stopped */
@@ -18,10 +18,7 @@ export interface IFindCliTreeResult extends ICliTree {
  * @param args - An array of command-line arguments
  * @returns The result of the search
  */
-export function findCliTree(
-	root: TCliRoot,
-	args: string[],
-): IFindCliTreeResult {
+export function findCliTree(root: CliRoot, args: string[]): IFindCliTreeResult {
 	return recursiveFindCliTree({ current: root, parents: [], args });
 }
 

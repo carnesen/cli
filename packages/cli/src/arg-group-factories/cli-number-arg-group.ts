@@ -1,43 +1,43 @@
-import { ICliArgGroup } from '../cli-arg-group';
+import { CliArgGroup } from '../cli-arg-group';
 import { convertToNumber } from '../util';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliNumberArgGroup`]] */
-export interface ICliNumberArgGroupOptions {
-	/** See [[`ICliArgGroup.required`]] */
+export type CliNumberArgGroupOptions = {
+	/** See [[`CliArgGroup.required`]] */
 	required?: boolean;
 
-	/** See [[`ICliArgGroup.description`]] */
+	/** See [[`CliArgGroup.description`]] */
 	description?: string;
 
-	/** See [[`ICliArgGroup.placeholder`]] defaulting to "\<num\>" */
+	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<num\>" */
 	placeholder?: string;
 
-	/** See [[`ICliArgGroup.description`]] */
+	/** See [[`CliArgGroup.description`]] */
 	hidden?: boolean;
-}
+};
 
-/** A factory for `number`-valued required [[`ICliArgGroup`]]s */
+/** A factory for `number`-valued required [[`CliArgGroup`]]s */
 function CliNumberArgGroup(
-	options: ICliNumberArgGroupOptions & { required: true },
-): ICliArgGroup<number, true>;
+	options: CliNumberArgGroupOptions & { required: true },
+): CliArgGroup<number, true>;
 
-/** A factory for `number | undefined`-valued optional [[`ICliArgGroup`]]s */
+/** A factory for `number | undefined`-valued optional [[`CliArgGroup`]]s */
 function CliNumberArgGroup(
-	options?: ICliNumberArgGroupOptions,
-): ICliArgGroup<number | undefined, boolean>;
+	options?: CliNumberArgGroupOptions,
+): CliArgGroup<number | undefined, boolean>;
 
 // Implementation
 function CliNumberArgGroup(
-	config: ICliNumberArgGroupOptions = {},
-): ICliArgGroup<number | undefined> {
+	config: CliNumberArgGroupOptions = {},
+): CliArgGroup<number | undefined> {
 	const {
 		required = false,
 		description,
 		placeholder = '<num>',
 		hidden = false,
 	} = config;
-	const argGroup: ICliArgGroup<number | undefined> = {
+	const argGroup: CliArgGroup<number | undefined> = {
 		required,
 		hidden,
 		parse(args) {

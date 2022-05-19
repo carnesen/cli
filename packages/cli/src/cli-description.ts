@@ -1,18 +1,18 @@
-import { ICliAnsi } from './cli-ansi';
+import { CliColor } from './cli-color';
 
-export interface ICliDescriptionFunctionInput {
-	ansi: ICliAnsi;
+export interface CliDescriptionFunctionInput {
+	ansi: CliColor;
 }
 
-export type TCliDescriptionFunction = (
-	input: ICliDescriptionFunctionInput,
+export type CliDescriptionFunction = (
+	input: CliDescriptionFunctionInput,
 ) => string;
 
-export type TCliDescription = undefined | string | TCliDescriptionFunction;
+export type AnyCliDescription = undefined | string | CliDescriptionFunction;
 
 export function DescriptionText(
-	description: TCliDescription,
-	input: ICliDescriptionFunctionInput,
+	description: AnyCliDescription,
+	input: CliDescriptionFunctionInput,
 ): string {
 	let text = '';
 	switch (typeof description) {

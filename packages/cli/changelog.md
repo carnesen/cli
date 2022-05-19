@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+- Deprecation: Use `CliOptions` instead of `ICliOptions`
+
 ## carnesen-cli-0.7.1 (2022-05-10)
 
 - Breaking: Drop official support for Node.js 12

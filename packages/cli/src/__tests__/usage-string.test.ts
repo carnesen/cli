@@ -1,11 +1,11 @@
 import { runAndCatchSync } from '@carnesen/run-and-catch';
-import { UsageString } from '../usage-string';
-import { CliCommandGroup } from '../cli-command-group';
+import { usageFactory } from '../usage-string';
+import { cliCommandGroupFactory } from '../cli-command-group';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 import { CliCommand } from '../cli-command';
-import { ICliTree } from '../cli-tree';
-import { IUsageOptions } from '../usage-options';
-import { CliAnsi } from '../cli-ansi';
+import { CliTree } from '../cli-tree';
+import { UsageOptions } from '../usage-options';
+import { cliColorFactory } from '../cli-color-factory';
 
 const DESCRIPTION = 'A string message please';
 
@@ -33,21 +33,21 @@ const current = CliCommand({
 	},
 });
 
-const commandGroup = CliCommandGroup({
+const commandGroup = cliCommandGroupFactory({
 	name: 'cli',
 	description: 'This is a CLI',
 	subcommands: [current],
 });
 
-const options: IUsageOptions = {
-	ansi: CliAnsi(),
+const options: UsageOptions = {
+	color: cliColorFactory(),
 	columns: 100,
 	indentation: '',
 };
 
-describe(UsageString.name, () => {
+describe(usageFactory.name, () => {
 	it('Creates a usage string for a command group', () => {
-		const usageString = UsageString(
+		const usageString = usageFactory(
 			{ current: commandGroup, parents: [] },
 			options,
 		);
@@ -55,9 +55,9 @@ describe(UsageString.name, () => {
 	});
 
 	it('Creates a usage string for a command without a parent', () => {
-		const usageString = UsageString(
+		const usageString = usageFactory(
 			{
-				current: current as ICliTree['current'],
+				current: current as CliTree['current'],
 				parents: [],
 			},
 			options,
@@ -67,9 +67,9 @@ describe(UsageString.name, () => {
 	});
 
 	it('Creates a usage string for a command without a parent command group', () => {
-		const usageString = UsageString(
+		const usageString = usageFactory(
 			{
-				current: current as ICliTree['current'],
+				current: current as CliTree['current'],
 				parents: [commandGroup],
 			},
 			options,
@@ -79,7 +79,7 @@ describe(UsageString.name, () => {
 
 	it('Does not write usage for named argGroups if there are none', () => {
 		const fooCommand = CliCommand({ name: 'foo', action() {} });
-		const usageString = UsageString(
+		const usageString = usageFactory(
 			{ current: fooCommand, parents: [] },
 			options,
 		);
@@ -88,7 +88,7 @@ describe(UsageString.name, () => {
 
 	it('Throws "unexpected kind" if passed an object of unknown kind', () => {
 		const exception = runAndCatchSync(
-			UsageString,
+			usageFactory,
 			{ current: {} } as any,
 			{} as any,
 		);

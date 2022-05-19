@@ -1,13 +1,13 @@
 import {
 	DescriptionText,
-	TCliDescription,
-	ICliDescriptionFunctionInput,
+	AnyCliDescription,
+	CliDescriptionFunctionInput,
 } from '../cli-description';
-import { CliAnsi } from '../cli-ansi';
+import { cliColorFactory } from '../cli-color-factory';
 
 const data: {
 	title: string;
-	description: TCliDescription;
+	description: AnyCliDescription;
 	text: string;
 }[] = [
 	{
@@ -36,9 +36,9 @@ const data: {
 	},
 ];
 
-const input: ICliDescriptionFunctionInput = {
+const input: CliDescriptionFunctionInput = {
 	ansi: {
-		...CliAnsi(false),
+		...cliColorFactory(false),
 		red() {
 			return 'bar';
 		},

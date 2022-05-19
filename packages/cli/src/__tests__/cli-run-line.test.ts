@@ -1,11 +1,9 @@
 import { CliCommand } from '../cli-command';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
-import { CliRunLine } from '../cli-run-line';
-import { CliApi } from '../cli-api';
-import { CliRun } from '../cli-run';
-import { ICliOptions } from '../cli-options';
+import { CliOptions } from '../cli-options';
+import { Cli } from '../cli';
 
-describe(CliRunLine.name, () => {
+describe(Cli.prototype.runLine.name, () => {
 	it('has a runLine method that parses the command-line', async () => {
 		const command = CliCommand({
 			name: 'cli',
@@ -14,10 +12,8 @@ describe(CliRunLine.name, () => {
 				expect(str).toBe('foo');
 			},
 		});
-		const options: ICliOptions = { done: () => {} };
-		const api = CliApi(command, options);
-		const run = CliRun(api, options);
-		const exitCode = await CliRunLine(run, options)('"foo"');
+		const options: CliOptions = { done: () => {} };
+		const exitCode = await Cli.create(command, options).runLine('"foo"');
 		expect(exitCode).toBe(0);
 	});
 
@@ -27,16 +23,14 @@ describe(CliRunLine.name, () => {
 			name: 'cli',
 			action() {},
 		});
-		const options: ICliOptions = {
+		const options: CliOptions = {
 			done: () => {},
-			console: {
+			logger: {
 				error: spy,
 				log: jest.fn(),
 			},
 		};
-		const api = CliApi(command, options);
-		const run = CliRun(api, options);
-		const exitCode = await CliRunLine(run, options)('"foo');
+		const exitCode = await Cli.create(command, options).runLine('"foo');
 		expect(exitCode).not.toBe(0);
 		expect(spy).toHaveBeenCalledWith('Error: Unterminated "-quoted string');
 	});
@@ -48,18 +42,16 @@ describe(CliRunLine.name, () => {
 			action() {},
 		});
 		const error = new Error();
-		const options: ICliOptions = {
+		const options: CliOptions = {
 			done: () => {
 				throw error;
 			},
-			console: {
+			logger: {
 				error: spy,
 				log: jest.fn(),
 			},
 		};
-		const api = CliApi(command, options);
-		const run = CliRun(api, options);
-		const exitCode = await CliRunLine(run, options)('"');
+		const exitCode = await Cli.create(command, options).runLine('"');
 		expect(exitCode).toBe(1);
 		expect(spy).toHaveBeenCalledWith('"done" callback threw');
 		expect(spy).toHaveBeenCalledWith(error);
@@ -70,9 +62,7 @@ describe(CliRunLine.name, () => {
 			name: 'cli',
 			action() {},
 		});
-		const api = CliApi(command);
-		const run = CliRun(api);
-		CliRunLine(run);
+		Cli.create(command);
 	});
 
 	it('line defaults to empty string', () => {
@@ -80,9 +70,7 @@ describe(CliRunLine.name, () => {
 			name: 'cli',
 			action() {},
 		});
-		const options: ICliOptions = { done() {} };
-		const api = CliApi(command, options);
-		const run = CliRun(api, options);
-		CliRunLine(run, options)();
+		const options: CliOptions = { done() {} };
+		Cli.create(command, options).runLine();
 	});
 });

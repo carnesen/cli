@@ -1,4 +1,4 @@
-import { CliAnsi } from '../cli-ansi';
+import { cliColorFactory } from '../cli-color-factory';
 import { stripAnsi } from '../strip-ansi';
 
 const METHOD_NAMES = [
@@ -8,10 +8,10 @@ const METHOD_NAMES = [
 	'blue' as const,
 ];
 
-describe(CliAnsi.name, () => {
+describe(cliColorFactory.name, () => {
 	it(`has methods ${METHOD_NAMES}`, () => {
 		for (const enabled of [true, false, undefined]) {
-			const ansi = CliAnsi(enabled);
+			const ansi = cliColorFactory(enabled);
 			for (const methodName of METHOD_NAMES) {
 				expect(typeof ansi[methodName]).toBe('function');
 			}
@@ -19,14 +19,14 @@ describe(CliAnsi.name, () => {
 	});
 
 	it(`returns the provided string if enabled=false`, () => {
-		const ansi = CliAnsi(false);
+		const ansi = cliColorFactory(false);
 		for (const methodName of METHOD_NAMES) {
 			expect(ansi[methodName]('foo')).toBe('foo');
 		}
 	});
 
 	it(`returns a wrapped string if enabled=true`, () => {
-		const ansi = CliAnsi(true);
+		const ansi = cliColorFactory(true);
 		for (const methodName of METHOD_NAMES) {
 			const value = ansi[methodName]('foo');
 			expect(value.includes('\u001b')).toBe(true);

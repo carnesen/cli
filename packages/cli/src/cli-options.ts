@@ -1,9 +1,8 @@
-import { ICliConsole } from './cli-console';
-import { ICliProcess } from './cli-process';
+import { CliColor } from './cli-color';
+import { CliLogger } from './cli-logger';
+import { CliProcess } from './cli-process';
 
-/**
- * A command-line interface (CLI) created by [[`Cli`]]
- */
+/** A command-line interface (CLI) created by [[`Cli`]] */
 export interface ICli {
 	/**
 	 * Programmatic interface for the CLI, useful for unit testing
@@ -28,24 +27,30 @@ export interface ICli {
 	runLine(line?: string): Promise<number>;
 }
 
-/**
- * Options for [[`Cli`]]
- * */
-export interface ICliOptions {
-	/**
-	 * Enable/disable ANSI text decoration. Defaults to `process.stdout.isTTY &&
-	 * process.stderr.isTTY`
-	 * */
+/** Options for [[`Cli`]] */
+export type CliOptions = {
+	/** Enable/disable ANSI text decoration
+	 * @default process.stdout.isTTY && process.stderr.isTTY */
 	ansi?: boolean;
 
-	/**
-	 * Number of terminal columns. Defaults to `process.stdout.columns || 100`
-	 * */
+	/** Text coloring methods. Takes precedence over the `ansi` option
+	 * @default CliDefaultColor */
+	color?: CliColor;
+
+	/** Number of terminal columns
+	 * @default process.stdout.columns || 100 */
 	columns?: number;
 
-	/** `console.log` is called on the result, `console.error` on error */
-	console?: ICliConsole;
+	/** @deprecated Use `logger` instead */
+	console?: CliLogger;
 
 	/** Called after the command has completed. Defaults to `process.exit` */
-	done?: ICliProcess['exit'];
-}
+	done?: CliProcess['exit'];
+
+	/** `CliLogger` object to use for the CLI. Defaults to the global `console`
+	 * object. The CLI runner calls `logger.log` on the command's `action` return
+	 * value if there is one. The CLI runner calls `logger.error` on the
+	 * exception if one is thrown. The `logger` is injected into the command
+	 * `action` too. */
+	logger?: CliLogger;
+};

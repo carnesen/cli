@@ -1,4 +1,4 @@
-import { TCliDescriptionFunction } from './cli-description';
+import { CliDescriptionFunction } from './cli-description';
 
-export const CliWordMark: TCliDescriptionFunction = ({ ansi }) =>
+export const CliWordMark: CliDescriptionFunction = ({ ansi }) =>
 	ansi.bold('@carnesen/cli');

@@ -1,6 +1,6 @@
 import { CliCommand } from '../cli-command';
-import { UsageForCommand } from '../usage-for-command';
-import { CliAnsi } from '../cli-ansi';
+import { usageForCommand } from '../usage-for-command';
+import { cliColorFactory } from '../cli-color-factory';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
 const argGroup = CliStringArgGroup({
@@ -19,12 +19,12 @@ const command = CliCommand({
 	description: 'La da dee',
 });
 
-describe(UsageForCommand.name, () => {
+describe(usageForCommand.name, () => {
 	it('Generates a usage string for a command', () => {
 		const indentation = '   ';
-		const lines = UsageForCommand(
+		const lines = usageForCommand(
 			{ current: command as any, parents: [] },
-			{ columns: 100, indentation, ansi: CliAnsi() },
+			{ columns: 100, indentation, color: cliColorFactory() },
 		);
 		expect(lines.length).toBe(15);
 		expect(lines[0]).toMatch(`-- ${argGroup.placeholder}`);

@@ -1,6 +1,6 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { findCliTree } from '../find-cli-tree';
-import { CliCommandGroup } from '../cli-command-group';
+import { cliCommandGroupFactory } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
 
 const command = CliCommand({
@@ -10,7 +10,7 @@ const command = CliCommand({
 	},
 });
 
-const commandGroup = CliCommandGroup({
+const commandGroup = cliCommandGroupFactory({
 	name: 'cli',
 	subcommands: [command],
 });

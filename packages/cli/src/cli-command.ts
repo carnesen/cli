@@ -1,64 +1,66 @@
-import { TValueFromCliArgGroup, ICliArgGroup } from './cli-arg-group';
-import { ICliConsole } from './cli-console';
-import { ICliAnsi } from './cli-ansi';
-import { TCliDescription } from './cli-description';
+import { TValueFromCliArgGroup, CliArgGroup } from './cli-arg-group';
+import { CliLogger } from './cli-logger';
+import { CliColor } from './cli-color';
+import { AnyCliDescription } from './cli-description';
 
 /** "kind" of a [[`ICliCommand`]] */
 export const CLI_COMMAND = 'CLI_COMMAND';
 
 /** Options for [[`CliCommand`]] */
-export interface ICliCommandOptions<
-	TPositionalArgGroup extends ICliArgGroup = ICliArgGroup,
-	TNamedArgGroups extends {
-		[name: string]: ICliArgGroup;
+export type CliCommandOptions<
+	PositionalArgGroup extends CliArgGroup = CliArgGroup,
+	NamedArgGroups extends {
+		[name: string]: CliArgGroup;
 	} = {
-		[name: string]: ICliArgGroup;
+		[name: string]: CliArgGroup;
 	},
-	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup,
-> {
+	DoubleDashArgGroup extends CliArgGroup = CliArgGroup,
+> = {
 	/** Identifier for this command in command-line usage */
 	name: string;
 
 	/** Function or async function that implements the command */
 	action: (input: {
-		positionalValue: TValueFromCliArgGroup<TPositionalArgGroup>;
+		ansi: CliColor;
+		/** @deprecated Use `logger` instead */
+		console: CliLogger;
+		doubleDashValue: TValueFromCliArgGroup<DoubleDashArgGroup>;
+		logger: CliLogger;
 		namedValues: {
-			[K in keyof TNamedArgGroups]: TValueFromCliArgGroup<TNamedArgGroups[K]>;
+			[K in keyof NamedArgGroups]: TValueFromCliArgGroup<NamedArgGroups[K]>;
 		};
-		doubleDashValue: TValueFromCliArgGroup<TDoubleDashArgGroup>;
-		console: ICliConsole;
-		ansi: ICliAnsi;
+		positionalValue: TValueFromCliArgGroup<PositionalArgGroup>;
 	}) => any;
 
-	/** A [[`ICliArgGroup`]] for the arguments before the first separator argument */
-	positionalArgGroup?: TPositionalArgGroup;
+	/** A [[`CliArgGroup`]] for the arguments before the first separator argument */
+	positionalArgGroup?: PositionalArgGroup;
 
-	/** A [[`ICliArgGroup`]] for the arguments passed as "--name value" */
-	namedArgGroups?: TNamedArgGroups;
+	/** A [[`CliArgGroup`]] for the arguments passed as "--name value" */
+	namedArgGroups?: NamedArgGroups;
 
-	/** A [[`ICliArgGroup`]] for the arguments after a lone "--" */
-	doubleDashArgGroup?: TDoubleDashArgGroup;
+	/** A [[`CliArgGroup`]] for the arguments after a lone "--" */
+	doubleDashArgGroup?: DoubleDashArgGroup;
 
 	/** A sentence or two about this command for command-line usage */
-	description?: TCliDescription;
+	description?: AnyCliDescription;
 
 	/** If `true`, don't show this command in command-line usage */
 	hidden?: boolean;
-}
+};
 
 /** An object that defines a CLI command and its arguments */
 export interface ICliCommand<
-	TPositionalArgGroup extends ICliArgGroup = ICliArgGroup,
-	TNamedArgGroups extends {
-		[name: string]: ICliArgGroup;
+	PositionalArgGroup extends CliArgGroup = CliArgGroup,
+	NamedArgGroups extends {
+		[name: string]: CliArgGroup;
 	} = {
-		[name: string]: ICliArgGroup;
+		[name: string]: CliArgGroup;
 	},
-	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup,
-> extends ICliCommandOptions<
-		TPositionalArgGroup,
-		TNamedArgGroups,
-		TDoubleDashArgGroup
+	DoubleDashArgGroup extends CliArgGroup = CliArgGroup,
+> extends CliCommandOptions<
+		PositionalArgGroup,
+		NamedArgGroups,
+		DoubleDashArgGroup
 	> {
 	/** The string literal [[`CLI_COMMAND`]] */
 	kind: typeof CLI_COMMAND;
@@ -66,20 +68,20 @@ export interface ICliCommand<
 
 /** A factory for [[`ICliCommand`]]s */
 export function CliCommand<
-	TPositionalArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>,
-	TNamedArgGroups extends {
-		[name: string]: ICliArgGroup;
+	PositionalArgGroup extends CliArgGroup = CliArgGroup<unknown, false>,
+	NamedArgGroups extends {
+		[name: string]: CliArgGroup;
 	} = {
-		[name: string]: ICliArgGroup;
+		[name: string]: CliArgGroup;
 	},
-	TDoubleDashArgGroup extends ICliArgGroup = ICliArgGroup<unknown, false>,
+	DoubleDashArgGroup extends CliArgGroup = CliArgGroup<unknown, false>,
 >(
-	options: ICliCommandOptions<
-		TPositionalArgGroup,
-		TNamedArgGroups,
-		TDoubleDashArgGroup
+	options: CliCommandOptions<
+		PositionalArgGroup,
+		NamedArgGroups,
+		DoubleDashArgGroup
 	>,
-): ICliCommand<TPositionalArgGroup, TNamedArgGroups, TDoubleDashArgGroup> {
+): ICliCommand<PositionalArgGroup, NamedArgGroups, DoubleDashArgGroup> {
 	return {
 		...options,
 		kind: CLI_COMMAND,

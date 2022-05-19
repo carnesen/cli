@@ -1,5 +1,5 @@
 import { CliUsageError } from './cli-usage-error';
-import { ICliArgGroup } from './cli-arg-group';
+import { CliArgGroup } from './cli-arg-group';
 
 /**
  * Calls the parse method of an ArgGroup
@@ -10,7 +10,7 @@ import { ICliArgGroup } from './cli-arg-group';
  * @returns The result of parse
  */
 export async function parseArgs(
-	argGroup: ICliArgGroup,
+	argGroup: CliArgGroup,
 	args: string[] | undefined,
 	separator: string | undefined,
 ): Promise<any> {

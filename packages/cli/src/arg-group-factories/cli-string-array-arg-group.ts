@@ -1,42 +1,42 @@
-import { ICliArgGroup } from '../cli-arg-group';
+import { CliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliStringArrayArgGroup`]] */
-export interface ICliStringArrayArgGroupOptions {
-	/** See [[`ICliArgGroup.description`]] */
+export type CliStringArrayArgGroupOptions = {
+	/** See [[`CliArgGroup.description`]] */
 	description?: string;
 
-	/** See [[`ICliArgGroup.required`]] */
+	/** See [[`CliArgGroup.required`]] */
 	required?: boolean;
 
-	/** See [[`ICliArgGroup.required`]] */
+	/** See [[`CliArgGroup.required`]] */
 	hidden?: boolean;
 
-	/** See [[`ICliArgGroup.placeholder`]] defaulting to "\<str0\> [...]" */
+	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<str0\> [...]" */
 	placeholder?: string;
-}
+};
 
-/** A factory for required `string[]`-valued [[`ICliArgGroup`]]s */
+/** A factory for required `string[]`-valued [[`CliArgGroup`]]s */
 function CliStringArrayArgGroup(
-	options: ICliStringArrayArgGroupOptions & { required: true },
-): ICliArgGroup<string[], true>;
+	options: CliStringArrayArgGroupOptions & { required: true },
+): CliArgGroup<string[], true>;
 
-/** A factory for optional `string[] | undefined`-valued [[`ICliArgGroup`]]s */
+/** A factory for optional `string[] | undefined`-valued [[`CliArgGroup`]]s */
 function CliStringArrayArgGroup(
-	options?: ICliStringArrayArgGroupOptions,
-): ICliArgGroup<string[] | undefined, boolean>;
+	options?: CliStringArrayArgGroupOptions,
+): CliArgGroup<string[] | undefined, boolean>;
 
 // Implementation
 function CliStringArrayArgGroup(
-	options: ICliStringArrayArgGroupOptions = {},
-): ICliArgGroup<string[] | undefined> {
+	options: CliStringArrayArgGroupOptions = {},
+): CliArgGroup<string[] | undefined> {
 	const {
 		required = false,
 		description,
 		placeholder = '<str0> [...]',
 		hidden = false,
 	} = options;
-	const argGroup: ICliArgGroup<string[] | undefined> = {
+	const argGroup: CliArgGroup<string[] | undefined> = {
 		required,
 		hidden,
 		placeholder,

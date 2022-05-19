@@ -1,26 +1,20 @@
 import { ICliCommandGroup } from './cli-command-group';
 import { ICliCommand } from './cli-command';
-import { ICliArgGroup } from './cli-arg-group';
+import { CliArgGroup } from './cli-arg-group';
 
-/**
- * The root of a command tree
- */
-export type TCliRoot =
+/** Root of a command tree */
+export type CliRoot =
 	| ICliCommandGroup
-	| ICliCommand<ICliArgGroup, any, ICliArgGroup>;
+	| ICliCommand<CliArgGroup, any, CliArgGroup>;
 
-/**
- * Data structure representing a node in a command tree
- * */
-export interface ICliTree {
-	current: TCliRoot;
+/** Data structure representing a node in a command tree */
+export type CliTree = {
+	current: CliRoot;
 	parents: ICliCommandGroup[];
-}
+};
 
-/**
- * Data structure representing a leaf node in a command tree
- * */
-export interface ICliLeaf {
+/** Data structure representing a leaf node in a command tree */
+export type CliLeaf = {
 	current: ICliCommand;
 	parents: ICliCommandGroup[];
-}
+};

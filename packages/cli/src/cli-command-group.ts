@@ -1,32 +1,32 @@
 import { ICliCommand } from './cli-command';
-import { TCliDescription } from './cli-description';
+import { AnyCliDescription } from './cli-description';
 
 /** "kind" of an [[`ICliCommandGroup`]] */
 export const CLI_COMMAND_GROUP = 'CLI_COMMAND_GROUP';
 
 /** Options for [[`CliCommandGroup`]] */
-export interface ICliCommandGroupOptions {
+export type CliCommandGroupOptions = {
 	/** Name of this command group */
 	name: string;
 
 	/** A short description for command-line usage */
-	description?: TCliDescription;
+	description?: AnyCliDescription;
 
 	/** If `true`, hide these commands in command-line usage */
 	hidden?: boolean;
 
 	/** The [[`ICliCommandGroup`]]s and/or [[`ICliCommand`]]s in this group */
 	subcommands: (ICliCommandGroup | ICliCommand<any, any, any>)[];
-}
+};
 
 /**
  * A group of related commands
  */
-export interface ICliCommandGroup extends ICliCommandGroupOptions {
+export type ICliCommandGroup = CliCommandGroupOptions & {
 	/** Used internally for discriminating between [[`ICliCommandGroup`]]'s and
 	 * [[`ICliCommand`]]'s */
 	kind: typeof CLI_COMMAND_GROUP;
-}
+};
 
 /**
  * A factory for [[`ICliCommandGroup`]]s
@@ -37,8 +37,8 @@ export interface ICliCommandGroup extends ICliCommandGroupOptions {
  * const cloudCommandGroup = CliCommandGroup()
  * ```
  */
-export function CliCommandGroup(
-	options: ICliCommandGroupOptions,
+export function cliCommandGroupFactory(
+	options: CliCommandGroupOptions,
 ): ICliCommandGroup {
 	return {
 		...options,

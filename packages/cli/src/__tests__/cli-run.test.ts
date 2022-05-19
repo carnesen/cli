@@ -1,17 +1,17 @@
 import { CodedError } from '@carnesen/coded-error';
-import { CliAnsi } from '../cli-ansi';
-import { CliApi } from '../cli-api';
+import { cliColorFactory } from '../cli-color-factory';
 import { CliCommand } from '../cli-command';
-import { CliConsole } from '../cli-console';
 import { CliUsageError, CLI_USAGE_ERROR } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
-import { ICliOptions } from '../cli-options';
-import { CliRun } from '../cli-run';
-import { CliProcess } from '../cli-process';
+import { CliOptions } from '../cli-options';
+import { cliProcessFactory, getGlobalProcess } from '../cli-process';
+import { CliConsoleLogger } from '../cli-console-logger';
+import { Cli } from '../cli';
+import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
-async function runMocked(action: () => any, options: ICliOptions = {}) {
+async function runMocked(action: () => any, options: CliOptions = {}) {
 	const mockOptions = {
-		console: { log: jest.fn(), error: jest.fn() },
+		logger: { log: jest.fn(), error: jest.fn() },
 		done: jest.fn(),
 	};
 
@@ -20,35 +20,33 @@ async function runMocked(action: () => any, options: ICliOptions = {}) {
 		action,
 	});
 
-	const api = CliApi(command, { ...mockOptions, ...options });
+	const cli = Cli.create(command, { ...mockOptions, ...options });
 
-	const cliRun = CliRun(api, { ...mockOptions, ...options });
-
-	await cliRun([]);
+	await cli.run([]);
 
 	expect(mockOptions.done.mock.calls.length).toBe(1);
 	expect(mockOptions.done.mock.calls[0].length).toBe(1);
 	const exitCode = mockOptions.done.mock.calls[0][0];
 
 	expect(
-		mockOptions.console.error.mock.calls.length +
-			mockOptions.console.log.mock.calls.length,
+		mockOptions.logger.error.mock.calls.length +
+			mockOptions.logger.log.mock.calls.length,
 	).toBeLessThanOrEqual(1);
 	let errorMessage: any;
 	let logMessage: any;
-	if (mockOptions.console.log.mock.calls.length === 1) {
-		expect(mockOptions.console.log.mock.calls.length).toBe(1);
-		[[logMessage]] = mockOptions.console.log.mock.calls;
+	if (mockOptions.logger.log.mock.calls.length === 1) {
+		expect(mockOptions.logger.log.mock.calls.length).toBe(1);
+		[[logMessage]] = mockOptions.logger.log.mock.calls;
 	}
-	if (mockOptions.console.error.mock.calls.length === 1) {
-		expect(mockOptions.console.error.mock.calls.length).toBe(1);
-		[[errorMessage]] = mockOptions.console.error.mock.calls;
+	if (mockOptions.logger.error.mock.calls.length === 1) {
+		expect(mockOptions.logger.error.mock.calls.length).toBe(1);
+		[[errorMessage]] = mockOptions.logger.error.mock.calls;
 	}
 	return { exitCode, errorMessage, logMessage };
 }
 
-describe(CliRun.name, () => {
-	it('exits 0 and does not console.log if action succeeds', async () => {
+describe(Cli.prototype.run.name, () => {
+	it('exits 0 and does not logger.log if action succeeds', async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			// do nothing
 		});
@@ -57,14 +55,14 @@ describe(CliRun.name, () => {
 		expect(logMessage).toBe(undefined);
 	});
 
-	it('exits 0 and console.logs resolved value if action succeeds', async () => {
+	it("exits 0 and logger.log's resolved value if action succeeds", async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => 'foo');
 		expect(exitCode).toBe(0);
 		expect(errorMessage).toBe(undefined);
 		expect(logMessage).toBe('foo');
 	});
 
-	it('exits 1 and console.errors "non-truthy exception" if action throws a non-truthy exception', async () => {
+	it('exits 1 and logger.error\'s "non-truthy exception" if action throws a non-truthy exception', async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			// eslint-disable-next-line no-throw-literal
 			throw '';
@@ -74,7 +72,7 @@ describe(CliRun.name, () => {
 		expect(logMessage).toBe(undefined);
 	});
 
-	it('exits 1 and console.errors a usage string if action throws a UsageError', async () => {
+	it("exits 1 and logger.error's a usage string if action throws a UsageError", async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			throw new CliUsageError();
 		});
@@ -91,12 +89,12 @@ describe(CliRun.name, () => {
 		expect(errorMessage).toMatch('Error');
 	});
 
-	it('exits 1 and console.errors a red error message if action throws a TerseError', async () => {
+	it("exits 1 and logger.error's a red error message if action throws a TerseError", async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			throw new CliTerseError('foo');
 		});
 		expect(exitCode).toBe(1);
-		expect(errorMessage).toMatch(CliAnsi().red('Error:'));
+		expect(errorMessage).toMatch(cliColorFactory().red('Error:'));
 		expect(errorMessage).toMatch('foo');
 		expect(logMessage).toBe(undefined);
 	});
@@ -108,11 +106,11 @@ describe(CliRun.name, () => {
 			},
 			{ ansi: false },
 		);
-		expect(errorMessage).not.toMatch(CliAnsi(true).red('Error:'));
+		expect(errorMessage).not.toMatch(cliColorFactory(true).red('Error:'));
 		expect(errorMessage).toMatch('Error:');
 	});
 
-	it('exits 1 and console.errors the full error if action throws a TerseError without a message', async () => {
+	it("exits 1 and logger.error's the full error if action throws a TerseError without a message", async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			throw new CliTerseError('');
 		});
@@ -130,7 +128,7 @@ describe(CliRun.name, () => {
 		expect(exitCode).toBe(123);
 	});
 
-	it('console.errors any other error thrown and exits 1', async () => {
+	it("logger.error's any other error thrown and exits 1", async () => {
 		const error = new Error();
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			throw error;
@@ -150,12 +148,12 @@ describe(CliRun.name, () => {
 				// do nothing
 			},
 		});
-		const exitCode = await CliRun(CliApi(command))([]);
+		const exitCode = await Cli.create(command).run([]);
 		expect(mockExit).toHaveBeenCalledWith(0);
 		expect(exitCode).toBe(0);
 	});
 
-	it(`console.errors an exception that has code=${CLI_USAGE_ERROR} but tree=undefined`, async () => {
+	it(`logger.error's an exception that has code=${CLI_USAGE_ERROR} but tree=undefined`, async () => {
 		const command = CliCommand({
 			name: 'cli',
 			action() {
@@ -164,17 +162,16 @@ describe(CliRun.name, () => {
 		});
 		const spy = jest.fn();
 		const codedError = new CodedError('Ah!', CLI_USAGE_ERROR);
-		const options: ICliOptions = {
+		const options: CliOptions = {
 			done: () => {},
-			console: {
+			logger: {
 				log() {
 					throw codedError;
 				},
 				error: spy,
 			},
 		};
-		const cliRun = CliRun(CliApi(command, options), options);
-		const exitCode = await cliRun([]);
+		const exitCode = await Cli.create(command, options).run([]);
 		expect(exitCode).not.toBe(0);
 		expect(spy).toHaveBeenCalledWith(codedError);
 	});
@@ -188,38 +185,47 @@ describe(CliRun.name, () => {
 		});
 		const spy = jest.fn();
 		const error = new Error('Ah!');
-		const options: ICliOptions = {
+		const options: CliOptions = {
 			done: () => {
 				throw error;
 			},
-			console: {
+			logger: {
 				log() {
 					// nothing
 				},
 				error: spy,
 			},
 		};
-		const cliRun = CliRun(CliApi(command, options), options);
-		const exitCode = await cliRun([]);
+		const exitCode = await Cli.create(command, options).run([]);
 		expect(exitCode).toBe(0);
 		expect(spy).toHaveBeenCalledWith(error);
 	});
 
 	it(`sets args to process.argv.slice(2) by default`, async () => {
 		const spy = jest.fn();
-		const options: ICliOptions = {
+		const command = CliCommand({
+			name: 'whatever',
+			positionalArgGroup: CliStringArgGroup(),
+			action({ positionalValue }) {
+				return positionalValue;
+			},
+		});
+		const options: CliOptions = {
 			done: () => {
 				// nothing
 			},
-			console: {
+			logger: {
 				log: spy,
-				error: CliConsole().error,
+				error: () => {},
 			},
 		};
-		const cliRun = CliRun((args) => Promise.resolve(args), options);
-		const exitCode = await cliRun();
+		const cli = Cli.create(command, options);
+		const globalProcess = getGlobalProcess();
+		const originalArgv = globalProcess.argv;
+		globalProcess.argv = ['ignored', 'also ignored', 'foo bar baz'];
+		const exitCode = await cli.run();
 		expect(exitCode).toBe(0);
-		const cliProcess = CliProcess();
-		expect(spy).toHaveBeenCalledWith(cliProcess.argv.slice(2));
+		expect(spy).toHaveBeenCalledWith('foo bar baz');
+		globalProcess.argv = originalArgv;
 	});
 });

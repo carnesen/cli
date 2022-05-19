@@ -1,84 +1,178 @@
-/**
- * This module is the main entrypoint for the **@carnesen/cli** package
- */
+/** This module is the main entrypoint for the **@carnesen/cli** package */
 
+//
 // Command factory
-export {
-	CliCommand,
-	ICliCommand,
-	ICliCommandOptions,
-	CLI_COMMAND,
-} from './cli-command';
+//
+export { CliCommand, ICliCommand, CLI_COMMAND } from './cli-command';
+import { CliCommandOptions } from './cli-command';
+/** @deprecated Use `CliCommandOptions` */
+export type ICliCommandOptions = CliCommandOptions;
+export { CliCommandOptions };
 
+//
 // Command-line interface (CLI) factory
-export { Cli } from './cli';
-export { ICli, ICliOptions } from './cli-options';
+//
+// TODO
+// export { cliFactory as Cli } from './cli';
+import { CliOptions } from './cli-options';
+/** @deprecated Use `CliOptions` instead */
+export type ICliOptions = CliOptions;
+export { CliOptions };
 
+export { ICli } from './cli-options';
+
+//
 // Command group factory
+//
 export {
-	CliCommandGroup,
+	cliCommandGroupFactory as CliCommandGroup,
 	ICliCommandGroup,
-	ICliCommandGroupOptions,
+	CliCommandGroupOptions as ICliCommandGroupOptions,
 	CLI_COMMAND_GROUP,
 } from './cli-command-group';
 
+//
 // Argument group factories
-export {
-	CliFlagArgGroup,
-	ICliFlagArgGroupOptions,
-} from './arg-group-factories/cli-flag-arg-group';
-export {
-	CliJsonArgGroup,
-	ICliJsonArgGroupOptions,
-} from './arg-group-factories/cli-json-arg-group';
-export {
-	CliNumberArgGroup,
-	ICliNumberArgGroupOptions,
-} from './arg-group-factories/cli-number-arg-group';
-export {
-	CliNumberArrayArgGroup,
-	ICliNumberArrayArgGroupOptions,
-} from './arg-group-factories/cli-number-array-arg-group';
-export {
-	CliStringChoiceArgGroup,
-	ICliStringChoiceArgGroupOptions,
+//
+
+// boolean flag
+export { CliFlagArgGroup } from './arg-group-factories/cli-flag-arg-group';
+import { CliFlagArgGroupOptions } from './arg-group-factories/cli-flag-arg-group';
+/** @deprecated Use `CliFlagArgGroupOptions` */
+export type ICliFlagArgGroupOptions = CliFlagArgGroupOptions;
+export { CliFlagArgGroupOptions };
+
+// JSON
+export { CliJsonArgGroup } from './arg-group-factories/cli-json-arg-group';
+import { CliJsonArgGroupOptions } from './arg-group-factories/cli-json-arg-group';
+/** @deprecated Use `CliJsonArgGroupOptions` */
+export type ICliJsonArgGroupOptions = CliJsonArgGroupOptions;
+export { CliJsonArgGroupOptions };
+
+// number
+export { CliNumberArgGroup } from './arg-group-factories/cli-number-arg-group';
+import { CliNumberArgGroupOptions } from './arg-group-factories/cli-number-arg-group';
+/** @deprecated Use `CliNumberArgGroupOptions` */
+export type ICliNumberArgGroupOptions = CliNumberArgGroupOptions;
+export { CliNumberArgGroupOptions };
+
+// number array
+export { CliNumberArrayArgGroup } from './arg-group-factories/cli-number-array-arg-group';
+import { CliNumberArrayArgGroupOptions } from './arg-group-factories/cli-number-array-arg-group';
+/** @deprecated Use `CliNumberArrayArgGroupOptions` */
+export type ICliNumberArrayArgGroupOptions = CliNumberArrayArgGroupOptions;
+export { CliNumberArrayArgGroupOptions };
+
+// string choice (literal union)
+export { CliStringChoiceArgGroup } from './arg-group-factories/cli-string-choice-arg-group';
+import {
+	AnyCliStringChoices,
+	CliStringChoiceArgGroupOptions,
 } from './arg-group-factories/cli-string-choice-arg-group';
-export {
-	CliStringArgGroup,
-	ICliStringArgGroupOptions,
-} from './arg-group-factories/cli-string-arg-group';
-export {
-	CliStringArrayArgGroup,
-	ICliStringArrayArgGroupOptions,
-} from './arg-group-factories/cli-string-array-arg-group';
+/** @deprecated Use `CliStringChoiceArgGroupOptions` */
+export type ICliStringChoiceArgGroupOptions<
+	Choices extends AnyCliStringChoices,
+> = CliStringChoiceArgGroupOptions<Choices>;
+export { AnyCliStringChoices, CliStringChoiceArgGroupOptions };
 
-// The rest of the exports are advanced features
+// string
+export { CliStringArgGroup } from './arg-group-factories/cli-string-arg-group';
+import { CliStringArgGroupOptions } from './arg-group-factories/cli-string-arg-group';
+/** @deprecated Use `CliStringArgGroupOptions` */
+export type ICliStringArgGroupOptions = CliStringArgGroupOptions;
+export { CliStringArgGroupOptions };
 
+// string array
+export { CliStringArrayArgGroup } from './arg-group-factories/cli-string-array-arg-group';
+import { CliStringArrayArgGroupOptions } from './arg-group-factories/cli-string-array-arg-group';
+/** @deprecated Use `CliStringArrayArgGroupOptions` */
+export type ICliStringArrayArgGroupOptions = CliStringArrayArgGroupOptions;
+export { CliStringArrayArgGroupOptions };
+
+//
+// The rest of the exports in this module are "advanced" features
+//
+
+//
 // Description functions
-export {
-	TCliDescription,
-	TCliDescriptionFunction,
-	ICliDescriptionFunctionInput,
+//
+import {
+	AnyCliDescription,
+	CliDescriptionFunctionInput,
+	CliDescriptionFunction,
 } from './cli-description';
+/** @deprecated Use `CliDescriptionFunctionInput` */
+export type ICliDescriptionFunctionInput = CliDescriptionFunctionInput;
+/** @deprecated Use `AnyCliDescription` */
+export type TCliDescription = AnyCliDescription;
+/** @deprecated Use `CliDescriptionFunction` */
+export type TCliDescriptionFunction = CliDescriptionFunction;
+export {
+	AnyCliDescription,
+	CliDescriptionFunctionInput,
+	CliDescriptionFunction,
+};
 
-// Isomorphic console interface
-export { ICliConsole } from './cli-console';
+//
+// Logging
+//
+import { CliLogger } from './cli-logger';
+/** @deprecated Use `CliLogger` */
+export type ICliConsole = CliLogger;
+export { CliLogger };
+export { CliNoopLogger } from './cli-noop-logger';
+export { CliConsoleLogger } from './cli-console-logger';
 
-// Isomorphic process interface
-export { ICliProcess } from './cli-process';
+//
+// Isomorphic type mimicking the Node.js global `process`
+//
+import { CliProcess } from './cli-process';
+/** @deprecated Use `CliProcess` */
+export type ICliProcess = CliProcess;
+export { CliProcess };
 
+//
 // Text decoration
-export { ICliAnsi, CliAnsi } from './cli-ansi';
+//
+import { CliColor } from './cli-color';
+/** @deprecated Use `CliColor` */
+export type ICliAnsi = CliColor;
+export { CliColor };
+import { cliColorFactory } from './cli-color-factory';
+/** @deprecated Use `cliColorFactory` */
+export const CliAnsi = cliColorFactory;
+export { cliColorFactory };
 
+//
 // Error constructors
+//
 export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
 export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 
+//
 // Custom ArgGroup
-export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';
+//
+import { CliArgGroup, CliArgGroupArgs } from './cli-arg-group';
+/** @deprecated Use `CliArgGroupArgs` */
+export type TCliArgGroupArgs<Required extends boolean> =
+	CliArgGroupArgs<Required>;
+/** @deprecated Use `CliArgGroup` */
+export type ICliArgGroup = CliArgGroup;
+export { CliArgGroup, CliArgGroupArgs };
 
+//
 // Command tree
-export { TCliRoot, ICliTree, ICliLeaf } from './cli-tree';
+//
+import { CliRoot, CliTree, CliLeaf } from './cli-tree';
+/** @deprecated Use `CliRoot` */
+export type TCliRoot = CliRoot;
+/** @deprecated Use `CliTree` */
+export type ICliTree = CliTree;
+/** @deprecated Use `CliLeaf` */
+export type ICliLeaf = CliLeaf;
+export { CliRoot, CliTree, CliLeaf };
 
+//
 // Branding
+//
 export { CliWordMark } from './cli-word-mark';

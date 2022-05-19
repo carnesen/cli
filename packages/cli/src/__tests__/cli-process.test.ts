@@ -1,59 +1,65 @@
-import { CliProcess } from '../cli-process';
+import { cliProcessFactory, getGlobalProcess } from '../cli-process';
+import { deleteGlobal } from '../delete-global';
 
-describe(CliProcess.name, () => {
+describe(cliProcessFactory.name, () => {
 	it('works even if there is no global process', () => {
-		const originalProcess = (globalThis as any).process;
-		delete (globalThis as any).process;
-		CliProcess().exit();
-		(globalThis as any).process = originalProcess;
+		const restoreOriginal = deleteGlobal('process');
+		cliProcessFactory().exit();
+		restoreOriginal();
 	});
 
 	it('has an argv property with the current process args in Node.js', () => {
-		expect(CliProcess().argv.length).toBeGreaterThan(0);
+		expect(cliProcessFactory().argv.length).toBeGreaterThan(0);
 	});
 
 	it('argv is an empty array if process.argv does not exist', () => {
-		const { argv: originalArgv } = (globalThis as any).process;
-		delete (globalThis as any).process.argv;
-		expect(CliProcess().argv).toEqual([]);
-		(globalThis as any).process.argv = originalArgv;
+		const globalProcess = getGlobalProcess();
+		const { argv } = globalProcess;
+		delete globalProcess.argv;
+		expect(cliProcessFactory().argv).toEqual([]);
+		globalProcess.argv = argv;
 	});
 
 	it('"exit" calls global process.exit with 0 by default', () => {
 		const spy = jest
-			.spyOn((globalThis as any).process, 'exit')
+			.spyOn(getGlobalProcess(), 'exit')
 			.mockImplementation(() => {});
-		CliProcess().exit();
+		cliProcessFactory().exit();
 		expect(spy).toHaveBeenCalledWith(0);
 		spy.mockRestore();
 	});
 
 	it('"exit" does nothing if there is no global process.exit', () => {
-		const originalExit = (globalThis as any).process.exit;
-		delete (globalThis as any).process.exit;
-		CliProcess().exit();
-		(globalThis as any).process.exit = originalExit;
+		const globalProcess = getGlobalProcess();
+		const originalExit = globalProcess.exit;
+		delete globalProcess.exit;
+		cliProcessFactory().exit();
+		globalProcess.exit = originalExit;
 	});
 
 	it('"exit" calls global process.exit with provided code', () => {
 		const spy = jest
-			.spyOn((globalThis as any).process, 'exit')
+			.spyOn(getGlobalProcess(), 'exit')
 			.mockImplementation(() => {});
-		CliProcess().exit(42);
+		cliProcessFactory().exit(42);
 		expect(spy).toHaveBeenCalledWith(42);
 		spy.mockRestore();
 	});
 
 	it('stdout.columns returns process.stdout.columns', () => {
-		(globalThis as any).process.stdout.columns = 23;
-		const result = CliProcess().stdout.columns;
+		const globalProcess = getGlobalProcess();
+		const originalColumns = globalProcess.stdout.columns;
+		globalProcess.stdout.columns = 23;
+		const result = cliProcessFactory().stdout.columns;
 		expect(result).toBe(23);
+		globalProcess.stdout.columns = originalColumns;
 	});
 
 	it('stdout.columns returns 100 if not process.stdout', () => {
-		const originalStdout = (globalThis as any).process.stdout;
-		delete (globalThis as any).process.stdout;
-		expect(CliProcess().stdout.columns).toBe(100);
-		(globalThis as any).process.stdout = originalStdout;
+		const globalProcess = getGlobalProcess();
+		const originalStdout = globalProcess.stdout;
+		delete globalProcess.stdout;
+		expect(cliProcessFactory().stdout.columns).toBe(100);
+		globalProcess.stdout = originalStdout;
 	});
 });

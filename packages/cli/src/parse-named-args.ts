@@ -1,7 +1,7 @@
 import { TPartitioned } from './partition-args';
 import { parseArgs } from './parse-args';
 import { CliUsageError } from './cli-usage-error';
-import { ICliArgGroup } from './cli-arg-group';
+import { CliArgGroup } from './cli-arg-group';
 
 type VoidAsyncFunc = () => Promise<void>;
 
@@ -12,7 +12,7 @@ type VoidAsyncFunc = () => Promise<void>;
  */
 export async function parseNamedArgs(
 	namedArgGroups: {
-		[name: string]: ICliArgGroup;
+		[name: string]: CliArgGroup;
 	},
 	namedArgs: TPartitioned['namedArgs'],
 ): Promise<{ [name: string]: any }> {

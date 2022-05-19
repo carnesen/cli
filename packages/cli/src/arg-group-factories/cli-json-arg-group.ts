@@ -1,23 +1,23 @@
-import { ICliArgGroup } from '../cli-arg-group';
+import { CliArgGroup } from '../cli-arg-group';
 import { CliUsageError } from '../cli-usage-error';
 
 /** Options for [[`CliJsonArgGroup`]] */
-export interface ICliJsonArgGroupOptions {
-	/** See [[`ICliArgGroup.description`]] */
+export type CliJsonArgGroupOptions = {
+	/** See [[`CliArgGroup.description`]] */
 	description?: string;
 
-	/** See [[`ICliArgGroup.required`]] */
+	/** See [[`CliArgGroup.required`]] */
 	required?: boolean;
 
-	/** See [[`ICliArgGroup.placeholder`]]. Defaults to "\<json\>" */
+	/** See [[`CliArgGroup.placeholder`]]. Defaults to "\<json\>" */
 	placeholder?: string;
 
-	/** See [[`ICliArgGroup.hidden`]] */
+	/** See [[`CliArgGroup.hidden`]] */
 	hidden?: boolean;
-}
+};
 
 /**
- * A factory for [[`ICliArgGroup`]]s that `JSON.parse`
+ * A factory for [[`CliArgGroup`]]s that `JSON.parse`
  *
  * @example
  * Suppose our CLI's positionalArgGroup is a CliJsonArgGroup. Here's how that
@@ -32,15 +32,15 @@ export interface ICliJsonArgGroupOptions {
  * @throws [[`CliUsageError`]]
  */
 export function CliJsonArgGroup(
-	options: ICliJsonArgGroupOptions = {},
-): ICliArgGroup<any> {
+	options: CliJsonArgGroupOptions = {},
+): CliArgGroup<any> {
 	const {
 		placeholder = '<json>',
 		required = false,
 		description,
 		hidden = false,
 	} = options;
-	const argGroup: ICliArgGroup<any> = {
+	const argGroup: CliArgGroup<any> = {
 		required,
 		placeholder,
 		hidden,

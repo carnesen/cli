@@ -1,9 +1,9 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { UsageSubcommandRows } from '../usage-subcommand-rows';
-import { CliCommandGroup } from '../cli-command-group';
+import { cliCommandGroupFactory } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
-import { CliAnsi } from '../cli-ansi';
-import { ICliDescriptionFunctionInput } from '../cli-description';
+import { cliColorFactory } from '../cli-color-factory';
+import { CliDescriptionFunctionInput } from '../cli-description';
 
 const command = CliCommand({
 	name: 'list',
@@ -17,12 +17,15 @@ const hiddenCommand = CliCommand({
 	action() {},
 });
 
-const commandGroup = CliCommandGroup({
+const commandGroup = cliCommandGroupFactory({
 	name: 'users',
 	subcommands: [command, hiddenCommand],
 });
-const root = CliCommandGroup({ name: 'cloud', subcommands: [commandGroup] });
-const options: ICliDescriptionFunctionInput = { ansi: CliAnsi() };
+const root = cliCommandGroupFactory({
+	name: 'cloud',
+	subcommands: [commandGroup],
+});
+const options: CliDescriptionFunctionInput = { ansi: cliColorFactory() };
 
 describe(UsageSubcommandRows.name, () => {
 	it('lists all commands underneath the provided command group, recursive', () => {

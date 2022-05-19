@@ -1,4 +1,4 @@
-import { ICliTree } from './cli-tree';
+import { CliTree } from './cli-tree';
 
 /** "code" of a {@link CliUsageError} */
 export const CLI_USAGE_ERROR = 'CLI_USAGE_ERROR';
@@ -11,14 +11,14 @@ export class CliUsageError extends Error {
 	public readonly code: typeof CLI_USAGE_ERROR;
 
 	/** Used internally for generating usage documentation */
-	public tree?: ICliTree;
+	public tree?: CliTree;
 
 	/**
 	 * @param message If provided, [[`ICli.run`]] will also print "Error: \<your
 	 * message\>"
 	 * @param tree Used internally for constructing the command-line usage string
 	 */
-	public constructor(message?: string, tree?: ICliTree) {
+	public constructor(message?: string, tree?: CliTree) {
 		super(message);
 		this.code = CLI_USAGE_ERROR;
 		this.tree = tree;

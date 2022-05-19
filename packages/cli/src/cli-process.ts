@@ -1,7 +1,7 @@
-/**
- * A universal implementation of the Node.js global `process`
- */
-export interface ICliProcess {
+import { getGlobal } from './get-global';
+
+/** An isomorphic implementation of the Node.js global `process` object */
+export type CliProcess = {
 	argv: string[];
 	exit: (code?: number) => void;
 	stderr: {
@@ -11,16 +11,18 @@ export interface ICliProcess {
 		columns: number;
 		isTTY: boolean;
 	};
+};
+
+export function getGlobalProcess(): any {
+	return getGlobal('process');
 }
 
 const DEFAULT_COLUMNS = 100;
 
-/**
- * A factory for [[`ICliProcess`]]es
- * @param options
- */
-export function CliProcess(): ICliProcess {
-	const { process: globalProcess = {} } = globalThis as any;
+/** A factory for [[`ICliProcess`]]es
+ * @param options */
+export function cliProcessFactory(): CliProcess {
+	const globalProcess = getGlobalProcess() ?? {};
 
 	return {
 		argv: Array.isArray(globalProcess.argv) ? globalProcess.argv : [],
