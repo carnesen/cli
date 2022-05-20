@@ -158,7 +158,10 @@ import { CliArgGroup, CliArgGroupArgs } from './cli-arg-group';
 export type TCliArgGroupArgs<Required extends boolean> =
 	CliArgGroupArgs<Required>;
 /** @deprecated Use `CliArgGroup` */
-export type ICliArgGroup = CliArgGroup;
+export type ICliArgGroup<
+	Value = unknown,
+	Required extends boolean = boolean,
+> = CliArgGroup<Value, Required>;
 export { CliArgGroup, CliArgGroupArgs };
 
 //

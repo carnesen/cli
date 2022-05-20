@@ -1,4 +1,4 @@
-import { TValueFromCliArgGroup, CliArgGroup } from './cli-arg-group';
+import { ValueFromCliArgGroup, CliArgGroup } from './cli-arg-group';
 import { CliLogger } from './cli-logger';
 import { CliColor } from './cli-color';
 import { AnyCliDescription } from './cli-description';
@@ -24,12 +24,12 @@ export type CliCommandOptions<
 		ansi: CliColor;
 		/** @deprecated Use `logger` instead */
 		console: CliLogger;
-		doubleDashValue: TValueFromCliArgGroup<DoubleDashArgGroup>;
+		doubleDashValue: ValueFromCliArgGroup<DoubleDashArgGroup>;
 		logger: CliLogger;
 		namedValues: {
-			[K in keyof NamedArgGroups]: TValueFromCliArgGroup<NamedArgGroups[K]>;
+			[K in keyof NamedArgGroups]: ValueFromCliArgGroup<NamedArgGroups[K]>;
 		};
-		positionalValue: TValueFromCliArgGroup<PositionalArgGroup>;
+		positionalValue: ValueFromCliArgGroup<PositionalArgGroup>;
 	}) => any;
 
 	/** A [[`CliArgGroup`]] for the arguments before the first separator argument */
