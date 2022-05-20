@@ -1,6 +1,7 @@
 import { getGlobal } from './get-global';
 
-/** An isomorphic implementation of the Node.js global `process` object */
+/** An isomorphic subset of the Node.js global `process` object that doesn't
+ * depend on the `@types/node` package */
 export type CliProcess = {
 	argv: string[];
 	exit: (code?: number) => void;
@@ -13,14 +14,15 @@ export type CliProcess = {
 	};
 };
 
+/** Get a reference to the global variable `process` if it exists. The return
+ * value is type-asserted as `any` so be careful with it. */
 export function getGlobalProcess(): any {
 	return getGlobal('process');
 }
 
 const DEFAULT_COLUMNS = 100;
 
-/** A factory for [[`ICliProcess`]]es
- * @param options */
+/** A factory for [[`ICliProcess`]]es */
 export function cliProcessFactory(): CliProcess {
 	const globalProcess = getGlobalProcess() ?? {};
 

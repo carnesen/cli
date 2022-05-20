@@ -12,14 +12,15 @@ export { CliCommandOptions };
 //
 // Command-line interface (CLI) factory
 //
-// TODO
-// export { cliFactory as Cli } from './cli';
 import { CliOptions } from './cli-options';
 /** @deprecated Use `CliOptions` instead */
 export type ICliOptions = CliOptions;
 export { CliOptions };
 
-export { ICli } from './cli-options';
+import { CCli } from './c-cli';
+export const Cli = CCli.create;
+/** @deprecated Use `CCli` instead */
+export type ICli = CCli;
 
 //
 // Command group factory

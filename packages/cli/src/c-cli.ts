@@ -1,8 +1,8 @@
 import { CliRoot } from './cli-tree';
-import { ICli, CliOptions } from './cli-options';
+import { CliOptions } from './cli-options';
 import { CliConsoleLogger } from './cli-console-logger';
 import { cliColorFactory } from './cli-color-factory';
-import { findCliTree } from './find-cli-tree';
+import { navigateCommandTree } from './find-cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { partitionArgs } from './partition-args';
@@ -13,7 +13,7 @@ import { usageFactory } from './usage-string';
 import { CLI_TERSE_ERROR } from './cli-terse-error';
 import { splitCommandLine } from './split-command-line';
 
-export class Cli {
+export class CCli {
 	private readonly color =
 		this.options.color ?? cliColorFactory(this.options.ansi);
 
@@ -25,29 +25,32 @@ export class Cli {
 		private readonly options: CliOptions,
 	) {}
 
+	/** Programmatic interface for the CLI. Mostly used for unit testing
+	 * @param args Command-line argument strings
+	 * @returns A promise resolving to the command action's return value */
 	public async api(args: string[]): Promise<any> {
-		const tree = findCliTree(this.root, args);
+		const navigated = navigateCommandTree(this.root, args);
 
-		if (tree.message || tree.current.kind !== CLI_COMMAND) {
-			throw new CliUsageError(tree.message, tree);
+		if (navigated.message || navigated.tree.current.kind !== CLI_COMMAND) {
+			throw new CliUsageError(navigated.message, navigated.tree);
 		}
 
 		const { positionalArgs, namedArgs, doubleDashArgs } = partitionArgs(
-			tree.args,
+			navigated.args,
 		);
 
 		// We found "--help" among the arguments
 		if (namedArgs.help) {
-			throw new CliUsageError(undefined, tree);
+			throw new CliUsageError(undefined, navigated.tree);
 		}
 
-		const command = tree.current;
+		const command = navigated.tree.current;
 
 		// Pre-validation for positional argument group
 		if (!command.positionalArgGroup && positionalArgs.length > 0) {
 			throw new CliUsageError(
 				`Unexpected argument "${positionalArgs[0]}" : Command "${command.name}" does not accept positional arguments`,
-				tree,
+				navigated.tree,
 			);
 		}
 
@@ -102,20 +105,20 @@ export class Cli {
 				logger: this.logger,
 			});
 			return result;
-		} catch (exception: any) {
-			if (exception && exception.code === CLI_USAGE_ERROR) {
-				exception.tree = tree;
+		} catch (exception) {
+			// Check if the thrown exception is an instance of CliUsageError. If
+			// so, attach the current command tree context.
+			if (exception instanceof CliUsageError) {
+				exception.tree = exception.tree ?? navigated.tree;
 			}
 			throw exception;
 		}
 	}
 
-	private done(code?: number): void {
-		const cliProcess = cliProcessFactory();
-		const { done = cliProcess.exit } = this.options;
-		done(code);
-	}
-
+	/** Run the command-line interface, console.log the result, and exit
+	 * @param args Command-line arguments to be parsed and passed into the
+	 * command action. Defaults to `process.argv.slice(2)` in Node.js.
+	 * @returns A promise resolving to the command's exit code */
 	public async run(args?: string[]): Promise<number> {
 		const cliProcess = cliProcessFactory();
 
@@ -141,6 +144,31 @@ export class Cli {
 			}
 		}
 		return exitCode;
+	}
+
+	/** Split a command line into args and call this `Cli`'s `run` method
+	 * @param line A command line
+	 * @returns A promise resolving to the command's exit code */
+	public async runLine(line = ''): Promise<number> {
+		const { args, quoteChar } = splitCommandLine(line);
+		if (quoteChar) {
+			this.logger.error(
+				`${this.color.red('Error:')} Unterminated ${quoteChar}-quoted string`,
+			);
+			const exitCode = 1;
+			try {
+				this.done(exitCode);
+			} catch (exception) {
+				this.logger.error('"done" callback threw');
+				this.logger.error(exception);
+			}
+			return exitCode;
+		}
+		return await this.run(args);
+	}
+
+	private done(code?: number): void {
+		(this.options.done ?? cliProcessFactory().exit)(code);
 	}
 
 	private handleException(exception: any): void {
@@ -197,34 +225,7 @@ export class Cli {
 		}
 	}
 
-	public async runLine(line = ''): Promise<number> {
-		const { args, quoteChar } = splitCommandLine(line);
-		if (quoteChar) {
-			this.logger.error(
-				`${this.color.red('Error:')} Unterminated ${quoteChar}-quoted string`,
-			);
-			const exitCode = 1;
-			try {
-				this.done(exitCode);
-			} catch (exception) {
-				this.logger.error('"done" callback threw');
-				this.logger.error(exception);
-			}
-			return exitCode;
-		}
-		return await this.run(args);
+	public static create(root: CliRoot, options: CliOptions = {}): CCli {
+		return new CCli(root, options);
 	}
-
-	public static create(root: CliRoot, options: CliOptions = {}): Cli {
-		return new Cli(root, options);
-	}
-}
-
-/** A factory for [[`ICli`]]s
- * @param root The root of this command-line interface's command tree
- * @param options Optional properties and callbacks
- * @returns A command-line interface object */
-export function cliFactory(root: CliRoot, options: CliOptions = {}): ICli {
-	const cli = Cli.create(root, options);
-	return cli;
 }

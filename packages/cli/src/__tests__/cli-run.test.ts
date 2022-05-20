@@ -4,9 +4,8 @@ import { CliCommand } from '../cli-command';
 import { CliUsageError, CLI_USAGE_ERROR } from '../cli-usage-error';
 import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
 import { CliOptions } from '../cli-options';
-import { cliProcessFactory, getGlobalProcess } from '../cli-process';
-import { CliConsoleLogger } from '../cli-console-logger';
-import { Cli } from '../cli';
+import { getGlobalProcess } from '../cli-process';
+import { CCli } from '../c-cli';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
 async function runMocked(action: () => any, options: CliOptions = {}) {
@@ -20,7 +19,7 @@ async function runMocked(action: () => any, options: CliOptions = {}) {
 		action,
 	});
 
-	const cli = Cli.create(command, { ...mockOptions, ...options });
+	const cli = CCli.create(command, { ...mockOptions, ...options });
 
 	await cli.run([]);
 
@@ -45,7 +44,7 @@ async function runMocked(action: () => any, options: CliOptions = {}) {
 	return { exitCode, errorMessage, logMessage };
 }
 
-describe(Cli.prototype.run.name, () => {
+describe(CCli.prototype.run.name, () => {
 	it('exits 0 and does not logger.log if action succeeds', async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
 			// do nothing
@@ -148,7 +147,7 @@ describe(Cli.prototype.run.name, () => {
 				// do nothing
 			},
 		});
-		const exitCode = await Cli.create(command).run([]);
+		const exitCode = await CCli.create(command).run([]);
 		expect(mockExit).toHaveBeenCalledWith(0);
 		expect(exitCode).toBe(0);
 	});
@@ -171,7 +170,7 @@ describe(Cli.prototype.run.name, () => {
 				error: spy,
 			},
 		};
-		const exitCode = await Cli.create(command, options).run([]);
+		const exitCode = await CCli.create(command, options).run([]);
 		expect(exitCode).not.toBe(0);
 		expect(spy).toHaveBeenCalledWith(codedError);
 	});
@@ -196,7 +195,7 @@ describe(Cli.prototype.run.name, () => {
 				error: spy,
 			},
 		};
-		const exitCode = await Cli.create(command, options).run([]);
+		const exitCode = await CCli.create(command, options).run([]);
 		expect(exitCode).toBe(0);
 		expect(spy).toHaveBeenCalledWith(error);
 	});
@@ -219,7 +218,7 @@ describe(Cli.prototype.run.name, () => {
 				error: () => {},
 			},
 		};
-		const cli = Cli.create(command, options);
+		const cli = CCli.create(command, options);
 		const globalProcess = getGlobalProcess();
 		const originalArgv = globalProcess.argv;
 		globalProcess.argv = ['ignored', 'also ignored', 'foo bar baz'];

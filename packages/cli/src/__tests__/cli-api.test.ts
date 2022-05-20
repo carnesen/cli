@@ -6,7 +6,7 @@ import {
 	DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED,
 } from '../dummy-arg-groups';
 import { CLI_USAGE_ERROR, CliUsageError } from '../cli-usage-error';
-import { Cli } from '../cli';
+import { CCli } from '../c-cli';
 
 const commandWithNoArguments = CliCommand({
 	name: 'command-with-no-args',
@@ -49,13 +49,13 @@ const root = cliCommandGroupFactory({
 	],
 });
 
-const cli = Cli.create(root);
+const cli = CCli.create(root);
 const cliApi = async (args: string[]) => await cli.api(args);
 
-describe(Cli.prototype.api.name, () => {
+describe(CCli.prototype.api.name, () => {
 	it(`throws ${CLI_USAGE_ERROR} if --help is passed among the arguments of on an otherwise valid invocation`, async () => {
 		const exception = await runAndCatch(async () => {
-			await Cli.create(commandWithNoArguments).api(['--help']);
+			await CCli.create(commandWithNoArguments).api(['--help']);
 		});
 		expect(exception.code).toBe(CLI_USAGE_ERROR);
 		expect(exception.message).toBeFalsy();

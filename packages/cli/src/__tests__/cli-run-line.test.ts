@@ -1,9 +1,9 @@
 import { CliCommand } from '../cli-command';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 import { CliOptions } from '../cli-options';
-import { Cli } from '../cli';
+import { CCli } from '../c-cli';
 
-describe(Cli.prototype.runLine.name, () => {
+describe(CCli.prototype.runLine.name, () => {
 	it('has a runLine method that parses the command-line', async () => {
 		const command = CliCommand({
 			name: 'cli',
@@ -13,7 +13,7 @@ describe(Cli.prototype.runLine.name, () => {
 			},
 		});
 		const options: CliOptions = { done: () => {} };
-		const exitCode = await Cli.create(command, options).runLine('"foo"');
+		const exitCode = await CCli.create(command, options).runLine('"foo"');
 		expect(exitCode).toBe(0);
 	});
 
@@ -30,7 +30,7 @@ describe(Cli.prototype.runLine.name, () => {
 				log: jest.fn(),
 			},
 		};
-		const exitCode = await Cli.create(command, options).runLine('"foo');
+		const exitCode = await CCli.create(command, options).runLine('"foo');
 		expect(exitCode).not.toBe(0);
 		expect(spy).toHaveBeenCalledWith('Error: Unterminated "-quoted string');
 	});
@@ -51,7 +51,7 @@ describe(Cli.prototype.runLine.name, () => {
 				log: jest.fn(),
 			},
 		};
-		const exitCode = await Cli.create(command, options).runLine('"');
+		const exitCode = await CCli.create(command, options).runLine('"');
 		expect(exitCode).toBe(1);
 		expect(spy).toHaveBeenCalledWith('"done" callback threw');
 		expect(spy).toHaveBeenCalledWith(error);
@@ -62,7 +62,7 @@ describe(Cli.prototype.runLine.name, () => {
 			name: 'cli',
 			action() {},
 		});
-		Cli.create(command);
+		CCli.create(command);
 	});
 
 	it('line defaults to empty string', () => {
@@ -71,6 +71,6 @@ describe(Cli.prototype.runLine.name, () => {
 			action() {},
 		});
 		const options: CliOptions = { done() {} };
-		Cli.create(command, options).runLine();
+		CCli.create(command, options).runLine();
 	});
 });
