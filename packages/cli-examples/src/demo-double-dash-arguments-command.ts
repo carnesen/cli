@@ -5,7 +5,7 @@ import { CliCommand, CliStringArrayArgGroup, CliWordMark } from '@carnesen/cli';
  */
 export const demoDoubleDashArgumentsCommand = CliCommand({
 	name: 'demo-double-dash-arguments',
-	description({ ansi }) {
+	description(input) {
 		return `
 		Demonstrate usage of double-dash arguments
 
@@ -15,7 +15,7 @@ export const demoDoubleDashArgumentsCommand = CliCommand({
 
 		kubectl exec POD -- COMMAND [args...] [options]
 
-		In a ${CliWordMark({ ansi })} CLI, 
+		In a ${CliWordMark(input)} CLI, 
 		all command-line arguments after a lone --
 		are passed into the command's doubleDashArgGroup. Specifically, after 
 		-- things like --name aren't interpreted as argument group separators. 

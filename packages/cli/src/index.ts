@@ -180,3 +180,8 @@ export { CliRoot, CliTree, CliLeaf };
 // Branding
 //
 export { CliWordMark } from './cli-word-mark';
+
+///
+// FOR INTERNAL USE ONLY
+//
+export { navigateCliTree, NavigateCliTreeResult } from './navigate-cli-tree';

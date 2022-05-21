@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { UsageSubcommandRows } from '../usage-subcommand-rows';
+import { usageSubcommandRowsFactory } from '../usage-subcommand-rows';
 import { cliCommandGroupFactory } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
 import { cliColorFactory } from '../cli-color-factory';
@@ -25,11 +25,12 @@ const root = cliCommandGroupFactory({
 	name: 'cloud',
 	subcommands: [commandGroup],
 });
-const options: CliDescriptionFunctionInput = { ansi: cliColorFactory() };
+const color = cliColorFactory();
+const input: CliDescriptionFunctionInput = { ansi: color, color };
 
-describe(UsageSubcommandRows.name, () => {
+describe(usageSubcommandRowsFactory.name, () => {
 	it('lists all commands underneath the provided command group, recursive', () => {
-		const rows = UsageSubcommandRows(root, options);
+		const rows = usageSubcommandRowsFactory(root, input);
 		// This also verifies that hidden commands do not show up
 		expect(rows.length).toBe(1);
 		const [name, description] = rows[0];
@@ -38,9 +39,9 @@ describe(UsageSubcommandRows.name, () => {
 	});
 	it('throws "Unexpected kind" on bad object', async () => {
 		const exception = await runAndCatch(
-			UsageSubcommandRows,
+			usageSubcommandRowsFactory,
 			{} as any,
-			options,
+			input,
 		);
 		expect(exception.message).toBe('Unexpected kind');
 	});

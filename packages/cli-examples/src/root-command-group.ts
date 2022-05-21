@@ -10,8 +10,8 @@ import { advancedCommandGroup } from './advanced-command-group';
  * */
 export const rootCommandGroup = CliCommandGroup({
 	name: 'carnesen-cli-examples',
-	description({ ansi }) {
-		return `Examples that demonstrate ${CliWordMark({ ansi })} features`;
+	description(input) {
+		return `Examples that demonstrate ${CliWordMark(input)} features`;
 	},
 	subcommands: [
 		echoCommand,

@@ -1,4 +1,4 @@
 import { CliDescriptionFunction } from './cli-description';
 
-export const CliWordMark: CliDescriptionFunction = ({ ansi }) =>
-	ansi.bold('@carnesen/cli');
+export const CliWordMark: CliDescriptionFunction = ({ color }) =>
+	color.bold('@carnesen/cli');

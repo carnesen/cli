@@ -1,7 +1,9 @@
 import { CliColor } from './cli-color';
 
 export interface CliDescriptionFunctionInput {
+	/** @deprecated Use `color` instead */
 	ansi: CliColor;
+	color: CliColor;
 }
 
 export type CliDescriptionFunction = (
@@ -10,7 +12,7 @@ export type CliDescriptionFunction = (
 
 export type AnyCliDescription = undefined | string | CliDescriptionFunction;
 
-export function DescriptionText(
+export function descriptionTextFactory(
 	description: AnyCliDescription,
 	input: CliDescriptionFunctionInput,
 ): string {

@@ -1,8 +1,6 @@
 import { CliCommand, CliStringArrayArgGroup } from '@carnesen/cli';
 
-/**
- * A "hidden" CliCommand that otherwise behaves like the normal "echo" command
- */
+/** A "hidden" CliCommand that otherwise behaves like the normal "echo" command */
 export const echoHiddenCommand = CliCommand({
 	name: 'echo-hidden',
 	description: `

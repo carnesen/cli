@@ -2,8 +2,8 @@ import { CliTree, CliRoot } from './cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { CLI_COMMAND_GROUP } from './cli-command-group';
 
-/** The result of calling [[`navigateCommandTree`]] */
-export type NavigateCommandTreeResult = {
+/** FOR INTERNAL USE ONLY. The result of calling [[`navigateCommandTree`]] */
+export type NavigateCliTreeResult = {
 	/** Passed args past those used during navigation */
 	args: string[];
 	/** An error message describing why navigation stopped */
@@ -12,23 +12,24 @@ export type NavigateCommandTreeResult = {
 	tree: CliTree;
 };
 
-/** Walk a tree of commands to find the one selected by the arguments provided
+/** FOR INTERNAL USE ONLY. Walk a tree of commands to find the one selected by
+ * the arguments provided
  * @param root - A command tree root
  * @param args - An array of command-line arguments
  * @returns The result of the search */
-export function navigateCommandTree(
+export function navigateCliTree(
 	root: CliRoot,
 	args: string[],
-): NavigateCommandTreeResult {
-	return recursiveNavigateCommandTree({
+): NavigateCliTreeResult {
+	return recursiveNavigateCliTree({
 		tree: { current: root, parents: [] },
 		args,
 	});
 }
 
-function recursiveNavigateCommandTree(
-	result: NavigateCommandTreeResult,
-): NavigateCommandTreeResult {
+function recursiveNavigateCliTree(
+	result: NavigateCliTreeResult,
+): NavigateCliTreeResult {
 	// Terminate recursion if current is a command
 	if (result.tree.current.kind === CLI_COMMAND) {
 		return result;
@@ -55,7 +56,7 @@ function recursiveNavigateCommandTree(
 			return { ...result, message: `Bad command "${result.args[0]}"` };
 		}
 
-		return recursiveNavigateCommandTree({
+		return recursiveNavigateCliTree({
 			tree: {
 				parents: [...result.tree.parents, result.tree.current],
 				current: next,

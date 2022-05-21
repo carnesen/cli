@@ -52,7 +52,7 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/carnesen/cli.git",
-		"directory": "website-server"
+		"directory": "packages/cli-website-server"
 	},
 	"author": "Chris Arnesen",
 	"license": "MIT",

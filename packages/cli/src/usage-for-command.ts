@@ -2,7 +2,7 @@ import { wrapInSquareBrackets } from './util';
 import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
 import {
-	DescriptionText,
+	descriptionTextFactory,
 	CliDescriptionFunctionInput,
 } from './cli-description';
 import { CliLeaf } from './cli-tree';
@@ -13,7 +13,7 @@ export function usageForCommand(
 	options: UsageOptions,
 ): string[] {
 	const { current, parents } = leaf;
-	const { columns, indentation, color: ansi } = options;
+	const { columns, indentation, color } = options;
 	const {
 		positionalArgGroup,
 		namedArgGroups,
@@ -27,8 +27,8 @@ export function usageForCommand(
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionInput: CliDescriptionFunctionInput = { ansi };
-	const commandDescriptionText: string = DescriptionText(
+	const descriptionInput: CliDescriptionFunctionInput = { ansi: color, color };
+	const commandDescriptionText: string = descriptionTextFactory(
 		description,
 		descriptionInput,
 	);
@@ -54,7 +54,7 @@ export function usageForCommand(
 		} else {
 			firstLine += ` ${wrapInSquareBrackets(positionalArgGroup.placeholder)}`;
 		}
-		const positionalArgGroupDescriptionText = DescriptionText(
+		const positionalArgGroupDescriptionText = descriptionTextFactory(
 			positionalArgGroup.description,
 			descriptionInput,
 		);
@@ -85,7 +85,7 @@ export function usageForCommand(
 			lines.push('');
 			const rows: TTwoColumnTableRow[] = namedArgGroupEntries.map(
 				([name, argGroup]) => {
-					const argGroupDescriptionText = DescriptionText(
+					const argGroupDescriptionText = descriptionTextFactory(
 						argGroup.description,
 						descriptionInput,
 					);
@@ -118,7 +118,10 @@ export function usageForCommand(
 				[
 					[
 						placeholder,
-						DescriptionText(doubleDashArgGroup.description, descriptionInput),
+						descriptionTextFactory(
+							doubleDashArgGroup.description,
+							descriptionInput,
+						),
 					],
 				],
 				twoColumnTableOptions,

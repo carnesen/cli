@@ -1,10 +1,10 @@
 import {
 	CLI_COMMAND,
-	TCliRoot,
 	CLI_COMMAND_GROUP,
-	ICliArgGroup,
+	CliArgGroup,
+	CliRoot,
+	navigateCliTree,
 } from '@carnesen/cli';
-import { findCliTree } from '@carnesen/cli/lib/find-cli-tree';
 
 import { LongestLeadingSubstring } from './longest-leading-substring';
 
@@ -16,23 +16,25 @@ import { LongestLeadingSubstring } from './longest-leading-substring';
  * @returns Completions for the provided search word
  */
 export function autocomplete(
-	root: TCliRoot,
+	root: CliRoot,
 	args: string[],
 	search: string,
 ): string[] {
 	if (args.includes('--help')) {
 		return [];
 	}
-	const tree = findCliTree(root, args);
-	switch (tree.current.kind) {
+	const navigated = navigateCliTree(root, args);
+	switch (navigated.tree.current.kind) {
 		case CLI_COMMAND_GROUP: {
-			if (tree.args.length > 0) {
-				// findCliTree stopped at a branch with args still remaining.
+			if (navigated.args.length > 0) {
+				// navigateCommandTree stopped at a branch with args still remaining.
 				// There's no way for us to autocomplete from that state.
 				return [];
 			}
 
-			const subcommandNames = tree.current.subcommands.map(({ name }) => name);
+			const subcommandNames = navigated.tree.current.subcommands.map(
+				({ name }) => name,
+			);
 			return autocompleteFromWordList([...subcommandNames], search);
 		}
 
@@ -40,7 +42,7 @@ export function autocomplete(
 			// E.g. The command line was "cloud users list --all --v"
 
 			// E.g. The command invoked e.g. "listCommand"
-			const command = tree.current;
+			const command = navigated.tree.current;
 
 			// E.g. ["--all", "--verbose", "--version", "--help"]
 			const namedArgGroupSeparators = [
@@ -51,7 +53,7 @@ export function autocomplete(
 			];
 
 			// The argument _before_ the search term
-			const previousArg = tree.args.slice(-1)[0];
+			const previousArg = navigated.args.slice(-1)[0];
 
 			// This is perhaps an obscure sub-case to start with, but if the previous
 			// arg is "--", we can be sure we are currently searching at the start of
@@ -59,7 +61,7 @@ export function autocomplete(
 			if (previousArg === '--') {
 				// We are in the double-dash arg group
 				return autocompleteArgGroup(
-					tree.current.doubleDashArgGroup,
+					navigated.tree.current.doubleDashArgGroup,
 					[],
 					search,
 				);
@@ -67,7 +69,7 @@ export function autocomplete(
 
 			// Otherwise if there's a "--" but we're not at the start of the argument
 			// group, just give up e.g. "cloud users list -- chris "
-			if (tree.args.includes('--')) {
+			if (navigated.args.includes('--')) {
 				return [];
 			}
 			// Now we know we are NOT in the double-dash args group
@@ -88,7 +90,7 @@ export function autocomplete(
 			}
 
 			// We are AT a command e.g. "cloud users list "
-			if (tree.args.length === 0) {
+			if (navigated.args.length === 0) {
 				const { positionalArgGroup } = command;
 				const completions = autocompleteArgGroup(
 					positionalArgGroup,
@@ -113,12 +115,12 @@ export function autocomplete(
 
 			// E.g. "cloud users list --email chr"
 			if (previousArg.startsWith('--')) {
-				if (!tree.current.namedArgGroups) {
+				if (!navigated.tree.current.namedArgGroups) {
 					return [];
 				}
 				// OK if undefined
-				const argGroup: ICliArgGroup | undefined =
-					tree.current.namedArgGroups[previousArg.slice(2)];
+				const argGroup: CliArgGroup | undefined =
+					navigated.tree.current.namedArgGroups[previousArg.slice(2)];
 				return autocompleteArgGroup(argGroup, [], search);
 			}
 
@@ -133,7 +135,7 @@ export function autocomplete(
 }
 
 function autocompleteArgGroup(
-	argGroup: ICliArgGroup | undefined,
+	argGroup: CliArgGroup | undefined,
 	args: string[],
 	search: string,
 ): string[] {

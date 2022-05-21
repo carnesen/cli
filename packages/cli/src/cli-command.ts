@@ -21,7 +21,9 @@ export type CliCommandOptions<
 
 	/** Function or async function that implements the command */
 	action: (input: {
+		/** @deprecated Use `color` instead */
 		ansi: CliColor;
+		color: CliColor;
 		/** @deprecated Use `logger` instead */
 		console: CliLogger;
 		doubleDashValue: ValueFromCliArgGroup<DoubleDashArgGroup>;

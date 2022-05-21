@@ -6,7 +6,7 @@ const cli = Cli(multiplyCommand);
 
 describe(multiplyCommand.name, () => {
 	it(`throws a ${CliUsageError.name} if no number is provided`, async () => {
-		const exception = await runAndCatch(cli.api, []);
+		const exception = await runAndCatch(() => cli.api([]));
 		expect(exception instanceof CliUsageError).toBe(true);
 	});
 

@@ -34,14 +34,14 @@ export type CliStringChoiceArgGroupOptions<
  * */
 
 // required = true overload
-function CliStringChoiceArgGroup<TChoices extends AnyCliStringChoices>(
-	options: CliStringChoiceArgGroupOptions<TChoices> & { required: true },
-): CliArgGroup<TChoices[number], true>;
+function CliStringChoiceArgGroup<Choices extends AnyCliStringChoices>(
+	options: CliStringChoiceArgGroupOptions<Choices> & { required: true },
+): CliArgGroup<Choices[number], true>;
 
 // required = false overload
-function CliStringChoiceArgGroup<TChoices extends AnyCliStringChoices>(
-	options: CliStringChoiceArgGroupOptions<TChoices>,
-): CliArgGroup<TChoices[number] | undefined, false>;
+function CliStringChoiceArgGroup<Choices extends AnyCliStringChoices>(
+	options: CliStringChoiceArgGroupOptions<Choices>,
+): CliArgGroup<Choices[number] | undefined, false>;
 
 // Implementation
 function CliStringChoiceArgGroup(

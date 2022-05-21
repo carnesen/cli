@@ -2,7 +2,7 @@ import { CliRoot } from './cli-tree';
 import { CliOptions } from './cli-options';
 import { CliConsoleLogger } from './cli-console-logger';
 import { cliColorFactory } from './cli-color-factory';
-import { navigateCommandTree } from './find-cli-tree';
+import { navigateCliTree } from './navigate-cli-tree';
 import { CLI_COMMAND } from './cli-command';
 import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
 import { partitionArgs } from './partition-args';
@@ -29,7 +29,7 @@ export class CCli {
 	 * @param args Command-line argument strings
 	 * @returns A promise resolving to the command action's return value */
 	public async api(args: string[]): Promise<any> {
-		const navigated = navigateCommandTree(this.root, args);
+		const navigated = navigateCliTree(this.root, args);
 
 		if (navigated.message || navigated.tree.current.kind !== CLI_COMMAND) {
 			throw new CliUsageError(navigated.message, navigated.tree);
@@ -98,6 +98,7 @@ export class CCli {
 
 			const result = await command.action({
 				ansi: this.color,
+				color: this.color,
 				console: this.logger,
 				doubleDashValue,
 				namedValues,

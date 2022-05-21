@@ -1,9 +1,10 @@
 import {
-	DescriptionText,
+	descriptionTextFactory,
 	AnyCliDescription,
 	CliDescriptionFunctionInput,
 } from '../cli-description';
 import { cliColorFactory } from '../cli-color-factory';
+import { CliColor } from '../cli-color';
 
 const data: {
 	title: string;
@@ -29,30 +30,33 @@ const data: {
 	},
 	{
 		title: 'Runs the function injecting the correct ansi',
-		description({ ansi }) {
+		description({ color: ansi }) {
 			return ansi.red('foo');
 		},
 		text: 'bar',
 	},
 ];
 
-const input: CliDescriptionFunctionInput = {
-	ansi: {
-		...cliColorFactory(false),
-		red() {
-			return 'bar';
-		},
+const color: CliColor = {
+	...cliColorFactory(false),
+	red() {
+		return 'bar';
 	},
 };
 
-describe(DescriptionText.name, () => {
+const input: CliDescriptionFunctionInput = {
+	ansi: color,
+	color,
+};
+
+describe(descriptionTextFactory.name, () => {
 	for (const { title, description, text: output } of data) {
 		it(title, () => {
-			expect(DescriptionText(description, input)).toBe(output);
+			expect(descriptionTextFactory(description, input)).toBe(output);
 		});
 	}
 	it('throws if provided an invalid description', () => {
-		expect(() => DescriptionText(42 as any as string, input)).toThrow(
+		expect(() => descriptionTextFactory(42 as any as string, input)).toThrow(
 			'Unexpected description',
 		);
 	});

@@ -3,22 +3,22 @@ import { CLI_COMMAND } from './cli-command';
 import { ICliCommandGroup, CLI_COMMAND_GROUP } from './cli-command-group';
 import { TTwoColumnTableRow } from './two-column-table';
 import {
-	DescriptionText,
+	descriptionTextFactory,
 	CliDescriptionFunctionInput,
 } from './cli-description';
 /** [command path, description] */
 
-export function UsageSubcommandRows(
+export function usageSubcommandRowsFactory(
 	commandGroup: ICliCommandGroup,
 	input: CliDescriptionFunctionInput,
 ): TTwoColumnTableRow[] {
-	return RecursiveUsageSubcommandRows(commandGroup, '', input);
+	return recursiveUsageSubcommandRows(commandGroup, '', input);
 }
 
-function RecursiveUsageSubcommandRows(
+function recursiveUsageSubcommandRows(
 	current: CliTree['current'],
 	path: string,
-	options: CliDescriptionFunctionInput,
+	input: CliDescriptionFunctionInput,
 ): TTwoColumnTableRow[] {
 	if (current.hidden && path.length > 0) {
 		// We've walked to a hidden tree. When path.length === 0 the user has
@@ -28,9 +28,7 @@ function RecursiveUsageSubcommandRows(
 	}
 
 	if (current.kind === CLI_COMMAND) {
-		const text = DescriptionText(current.description, {
-			ansi: options.ansi,
-		});
+		const text = descriptionTextFactory(current.description, input);
 		return [[path, text]];
 	}
 
@@ -38,10 +36,10 @@ function RecursiveUsageSubcommandRows(
 		const subcommandsForUsage: TTwoColumnTableRow[] = [];
 		for (const subcommand of current.subcommands) {
 			subcommandsForUsage.push(
-				...RecursiveUsageSubcommandRows(
+				...recursiveUsageSubcommandRows(
 					subcommand,
 					path ? `${path} ${subcommand.name}` : subcommand.name,
-					options,
+					input,
 				),
 			);
 		}

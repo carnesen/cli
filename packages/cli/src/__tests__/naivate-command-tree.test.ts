@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { navigateCommandTree } from '../find-cli-tree';
+import { navigateCliTree } from '../navigate-cli-tree';
 import { cliCommandGroupFactory } from '../cli-command-group';
 import { CliCommand } from '../cli-command';
 
@@ -15,12 +15,12 @@ const commandGroup = cliCommandGroupFactory({
 	subcommands: [command],
 });
 
-describe(navigateCommandTree.name, () => {
+describe(navigateCliTree.name, () => {
 	it('finds a command in a tree based on command-line arguments', () => {
 		const {
 			tree: { current, parents },
 			args,
-		} = navigateCommandTree(commandGroup, ['echo', 'foo']);
+		} = navigateCliTree(commandGroup, ['echo', 'foo']);
 		expect(current).toBe(command);
 		expect(parents[0]).toBe(commandGroup);
 		expect(args).toEqual(['foo']);
@@ -28,7 +28,7 @@ describe(navigateCommandTree.name, () => {
 
 	it('throws an error if passed an unexpected kind', async () => {
 		const exception = await runAndCatch(
-			navigateCommandTree,
+			navigateCliTree,
 			{ current: {} } as any,
 			[],
 		);
