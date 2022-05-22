@@ -1,10 +1,10 @@
-import { CliWordMark } from '../cli-word-mark';
-import { cliColorFactory } from '../cli-color-factory';
+import { CCliWordMark } from '../c-cli-word-mark';
+import { cCliColorFactory } from '../c-cli-color-factory';
 
-describe(CliWordMark.name, () => {
+describe(CCliWordMark.name, () => {
 	it('returns an ansi-bold decorated string', () => {
-		const color = cliColorFactory(true);
-		expect(CliWordMark({ ansi: color, color })).toBe(
+		const color = cCliColorFactory(true);
+		expect(CCliWordMark({ ansi: color, color })).toBe(
 			color.bold('@carnesen/cli'),
 		);
 	});

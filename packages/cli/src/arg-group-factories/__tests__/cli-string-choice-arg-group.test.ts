@@ -1,6 +1,6 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliStringChoiceArgGroup } from '../cli-string-choice-arg-group';
-import { CLI_USAGE_ERROR } from '../../cli-usage-error';
+import { C_CLI_USAGE_ERROR } from '../../c-cli-usage-error';
 
 const description = 'foo bar baz';
 const hidden = true;
@@ -22,14 +22,14 @@ describe(CliStringChoiceArgGroup.name, () => {
 
 	it('parse throws usage error "expected one of" if args is an empty array', async () => {
 		const exception = await runAndCatch(argGroup.parse, []);
-		expect(exception.code).toBe(CLI_USAGE_ERROR);
+		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/expected <special> to be one of/i);
 		expect(exception.message).toMatch(/foo, bar/i);
 	});
 
 	it('parse throws usage error "invalid argument ... expected one of" if args has a bad value', async () => {
 		const exception = await runAndCatch(argGroup.parse, ['baz']);
-		expect(exception.code).toBe(CLI_USAGE_ERROR);
+		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/expected <special> to be one of/i);
 		expect(exception.message).toMatch(placeholder);
 	});

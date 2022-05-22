@@ -1,29 +1,28 @@
-import { CliCommand } from '../cli-command';
+import { CCliCommand } from '../c-cli-command';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
-import { CliOptions } from '../cli-options';
-import { CCli } from '../c-cli';
+import { CCli, CCliOptions } from '../c-cli';
 
 describe(CCli.prototype.runLine.name, () => {
 	it('has a runLine method that parses the command-line', async () => {
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'cli',
 			positionalArgGroup: CliStringArgGroup(),
 			action({ positionalValue: str }) {
 				expect(str).toBe('foo');
 			},
 		});
-		const options: CliOptions = { done: () => {} };
+		const options: CCliOptions = { done: () => {} };
 		const exitCode = await CCli.create(command, options).runLine('"foo"');
 		expect(exitCode).toBe(0);
 	});
 
 	it("runLine consoleErrors if there's an unterminated quote", async () => {
 		const spy = jest.fn();
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'cli',
 			action() {},
 		});
-		const options: CliOptions = {
+		const options: CCliOptions = {
 			done: () => {},
 			logger: {
 				error: spy,
@@ -37,12 +36,12 @@ describe(CCli.prototype.runLine.name, () => {
 
 	it('runLine catches done if it throws', async () => {
 		const spy = jest.fn();
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'cli',
 			action() {},
 		});
 		const error = new Error();
-		const options: CliOptions = {
+		const options: CCliOptions = {
 			done: () => {
 				throw error;
 			},
@@ -58,7 +57,7 @@ describe(CCli.prototype.runLine.name, () => {
 	});
 
 	it('has reasonable default options', () => {
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'cli',
 			action() {},
 		});
@@ -66,11 +65,11 @@ describe(CCli.prototype.runLine.name, () => {
 	});
 
 	it('line defaults to empty string', () => {
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'cli',
 			action() {},
 		});
-		const options: CliOptions = { done() {} };
+		const options: CCliOptions = { done() {} };
 		CCli.create(command, options).runLine();
 	});
 });

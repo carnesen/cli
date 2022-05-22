@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`api throws USAGE error "bad command" if last command is a command group and additional args is present 1`] = `"Bad command \\"oops\\""`;
+
+exports[`api throws USAGE error "positional arguments" if last command is a command without positionalArgGroup property and additional args are present 1`] = `"Unexpected argument \\"oops\\" : Command \\"command-with-named-args\\" does not accept positional arguments"`;

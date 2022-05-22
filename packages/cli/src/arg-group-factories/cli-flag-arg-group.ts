@@ -1,18 +1,18 @@
-import { CliArgGroup } from '../cli-arg-group';
-import { CliUsageError } from '../cli-usage-error';
-import { AnyCliDescription } from '../cli-description';
+import { CCliArgGroup } from '../c-cli-arg-group';
+import { CCliUsageError } from '../c-cli-usage-error';
+import { AnyCliDescription } from '../c-cli-description';
 
 /**
- * Options for [[`CliFlagArgGroup`]]
+ * Options for {@link CliFlagArgGroup}
  */
 export type CliFlagArgGroupOptions = {
-	/** See [[`CliArgGroup.description`]] */
+	/** See {@link CliArgGroup.description} */
 	description?: AnyCliDescription;
-	/** See [[`CliArgGroup.hidden`]] */
+	/** See {@link CliArgGroup.hidden} */
 	hidden?: boolean;
 };
 
-/** A factory for boolean-valued [[`CliArgGroup`]]'s
+/** A factory for boolean-valued {@link CliArgGroup}'s
  *
  * @example
  * ```plaintext
@@ -20,12 +20,12 @@ export type CliFlagArgGroupOptions = {
  * $ cli --foo     // named flag "foo" parses `true`
  * $ cli --foo bar // usage error
  * ```
- * @throws [[`CliUsageError`]] */
+ * @throws {@link CliUsageError} */
 export function CliFlagArgGroup(
 	options: CliFlagArgGroupOptions = {},
-): CliArgGroup<boolean, false> {
+): CCliArgGroup<boolean, false> {
 	const { description, hidden = false } = options;
-	const argGroup: CliArgGroup<boolean, false> = {
+	const argGroup: CCliArgGroup<boolean, false> = {
 		placeholder: '',
 		required: false,
 		hidden,
@@ -34,7 +34,7 @@ export function CliFlagArgGroup(
 				return false;
 			}
 			if (args.length > 0) {
-				throw new CliUsageError(`Unexpected argument "${args[0]}"`);
+				throw new CCliUsageError(`Unexpected argument "${args[0]}"`);
 			}
 			return true;
 		},

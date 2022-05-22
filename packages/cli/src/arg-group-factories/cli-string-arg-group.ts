@@ -1,42 +1,42 @@
-import { CliArgGroup } from '../cli-arg-group';
-import { CliUsageError } from '../cli-usage-error';
+import { CCliArgGroup } from '../c-cli-arg-group';
+import { CCliUsageError } from '../c-cli-usage-error';
 
-/** Options for [[`CliStringArgGroup`]] */
+/** Options for {@link CliStringArgGroup} */
 export type CliStringArgGroupOptions = {
-	/** See [[`CliArgGroup.required`]] */
+	/** See {@link CliArgGroup.required} */
 	required?: boolean;
 
-	/** See [[`CliArgGroup.description`]] */
+	/** See {@link CliArgGroup.description} */
 	description?: string;
 
-	/** See [[`CliArgGroup.hidden`]] */
+	/** See {@link CliArgGroup.hidden} */
 	hidden?: boolean;
 
-	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<str\>" */
+	/** See {@link CliArgGroup.placeholder} defaulting to "\<str\>" */
 	placeholder?: string;
 };
 
-/** A factory for required `string`-valued [[`CliArgGroup`]]s */
+/** A factory for required `string`-valued {@link CliArgGroup}s */
 function CliStringArgGroup(
 	options: CliStringArgGroupOptions & { required: true },
-): CliArgGroup<string, true>;
+): CCliArgGroup<string, true>;
 
-/** A factory for optional `string | undefined`-valued [[`CliArgGroup`]]s */
+/** A factory for optional `string | undefined`-valued {@link CliArgGroup}s */
 function CliStringArgGroup(
 	options?: CliStringArgGroupOptions,
-): CliArgGroup<string | undefined, false>;
+): CCliArgGroup<string | undefined, false>;
 
 // Implementation
 function CliStringArgGroup(
 	options: CliStringArgGroupOptions = {},
-): CliArgGroup<string | undefined> {
+): CCliArgGroup<string | undefined> {
 	const {
 		required = false,
 		description,
 		placeholder = '<str>',
 		hidden = false,
 	} = options;
-	const argGroup: CliArgGroup<string | undefined> = {
+	const argGroup: CCliArgGroup<string | undefined> = {
 		hidden,
 		placeholder,
 		required,
@@ -46,11 +46,11 @@ function CliStringArgGroup(
 			}
 
 			if (args.length > 1) {
-				throw new CliUsageError(`Expected just one ${placeholder}`);
+				throw new CCliUsageError(`Expected just one ${placeholder}`);
 			}
 
 			if (args.length === 0) {
-				throw new CliUsageError(`Expected a ${placeholder}`);
+				throw new CCliUsageError(`Expected a ${placeholder}`);
 			}
 
 			return args[0];

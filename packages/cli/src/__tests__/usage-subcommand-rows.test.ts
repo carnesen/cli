@@ -1,32 +1,32 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { usageSubcommandRowsFactory } from '../usage-subcommand-rows';
-import { cliCommandGroupFactory } from '../cli-command-group';
-import { CliCommand } from '../cli-command';
-import { cliColorFactory } from '../cli-color-factory';
-import { CliDescriptionFunctionInput } from '../cli-description';
+import { CCliCommand } from '../c-cli-command';
+import { cCliColorFactory } from '../c-cli-color-factory';
+import { CCliDescriptionFunctionInput } from '../c-cli-description';
+import { CCliCommandGroup } from '../c-cli-command-group';
 
-const command = CliCommand({
+const command = CCliCommand.create({
 	name: 'list',
 	action() {},
 	description: 'La da dee',
 });
 
-const hiddenCommand = CliCommand({
+const hiddenCommand = CCliCommand.create({
 	name: 'foo',
 	hidden: true,
 	action() {},
 });
 
-const commandGroup = cliCommandGroupFactory({
+const commandGroup = CCliCommandGroup.create({
 	name: 'users',
 	subcommands: [command, hiddenCommand],
 });
-const root = cliCommandGroupFactory({
+const root = CCliCommandGroup.create({
 	name: 'cloud',
 	subcommands: [commandGroup],
 });
-const color = cliColorFactory();
-const input: CliDescriptionFunctionInput = { ansi: color, color };
+const color = cCliColorFactory();
+const input: CCliDescriptionFunctionInput = { ansi: color, color };
 
 describe(usageSubcommandRowsFactory.name, () => {
 	it('lists all commands underneath the provided command group, recursive', () => {
@@ -35,14 +35,12 @@ describe(usageSubcommandRowsFactory.name, () => {
 		expect(rows.length).toBe(1);
 		const [name, description] = rows[0];
 		expect(name).toBe('users list');
-		expect(description).toBe(command.description);
+		expect(description).toBe(command.options.description);
 	});
 	it('throws "Unexpected kind" on bad object', async () => {
-		const exception = await runAndCatch(
-			usageSubcommandRowsFactory,
-			{} as any,
-			input,
+		const exception = await runAndCatch(() =>
+			usageSubcommandRowsFactory({ options: {} } as any, input),
 		);
-		expect(exception.message).toBe('Unexpected kind');
+		expect(exception.message).toMatch('Expected instance');
 	});
 });

@@ -1,44 +1,44 @@
-import { CliTree } from './cli-tree';
-import { CLI_COMMAND } from './cli-command';
-import { ICliCommandGroup, CLI_COMMAND_GROUP } from './cli-command-group';
+import { CCliTree } from './c-cli-tree';
 import { TTwoColumnTableRow } from './two-column-table';
 import {
 	descriptionTextFactory,
-	CliDescriptionFunctionInput,
-} from './cli-description';
+	CCliDescriptionFunctionInput,
+} from './c-cli-description';
+import { CCliCommandGroup } from './c-cli-command-group';
+import { CCliCommand } from './c-cli-command';
 /** [command path, description] */
 
 export function usageSubcommandRowsFactory(
-	commandGroup: ICliCommandGroup,
-	input: CliDescriptionFunctionInput,
+	commandGroup: CCliCommandGroup,
+	input: CCliDescriptionFunctionInput,
 ): TTwoColumnTableRow[] {
 	return recursiveUsageSubcommandRows(commandGroup, '', input);
 }
 
 function recursiveUsageSubcommandRows(
-	current: CliTree['current'],
+	current: CCliTree['current'],
 	path: string,
-	input: CliDescriptionFunctionInput,
+	input: CCliDescriptionFunctionInput,
 ): TTwoColumnTableRow[] {
-	if (current.hidden && path.length > 0) {
+	if (current.options.hidden && path.length > 0) {
 		// We've walked to a hidden tree. When path.length === 0 the user has
 		// specifically invoked a hidden tree in which case we still want to show
 		// them the usage.
 		return [];
 	}
 
-	if (current.kind === CLI_COMMAND) {
-		const text = descriptionTextFactory(current.description, input);
+	if (current instanceof CCliCommand) {
+		const text = descriptionTextFactory(current.options.description, input);
 		return [[path, text]];
 	}
 
-	if (current.kind === CLI_COMMAND_GROUP) {
+	if (current instanceof CCliCommandGroup) {
 		const subcommandsForUsage: TTwoColumnTableRow[] = [];
-		for (const subcommand of current.subcommands) {
+		for (const subcommand of current.options.subcommands) {
 			subcommandsForUsage.push(
 				...recursiveUsageSubcommandRows(
 					subcommand,
-					path ? `${path} ${subcommand.name}` : subcommand.name,
+					path ? `${path} ${subcommand.options.name}` : subcommand.options.name,
 					input,
 				),
 			);
@@ -46,5 +46,7 @@ function recursiveUsageSubcommandRows(
 		return subcommandsForUsage;
 	}
 
-	throw new Error('Unexpected kind');
+	throw new Error(
+		`Expected instance of ${CCliCommand.name} or ${CCliCommandGroup.name}`,
+	);
 }

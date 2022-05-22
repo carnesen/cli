@@ -1,12 +1,12 @@
-import { CliConsoleLogger } from '../cli-console-logger';
-import { CliLogger } from '../cli-logger';
+import { CCliConsoleLogger } from '../c-cli-console-logger';
+import { CCliLogger } from '../c-cli-logger';
 import { deleteGlobal } from '../delete-global';
 import { getGlobal } from '../get-global';
 
-describe(CliConsoleLogger.name, () => {
+describe(CCliConsoleLogger.name, () => {
 	it('"log" delegates to global console.log if `console` is present', () => {
-		const logger = CliConsoleLogger.create();
-		const globalConsole = getGlobal<CliLogger>('console');
+		const logger = CCliConsoleLogger.create();
+		const globalConsole = getGlobal<CCliLogger>('console');
 		const spy = jest.spyOn(globalConsole, 'log').mockImplementation(() => {});
 		logger.log('foo');
 		expect(spy).toHaveBeenCalledWith('foo');
@@ -14,8 +14,8 @@ describe(CliConsoleLogger.name, () => {
 	});
 
 	it('"error" delegates to global `console.error` if `console` exists', () => {
-		const logger = CliConsoleLogger.create();
-		const globalConsole = getGlobal<CliLogger>('console');
+		const logger = CCliConsoleLogger.create();
+		const globalConsole = getGlobal<CCliLogger>('console');
 
 		const spy = jest.spyOn(globalConsole, 'error').mockImplementation(() => {});
 		logger.error('foo');
@@ -24,9 +24,9 @@ describe(CliConsoleLogger.name, () => {
 	});
 
 	it('uses a no-op logger if `console` does not exist', () => {
-		const globalConsole = getGlobal<CliLogger>('console');
+		const globalConsole = getGlobal<CCliLogger>('console');
 		const restoreOriginal = deleteGlobal('console');
-		const logger = CliConsoleLogger.create();
+		const logger = CCliConsoleLogger.create();
 		const spy = jest.spyOn(globalConsole, 'log').mockImplementation(() => {});
 		logger.log('foo');
 		expect(spy).not.toHaveBeenCalled();

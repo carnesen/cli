@@ -13,7 +13,7 @@ export interface ITwoColumnTableOptions {
 /**
  * Generate the lines for a two-column table
  * @param rows
- * @param options An [[`ITwoColumnTableOptions`]] object
+ * @param options An {@link ITwoColumnTableOptions} object
  */
 export function TwoColumnTable(
 	rows: TTwoColumnTableRow[],

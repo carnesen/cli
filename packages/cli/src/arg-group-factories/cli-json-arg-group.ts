@@ -1,46 +1,43 @@
-import { CliArgGroup } from '../cli-arg-group';
-import { CliUsageError } from '../cli-usage-error';
+import { CCliArgGroup } from '../c-cli-arg-group';
+import { CCliUsageError } from '../c-cli-usage-error';
 
-/** Options for [[`CliJsonArgGroup`]] */
+/** Options for {@link CliJsonArgGroup} */
 export type CliJsonArgGroupOptions = {
-	/** See [[`CliArgGroup.description`]] */
+	/** See {@link CliArgGroup.description} */
 	description?: string;
 
-	/** See [[`CliArgGroup.required`]] */
+	/** See {@link CliArgGroup.required} */
 	required?: boolean;
 
-	/** See [[`CliArgGroup.placeholder`]]. Defaults to "\<json\>" */
+	/** See {@link CliArgGroup.placeholder}. Defaults to "\<json\>" */
 	placeholder?: string;
 
-	/** See [[`CliArgGroup.hidden`]] */
+	/** See {@link CliArgGroup.hidden} */
 	hidden?: boolean;
 };
 
-/**
- * A factory for [[`CliArgGroup`]]s that `JSON.parse`
+/** A factory for {@link CliArgGroup}s that `JSON.parse`
  *
  * @example
  * Suppose our CLI's positionalArgGroup is a CliJsonArgGroup. Here's how that
  * behaves:
  * ```plaintext
- * $ cli '{"foo":true}' // named value "json" receives object `{ foo: true }`
+ * $ cli '{"foo":true}' // named value receives object `{ foo: true }`
  * $ cli                // usage error
  * $ cli '""' '""'      // usage error
  * $ cli foo            // error parsing JSON
  * ```
- *
- * @throws [[`CliUsageError`]]
- */
+ * @throws {@link CliUsageError} */
 export function CliJsonArgGroup(
 	options: CliJsonArgGroupOptions = {},
-): CliArgGroup<any> {
+): CCliArgGroup<any> {
 	const {
 		placeholder = '<json>',
 		required = false,
 		description,
 		hidden = false,
 	} = options;
-	const argGroup: CliArgGroup<any> = {
+	const argGroup: CCliArgGroup<any> = {
 		required,
 		placeholder,
 		hidden,
@@ -49,13 +46,13 @@ export function CliJsonArgGroup(
 				return undefined;
 			}
 			if (args.length !== 1) {
-				throw new CliUsageError(`Expected a single ${placeholder} string`);
+				throw new CCliUsageError(`Expected a single ${placeholder} string`);
 			}
 			try {
 				const parsed = JSON.parse(args[0]);
 				return parsed;
 			} catch (exception: any) {
-				throw new CliUsageError(exception.message);
+				throw new CCliUsageError(exception.message);
 			}
 		},
 		description,

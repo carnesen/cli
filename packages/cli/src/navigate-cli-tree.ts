@@ -1,15 +1,15 @@
-import { CliTree, CliRoot } from './cli-tree';
-import { CLI_COMMAND } from './cli-command';
-import { CLI_COMMAND_GROUP } from './cli-command-group';
+import { CCliCommand } from './c-cli-command';
+import { CCliCommandGroup } from './c-cli-command-group';
+import { CCliTree, CCliRoot } from './c-cli-tree';
 
-/** FOR INTERNAL USE ONLY. The result of calling [[`navigateCommandTree`]] */
+/** FOR INTERNAL USE ONLY. The result of calling {@link navigateCommandTree} */
 export type NavigateCliTreeResult = {
 	/** Passed args past those used during navigation */
 	args: string[];
 	/** An error message describing why navigation stopped */
 	message?: string;
 	/** The point in the command tree at which navigation stopped */
-	tree: CliTree;
+	tree: CCliTree;
 };
 
 /** FOR INTERNAL USE ONLY. Walk a tree of commands to find the one selected by
@@ -18,7 +18,7 @@ export type NavigateCliTreeResult = {
  * @param args - An array of command-line arguments
  * @returns The result of the search */
 export function navigateCliTree(
-	root: CliRoot,
+	root: CCliRoot,
 	args: string[],
 ): NavigateCliTreeResult {
 	return recursiveNavigateCliTree({
@@ -31,11 +31,11 @@ function recursiveNavigateCliTree(
 	result: NavigateCliTreeResult,
 ): NavigateCliTreeResult {
 	// Terminate recursion if current is a command
-	if (result.tree.current.kind === CLI_COMMAND) {
+	if (result.tree.current instanceof CCliCommand) {
 		return result;
 	}
 
-	if (result.tree.current.kind === CLI_COMMAND_GROUP) {
+	if (result.tree.current instanceof CCliCommandGroup) {
 		if (result.args.length === 0) {
 			// Example: Full command is "cli user login". They've done "cli user". In
 			// this case we want to print the usage string but not an error message.
@@ -47,8 +47,8 @@ function recursiveNavigateCliTree(
 			return result;
 		}
 
-		const next = result.tree.current.subcommands.find(
-			(subcommand) => subcommand.name === result.args[0],
+		const next = result.tree.current.options.subcommands.find(
+			(subcommand) => subcommand.options.name === result.args[0],
 		);
 
 		if (!next) {

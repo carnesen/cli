@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CLI_USAGE_ERROR } from '../../cli-usage-error';
+import { C_CLI_USAGE_ERROR } from '../../c-cli-usage-error';
 import { CliJsonArgGroup } from '../cli-json-arg-group';
 
 const description = 'foo bar baz';
@@ -26,7 +26,7 @@ describe(CliJsonArgGroup.name, () => {
 	it('parse throws a usage error "expected a single" if args is an array with zero or more than one items', async () => {
 		for (const args of [[], ['', '']]) {
 			const exception = await runAndCatch(argGroup.parse, args);
-			expect(exception.code).toBe(CLI_USAGE_ERROR);
+			expect(exception.code).toBe(C_CLI_USAGE_ERROR);
 			expect(exception.message).toMatch(/expected a single/i);
 			expect(exception.message).toMatch(placeholder);
 		}
@@ -34,7 +34,7 @@ describe(CliJsonArgGroup.name, () => {
 
 	it('parse throws a good usage error if the string in args is not parsable', async () => {
 		const exception = await runAndCatch(argGroup.parse, ['foo']);
-		expect(exception.code).toBe(CLI_USAGE_ERROR);
+		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
 		expect(exception.message).toMatch('Unexpected token');
 	});
 

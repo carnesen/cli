@@ -1,10 +1,10 @@
 import {
 	descriptionTextFactory,
 	AnyCliDescription,
-	CliDescriptionFunctionInput,
-} from '../cli-description';
-import { cliColorFactory } from '../cli-color-factory';
-import { CliColor } from '../cli-color';
+	CCliDescriptionFunctionInput,
+} from '../c-cli-description';
+import { cCliColorFactory } from '../c-cli-color-factory';
+import { CCliColor } from '../c-cli-color';
 
 const data: {
 	title: string;
@@ -37,14 +37,14 @@ const data: {
 	},
 ];
 
-const color: CliColor = {
-	...cliColorFactory(false),
+const color: CCliColor = {
+	...cCliColorFactory(false),
 	red() {
 		return 'bar';
 	},
 };
 
-const input: CliDescriptionFunctionInput = {
+const input: CCliDescriptionFunctionInput = {
 	ansi: color,
 	color,
 };

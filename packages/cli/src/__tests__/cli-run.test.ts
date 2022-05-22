@@ -1,20 +1,19 @@
 import { CodedError } from '@carnesen/coded-error';
-import { cliColorFactory } from '../cli-color-factory';
-import { CliCommand } from '../cli-command';
-import { CliUsageError, CLI_USAGE_ERROR } from '../cli-usage-error';
-import { CliTerseError, CLI_TERSE_ERROR } from '../cli-terse-error';
-import { CliOptions } from '../cli-options';
-import { getGlobalProcess } from '../cli-process';
-import { CCli } from '../c-cli';
+import { cCliColorFactory } from '../c-cli-color-factory';
+import { CCliCommand } from '../c-cli-command';
+import { CCliUsageError, C_CLI_USAGE_ERROR } from '../c-cli-usage-error';
+import { CCliTerseError, C_CLI_TERSE_ERROR } from '../c-cli-terse-error';
+import { getGlobalProcess } from '../c-cli-process';
+import { CCli, CCliOptions } from '../c-cli';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
-async function runMocked(action: () => any, options: CliOptions = {}) {
+async function runMocked(action: () => any, options: CCliOptions = {}) {
 	const mockOptions = {
 		logger: { log: jest.fn(), error: jest.fn() },
 		done: jest.fn(),
 	};
 
-	const command = CliCommand({
+	const command = CCliCommand.create({
 		name: 'cli',
 		action,
 	});
@@ -73,7 +72,7 @@ describe(CCli.prototype.run.name, () => {
 
 	it("exits 1 and logger.error's a usage string if action throws a UsageError", async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
-			throw new CliUsageError();
+			throw new CCliUsageError();
 		});
 		expect(exitCode).toBe(1);
 		expect(errorMessage).toMatch('Usage');
@@ -82,7 +81,7 @@ describe(CCli.prototype.run.name, () => {
 
 	it('usage string includes "Error" and the message if provided', async () => {
 		const { errorMessage } = await runMocked(() => {
-			throw new CliUsageError('Oops!');
+			throw new CCliUsageError('Oops!');
 		});
 		expect(errorMessage).toMatch('Oops!');
 		expect(errorMessage).toMatch('Error');
@@ -90,10 +89,10 @@ describe(CCli.prototype.run.name, () => {
 
 	it("exits 1 and logger.error's a red error message if action throws a TerseError", async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
-			throw new CliTerseError('foo');
+			throw new CCliTerseError('foo');
 		});
 		expect(exitCode).toBe(1);
-		expect(errorMessage).toMatch(cliColorFactory().red('Error:'));
+		expect(errorMessage).toMatch(cCliColorFactory().red('Error:'));
 		expect(errorMessage).toMatch('foo');
 		expect(logMessage).toBe(undefined);
 	});
@@ -101,26 +100,26 @@ describe(CCli.prototype.run.name, () => {
 	it('does not use red in the error message if ansi is false', async () => {
 		const { errorMessage } = await runMocked(
 			() => {
-				throw new CliTerseError('foo');
+				throw new CCliTerseError('foo');
 			},
 			{ ansi: false },
 		);
-		expect(errorMessage).not.toMatch(cliColorFactory(true).red('Error:'));
+		expect(errorMessage).not.toMatch(cCliColorFactory(true).red('Error:'));
 		expect(errorMessage).toMatch('Error:');
 	});
 
 	it("exits 1 and logger.error's the full error if action throws a TerseError without a message", async () => {
 		const { exitCode, errorMessage, logMessage } = await runMocked(() => {
-			throw new CliTerseError('');
+			throw new CCliTerseError('');
 		});
 		expect(exitCode).toBe(1);
 		expect(typeof errorMessage).toBe('object');
-		expect(errorMessage.code).toBe(CLI_TERSE_ERROR);
+		expect(errorMessage.code).toBe(C_CLI_TERSE_ERROR);
 		expect(logMessage).toBe(undefined);
 	});
 
 	it('exits with the specified code if exitCode is a number', async () => {
-		const error = new CliTerseError('', 123);
+		const error = new CCliTerseError('', 123);
 		const { exitCode } = await runMocked(() => {
 			throw error;
 		});
@@ -141,7 +140,7 @@ describe(CCli.prototype.run.name, () => {
 		const mockExit = jest
 			.spyOn((globalThis as any).process, 'exit')
 			.mockImplementation((() => {}) as any);
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'cli',
 			action() {
 				// do nothing
@@ -152,16 +151,16 @@ describe(CCli.prototype.run.name, () => {
 		expect(exitCode).toBe(0);
 	});
 
-	it(`logger.error's an exception that has code=${CLI_USAGE_ERROR} but tree=undefined`, async () => {
-		const command = CliCommand({
+	it(`logger.error's an exception that has code=${C_CLI_USAGE_ERROR} but tree=undefined`, async () => {
+		const command = CCliCommand.create({
 			name: 'cli',
 			action() {
 				return 'something';
 			},
 		});
 		const spy = jest.fn();
-		const codedError = new CodedError('Ah!', CLI_USAGE_ERROR);
-		const options: CliOptions = {
+		const codedError = new CodedError('Ah!', C_CLI_USAGE_ERROR);
+		const options: CCliOptions = {
 			done: () => {},
 			logger: {
 				log() {
@@ -176,7 +175,7 @@ describe(CCli.prototype.run.name, () => {
 	});
 
 	it(`handles it gracefully if the "done" callback throws`, async () => {
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'cli',
 			action() {
 				// nothing;
@@ -184,7 +183,7 @@ describe(CCli.prototype.run.name, () => {
 		});
 		const spy = jest.fn();
 		const error = new Error('Ah!');
-		const options: CliOptions = {
+		const options: CCliOptions = {
 			done: () => {
 				throw error;
 			},
@@ -202,14 +201,14 @@ describe(CCli.prototype.run.name, () => {
 
 	it(`sets args to process.argv.slice(2) by default`, async () => {
 		const spy = jest.fn();
-		const command = CliCommand({
+		const command = CCliCommand.create({
 			name: 'whatever',
 			positionalArgGroup: CliStringArgGroup(),
 			action({ positionalValue }) {
 				return positionalValue;
 			},
 		});
-		const options: CliOptions = {
+		const options: CCliOptions = {
 			done: () => {
 				// nothing
 			},

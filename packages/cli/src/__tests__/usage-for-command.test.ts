@@ -1,6 +1,6 @@
-import { CliCommand } from '../cli-command';
+import { CCliCommand } from '../c-cli-command';
 import { usageForCommand } from '../usage-for-command';
-import { cliColorFactory } from '../cli-color-factory';
+import { cCliColorFactory } from '../c-cli-color-factory';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
 
 const argGroup = CliStringArgGroup({
@@ -8,7 +8,7 @@ const argGroup = CliStringArgGroup({
 	placeholder: '<p>',
 });
 
-const command = CliCommand({
+const command = CCliCommand.create({
 	name: 'list',
 	positionalArgGroup: argGroup,
 	namedArgGroups: {
@@ -24,12 +24,12 @@ describe(usageForCommand.name, () => {
 		const indentation = '   ';
 		const lines = usageForCommand(
 			{ current: command as any, parents: [] },
-			{ columns: 100, indentation, color: cliColorFactory() },
+			{ columns: 100, indentation, color: cCliColorFactory() },
 		);
 		expect(lines.length).toBe(15);
 		expect(lines[0]).toMatch(`-- ${argGroup.placeholder}`);
 		expect(lines[1]).toBe('');
-		expect(lines[2]).toBe(`${indentation}${command.description}`);
+		expect(lines[2]).toBe(`${indentation}${command.options.description}`);
 		expect(lines[3]).toBe('');
 		expect(lines[4]).toBe('Positional arguments:');
 		expect(lines[5]).toBe('');

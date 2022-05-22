@@ -1,5 +1,5 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CLI_USAGE_ERROR } from '../../cli-usage-error';
+import { C_CLI_USAGE_ERROR } from '../../c-cli-usage-error';
 import { CliStringArrayArgGroup } from '../cli-string-array-arg-group';
 
 const description = 'foo bar baz';
@@ -25,7 +25,7 @@ describe(CliStringArrayArgGroup.name, () => {
 
 	it('parse throws USAGE error "expected one or more" if args is an empty array', async () => {
 		const exception = await runAndCatch(argGroup.parse, []);
-		expect(exception.code).toBe(CLI_USAGE_ERROR);
+		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/expected one or more/i);
 		expect(exception.message).toMatch(placeholder);
 	});

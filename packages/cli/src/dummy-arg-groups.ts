@@ -1,4 +1,4 @@
-import { CliArgGroup } from './cli-arg-group';
+import { CCliArgGroup } from './c-cli-arg-group';
 
 export const DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED = 'undefined was passed';
 export const DUMMY_ARG_GROUP_EMPTY_ARRAY_WAS_PASSED = 'undefined was passed';
@@ -6,7 +6,7 @@ export const DUMMY_ARG_GROUP_THROWN_INTENTIONALLY = 'thrown intentionally';
 export const DUMMY_ARG_GROUP_THROW = 'throw';
 export const DUMMY_ARG_GROUP_THROW_NON_TRUTHY = 'throw-non-truthy';
 
-export const dummyArgGroup: CliArgGroup<string, false> = {
+export const dummyArgGroup: CCliArgGroup<string, false> = {
 	placeholder: '',
 	parse(args) {
 		if (typeof args === 'undefined') {
@@ -30,7 +30,7 @@ export const dummyArgGroup: CliArgGroup<string, false> = {
 	},
 };
 
-export const dummyRequiredArgGroup: CliArgGroup<string, true> = {
+export const dummyRequiredArgGroup: CCliArgGroup<string, true> = {
 	placeholder: '<foo>',
 	required: true,
 	parse: dummyArgGroup.parse,

@@ -3,13 +3,13 @@ import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
 import {
 	descriptionTextFactory,
-	CliDescriptionFunctionInput,
-} from './cli-description';
-import { CliLeaf } from './cli-tree';
+	CCliDescriptionFunctionInput,
+} from './c-cli-description';
+import { CCliLeaf } from './c-cli-tree';
 import { UsageOptions } from './usage-options';
 
 export function usageForCommand(
-	leaf: CliLeaf,
+	leaf: CCliLeaf,
 	options: UsageOptions,
 ): string[] {
 	const { current, parents } = leaf;
@@ -19,15 +19,15 @@ export function usageForCommand(
 		namedArgGroups,
 		doubleDashArgGroup,
 		description,
-	} = current;
+	} = current.options;
 	const commandPathString = [...parents, current]
-		.map(({ name }) => name)
+		.map(({ options: { name } }) => name)
 		.join(' ');
 
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionInput: CliDescriptionFunctionInput = { ansi: color, color };
+	const descriptionInput: CCliDescriptionFunctionInput = { ansi: color, color };
 	const commandDescriptionText: string = descriptionTextFactory(
 		description,
 		descriptionInput,

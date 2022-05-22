@@ -1,11 +1,11 @@
 import { runAndCatchSync } from '@carnesen/run-and-catch';
 import { usageFactory } from '../usage-string';
-import { cliCommandGroupFactory } from '../cli-command-group';
 import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
-import { CliCommand } from '../cli-command';
-import { CliTree } from '../cli-tree';
+import { CCliCommand } from '../c-cli-command';
+import { CCliTree } from '../c-cli-tree';
 import { UsageOptions } from '../usage-options';
-import { cliColorFactory } from '../cli-color-factory';
+import { cCliColorFactory } from '../c-cli-color-factory';
+import { CCliCommandGroup } from '../c-cli-command-group';
 
 const DESCRIPTION = 'A string message please';
 
@@ -21,7 +21,7 @@ const doubleDashArgGroup = CliStringArgGroup({
 	required: true,
 });
 
-const current = CliCommand({
+const current = CCliCommand.create({
 	name: 'echo',
 	positionalArgGroup,
 	namedArgGroups: {
@@ -33,14 +33,14 @@ const current = CliCommand({
 	},
 });
 
-const commandGroup = cliCommandGroupFactory({
+const commandGroup = CCliCommandGroup.create({
 	name: 'cli',
 	description: 'This is a CLI',
 	subcommands: [current],
 });
 
 const options: UsageOptions = {
-	color: cliColorFactory(),
+	color: cCliColorFactory(),
 	columns: 100,
 	indentation: '',
 };
@@ -57,7 +57,7 @@ describe(usageFactory.name, () => {
 	it('Creates a usage string for a command without a parent', () => {
 		const usageString = usageFactory(
 			{
-				current: current as CliTree['current'],
+				current: current as CCliTree['current'],
 				parents: [],
 			},
 			options,
@@ -69,7 +69,7 @@ describe(usageFactory.name, () => {
 	it('Creates a usage string for a command without a parent command group', () => {
 		const usageString = usageFactory(
 			{
-				current: current as CliTree['current'],
+				current: current as CCliTree['current'],
 				parents: [commandGroup],
 			},
 			options,
@@ -78,7 +78,7 @@ describe(usageFactory.name, () => {
 	});
 
 	it('Does not write usage for named argGroups if there are none', () => {
-		const fooCommand = CliCommand({ name: 'foo', action() {} });
+		const fooCommand = CCliCommand.create({ name: 'foo', action() {} });
 		const usageString = usageFactory(
 			{ current: fooCommand, parents: [] },
 			options,

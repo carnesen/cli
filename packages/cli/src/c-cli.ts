@@ -1,29 +1,65 @@
-import { CliRoot } from './cli-tree';
-import { CliOptions } from './cli-options';
-import { CliConsoleLogger } from './cli-console-logger';
-import { cliColorFactory } from './cli-color-factory';
+import { CCliRoot } from './c-cli-tree';
+import { CCliConsoleLogger } from './c-cli-console-logger';
+import { cCliColorFactory } from './c-cli-color-factory';
 import { navigateCliTree } from './navigate-cli-tree';
-import { CLI_COMMAND } from './cli-command';
-import { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
+import { CCliUsageError, C_CLI_USAGE_ERROR } from './c-cli-usage-error';
 import { partitionArgs } from './partition-args';
 import { parseArgs } from './parse-args';
 import { parseNamedArgs } from './parse-named-args';
-import { cliProcessFactory } from './cli-process';
+import { CCliProcess, cCliProcessFactory } from './c-cli-process';
 import { usageFactory } from './usage-string';
-import { CLI_TERSE_ERROR } from './cli-terse-error';
+import { C_CLI_TERSE_ERROR } from './c-cli-terse-error';
 import { splitCommandLine } from './split-command-line';
+import { CCliCommand } from './c-cli-command';
+import { CCliColor } from './c-cli-color';
+import { CCliLogger } from './c-cli-logger';
 
+/** Options for creating a **@carnesen/cli** CLI */
+export type CCliOptions = {
+	/** Enable/disable ANSI text color decoration
+	 * @default process.stdout.isTTY && process.stderr.isTTY */
+	ansi?: boolean;
+
+	/** Text coloring methods. Takes precedence over the `ansi` option
+	 * @default CliDefaultColor */
+	color?: CCliColor;
+
+	/** Number of terminal columns
+	 * @default process.stdout.columns || 100 */
+	columns?: number;
+
+	/** @deprecated Use `logger` instead */
+	console?: CCliLogger;
+
+	/** Called after the command has completed. Defaults to `process.exit` */
+	done?: CCliProcess['exit'];
+
+	/** `CliLogger` object to use for the CLI. Defaults to the global `console`
+	 * object. The CLI runner calls `logger.log` on the command's `action` return
+	 * value if there is one. The CLI runner calls `logger.error` on the
+	 * exception if one is thrown. The `logger` is injected into the command
+	 * `action` too. */
+	logger?: CCliLogger;
+};
+
+/** Main class implementing the **@carnesen/cli** command-line interface (CLI)
+ * framework */
 export class CCli {
 	private readonly color =
-		this.options.color ?? cliColorFactory(this.options.ansi);
+		this.options.color ?? cCliColorFactory(this.options.ansi);
 
 	private readonly logger =
-		this.options.logger ?? this.options.console ?? CliConsoleLogger.create();
+		this.options.logger ?? this.options.console ?? CCliConsoleLogger.create();
 
 	protected constructor(
-		private readonly root: CliRoot,
-		private readonly options: CliOptions,
-	) {}
+		private readonly root: CCliRoot,
+		private readonly options: CCliOptions,
+	) {
+		// Explicitly bind the public class methods to this instance
+		this.api = this.api.bind(this);
+		this.run = this.run.bind(this);
+		this.runLine = this.runLine.bind(this);
+	}
 
 	/** Programmatic interface for the CLI. Mostly used for unit testing
 	 * @param args Command-line argument strings
@@ -31,8 +67,8 @@ export class CCli {
 	public async api(args: string[]): Promise<any> {
 		const navigated = navigateCliTree(this.root, args);
 
-		if (navigated.message || navigated.tree.current.kind !== CLI_COMMAND) {
-			throw new CliUsageError(navigated.message, navigated.tree);
+		if (navigated.message || !(navigated.tree.current instanceof CCliCommand)) {
+			throw new CCliUsageError(navigated.message, navigated.tree);
 		}
 
 		const { positionalArgs, namedArgs, doubleDashArgs } = partitionArgs(
@@ -41,15 +77,15 @@ export class CCli {
 
 		// We found "--help" among the arguments
 		if (namedArgs.help) {
-			throw new CliUsageError(undefined, navigated.tree);
+			throw new CCliUsageError(undefined, navigated.tree);
 		}
 
 		const command = navigated.tree.current;
 
 		// Pre-validation for positional argument group
-		if (!command.positionalArgGroup && positionalArgs.length > 0) {
-			throw new CliUsageError(
-				`Unexpected argument "${positionalArgs[0]}" : Command "${command.name}" does not accept positional arguments`,
+		if (!command.options.positionalArgGroup && positionalArgs.length > 0) {
+			throw new CCliUsageError(
+				`Unexpected argument "${positionalArgs[0]}" : Command "${command.options.name}" does not accept positional arguments`,
 				navigated.tree,
 			);
 		}
@@ -57,9 +93,9 @@ export class CCli {
 		// All validation for named argument groups is done during parsing
 
 		// Pre-validation for double-dash argument group
-		if (!command.doubleDashArgGroup && doubleDashArgs) {
-			throw new CliUsageError(
-				`Command "${command.name}" does not allow "--" as an argument`,
+		if (!command.options.doubleDashArgGroup && doubleDashArgs) {
+			throw new CCliUsageError(
+				`Command "${command.options.name}" does not allow "--" as an argument`,
 			);
 		}
 
@@ -68,7 +104,7 @@ export class CCli {
 		// context.
 		try {
 			let positionalValue: any;
-			if (command.positionalArgGroup) {
+			if (command.options.positionalArgGroup) {
 				// Note that for named and double-dash args, we distinguish between
 				// `undefined` and `[]`. For example, "cli" gives an double-dash args
 				// `undefined` whereas "cli --" gives an double-dash args `[]`. For the
@@ -76,27 +112,27 @@ export class CCli {
 				// we elect here to pass in `undefined` rather than an empty array when no
 				// positional arguments are passed.
 				positionalValue = await parseArgs(
-					command.positionalArgGroup,
+					command.options.positionalArgGroup,
 					positionalArgs.length > 0 ? positionalArgs : undefined,
 					undefined,
 				);
 			}
 
 			const namedValues = await parseNamedArgs(
-				command.namedArgGroups || {},
+				command.options.namedArgGroups || {},
 				namedArgs,
 			);
 
 			let doubleDashValue: any;
-			if (command.doubleDashArgGroup) {
+			if (command.options.doubleDashArgGroup) {
 				doubleDashValue = await parseArgs(
-					command.doubleDashArgGroup,
+					command.options.doubleDashArgGroup,
 					doubleDashArgs,
 					'--',
 				);
 			}
 
-			const result = await command.action({
+			const result = await command.options.action({
 				ansi: this.color,
 				color: this.color,
 				console: this.logger,
@@ -109,7 +145,7 @@ export class CCli {
 		} catch (exception) {
 			// Check if the thrown exception is an instance of CliUsageError. If
 			// so, attach the current command tree context.
-			if (exception instanceof CliUsageError) {
+			if (exception instanceof CCliUsageError) {
 				exception.tree = exception.tree ?? navigated.tree;
 			}
 			throw exception;
@@ -121,7 +157,7 @@ export class CCli {
 	 * command action. Defaults to `process.argv.slice(2)` in Node.js.
 	 * @returns A promise resolving to the command's exit code */
 	public async run(args?: string[]): Promise<number> {
-		const cliProcess = cliProcessFactory();
+		const cliProcess = cCliProcessFactory();
 
 		let exitCode = 0;
 		try {
@@ -169,11 +205,11 @@ export class CCli {
 	}
 
 	private done(code?: number): void {
-		(this.options.done ?? cliProcessFactory().exit)(code);
+		(this.options.done ?? cCliProcessFactory().exit)(code);
 	}
 
 	private handleException(exception: any): void {
-		const cliProcess = cliProcessFactory();
+		const cliProcess = cCliProcessFactory();
 		const { columns = cliProcess.stdout.columns } = this.options;
 
 		// This should never happen
@@ -188,8 +224,8 @@ export class CCli {
 
 		// Special handling per exception.code
 		switch (exception.code) {
-			case CLI_USAGE_ERROR: {
-				const exceptionAsUsageError: CliUsageError = exception;
+			case C_CLI_USAGE_ERROR: {
+				const exceptionAsUsageError: CCliUsageError = exception;
 				if (exceptionAsUsageError.tree) {
 					const usageString = usageFactory(exceptionAsUsageError.tree, {
 						columns,
@@ -212,7 +248,7 @@ export class CCli {
 				}
 				break;
 			}
-			case CLI_TERSE_ERROR: {
+			case C_CLI_TERSE_ERROR: {
 				if (!exception.message) {
 					this.logger.error(exception);
 				} else {
@@ -226,7 +262,10 @@ export class CCli {
 		}
 	}
 
-	public static create(root: CliRoot, options: CliOptions = {}): CCli {
+	/** Factory for creating a **@carnesen/cli** command-line interface (CLI)
+	 * @param root The "root" command or (most often) command group for the CLI
+	 * @param options Advanced options for configuring the CLI */
+	public static create(root: CCliRoot, options: CCliOptions = {}): CCli {
 		return new CCli(root, options);
 	}
 }

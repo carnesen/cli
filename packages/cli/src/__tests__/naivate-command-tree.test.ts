@@ -1,16 +1,16 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { navigateCliTree } from '../navigate-cli-tree';
-import { cliCommandGroupFactory } from '../cli-command-group';
-import { CliCommand } from '../cli-command';
+import { CCliCommand } from '../c-cli-command';
+import { CCliCommandGroup } from '../c-cli-command-group';
 
-const command = CliCommand({
+const command = CCliCommand.create({
 	name: 'echo',
 	action(foo) {
 		return foo;
 	},
 });
 
-const commandGroup = cliCommandGroupFactory({
+const commandGroup = CCliCommandGroup.create({
 	name: 'cli',
 	subcommands: [command],
 });

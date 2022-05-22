@@ -1,42 +1,42 @@
-import { CliArgGroup } from '../cli-arg-group';
-import { CliUsageError } from '../cli-usage-error';
+import { CCliArgGroup } from '../c-cli-arg-group';
+import { CCliUsageError } from '../c-cli-usage-error';
 
-/** Options for [[`CliStringArrayArgGroup`]] */
+/** Options for {@link CliStringArrayArgGroup} */
 export type CliStringArrayArgGroupOptions = {
-	/** See [[`CliArgGroup.description`]] */
+	/** See {@link CliArgGroup.description} */
 	description?: string;
 
-	/** See [[`CliArgGroup.required`]] */
+	/** See {@link CliArgGroup.required} */
 	required?: boolean;
 
-	/** See [[`CliArgGroup.required`]] */
+	/** See {@link CliArgGroup.required} */
 	hidden?: boolean;
 
-	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<str0\> [...]" */
+	/** See {@link CliArgGroup.placeholder} defaulting to "\<str0\> [...]" */
 	placeholder?: string;
 };
 
-/** A factory for required `string[]`-valued [[`CliArgGroup`]]s */
+/** A factory for required `string[]`-valued {@link CliArgGroup}s */
 function CliStringArrayArgGroup(
 	options: CliStringArrayArgGroupOptions & { required: true },
-): CliArgGroup<string[], true>;
+): CCliArgGroup<string[], true>;
 
-/** A factory for optional `string[] | undefined`-valued [[`CliArgGroup`]]s */
+/** A factory for optional `string[] | undefined`-valued {@link CliArgGroup}s */
 function CliStringArrayArgGroup(
 	options?: CliStringArrayArgGroupOptions,
-): CliArgGroup<string[] | undefined, boolean>;
+): CCliArgGroup<string[] | undefined, boolean>;
 
 // Implementation
 function CliStringArrayArgGroup(
 	options: CliStringArrayArgGroupOptions = {},
-): CliArgGroup<string[] | undefined> {
+): CCliArgGroup<string[] | undefined> {
 	const {
 		required = false,
 		description,
 		placeholder = '<str0> [...]',
 		hidden = false,
 	} = options;
-	const argGroup: CliArgGroup<string[] | undefined> = {
+	const argGroup: CCliArgGroup<string[] | undefined> = {
 		required,
 		hidden,
 		placeholder,
@@ -46,7 +46,7 @@ function CliStringArrayArgGroup(
 			}
 
 			if (args.length === 0) {
-				throw new CliUsageError(`Expected one or more values ${placeholder}`);
+				throw new CCliUsageError(`Expected one or more values ${placeholder}`);
 			}
 
 			return args;

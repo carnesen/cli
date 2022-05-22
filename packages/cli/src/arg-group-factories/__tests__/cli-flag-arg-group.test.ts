@@ -1,6 +1,6 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CliFlagArgGroup } from '../cli-flag-arg-group';
-import { CLI_USAGE_ERROR } from '../../cli-usage-error';
+import { C_CLI_USAGE_ERROR } from '../../c-cli-usage-error';
 
 const description = 'foo bar baz';
 const hidden = true;
@@ -22,7 +22,7 @@ describe(CliFlagArgGroup.name, () => {
 
 	it('parse throws a usage error "unexpected argument" if args has a value', async () => {
 		const exception = await runAndCatch(argGroup.parse, ['foo']);
-		expect(exception.code).toBe(CLI_USAGE_ERROR);
+		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
 		expect(exception.message).toMatch(/unexpected argument/i);
 		expect(exception.message).toMatch('"foo"');
 	});

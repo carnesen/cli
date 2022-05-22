@@ -1,18 +1,18 @@
 import { TPartitioned } from './partition-args';
 import { parseArgs } from './parse-args';
-import { CliUsageError } from './cli-usage-error';
-import { CliArgGroup } from './cli-arg-group';
+import { CCliUsageError } from './c-cli-usage-error';
+import { CCliArgGroup } from './c-cli-arg-group';
 
 type VoidAsyncFunc = () => Promise<void>;
 
 /**
  * Matches named args to named arg groups and calls the `parse` method
- * @param namedArgGroups From the [[`ICliCommand`]]
+ * @param namedArgGroups From the {@link ICliCommand}
  * @param namedArgs The --foo bar values from the partition phase
  */
 export async function parseNamedArgs(
 	namedArgGroups: {
-		[name: string]: CliArgGroup;
+		[name: string]: CCliArgGroup;
 	},
 	namedArgs: TPartitioned['namedArgs'],
 ): Promise<{ [name: string]: any }> {
@@ -29,7 +29,7 @@ export async function parseNamedArgs(
 	}
 	const restNames = Object.keys(restNamedArgs);
 	if (restNames[0]) {
-		throw new CliUsageError(`--${restNames[0]} : Unknown named argument`);
+		throw new CCliUsageError(`--${restNames[0]} : Unknown named argument`);
 	}
 	await Promise.all(asyncFuncs.map((asyncFunc) => asyncFunc()));
 	return namedValues;

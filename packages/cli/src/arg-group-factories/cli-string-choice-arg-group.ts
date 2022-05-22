@@ -1,9 +1,9 @@
-import { CliArgGroup } from '../cli-arg-group';
-import { CliUsageError } from '../cli-usage-error';
+import { CCliArgGroup } from '../c-cli-arg-group';
+import { CCliUsageError } from '../c-cli-usage-error';
 
 export type AnyCliStringChoices = string[] | readonly string[];
 
-/** Options for [[`CliStringChoiceArgGroup`]]
+/** Options for {@link CliStringChoiceArgGroup}
  * @typeParam TChoices Type of the "choices" option */
 export type CliStringChoiceArgGroupOptions<
 	Choices extends AnyCliStringChoices,
@@ -14,39 +14,37 @@ export type CliStringChoiceArgGroupOptions<
 	 * ``` */
 	choices: Choices;
 
-	/** See [[`CliArgGroup.required`]] */
+	/** See {@link CliArgGroup.required} */
 	required?: boolean;
 
-	/** See [[`CliArgGroup.description`]] with "Choices: ..." appended
+	/** See {@link CliArgGroup.description} with "Choices: ..." appended
 	 * automatically */
 	description?: string;
 
-	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<value\>" */
+	/** See {@link CliArgGroup.placeholder} defaulting to "\<value\>" */
 	placeholder?: string;
 
-	/** See [[`CliArgGroup.hidden`]] */
+	/** See {@link CliArgGroup.hidden} */
 	hidden?: boolean;
 };
 
-/**
- * A factory for [[`CliArgGroup`]]s whose value is one of the choices provided
- * @typeParam TChoices Type of the provided choices.
- * */
+/** A factory for command argument groups whose value is one of the choices
+ * provided */
 
 // required = true overload
 function CliStringChoiceArgGroup<Choices extends AnyCliStringChoices>(
 	options: CliStringChoiceArgGroupOptions<Choices> & { required: true },
-): CliArgGroup<Choices[number], true>;
+): CCliArgGroup<Choices[number], true>;
 
 // required = false overload
 function CliStringChoiceArgGroup<Choices extends AnyCliStringChoices>(
 	options: CliStringChoiceArgGroupOptions<Choices>,
-): CliArgGroup<Choices[number] | undefined, false>;
+): CCliArgGroup<Choices[number] | undefined, false>;
 
 // Implementation
 function CliStringChoiceArgGroup(
 	options: CliStringChoiceArgGroupOptions<AnyCliStringChoices>,
-): CliArgGroup<string | undefined> {
+): CCliArgGroup<string | undefined> {
 	const valuesString = options.choices.join(', ');
 	const {
 		required = false,
@@ -55,7 +53,7 @@ function CliStringChoiceArgGroup(
 		hidden = false,
 	} = options;
 
-	const argGroup: CliArgGroup<string | undefined> = {
+	const argGroup: CCliArgGroup<string | undefined> = {
 		required,
 		placeholder: options.placeholder || '<value>',
 		hidden,
@@ -65,13 +63,13 @@ function CliStringChoiceArgGroup(
 			}
 
 			if (args.length !== 1) {
-				throw new CliUsageError(
+				throw new CCliUsageError(
 					`Expected ${placeholder} to be one of ${valuesString}`,
 				);
 			}
 
 			if (!options.choices.includes(args[0])) {
-				throw new CliUsageError(
+				throw new CCliUsageError(
 					`Invalid argument "${args[0]}". Expected ${placeholder} to be one of ${valuesString}`,
 				);
 			}

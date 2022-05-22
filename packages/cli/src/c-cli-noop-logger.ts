@@ -1,7 +1,7 @@
-import { CliLogger } from './cli-logger';
+import { CCliLogger } from './c-cli-logger';
 
 /** Implements the CliLogger interface with no-op methods */
-export class CliNoopLogger implements CliLogger {
+export class CCliNoopLogger implements CCliLogger {
 	protected constructor() {}
 
 	public log(_message: unknown, ..._optionalParams: unknown[]): void {
@@ -12,7 +12,7 @@ export class CliNoopLogger implements CliLogger {
 		// Do nothing
 	}
 
-	public static create(): CliNoopLogger {
-		return new CliNoopLogger();
+	public static create(): CCliNoopLogger {
+		return new CCliNoopLogger();
 	}
 }

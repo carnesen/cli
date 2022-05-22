@@ -1,5 +1,5 @@
 import { reWrapText } from '../re-wrap-text';
-import { cliColorFactory } from '../cli-color-factory';
+import { cCliColorFactory } from '../c-cli-color-factory';
 
 const data: {
 	text?: string;
@@ -67,9 +67,9 @@ const data: {
 		lines: ['A short subject line'],
 	},
 	{
-		text: `${cliColorFactory(true).red('f ').repeat(3)}`,
+		text: `${cCliColorFactory(true).red('f ').repeat(3)}`,
 		columns: 10,
-		lines: [cliColorFactory(true).red('f ').repeat(3).trim()],
+		lines: [cCliColorFactory(true).red('f ').repeat(3).trim()],
 	},
 ];
 

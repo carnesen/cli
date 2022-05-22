@@ -3,45 +3,65 @@
 //
 // Command factory
 //
-export { CliCommand, ICliCommand, CLI_COMMAND } from './cli-command';
-import { CliCommandOptions } from './cli-command';
+import { CCliCommand, CCliCommandOptions } from './c-cli-command';
+export { CCliCommand, CCliCommandOptions };
+/** @deprecated Use `CCliCommand.create` or `c.command` */
+export const CliCommand = CCliCommand.create;
+/** @deprecated Use `CCliCommand` */
+export type ICliCommand<
+	PositionalArgGroup extends CCliArgGroup = CCliArgGroup,
+	NamedArgGroups extends {
+		[name: string]: CCliArgGroup;
+	} = {
+		[name: string]: CCliArgGroup;
+	},
+	DoubleDashArgGroup extends CCliArgGroup = CCliArgGroup,
+> = CCliCommand<PositionalArgGroup, NamedArgGroups, DoubleDashArgGroup>;
 /** @deprecated Use `CliCommandOptions` */
-export type ICliCommandOptions = CliCommandOptions;
-export { CliCommandOptions };
+export type ICliCommandOptions<
+	PositionalArgGroup extends CCliArgGroup = CCliArgGroup,
+	NamedArgGroups extends {
+		[name: string]: CCliArgGroup;
+	} = {
+		[name: string]: CCliArgGroup;
+	},
+	DoubleDashArgGroup extends CCliArgGroup = CCliArgGroup,
+> = CCliCommandOptions<PositionalArgGroup, NamedArgGroups, DoubleDashArgGroup>;
+
+//
+// Command group factory
+//
+import {
+	CCliCommandGroup,
+	CCliCommandGroupOptions,
+} from './c-cli-command-group';
+export { CCliCommandGroup, CCliCommandGroupOptions };
+/** @deprecated Use `CCliCommandGroup.create` or `c.commandGroup` */
+export const CliCommandGroup = CCliCommandGroup.create;
+/** @deprecated Use `CCliCommandGroupOptions` */
+export type ICliCommandGroupOptions = CCliCommandGroupOptions;
 
 //
 // Command-line interface (CLI) factory
 //
-import { CliOptions } from './cli-options';
+import { CCli, CCliOptions } from './c-cli';
+export { CCli, CCliOptions };
 /** @deprecated Use `CliOptions` instead */
-export type ICliOptions = CliOptions;
-export { CliOptions };
-
-import { CCli } from './c-cli';
+export type ICliOptions = CCliOptions;
+/** @deprecated Use `CCli.create` or `c.cli` */
 export const Cli = CCli.create;
 /** @deprecated Use `CCli` instead */
 export type ICli = CCli;
 
 //
-// Command group factory
-//
-export {
-	cliCommandGroupFactory as CliCommandGroup,
-	ICliCommandGroup,
-	CliCommandGroupOptions as ICliCommandGroupOptions,
-	CLI_COMMAND_GROUP,
-} from './cli-command-group';
-
-//
 // Argument group factories
 //
-
 // boolean flag
 export { CliFlagArgGroup } from './arg-group-factories/cli-flag-arg-group';
 import { CliFlagArgGroupOptions } from './arg-group-factories/cli-flag-arg-group';
+export { CliFlagArgGroupOptions };
 /** @deprecated Use `CliFlagArgGroupOptions` */
 export type ICliFlagArgGroupOptions = CliFlagArgGroupOptions;
-export { CliFlagArgGroupOptions };
 
 // JSON
 export { CliJsonArgGroup } from './arg-group-factories/cli-json-arg-group';
@@ -99,87 +119,94 @@ export { CliStringArrayArgGroupOptions };
 //
 import {
 	AnyCliDescription,
-	CliDescriptionFunctionInput,
-	CliDescriptionFunction,
-} from './cli-description';
+	CCliDescriptionFunctionInput,
+	CCliDescriptionFunction,
+} from './c-cli-description';
 /** @deprecated Use `CliDescriptionFunctionInput` */
-export type ICliDescriptionFunctionInput = CliDescriptionFunctionInput;
+export type ICliDescriptionFunctionInput = CCliDescriptionFunctionInput;
 /** @deprecated Use `AnyCliDescription` */
 export type TCliDescription = AnyCliDescription;
 /** @deprecated Use `CliDescriptionFunction` */
-export type TCliDescriptionFunction = CliDescriptionFunction;
+export type TCliDescriptionFunction = CCliDescriptionFunction;
 export {
 	AnyCliDescription,
-	CliDescriptionFunctionInput,
-	CliDescriptionFunction,
+	CCliDescriptionFunctionInput as CliDescriptionFunctionInput,
+	CCliDescriptionFunction as CliDescriptionFunction,
 };
 
 //
 // Logging
 //
-import { CliLogger } from './cli-logger';
+import { CCliLogger } from './c-cli-logger';
 /** @deprecated Use `CliLogger` */
-export type ICliConsole = CliLogger;
-export { CliLogger };
-export { CliNoopLogger } from './cli-noop-logger';
-export { CliConsoleLogger } from './cli-console-logger';
+export type ICliConsole = CCliLogger;
+export { CCliLogger as CliLogger };
+export { CCliNoopLogger as CliNoopLogger } from './c-cli-noop-logger';
+export { CCliConsoleLogger as CliConsoleLogger } from './c-cli-console-logger';
 
 //
 // Isomorphic type mimicking the Node.js global `process`
 //
-import { CliProcess } from './cli-process';
+import { CCliProcess } from './c-cli-process';
 /** @deprecated Use `CliProcess` */
-export type ICliProcess = CliProcess;
-export { CliProcess };
+export type ICliProcess = CCliProcess;
+export { CCliProcess as CliProcess };
 
 //
 // Text decoration
 //
-import { CliColor } from './cli-color';
+import { CCliColor } from './c-cli-color';
 /** @deprecated Use `CliColor` */
-export type ICliAnsi = CliColor;
-export { CliColor };
-import { cliColorFactory } from './cli-color-factory';
+export type ICliAnsi = CCliColor;
+export { CCliColor as CliColor };
+export { CCliNoopColor as CliNoopColor } from './c-cli-noop-color';
+import { cCliColorFactory } from './c-cli-color-factory';
 /** @deprecated Use `cliColorFactory` */
-export const CliAnsi = cliColorFactory;
-export { cliColorFactory };
+export const CliAnsi = cCliColorFactory;
+export { cCliColorFactory as cliColorFactory };
 
 //
 // Error constructors
 //
-export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
-export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
+export {
+	CCliTerseError as CliTerseError,
+	C_CLI_TERSE_ERROR as CLI_TERSE_ERROR,
+} from './c-cli-terse-error';
+export {
+	CCliUsageError as CliUsageError,
+	C_CLI_USAGE_ERROR as CLI_USAGE_ERROR,
+} from './c-cli-usage-error';
 
 //
 // Custom ArgGroup
 //
-import { CliArgGroup, CliArgGroupArgs } from './cli-arg-group';
+import { CCliArgGroup, CCliArgGroupArgs } from './c-cli-arg-group';
 /** @deprecated Use `CliArgGroupArgs` */
 export type TCliArgGroupArgs<Required extends boolean> =
-	CliArgGroupArgs<Required>;
+	CCliArgGroupArgs<Required>;
 /** @deprecated Use `CliArgGroup` */
 export type ICliArgGroup<
 	Value = unknown,
 	Required extends boolean = boolean,
-> = CliArgGroup<Value, Required>;
-export { CliArgGroup, CliArgGroupArgs };
+> = CCliArgGroup<Value, Required>;
+export { CCliArgGroup as CliArgGroup, CCliArgGroupArgs as CliArgGroupArgs };
 
 //
 // Command tree
 //
-import { CliRoot, CliTree, CliLeaf } from './cli-tree';
+import { CCliRoot, CCliTree, CCliLeaf } from './c-cli-tree';
 /** @deprecated Use `CliRoot` */
-export type TCliRoot = CliRoot;
+export type TCliRoot = CCliRoot;
 /** @deprecated Use `CliTree` */
-export type ICliTree = CliTree;
+export type ICliTree = CCliTree;
 /** @deprecated Use `CliLeaf` */
-export type ICliLeaf = CliLeaf;
-export { CliRoot, CliTree, CliLeaf };
+export type ICliLeaf = CCliLeaf;
+export { CCliRoot as CliRoot, CCliTree as CliTree, CCliLeaf as CliLeaf };
 
 //
 // Branding
 //
-export { CliWordMark } from './cli-word-mark';
+export { CCliWordMark as CliWordMark } from './c-cli-word-mark';
 
 ///
 // FOR INTERNAL USE ONLY

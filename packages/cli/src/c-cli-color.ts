@@ -1,14 +1,14 @@
 /** Methods for decorating command output with colors */
-export type CliColor = {
+export type CCliColor = {
 	/** Color the text blue */
-	blue(message: string): string;
+	blue(text: string): string;
 
 	/** Color the text bold */
-	bold(message: string): string;
+	bold(text: string): string;
 
 	/** Color the text red */
-	green(message: string): string;
+	green(text: string): string;
 
 	/** Color the text red */
-	red(message: string): string;
+	red(text: string): string;
 };

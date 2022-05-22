@@ -1,7 +1,7 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
 import { parseArgs } from '../parse-args';
-import { CLI_USAGE_ERROR } from '../cli-usage-error';
+import { C_CLI_USAGE_ERROR } from '../c-cli-usage-error';
 import {
 	dummyArgGroup,
 	dummyRequiredArgGroup,
@@ -38,7 +38,7 @@ describe(parseArgs.name, () => {
 				args,
 				undefined,
 			);
-			expect(exception.code).toBe(CLI_USAGE_ERROR);
+			expect(exception.code).toBe(C_CLI_USAGE_ERROR);
 			expect(exception.message).toMatch(/argument is required/i);
 			expect(exception.message).toMatch(dummyRequiredArgGroup.placeholder);
 		}

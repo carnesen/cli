@@ -1,8 +1,13 @@
-import { CliColor } from './cli-color';
+import { CCliColor } from './c-cli-color';
 
+/** Unicode "escape" character */
 const ESC = '\u001b';
 
-export class CliAnsiColor implements CliColor {
+/**
+ * Implements the {@link CCliColor} interface by wrapping the provided text in
+ * ANSI escape sequences interpreted and rendered appropriately by the terminal
+ * emulator */
+export class CCliAnsiColor implements CCliColor {
 	protected constructor() {}
 
 	public blue(message: string): string {
@@ -21,7 +26,7 @@ export class CliAnsiColor implements CliColor {
 		return `${ESC}[31m${message}${ESC}[39m`;
 	}
 
-	public static create(): CliAnsiColor {
-		return new CliAnsiColor();
+	public static create(): CCliAnsiColor {
+		return new CCliAnsiColor();
 	}
 }

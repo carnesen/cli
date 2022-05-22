@@ -1,8 +1,8 @@
 import { getGlobal } from './get-global';
 
-/** An isomorphic subset of the Node.js global `process` object that doesn't
- * depend on the `@types/node` package */
-export type CliProcess = {
+/** An isomorphic subset of the Node.js global `process` object. By defining our
+ * own type for this we avoid depending on `@types/node` package */
+export type CCliProcess = {
 	argv: string[];
 	exit: (code?: number) => void;
 	stderr: {
@@ -22,8 +22,9 @@ export function getGlobalProcess(): any {
 
 const DEFAULT_COLUMNS = 100;
 
-/** A factory for [[`ICliProcess`]]es */
-export function cliProcessFactory(): CliProcess {
+/** A factory for {@link CCliProcess} objects that are a type- and
+ * environment-safe alternative to the Node.js global `process` */
+export function cCliProcessFactory(): CCliProcess {
 	const globalProcess = getGlobalProcess() ?? {};
 
 	return {

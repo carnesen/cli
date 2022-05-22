@@ -1,7 +1,7 @@
-import { CliColor } from './cli-color';
+import { CCliColor } from './c-cli-color';
 
 export interface UsageOptions {
-	color: CliColor;
+	color: CCliColor;
 	columns: number;
 	indentation: string;
 }

@@ -1,43 +1,43 @@
-import { CliArgGroup } from '../cli-arg-group';
+import { CCliArgGroup } from '../c-cli-arg-group';
 import { convertToNumber } from '../util';
-import { CliUsageError } from '../cli-usage-error';
+import { CCliUsageError } from '../c-cli-usage-error';
 
-/** Options for [[`CliNumberArgGroup`]] */
+/** Options for {@link CliNumberArgGroup} */
 export type CliNumberArgGroupOptions = {
-	/** See [[`CliArgGroup.required`]] */
+	/** See {@link CliArgGroup.required} */
 	required?: boolean;
 
-	/** See [[`CliArgGroup.description`]] */
+	/** See {@link CliArgGroup.description} */
 	description?: string;
 
-	/** See [[`CliArgGroup.placeholder`]] defaulting to "\<num\>" */
+	/** See {@link CliArgGroup.placeholder} defaulting to "\<num\>" */
 	placeholder?: string;
 
-	/** See [[`CliArgGroup.description`]] */
+	/** See {@link CliArgGroup.description} */
 	hidden?: boolean;
 };
 
-/** A factory for `number`-valued required [[`CliArgGroup`]]s */
+/** A factory for `number`-valued required {@link CliArgGroup}s */
 function CliNumberArgGroup(
 	options: CliNumberArgGroupOptions & { required: true },
-): CliArgGroup<number, true>;
+): CCliArgGroup<number, true>;
 
-/** A factory for `number | undefined`-valued optional [[`CliArgGroup`]]s */
+/** A factory for `number | undefined`-valued optional {@link CliArgGroup}s */
 function CliNumberArgGroup(
 	options?: CliNumberArgGroupOptions,
-): CliArgGroup<number | undefined, boolean>;
+): CCliArgGroup<number | undefined, boolean>;
 
 // Implementation
 function CliNumberArgGroup(
 	config: CliNumberArgGroupOptions = {},
-): CliArgGroup<number | undefined> {
+): CCliArgGroup<number | undefined> {
 	const {
 		required = false,
 		description,
 		placeholder = '<num>',
 		hidden = false,
 	} = config;
-	const argGroup: CliArgGroup<number | undefined> = {
+	const argGroup: CCliArgGroup<number | undefined> = {
 		required,
 		hidden,
 		parse(args) {
@@ -46,11 +46,11 @@ function CliNumberArgGroup(
 			}
 
 			if (args.length > 1) {
-				throw new CliUsageError(`Expected just one ${placeholder}`);
+				throw new CCliUsageError(`Expected just one ${placeholder}`);
 			}
 
 			if (args.length === 0) {
-				throw new CliUsageError(`Expected a ${placeholder}`);
+				throw new CCliUsageError(`Expected a ${placeholder}`);
 			}
 
 			return convertToNumber(args[0]);
