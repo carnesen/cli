@@ -3,7 +3,7 @@ import { CCliCommandGroup } from './c-cli-command-group';
 import { CCliTree, CCliRoot } from './c-cli-tree';
 
 /** FOR INTERNAL USE ONLY. The result of calling {@link navigateCommandTree} */
-export type NavigateCliTreeResult = {
+export type NavigateCCliTreeResult = {
 	/** Passed args past those used during navigation */
 	args: string[];
 	/** An error message describing why navigation stopped */
@@ -17,10 +17,10 @@ export type NavigateCliTreeResult = {
  * @param root - A command tree root
  * @param args - An array of command-line arguments
  * @returns The result of the search */
-export function navigateCliTree(
+export function navigateCCliTree(
 	root: CCliRoot,
 	args: string[],
-): NavigateCliTreeResult {
+): NavigateCCliTreeResult {
 	return recursiveNavigateCliTree({
 		tree: { current: root, parents: [] },
 		args,
@@ -28,8 +28,8 @@ export function navigateCliTree(
 }
 
 function recursiveNavigateCliTree(
-	result: NavigateCliTreeResult,
-): NavigateCliTreeResult {
+	result: NavigateCCliTreeResult,
+): NavigateCCliTreeResult {
 	// Terminate recursion if current is a command
 	if (result.tree.current instanceof CCliCommand) {
 		return result;

@@ -3,7 +3,7 @@ import { reWrapText } from './re-wrap-text';
 import { usageSubcommandRowsFactory } from './usage-subcommand-rows';
 import { TwoColumnTable } from './two-column-table';
 import { UsageOptions } from './usage-options';
-import { descriptionTextFactory } from './c-cli-description';
+import { textFromDescription } from './c-cli-description';
 
 export function usageForCommandGroup(
 	{
@@ -18,7 +18,7 @@ export function usageForCommandGroup(
 	const lines: string[] = [];
 	lines.push(`Usage: ${commandPath ? `${commandPath} ` : ''}<subcommand> ...`);
 	lines.push('');
-	const description = descriptionTextFactory(current.options.description, {
+	const description = textFromDescription(current.options.description, {
 		ansi: color,
 		color,
 	});

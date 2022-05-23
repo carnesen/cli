@@ -1,4 +1,7 @@
-import { CCliArgGroup } from './c-cli-arg-group';
+import {
+	CCliAbstractArgGroup,
+	CCliParseArgs,
+} from './c-cli-abstract-arg-group';
 
 export const DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED = 'undefined was passed';
 export const DUMMY_ARG_GROUP_EMPTY_ARRAY_WAS_PASSED = 'undefined was passed';
@@ -6,9 +9,8 @@ export const DUMMY_ARG_GROUP_THROWN_INTENTIONALLY = 'thrown intentionally';
 export const DUMMY_ARG_GROUP_THROW = 'throw';
 export const DUMMY_ARG_GROUP_THROW_NON_TRUTHY = 'throw-non-truthy';
 
-export const dummyArgGroup: CCliArgGroup<string, false> = {
-	placeholder: '',
-	parse(args) {
+export class DummyOptionalArgGroup extends CCliAbstractArgGroup<string, false> {
+	public parse(args: CCliParseArgs<false>): string {
 		if (typeof args === 'undefined') {
 			return DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED;
 		}
@@ -27,11 +29,23 @@ export const dummyArgGroup: CCliArgGroup<string, false> = {
 				return args[0];
 			}
 		}
-	},
-};
+	}
 
-export const dummyRequiredArgGroup: CCliArgGroup<string, true> = {
-	placeholder: '<foo>',
-	required: true,
-	parse: dummyArgGroup.parse,
-};
+	public static create(): DummyOptionalArgGroup {
+		return new DummyOptionalArgGroup({ required: false });
+	}
+}
+
+export const dummyArgGroup = DummyOptionalArgGroup.create();
+
+export class DummyRequiredArgGroup extends CCliAbstractArgGroup<string, true> {
+	public parse(args: string[]): string {
+		return dummyArgGroup.parse(args);
+	}
+
+	public static create(): DummyRequiredArgGroup {
+		return new DummyRequiredArgGroup({ required: true, placeholder: '<foo>' });
+	}
+}
+
+export const dummyRequiredArgGroup = DummyRequiredArgGroup.create();

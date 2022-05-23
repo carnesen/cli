@@ -1,14 +1,14 @@
 import { CCliRoot } from './c-cli-tree';
 import { CCliConsoleLogger } from './c-cli-console-logger';
 import { cCliColorFactory } from './c-cli-color-factory';
-import { navigateCliTree } from './navigate-cli-tree';
-import { CCliUsageError, C_CLI_USAGE_ERROR } from './c-cli-usage-error';
+import { navigateCCliTree } from './navigate-cli-tree';
+import { CCliUsageError } from './c-cli-usage-error';
 import { partitionArgs } from './partition-args';
 import { parseArgs } from './parse-args';
 import { parseNamedArgs } from './parse-named-args';
 import { CCliProcess, cCliProcessFactory } from './c-cli-process';
 import { usageFactory } from './usage-string';
-import { C_CLI_TERSE_ERROR } from './c-cli-terse-error';
+import { CCliTerseError } from './c-cli-terse-error';
 import { splitCommandLine } from './split-command-line';
 import { CCliCommand } from './c-cli-command';
 import { CCliColor } from './c-cli-color';
@@ -65,7 +65,7 @@ export class CCli {
 	 * @param args Command-line argument strings
 	 * @returns A promise resolving to the command action's return value */
 	public async api(args: string[]): Promise<any> {
-		const navigated = navigateCliTree(this.root, args);
+		const navigated = navigateCCliTree(this.root, args);
 
 		if (navigated.message || !(navigated.tree.current instanceof CCliCommand)) {
 			throw new CCliUsageError(navigated.message, navigated.tree);
@@ -222,43 +222,36 @@ export class CCli {
 			return;
 		}
 
-		// Special handling per exception.code
-		switch (exception.code) {
-			case C_CLI_USAGE_ERROR: {
-				const exceptionAsUsageError: CCliUsageError = exception;
-				if (exceptionAsUsageError.tree) {
-					const usageString = usageFactory(exceptionAsUsageError.tree, {
-						columns,
-						indentation: '   ',
-						color: this.color,
-					});
-					if (exception.message) {
-						this.logger.error(
-							`${usageString}\n\n${this.color.red('Error:')} ${
-								exception.message
-							}`,
-						);
-					} else {
-						this.logger.error(usageString);
-					}
+		// Special handling per exception class
+		if (exception instanceof CCliUsageError) {
+			if (exception.tree) {
+				const usageString = usageFactory(exception.tree, {
+					columns,
+					indentation: '   ',
+					color: this.color,
+				});
+				if (exception.message) {
+					this.logger.error(
+						`${usageString}\n\n${this.color.red('Error:')} ${
+							exception.message
+						}`,
+					);
 				} else {
-					// Handle case where "code" is CLI_USAGE_ERROR but "tree" is
-					// undefined. Surely this is a coding mistake on our part.
-					this.logger.error(exceptionAsUsageError);
+					this.logger.error(usageString);
 				}
-				break;
-			}
-			case C_CLI_TERSE_ERROR: {
-				if (!exception.message) {
-					this.logger.error(exception);
-				} else {
-					this.logger.error(`${this.color.red('Error:')} ${exception.message}`);
-				}
-				break;
-			}
-			default: {
+			} else {
+				// Handle case where "code" is a CCliUsageError but "tree" is
+				// undefined. Surely this is a coding mistake on our part.
 				this.logger.error(exception);
 			}
+		} else if (exception instanceof CCliTerseError) {
+			if (!exception.message) {
+				this.logger.error(exception);
+			} else {
+				this.logger.error(`${this.color.red('Error:')} ${exception.message}`);
+			}
+		} else {
+			this.logger.error(exception);
 		}
 	}
 

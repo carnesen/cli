@@ -13,11 +13,11 @@ export type CCliDescriptionFunction = (
 	input: CCliDescriptionFunctionInput,
 ) => string;
 
-export type AnyCliDescription = undefined | string | CCliDescriptionFunction;
+export type CCliAnyDescription = undefined | string | CCliDescriptionFunction;
 
 /** Generate a string text description from a description string or function */
-export function descriptionTextFactory(
-	description: AnyCliDescription,
+export function textFromDescription(
+	description: CCliAnyDescription,
 	input: CCliDescriptionFunctionInput,
 ): string {
 	let text = '';

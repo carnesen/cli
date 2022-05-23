@@ -1,20 +1,20 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliNumberArrayArgGroup } from '../cli-number-array-arg-group';
-import { C_CLI_USAGE_ERROR } from '../../c-cli-usage-error';
+import { CCliUsageError } from '../../c-cli-usage-error';
+import { CCliNumberArrayArgGroup } from '../c-cli-number-array-arg-group';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
 const required = false;
 
-const argGroup = CliNumberArrayArgGroup({
+const argGroup = CCliNumberArrayArgGroup.create({
 	description,
 	hidden,
 	placeholder,
 	required,
 });
 
-describe(CliNumberArrayArgGroup.name, () => {
+describe(CCliNumberArrayArgGroup.name, () => {
 	it('parse returns is args converted to numbers', () => {
 		expect(argGroup.parse(['0', '1', '2'])).toEqual([0, 1, 2]);
 	});
@@ -25,19 +25,19 @@ describe(CliNumberArrayArgGroup.name, () => {
 
 	it('parse throws USAGE error "expected one or more" if args is an empty array', async () => {
 		const exception = await runAndCatch(argGroup.parse, []);
-		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
+		expect(exception).toBeInstanceOf(CCliUsageError);
 		expect(exception.message).toMatch(/expected one or more/i);
 		expect(exception.message).toMatch(placeholder);
 	});
 
 	it('attaches config properties', () => {
-		expect(argGroup.description).toBe(description);
-		expect(argGroup.hidden).toBe(hidden);
-		expect(argGroup.placeholder).toBe(placeholder);
-		expect(argGroup.required).toBe(required);
+		expect(argGroup.options.description).toBe(description);
+		expect(argGroup.options.hidden).toBe(hidden);
+		expect(argGroup.options.placeholder).toBe(placeholder);
+		expect(argGroup.options.required).toBe(required);
 	});
 
 	it('config is not required', () => {
-		CliNumberArrayArgGroup();
+		CCliNumberArrayArgGroup.create();
 	});
 });

@@ -1,7 +1,7 @@
 import { CCliUsageError } from './c-cli-usage-error';
 
-export function wrapInSquareBrackets(str: string): string {
-	return `[${str}]`;
+export function wrapInSquareBrackets(str: string | undefined): string {
+	return `[${str || ''}]`;
 }
 
 export function convertToNumber(rawValue: string): number {

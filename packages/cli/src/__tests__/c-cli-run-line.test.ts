@@ -1,12 +1,12 @@
 import { CCliCommand } from '../c-cli-command';
-import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
+import { CCliStringArgGroup } from '../arg-group-factories/c-cli-string-arg-group';
 import { CCli, CCliOptions } from '../c-cli';
 
 describe(CCli.prototype.runLine.name, () => {
 	it('has a runLine method that parses the command-line', async () => {
 		const command = CCliCommand.create({
 			name: 'cli',
-			positionalArgGroup: CliStringArgGroup(),
+			positionalArgGroup: CCliStringArgGroup.create(),
 			action({ positionalValue: str }) {
 				expect(str).toBe('foo');
 			},

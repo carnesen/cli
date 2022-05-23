@@ -1,7 +1,6 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 
 import { parseArgs } from '../parse-args';
-import { C_CLI_USAGE_ERROR } from '../c-cli-usage-error';
 import {
 	dummyArgGroup,
 	dummyRequiredArgGroup,
@@ -9,6 +8,7 @@ import {
 	DUMMY_ARG_GROUP_THROW,
 	DUMMY_ARG_GROUP_THROW_NON_TRUTHY,
 } from '../dummy-arg-groups';
+import { CCliUsageError } from '../c-cli-usage-error';
 
 describe(parseArgs.name, () => {
 	it(`returns parse(args) if an args with length >= 1 is passed`, async () => {
@@ -38,9 +38,11 @@ describe(parseArgs.name, () => {
 				args,
 				undefined,
 			);
-			expect(exception.code).toBe(C_CLI_USAGE_ERROR);
+			expect(exception).toBeInstanceOf(CCliUsageError);
 			expect(exception.message).toMatch(/argument is required/i);
-			expect(exception.message).toMatch(dummyRequiredArgGroup.placeholder);
+			expect(exception.message).toMatch(
+				dummyRequiredArgGroup.options.placeholder || '',
+			);
 		}
 	});
 
@@ -74,7 +76,7 @@ describe(parseArgs.name, () => {
 			undefined,
 		);
 		expect(exception.message).toMatch(DUMMY_ARG_GROUP_THROWN_INTENTIONALLY);
-		expect(exception.message).toMatch(dummyArgGroup.placeholder);
+		expect(exception.message).toMatch(dummyArgGroup.options.placeholder || '');
 		expect(exception.message).toMatchSnapshot();
 	});
 

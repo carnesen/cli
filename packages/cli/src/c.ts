@@ -1,13 +1,13 @@
 /** The exports of this module are exported in the main index as the `c`
  * namespace object */
 
-import { CliFlagArgGroup } from './arg-group-factories/cli-flag-arg-group';
-import { CliJsonArgGroup } from './arg-group-factories/cli-json-arg-group';
-import { CliNumberArgGroup } from './arg-group-factories/cli-number-arg-group';
-import { CliNumberArrayArgGroup } from './arg-group-factories/cli-number-array-arg-group';
-import { CliStringArgGroup } from './arg-group-factories/cli-string-arg-group';
-import { CliStringArrayArgGroup } from './arg-group-factories/cli-string-array-arg-group';
-import { CliStringChoiceArgGroup } from './arg-group-factories/cli-string-choice-arg-group';
+import { CCliFlagArgGroup } from './arg-group-factories/c-cli-flag-arg-group';
+import { CCliJsonArgGroup } from './arg-group-factories/c-cli-json-arg-group';
+import { CCliNumberArgGroup } from './arg-group-factories/c-cli-number-arg-group';
+import { CCliNumberArrayArgGroup } from './arg-group-factories/c-cli-number-array-arg-group';
+import { CCliStringArgGroup } from './arg-group-factories/c-cli-string-arg-group';
+import { CCliStringArrayArgGroup } from './arg-group-factories/c-cli-string-array-arg-group';
+import { CCliStringChoiceArgGroup } from './arg-group-factories/c-cli-string-choice-arg-group';
 import { CCli } from './c-cli';
 import { CCliCommand } from './c-cli-command';
 import { CCliCommandGroup } from './c-cli-command-group';
@@ -32,8 +32,8 @@ export const commandGroup = CCliCommandGroup.create;
  * $ cli --foo     // named flag "foo" parses `true`
  * $ cli --foo bar // usage error
  * ```
- * @throws {@link CliUsageError} */
-export const flag = CliFlagArgGroup;
+ * @throws {@link CCliUsageError} */
+export const flag = CCliFlagArgGroup.create;
 
 /** A factory for argument groups that `JSON.parse`
  * @example
@@ -46,20 +46,20 @@ export const flag = CliFlagArgGroup;
  * $ cli foo            // error parsing JSON
  * ```
  * @throws {@link CliUsageError} */
-export const json = CliJsonArgGroup;
+export const json = CCliJsonArgGroup.create;
 
 /** A factory for `number`-valued argument groups */
-export const number = CliNumberArgGroup;
+export const number = CCliNumberArgGroup.create;
 
 /** A factory for `number[]`-valued argument groups */
-export const numberArray = CliNumberArrayArgGroup;
+export const numberArray = CCliNumberArrayArgGroup.create;
 
 /** A factory for `string`-valued argument groups */
-export const string = CliStringArgGroup;
+export const string = CCliStringArgGroup.create;
 
 /** A factory for `number[]`-valued argument groups */
-export const stringArray = CliStringArrayArgGroup;
+export const stringArray = CCliStringArrayArgGroup.create;
 
 /** A factory for command argument groups whose value is one of the provided
  * string choices */
-export const stringChoice = CliStringChoiceArgGroup;
+export const stringChoice = CCliStringChoiceArgGroup.create;

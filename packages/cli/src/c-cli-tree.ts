@@ -1,11 +1,11 @@
 import { CCliCommandGroup } from './c-cli-command-group';
 import { CCliCommand } from './c-cli-command';
-import { CCliArgGroup } from './c-cli-arg-group';
+import { CCliAbstractArgGroup } from './c-cli-abstract-arg-group';
 
 /** Root of a command tree */
 export type CCliRoot =
 	| CCliCommandGroup
-	| CCliCommand<CCliArgGroup, any, CCliArgGroup>;
+	| CCliCommand<CCliAbstractArgGroup, any, CCliAbstractArgGroup>;
 
 /** Data structure representing a node in a command tree */
 export type CCliTree = {

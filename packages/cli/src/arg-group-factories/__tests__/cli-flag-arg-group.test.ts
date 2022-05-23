@@ -1,15 +1,15 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { CliFlagArgGroup } from '../cli-flag-arg-group';
-import { C_CLI_USAGE_ERROR } from '../../c-cli-usage-error';
+import { CCliUsageError } from '../../c-cli-usage-error';
+import { CCliFlagArgGroup } from '../c-cli-flag-arg-group';
 
 const description = 'foo bar baz';
 const hidden = true;
 
-const argGroup = CliFlagArgGroup({ description, hidden });
+const argGroup = CCliFlagArgGroup.create({ description, hidden });
 
-describe(CliFlagArgGroup.name, () => {
+describe(CCliFlagArgGroup.name, () => {
 	it('always has "required" set to false', () => {
-		expect(argGroup.required).toBe(false);
+		expect(argGroup.options.required).toBe(false);
 	});
 
 	it('parse returns false if args is undefined', () => {
@@ -22,17 +22,17 @@ describe(CliFlagArgGroup.name, () => {
 
 	it('parse throws a usage error "unexpected argument" if args has a value', async () => {
 		const exception = await runAndCatch(argGroup.parse, ['foo']);
-		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
+		expect(exception).toBeInstanceOf(CCliUsageError);
 		expect(exception.message).toMatch(/unexpected argument/i);
 		expect(exception.message).toMatch('"foo"');
 	});
 
 	it('attaches passed properties "description" and "hidden"', () => {
-		expect(argGroup.description).toBe(description);
-		expect(argGroup.hidden).toBe(hidden);
+		expect(argGroup.options.description).toBe(description);
+		expect(argGroup.options.hidden).toBe(hidden);
 	});
 
 	it('config is optional', () => {
-		expect(CliFlagArgGroup().hidden).toBe(false);
+		expect(CCliFlagArgGroup.create().options.hidden).toBe(undefined);
 	});
 });

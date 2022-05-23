@@ -1,17 +1,20 @@
-import { ValueFromCCliArgGroup, CCliArgGroup } from './c-cli-arg-group';
+import {
+	ValueFromCCliArgGroup,
+	CCliAbstractArgGroup,
+} from './c-cli-abstract-arg-group';
 import { CCliLogger } from './c-cli-logger';
 import { CCliColor } from './c-cli-color';
-import { AnyCliDescription } from './c-cli-description';
+import { CCliAnyDescription } from './c-cli-description';
 
 /** Options for creating a **@carnesen/cli** command */
 export type CCliCommandOptions<
-	PositionalArgGroup extends CCliArgGroup = CCliArgGroup,
+	PositionalArgGroup extends CCliAbstractArgGroup = CCliAbstractArgGroup,
 	NamedArgGroups extends {
-		[name: string]: CCliArgGroup;
+		[name: string]: CCliAbstractArgGroup;
 	} = {
-		[name: string]: CCliArgGroup;
+		[name: string]: CCliAbstractArgGroup;
 	},
-	DoubleDashArgGroup extends CCliArgGroup = CCliArgGroup,
+	DoubleDashArgGroup extends CCliAbstractArgGroup = CCliAbstractArgGroup,
 > = {
 	/** Identifier for this command in command-line usage */
 	name: string;
@@ -41,7 +44,7 @@ export type CCliCommandOptions<
 	doubleDashArgGroup?: DoubleDashArgGroup;
 
 	/** A sentence or two about this command for command-line usage */
-	description?: AnyCliDescription;
+	description?: CCliAnyDescription;
 
 	/** If `true`, don't show this command in command-line usage */
 	hidden?: boolean;
@@ -49,13 +52,13 @@ export type CCliCommandOptions<
 
 /** A **@carnesen/cli** command-line interface (CLI) command */
 export class CCliCommand<
-	PositionalArgGroup_ extends CCliArgGroup = CCliArgGroup,
+	PositionalArgGroup_ extends CCliAbstractArgGroup = CCliAbstractArgGroup,
 	NamedArgGroups_ extends {
-		[name: string]: CCliArgGroup;
+		[name: string]: CCliAbstractArgGroup;
 	} = {
-		[name: string]: CCliArgGroup;
+		[name: string]: CCliAbstractArgGroup;
 	},
-	DoubleDashArgGroup_ extends CCliArgGroup = CCliArgGroup,
+	DoubleDashArgGroup_ extends CCliAbstractArgGroup = CCliAbstractArgGroup,
 > {
 	protected constructor(
 		public readonly options: CCliCommandOptions<
@@ -67,13 +70,19 @@ export class CCliCommand<
 
 	/** Factory for **@carnesen/cli** command-line interface (CLI) commands */
 	public static create<
-		PositionalArgGroup extends CCliArgGroup = CCliArgGroup<unknown, false>,
+		PositionalArgGroup extends CCliAbstractArgGroup = CCliAbstractArgGroup<
+			unknown,
+			false
+		>,
 		NamedArgGroups extends {
-			[name: string]: CCliArgGroup;
+			[name: string]: CCliAbstractArgGroup;
 		} = {
-			[name: string]: CCliArgGroup;
+			[name: string]: CCliAbstractArgGroup;
 		},
-		DoubleDashArgGroup extends CCliArgGroup = CCliArgGroup<unknown, false>,
+		DoubleDashArgGroup extends CCliAbstractArgGroup = CCliAbstractArgGroup<
+			unknown,
+			false
+		>,
 	>(
 		options: CCliCommandOptions<
 			PositionalArgGroup,

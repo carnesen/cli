@@ -1,5 +1,5 @@
 import { CCliCommand } from './c-cli-command';
-import { AnyCliDescription } from './c-cli-description';
+import { CCliAnyDescription } from './c-cli-description';
 
 /** Options for {@link CliCommandGroup} */
 export type CCliCommandGroupOptions = {
@@ -7,7 +7,7 @@ export type CCliCommandGroupOptions = {
 	name: string;
 
 	/** A short description for command-line usage */
-	description?: AnyCliDescription;
+	description?: CCliAnyDescription;
 
 	/** If `true`, hide these commands in command-line usage */
 	hidden?: boolean;

@@ -1,16 +1,16 @@
-import { CCliUsageError, C_CLI_USAGE_ERROR } from '../c-cli-usage-error';
+import { CCliUsageError } from '../c-cli-usage-error';
 
 describe(CCliUsageError.name, () => {
-	it('Constructs an error object with property "code" set to "USAGE"', () => {
+	it('Constructs an error object with empty message by default', () => {
 		const error = new CCliUsageError();
-		expect(error.code).toBe(C_CLI_USAGE_ERROR);
+		expect(error).toBeInstanceOf(CCliUsageError);
 		expect(error.message).toBe('');
 	});
 
 	it('Constructs an error object with property "code" set to "USAGE" with provided message', () => {
 		const message = 'this is a message';
 		const error = new CCliUsageError(message);
-		expect(error.code).toBe(C_CLI_USAGE_ERROR);
+		expect(error).toBeInstanceOf(CCliUsageError);
 		expect(error.message).toBe(message);
 	});
 });

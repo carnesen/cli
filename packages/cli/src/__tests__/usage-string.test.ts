@@ -1,6 +1,6 @@
 import { runAndCatchSync } from '@carnesen/run-and-catch';
 import { usageFactory } from '../usage-string';
-import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
+import { CCliStringArgGroup } from '../arg-group-factories/c-cli-string-arg-group';
 import { CCliCommand } from '../c-cli-command';
 import { CCliTree } from '../c-cli-tree';
 import { UsageOptions } from '../usage-options';
@@ -9,14 +9,14 @@ import { CCliCommandGroup } from '../c-cli-command-group';
 
 const DESCRIPTION = 'A string message please';
 
-const messageArgGroup = CliStringArgGroup({
+const messageArgGroup = CCliStringArgGroup.create({
 	description: DESCRIPTION,
 });
-const positionalArgGroup = CliStringArgGroup({
+const positionalArgGroup = CCliStringArgGroup.create({
 	description: 'A word',
 	placeholder: '<word>',
 });
-const doubleDashArgGroup = CliStringArgGroup({
+const doubleDashArgGroup = CCliStringArgGroup.create({
 	description: 'Another word',
 	required: true,
 });

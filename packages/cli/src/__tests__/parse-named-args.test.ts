@@ -5,7 +5,7 @@ import {
 	dummyArgGroup,
 	DUMMY_ARG_GROUP_THROW,
 } from '../dummy-arg-groups';
-import { C_CLI_USAGE_ERROR } from '../c-cli-usage-error';
+import { CCliUsageError } from '../c-cli-usage-error';
 
 describe(parseNamedArgs.name, () => {
 	it(`returns object of named values`, async () => {
@@ -35,7 +35,7 @@ describe(parseNamedArgs.name, () => {
 			{ foo123: dummyArgGroup },
 			{ foo1234: [] },
 		);
-		expect(exception.code).toBe(C_CLI_USAGE_ERROR);
+		expect(exception).toBeInstanceOf(CCliUsageError);
 		expect(exception.message).toMatch('--foo1234 : Unknown named argument');
 	});
 });

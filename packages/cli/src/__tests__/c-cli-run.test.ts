@@ -1,11 +1,10 @@
-import { CodedError } from '@carnesen/coded-error';
 import { cCliColorFactory } from '../c-cli-color-factory';
 import { CCliCommand } from '../c-cli-command';
-import { CCliUsageError, C_CLI_USAGE_ERROR } from '../c-cli-usage-error';
-import { CCliTerseError, C_CLI_TERSE_ERROR } from '../c-cli-terse-error';
+import { CCliUsageError } from '../c-cli-usage-error';
+import { CCliTerseError } from '../c-cli-terse-error';
 import { getGlobalProcess } from '../c-cli-process';
 import { CCli, CCliOptions } from '../c-cli';
-import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
+import { CCliStringArgGroup } from '../arg-group-factories/c-cli-string-arg-group';
 
 async function runMocked(action: () => any, options: CCliOptions = {}) {
 	const mockOptions = {
@@ -114,7 +113,7 @@ describe(CCli.prototype.run.name, () => {
 		});
 		expect(exitCode).toBe(1);
 		expect(typeof errorMessage).toBe('object');
-		expect(errorMessage.code).toBe(C_CLI_TERSE_ERROR);
+		expect(errorMessage).toBeInstanceOf(CCliTerseError);
 		expect(logMessage).toBe(undefined);
 	});
 
@@ -151,7 +150,7 @@ describe(CCli.prototype.run.name, () => {
 		expect(exitCode).toBe(0);
 	});
 
-	it(`logger.error's an exception that has code=${C_CLI_USAGE_ERROR} but tree=undefined`, async () => {
+	it(`logger.error's an exception that is a usage error but tree=undefined`, async () => {
 		const command = CCliCommand.create({
 			name: 'cli',
 			action() {
@@ -159,7 +158,7 @@ describe(CCli.prototype.run.name, () => {
 			},
 		});
 		const spy = jest.fn();
-		const codedError = new CodedError('Ah!', C_CLI_USAGE_ERROR);
+		const codedError = new CCliUsageError('Ah!');
 		const options: CCliOptions = {
 			done: () => {},
 			logger: {
@@ -203,7 +202,7 @@ describe(CCli.prototype.run.name, () => {
 		const spy = jest.fn();
 		const command = CCliCommand.create({
 			name: 'whatever',
-			positionalArgGroup: CliStringArgGroup(),
+			positionalArgGroup: CCliStringArgGroup.create(),
 			action({ positionalValue }) {
 				return positionalValue;
 			},

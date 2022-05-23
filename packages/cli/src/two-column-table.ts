@@ -1,37 +1,36 @@
 import { reWrapText } from './re-wrap-text';
 
 /** [cell0, description] */
-export type TTwoColumnTableRow = [string, string | undefined];
+export type TwoColumnTableRow = [string | undefined, string | undefined];
 
 const SEPARATOR = ' : ';
 
-export interface ITwoColumnTableOptions {
+export interface TwoColumnTableOptions {
 	indentation?: string;
 	columns?: number;
 	maxParagraphs?: number;
 }
-/**
- * Generate the lines for a two-column table
+/** Generate the lines for a two-column table
  * @param rows
- * @param options An {@link ITwoColumnTableOptions} object
+ * @param options An {@link TwoColumnTableOptions} object
  */
 export function TwoColumnTable(
-	rows: TTwoColumnTableRow[],
-	options: ITwoColumnTableOptions = {},
+	rows: TwoColumnTableRow[],
+	options: TwoColumnTableOptions = {},
 ): string[] {
 	const { columns = +Infinity, indentation = '', maxParagraphs } = options;
 
 	if (rows.length === 0) {
 		return [];
 	}
-	const column0Width = Math.max(...rows.map((row) => row[0].length));
+	const column0Width = Math.max(...rows.map((row) => (row[0] || '').length));
 	const column1Width =
 		columns - column0Width - SEPARATOR.length - indentation.length;
 	const indentationToColumn1 = ' '.repeat(
 		indentation.length + column0Width + SEPARATOR.length,
 	);
 	const outputLines: string[] = [];
-	for (const [cell0, description] of rows) {
+	for (const [cell0 = '', description] of rows) {
 		const [firstDescriptionLine, ...restDescriptionLines] = reWrapText(
 			description,
 			{
