@@ -1,8 +1,8 @@
 import {
-	CCliAbstractArgGroup,
+	CCliArgGroup,
 	CCliArgGroupOptions,
 	CCliParseArgs,
-} from '../c-cli-abstract-arg-group';
+} from '../c-cli-arg-group';
 import { convertToNumber } from '../util';
 
 /** Options for {@link CCliNumberArrayArgGroup} a.k.a `ccli.numberArray` */
@@ -14,10 +14,7 @@ export type CCliNumberArrayArgGroupValue<Required extends boolean> =
 
 export class CCliNumberArrayArgGroup<
 	Required extends boolean,
-> extends CCliAbstractArgGroup<
-	CCliNumberArrayArgGroupValue<Required>,
-	Required
-> {
+> extends CCliArgGroup<CCliNumberArrayArgGroupValue<Required>, Required> {
 	public parse(
 		args: CCliParseArgs<Required>,
 	): CCliNumberArrayArgGroupValue<Required> {

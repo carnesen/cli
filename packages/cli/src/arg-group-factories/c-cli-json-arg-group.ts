@@ -1,8 +1,8 @@
 import {
-	CCliAbstractArgGroup,
+	CCliArgGroup,
 	CCliArgGroupOptions,
 	CCliParseArgs,
-} from '../c-cli-abstract-arg-group';
+} from '../c-cli-arg-group';
 import { CCliUsageError } from '../c-cli-usage-error';
 
 /** Options for {@link CCliJsonArgGroup} */
@@ -23,7 +23,7 @@ export type CCliJsonArgGroupOptions = CCliArgGroupOptions;
 
 export type CCliJsonArgGroupValue = any;
 
-export class CCliJsonArgGroup extends CCliAbstractArgGroup<CCliJsonArgGroupValue> {
+export class CCliJsonArgGroup extends CCliArgGroup<CCliJsonArgGroupValue> {
 	public parse(args: CCliParseArgs): CCliJsonArgGroupValue {
 		if (!args) {
 			return undefined;

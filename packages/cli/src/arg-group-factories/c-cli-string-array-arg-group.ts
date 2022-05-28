@@ -1,8 +1,8 @@
 import {
-	CCliAbstractArgGroup,
+	CCliArgGroup,
 	CCliArgGroupOptions,
 	CCliParseArgs,
-} from '../c-cli-abstract-arg-group';
+} from '../c-cli-arg-group';
 
 /** Options for {@link CliStringArgGroup} */
 export type CCliStringArrayArgGroupOptions<Required extends boolean> =
@@ -14,10 +14,7 @@ export type CCliStringArrayArgGroupValue<Required extends boolean> =
 /** A factory for required `string`-valued argument groups */
 export class CCliStringArrayArgGroup<
 	Required extends boolean,
-> extends CCliAbstractArgGroup<
-	CCliStringArrayArgGroupValue<Required>,
-	Required
-> {
+> extends CCliArgGroup<CCliStringArrayArgGroupValue<Required>, Required> {
 	public parse(
 		args: CCliParseArgs<Required>,
 	): CCliStringArrayArgGroupValue<Required> {

@@ -104,14 +104,14 @@ export const CliStringChoiceArgGroup = CCliStringChoiceArgGroup.create;
 // Description functions
 //
 import {
-	CCliAnyDescription,
-	CCliDescriptionFunctionInput,
+	renderCCliDescription,
+	RenderCCliDescriptionOptions,
 	CCliDescriptionFunction,
 } from './c-cli-description';
 
 export {
-	CCliAnyDescription,
-	CCliDescriptionFunctionInput,
+	renderCCliDescription as CCliAnyDescription,
+	RenderCCliDescriptionOptions as CCliDescriptionFunctionInput,
 	CCliDescriptionFunction,
 };
 
@@ -132,22 +132,32 @@ export { CCliProcess } from './c-cli-process';
 //
 export { CCliColor } from './c-cli-color';
 export { CCliNoopColor } from './c-cli-noop-color';
-export { cCliColorFactory } from './c-cli-color-factory';
+import { cCliColorFactory } from './c-cli-color-factory';
+export { cCliColorFactory };
+/** @deprecated Use {@link cCliColorFactory} */
+export const CliAnsi = cCliColorFactory;
 
 //
 // Error constructors
 //
-export { CCliTerseError } from './c-cli-terse-error';
-export { CCliUsageError } from './c-cli-usage-error';
+import { CCliTerseError } from './c-cli-terse-error';
+/** @deprecated Use {@link CCliTerseError} */
+export const CliTerseError = CCliTerseError;
+export { CCliTerseError };
+
+import { CCliUsageError } from './c-cli-usage-error';
+export { CCliUsageError };
+/** @deprecated Use {@link CCliUsageError} */
+export const CliUsageError = CCliUsageError;
 
 //
 // Custom ArgGroup
 //
 export {
-	CCliAbstractArgGroup,
+	CCliArgGroup,
 	CCliArgGroupOptions,
 	CCliParseArgs,
-} from './c-cli-abstract-arg-group';
+} from './c-cli-arg-group';
 
 //
 // Command tree
@@ -157,7 +167,10 @@ export { CCliRoot, CCliTree, CCliLeaf } from './c-cli-tree';
 //
 // Branding
 //
-export { CCliWordMark } from './c-cli-word-mark';
+import { CCliWordMark } from './c-cli-word-mark';
+export { CCliWordMark };
+/** @deprecated Use {@link CCliWordMark} */
+export const CliWordMark = CCliWordMark;
 
 ///
 // FOR INTERNAL USE ONLY

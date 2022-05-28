@@ -47,8 +47,8 @@ function recursiveNavigateCliTree(
 			return result;
 		}
 
-		const next = result.tree.current.options.subcommands.find(
-			(subcommand) => subcommand.options.name === result.args[0],
+		const next = result.tree.current.subcommands.find(
+			(subcommand) => subcommand.name === result.args[0],
 		);
 
 		if (!next) {

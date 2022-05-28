@@ -1,7 +1,7 @@
 import { reWrapText } from './re-wrap-text';
 
 /** [cell0, description] */
-export type TwoColumnTableRow = [string | undefined, string | undefined];
+export type TwoColumnTableRow = [string, string | undefined];
 
 const SEPARATOR = ' : ';
 
@@ -23,14 +23,14 @@ export function TwoColumnTable(
 	if (rows.length === 0) {
 		return [];
 	}
-	const column0Width = Math.max(...rows.map((row) => (row[0] || '').length));
+	const column0Width = Math.max(...rows.map((row) => row[0].length));
 	const column1Width =
 		columns - column0Width - SEPARATOR.length - indentation.length;
 	const indentationToColumn1 = ' '.repeat(
 		indentation.length + column0Width + SEPARATOR.length,
 	);
 	const outputLines: string[] = [];
-	for (const [cell0 = '', description] of rows) {
+	for (const [cell0, description] of rows) {
 		const [firstDescriptionLine, ...restDescriptionLines] = reWrapText(
 			description,
 			{

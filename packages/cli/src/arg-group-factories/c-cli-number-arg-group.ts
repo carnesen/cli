@@ -1,8 +1,8 @@
 import {
-	CCliAbstractArgGroup,
+	CCliArgGroup,
 	CCliArgGroupOptions,
 	CCliParseArgs,
-} from '../c-cli-abstract-arg-group';
+} from '../c-cli-arg-group';
 import { convertToNumber } from '../util';
 import { CCliUsageError } from '../c-cli-usage-error';
 
@@ -13,9 +13,10 @@ export type CCliNumberArgGroupOptions<Required extends boolean> =
 export type CCliNumberArgGroupValue<Required extends boolean> =
 	Required extends true ? number : number | undefined;
 
-export class CCliNumberArgGroup<
-	Required extends boolean,
-> extends CCliAbstractArgGroup<CCliNumberArgGroupValue<Required>, Required> {
+export class CCliNumberArgGroup<Required extends boolean> extends CCliArgGroup<
+	CCliNumberArgGroupValue<Required>,
+	Required
+> {
 	public parse(
 		args: CCliParseArgs<Required>,
 	): CCliNumberArgGroupValue<Required> {

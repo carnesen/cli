@@ -42,9 +42,9 @@ describe(CCliStringChoiceArgGroup.name, () => {
 	});
 
 	it('attaches config properties', () => {
-		expect(argGroup.options.hidden).toBe(hidden);
-		expect(argGroup.options.placeholder).toBe(placeholder);
-		expect(argGroup.options.required).toBe(required);
+		expect(argGroup.hidden).toBe(hidden);
+		expect(argGroup.placeholder).toBe(placeholder);
+		expect(argGroup.required).toBe(required);
 	});
 
 	it('has experimental _suggest api', async () => {

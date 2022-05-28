@@ -27,22 +27,20 @@ describe(usageForCommand.name, () => {
 			{ columns: 100, indentation, color: cCliColorFactory() },
 		);
 		expect(lines.length).toBe(15);
-		expect(lines[0]).toMatch(`-- ${argGroup.options.placeholder}`);
+		expect(lines[0]).toMatch(`-- ${argGroup.placeholder}`);
 		expect(lines[1]).toBe('');
-		expect(lines[2]).toBe(`${indentation}${command.options.description}`);
+		expect(lines[2]).toBe(`${indentation}${command.description}`);
 		expect(lines[3]).toBe('');
 		expect(lines[4]).toBe('Positional arguments:');
 		expect(lines[5]).toBe('');
-		expect(lines[6]).toBe(`${indentation}${argGroup.options.placeholder}`);
+		expect(lines[6]).toBe(`${indentation}${argGroup.placeholder}`);
 		expect(lines[7]).toBe('');
 		expect(lines[8]).toBe('Named arguments:');
 		expect(lines[9]).toBe('');
-		expect(lines[10]).toBe(
-			`${indentation}--foo ${argGroup.options.placeholder}`,
-		);
+		expect(lines[10]).toBe(`${indentation}--foo ${argGroup.placeholder}`);
 		expect(lines[11]).toBe('');
 		expect(lines[12]).toBe('"Double dash" arguments:');
 		expect(lines[13]).toBe('');
-		expect(lines[14]).toBe(`${indentation}${argGroup.options.placeholder}`);
+		expect(lines[14]).toBe(`${indentation}${argGroup.placeholder}`);
 	});
 });

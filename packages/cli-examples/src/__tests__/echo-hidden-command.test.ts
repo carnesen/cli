@@ -1,4 +1,4 @@
-import { Cli, CliCommandGroup, ICliOptions } from '@carnesen/cli';
+import { Cli, CliCommandGroup, CCliOptions } from '@carnesen/cli';
 
 import { echoHiddenCommand } from '../echo-hidden-command';
 
@@ -10,7 +10,7 @@ describe(echoHiddenCommand.name, () => {
 
 	it('only shows up in usage if specifically requested via --help', async () => {
 		let sawHiddenCommandNameInUsage = false;
-		const options: ICliOptions = {
+		const options: CCliOptions = {
 			done() {},
 			console: {
 				error(arg) {

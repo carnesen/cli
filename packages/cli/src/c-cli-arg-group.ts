@@ -1,8 +1,8 @@
-import { CCliAnyDescription } from './c-cli-description';
+import { CCliDescription } from './c-cli-description';
 import { CCliUsageError } from './c-cli-usage-error';
 
 /**
- * Defines the type of the args passed to an {@link CCliAbstractArgGroup.parse}
+ * Defines the type of the args passed to an {@link CCliArgGroup.parse}
  * @param Required If `false` `undefined`, `undefined` */
 export type CCliParseArgs<Required extends boolean = boolean> =
 	Required extends true ? string[] : string[] | undefined;
@@ -14,7 +14,7 @@ export type CCliParseArgs<Required extends boolean = boolean> =
 export type CCliArgGroupOptions<Required extends boolean = boolean> = {
 	/** A text description of this argument group. Paragraphs are re-wrapped when
 	 * printed to the terminal so don't worry about whitespace. */
-	description?: CCliAnyDescription;
+	description?: CCliDescription;
 
 	/** If `true`, command-line usage won't show this arg group unless it's
 	 * invoked directly */
@@ -30,21 +30,40 @@ export type CCliArgGroupOptions<Required extends boolean = boolean> = {
 	required?: Required;
 };
 
-export type ValueFromCCliArgGroup<ArgGroup> =
-	ArgGroup extends CCliAbstractArgGroup<infer Value> ? Value : never;
+export type ValueFromCCliArgGroup<ArgGroup> = ArgGroup extends CCliArgGroup<
+	infer Value
+>
+	? Value
+	: never;
 
 /** A group of adjacent command-line arguments
  * @param Value Type of the value returned by {@link CCliArgGroupOptions.parse}
  * @param Required If `true`, the type of `args` passed to
- * {@link CCliAbstractArgGroup.parse} does not include `undefined`. */
-export abstract class CCliAbstractArgGroup<
+ * {@link CCliArgGroup.parse} does not include `undefined`. */
+export abstract class CCliArgGroup<
 	Value = unknown,
 	Required extends boolean = boolean,
 > {
 	protected constructor(
-		public readonly options: CCliArgGroupOptions<Required>,
+		protected readonly options: CCliArgGroupOptions<Required>,
 	) {
 		this.parse = this.parse.bind(this);
+	}
+
+	public get description(): CCliDescription {
+		return this.options.description;
+	}
+
+	public get hidden(): boolean {
+		return this.options.hidden || false;
+	}
+
+	public get placeholder(): string {
+		return this.options.placeholder ?? '<val>';
+	}
+
+	public get required(): Required | undefined {
+		return this.options.required;
 	}
 
 	/** Function that parses a well-typed value from string arguments */
@@ -61,7 +80,7 @@ export abstract class CCliAbstractArgGroup<
 		}
 	}
 
-	public assertOneOrMoreArgs(args: unknown[]): void {
+	protected assertOneOrMoreArgs(args: unknown[]): void {
 		if (args.length === 0) {
 			throw new CCliUsageError(
 				`Expected one or more arguments ${this.options.placeholder}`,

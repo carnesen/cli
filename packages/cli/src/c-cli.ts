@@ -83,9 +83,9 @@ export class CCli {
 		const command = navigated.tree.current;
 
 		// Pre-validation for positional argument group
-		if (!command.options.positionalArgGroup && positionalArgs.length > 0) {
+		if (!command.positionalArgGroup && positionalArgs.length > 0) {
 			throw new CCliUsageError(
-				`Unexpected argument "${positionalArgs[0]}" : Command "${command.options.name}" does not accept positional arguments`,
+				`Unexpected argument "${positionalArgs[0]}" : Command "${command.name}" does not accept positional arguments`,
 				navigated.tree,
 			);
 		}
@@ -93,9 +93,9 @@ export class CCli {
 		// All validation for named argument groups is done during parsing
 
 		// Pre-validation for double-dash argument group
-		if (!command.options.doubleDashArgGroup && doubleDashArgs) {
+		if (!command.doubleDashArgGroup && doubleDashArgs) {
 			throw new CCliUsageError(
-				`Command "${command.options.name}" does not allow "--" as an argument`,
+				`Command "${command.name}" does not allow "--" as an argument`,
 			);
 		}
 
@@ -104,7 +104,7 @@ export class CCli {
 		// context.
 		try {
 			let positionalValue: any;
-			if (command.options.positionalArgGroup) {
+			if (command.positionalArgGroup) {
 				// Note that for named and double-dash args, we distinguish between
 				// `undefined` and `[]`. For example, "cli" gives an double-dash args
 				// `undefined` whereas "cli --" gives an double-dash args `[]`. For the
@@ -112,27 +112,27 @@ export class CCli {
 				// we elect here to pass in `undefined` rather than an empty array when no
 				// positional arguments are passed.
 				positionalValue = await parseArgs(
-					command.options.positionalArgGroup,
+					command.positionalArgGroup,
 					positionalArgs.length > 0 ? positionalArgs : undefined,
 					undefined,
 				);
 			}
 
 			const namedValues = await parseNamedArgs(
-				command.options.namedArgGroups || {},
+				command.namedArgGroups || {},
 				namedArgs,
 			);
 
 			let doubleDashValue: any;
-			if (command.options.doubleDashArgGroup) {
+			if (command.doubleDashArgGroup) {
 				doubleDashValue = await parseArgs(
-					command.options.doubleDashArgGroup,
+					command.doubleDashArgGroup,
 					doubleDashArgs,
 					'--',
 				);
 			}
 
-			const result = await command.options.action({
+			const result = await command.action({
 				ansi: this.color,
 				color: this.color,
 				console: this.logger,

@@ -9,7 +9,7 @@ const argGroup = CCliFlagArgGroup.create({ description, hidden });
 
 describe(CCliFlagArgGroup.name, () => {
 	it('always has "required" set to false', () => {
-		expect(argGroup.options.required).toBe(false);
+		expect(argGroup.required).toBe(false);
 	});
 
 	it('parse returns false if args is undefined', () => {
@@ -28,11 +28,11 @@ describe(CCliFlagArgGroup.name, () => {
 	});
 
 	it('attaches passed properties "description" and "hidden"', () => {
-		expect(argGroup.options.description).toBe(description);
-		expect(argGroup.options.hidden).toBe(hidden);
+		expect(argGroup.description).toBe(description);
+		expect(argGroup.hidden).toBe(hidden);
 	});
 
 	it('config is optional', () => {
-		expect(CCliFlagArgGroup.create().options.hidden).toBe(undefined);
+		expect(CCliFlagArgGroup.create().hidden).toBe(false);
 	});
 });

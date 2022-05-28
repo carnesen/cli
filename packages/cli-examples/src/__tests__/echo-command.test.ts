@@ -1,10 +1,10 @@
-import { Cli, ICliOptions } from '@carnesen/cli';
+import { Cli, CCliOptions } from '@carnesen/cli';
 import { echoCommand } from '../echo-command';
 
 describe(echoCommand.name, () => {
 	it('" "-joins and console.log\'s the provided positional args', async () => {
 		const spy = jest.fn();
-		const options: ICliOptions = {
+		const options: CCliOptions = {
 			console: { error() {}, log: spy },
 		};
 		const cli = Cli(echoCommand, options);
@@ -15,7 +15,7 @@ describe(echoCommand.name, () => {
 
 	it('" "-joins and console.error\'s the provided positional args if --stderr', async () => {
 		const spy = jest.fn();
-		const options: ICliOptions = {
+		const options: CCliOptions = {
 			console: { log() {}, error: spy },
 		};
 		const cli = Cli(echoCommand, options);

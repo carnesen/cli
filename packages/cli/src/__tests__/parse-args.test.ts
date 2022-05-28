@@ -41,7 +41,7 @@ describe(parseArgs.name, () => {
 			expect(exception).toBeInstanceOf(CCliUsageError);
 			expect(exception.message).toMatch(/argument is required/i);
 			expect(exception.message).toMatch(
-				dummyRequiredArgGroup.options.placeholder || '',
+				dummyRequiredArgGroup.placeholder || '',
 			);
 		}
 	});
@@ -76,7 +76,7 @@ describe(parseArgs.name, () => {
 			undefined,
 		);
 		expect(exception.message).toMatch(DUMMY_ARG_GROUP_THROWN_INTENTIONALLY);
-		expect(exception.message).toMatch(dummyArgGroup.options.placeholder || '');
+		expect(exception.message).toMatch(dummyArgGroup.placeholder || '');
 		expect(exception.message).toMatchSnapshot();
 	});
 

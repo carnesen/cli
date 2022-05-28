@@ -1,4 +1,4 @@
-import { Cli, ICliOptions } from '@carnesen/cli';
+import { Cli, CCliOptions } from '@carnesen/cli';
 import {
 	hidingCommandGroup,
 	hiddenCommandGroup,
@@ -17,7 +17,7 @@ describe(hidingCommandGroup.name, () => {
 		let sawHiddenCommandGroupEcho = false;
 		let sawNonHiddenCommandGroupEcho = false;
 		let sawHiddenCommandGroupSubcommands = false;
-		const options: ICliOptions = {
+		const options: CCliOptions = {
 			done() {},
 			console: {
 				error(arg) {

@@ -64,7 +64,7 @@ describe(CCli.prototype.api.name, () => {
 	it(`throws ${CCliUsageError.name} if --help is passed among the commands`, async () => {
 		const exception = await runAndCatch(cliApi, [
 			'--help',
-			commandWithNoArguments.options.name,
+			commandWithNoArguments.name,
 		]);
 		expect(exception).toBeInstanceOf(CCliUsageError);
 		expect((exception as CCliUsageError).tree!.current).toBe(root);
@@ -87,12 +87,12 @@ describe(CCli.prototype.api.name, () => {
 
 	it('throws usage error "positional arguments" if last command is a command without positionalArgGroup property and additional args are present', async () => {
 		const exception = await runAndCatch(cliApi, [
-			commandWithNamedArgGroups.options.name,
+			commandWithNamedArgGroups.name,
 			'oops',
 		]);
 		expect(exception).toBeInstanceOf(CCliUsageError);
 		expect(exception.message).toMatch('Unexpected argument "oops"');
-		expect(exception.message).toMatch(commandWithNamedArgGroups.options.name);
+		expect(exception.message).toMatch(commandWithNamedArgGroups.name);
 		expect(exception.message).toMatch(/positional arguments/i);
 		expect(exception.message).toMatchSnapshot();
 	});
@@ -100,7 +100,7 @@ describe(CCli.prototype.api.name, () => {
 	it('Passes parsed positionalValue to the "action" function', async () => {
 		const positionalArgs = ['foo', 'bar'];
 		const result = await cliApi([
-			commandWithPositionalArgGroup.options.name,
+			commandWithPositionalArgGroup.name,
 			...positionalArgs,
 		]);
 		expect(result[0].positionalValue).toEqual(
@@ -110,10 +110,7 @@ describe(CCli.prototype.api.name, () => {
 
 	it('Passes parsed namedValues to the "action" function', async () => {
 		const namedArgs = ['--foo', 'bar'];
-		const result = await cliApi([
-			commandWithNamedArgGroups.options.name,
-			...namedArgs,
-		]);
+		const result = await cliApi([commandWithNamedArgGroups.name, ...namedArgs]);
 		expect(result[0].namedValues).toEqual({
 			foo: dummyArgGroup.parse(['bar']),
 		});
@@ -121,28 +118,23 @@ describe(CCli.prototype.api.name, () => {
 
 	it(`Throws usage error 'does not allow "--"' if command does not have an "doubleDashArgGroup" property`, async () => {
 		const exception = await runAndCatch(cliApi, [
-			commandWithPositionalArgGroup.options.name,
+			commandWithPositionalArgGroup.name,
 			'--',
 		]);
 		expect(exception).toBeInstanceOf(CCliUsageError);
-		expect(exception.message).toMatch(
-			commandWithPositionalArgGroup.options.name,
-		);
+		expect(exception.message).toMatch(commandWithPositionalArgGroup.name);
 		expect(exception.message).toMatch('does not allow "--"');
 	});
 
 	it('Passes parsed doubleDashValue to the "action" function', async () => {
-		const result = await cliApi([
-			commandWithDoubleDashArgGroup.options.name,
-			'--',
-		]);
+		const result = await cliApi([commandWithDoubleDashArgGroup.name, '--']);
 		expect(result[0].doubleDashValue).toEqual(
-			commandWithDoubleDashArgGroup.options.doubleDashArgGroup!.parse([]),
+			commandWithDoubleDashArgGroup.doubleDashArgGroup!.parse([]),
 		);
 	});
 
 	it('Passes undefined as the positionalValue when no positional args are passed', async () => {
-		const result = await cliApi([commandWithPositionalArgGroup.options.name]);
+		const result = await cliApi([commandWithPositionalArgGroup.name]);
 		expect(result[0].positionalValue).toEqual(
 			DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED,
 		);

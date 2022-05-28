@@ -1,7 +1,4 @@
-import {
-	CCliAbstractArgGroup,
-	CCliArgGroupOptions,
-} from '../c-cli-abstract-arg-group';
+import { CCliArgGroup, CCliArgGroupOptions } from '../c-cli-arg-group';
 import { CCliUsageError } from '../c-cli-usage-error';
 
 /** Options for {@link CCliFlagArgGroup} */
@@ -17,7 +14,7 @@ export type CCliFlagArgGroupOptions = Pick<
  * $ cli --foo     // named flag "foo" parses `true`
  * $ cli --foo bar // usage error
  * ``` */
-export class CCliFlagArgGroup extends CCliAbstractArgGroup<boolean, false> {
+export class CCliFlagArgGroup extends CCliArgGroup<boolean, false> {
 	public parse(args: string[] | undefined): boolean {
 		// `args` `undefined` means that the named argument separator e.g. `--foo`
 		// was not passed on the command line

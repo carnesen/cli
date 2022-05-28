@@ -2,7 +2,7 @@ import { runAndCatch } from '@carnesen/run-and-catch';
 import { usageSubcommandRowsFactory } from '../usage-subcommand-rows';
 import { CCliCommand } from '../c-cli-command';
 import { cCliColorFactory } from '../c-cli-color-factory';
-import { CCliDescriptionFunctionInput } from '../c-cli-description';
+import { RenderCCliDescriptionOptions } from '../c-cli-description';
 import { CCliCommandGroup } from '../c-cli-command-group';
 
 const command = CCliCommand.create({
@@ -26,7 +26,7 @@ const root = CCliCommandGroup.create({
 	subcommands: [commandGroup],
 });
 const color = cCliColorFactory();
-const input: CCliDescriptionFunctionInput = { ansi: color, color };
+const input: RenderCCliDescriptionOptions = { color };
 
 describe(usageSubcommandRowsFactory.name, () => {
 	it('lists all commands underneath the provided command group, recursive', () => {
@@ -35,7 +35,7 @@ describe(usageSubcommandRowsFactory.name, () => {
 		expect(rows.length).toBe(1);
 		const [name, description] = rows[0];
 		expect(name).toBe('users list');
-		expect(description).toBe(command.options.description);
+		expect(description).toBe(command.description);
 	});
 	it('throws "Unexpected kind" on bad object', async () => {
 		const exception = await runAndCatch(() =>

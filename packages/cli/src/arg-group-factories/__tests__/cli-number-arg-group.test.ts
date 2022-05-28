@@ -38,10 +38,10 @@ describe(CCliNumberArgGroup.name, () => {
 	});
 
 	it('attaches config properties', () => {
-		expect(argGroup.options.description).toBe(description);
-		expect(argGroup.options.hidden).toBe(hidden);
-		expect(argGroup.options.placeholder).toBe(placeholder);
-		expect(argGroup.options.required).toBe(required);
+		expect(argGroup.description).toBe(description);
+		expect(argGroup.hidden).toBe(hidden);
+		expect(argGroup.placeholder).toBe(placeholder);
+		expect(argGroup.required).toBe(required);
 	});
 
 	it('config is not required', () => {

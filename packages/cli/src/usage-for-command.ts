@@ -2,8 +2,8 @@ import { wrapInSquareBrackets } from './util';
 import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TwoColumnTableRow } from './two-column-table';
 import {
-	textFromDescription,
-	CCliDescriptionFunctionInput,
+	renderCCliDescription,
+	RenderCCliDescriptionOptions,
 } from './c-cli-description';
 import { CCliLeaf } from './c-cli-tree';
 import { UsageOptions } from './usage-options';
@@ -19,16 +19,16 @@ export function usageForCommand(
 		namedArgGroups,
 		doubleDashArgGroup,
 		description,
-	} = current.options;
+	} = current;
 	const commandPathString = [...parents, current]
-		.map(({ options: { name } }) => name)
+		.map(({ name }) => name)
 		.join(' ');
 
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionInput: CCliDescriptionFunctionInput = { ansi: color, color };
-	const commandDescriptionText: string = textFromDescription(
+	const descriptionInput: RenderCCliDescriptionOptions = { color };
+	const commandDescriptionText: string = renderCCliDescription(
 		description,
 		descriptionInput,
 	);
@@ -48,16 +48,14 @@ export function usageForCommand(
 		lines.push('');
 	}
 
-	if (positionalArgGroup && !positionalArgGroup.options.hidden) {
-		if (positionalArgGroup.options.required) {
-			firstLine += ` ${positionalArgGroup.options.placeholder}`;
+	if (positionalArgGroup && !positionalArgGroup.hidden) {
+		if (positionalArgGroup.required) {
+			firstLine += ` ${positionalArgGroup.placeholder}`;
 		} else {
-			firstLine += ` ${wrapInSquareBrackets(
-				positionalArgGroup.options.placeholder,
-			)}`;
+			firstLine += ` ${wrapInSquareBrackets(positionalArgGroup.placeholder)}`;
 		}
-		const positionalArgGroupDescriptionText = textFromDescription(
-			positionalArgGroup.options.description,
+		const positionalArgGroupDescriptionText = renderCCliDescription(
+			positionalArgGroup.description,
 			descriptionInput,
 		);
 
@@ -65,12 +63,7 @@ export function usageForCommand(
 		lines.push('');
 		lines.push(
 			...TwoColumnTable(
-				[
-					[
-						positionalArgGroup.options.placeholder,
-						positionalArgGroupDescriptionText,
-					],
-				],
+				[[positionalArgGroup.placeholder, positionalArgGroupDescriptionText]],
 				twoColumnTableOptions,
 			),
 		);
@@ -79,11 +72,11 @@ export function usageForCommand(
 
 	if (namedArgGroups) {
 		const namedArgGroupEntries = Object.entries(namedArgGroups).filter(
-			([_, argGroup]) => !argGroup.options.hidden,
+			([_, argGroup]) => !argGroup.hidden,
 		);
 		if (namedArgGroupEntries.length > 0) {
 			const namedArgGroupsNotRequired = namedArgGroupEntries.every(
-				([_, argGroup]) => !argGroup.options.required,
+				([_, argGroup]) => !argGroup.required,
 			);
 			firstLine += namedArgGroupsNotRequired
 				? ' [<named args>]'
@@ -92,15 +85,15 @@ export function usageForCommand(
 			lines.push('');
 			const rows: TwoColumnTableRow[] = namedArgGroupEntries.map(
 				([name, argGroup]) => {
-					const argGroupDescriptionText = textFromDescription(
-						argGroup.options.description,
+					const argGroupDescriptionText = renderCCliDescription(
+						argGroup.description,
 						descriptionInput,
 					);
 					let cell0 = `--${name}`;
-					if (argGroup.options.placeholder) {
-						cell0 += ` ${argGroup.options.placeholder}`;
+					if (argGroup.placeholder) {
+						cell0 += ` ${argGroup.placeholder}`;
 					}
-					if (!argGroup.options.required) {
+					if (!argGroup.required) {
 						cell0 = wrapInSquareBrackets(cell0);
 					}
 					return [cell0, argGroupDescriptionText];
@@ -112,8 +105,8 @@ export function usageForCommand(
 		}
 	}
 
-	if (doubleDashArgGroup && !doubleDashArgGroup.options.hidden) {
-		const { placeholder, required } = doubleDashArgGroup.options;
+	if (doubleDashArgGroup && !doubleDashArgGroup.hidden) {
+		const { placeholder, required } = doubleDashArgGroup;
 		const fullPlaceholder = `-- ${placeholder}`;
 		firstLine += ` ${
 			required ? fullPlaceholder : wrapInSquareBrackets(fullPlaceholder)
@@ -125,8 +118,8 @@ export function usageForCommand(
 				[
 					[
 						placeholder,
-						textFromDescription(
-							doubleDashArgGroup.options.description,
+						renderCCliDescription(
+							doubleDashArgGroup.description,
 							descriptionInput,
 						),
 					],

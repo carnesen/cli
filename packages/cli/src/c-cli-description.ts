@@ -1,24 +1,25 @@
 import { CCliColor } from './c-cli-color';
+import { cCliColorFactory } from './c-cli-color-factory';
 
 /** Type of the object injected into a command's description when it's a
  * function */
-export type CCliDescriptionFunctionInput = {
-	/** @deprecated Use `color` instead */
-	ansi: CCliColor;
+export type RenderCCliDescriptionOptions = {
 	color: CCliColor;
 };
 
 /** Type of a command description when it's a function */
-export type CCliDescriptionFunction = (
-	input: CCliDescriptionFunctionInput,
-) => string;
+export type CCliDescriptionFunction = (input: {
+	/** @deprecated Use `color` instead */
+	ansi: CCliColor;
+	color: CCliColor;
+}) => string;
 
-export type CCliAnyDescription = undefined | string | CCliDescriptionFunction;
+export type CCliDescription = undefined | string | CCliDescriptionFunction;
 
 /** Generate a string text description from a description string or function */
-export function textFromDescription(
-	description: CCliAnyDescription,
-	input: CCliDescriptionFunctionInput,
+export function renderCCliDescription(
+	description: CCliDescription,
+	options: RenderCCliDescriptionOptions,
 ): string {
 	let text = '';
 	switch (typeof description) {
@@ -31,7 +32,8 @@ export function textFromDescription(
 			break;
 		}
 		case 'function': {
-			text = description(input);
+			const color = options.color ?? cCliColorFactory();
+			text = description({ ansi: color, color });
 			break;
 		}
 		default: {

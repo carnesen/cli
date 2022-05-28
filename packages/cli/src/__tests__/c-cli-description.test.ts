@@ -1,14 +1,14 @@
 import {
-	textFromDescription,
-	CCliAnyDescription,
-	CCliDescriptionFunctionInput,
+	CCliDescription,
+	renderCCliDescription,
+	RenderCCliDescriptionOptions,
 } from '../c-cli-description';
 import { cCliColorFactory } from '../c-cli-color-factory';
 import { CCliColor } from '../c-cli-color';
 
 const data: {
 	title: string;
-	description: CCliAnyDescription;
+	description: CCliDescription;
 	text: string;
 }[] = [
 	{
@@ -44,19 +44,18 @@ const color: CCliColor = {
 	},
 };
 
-const input: CCliDescriptionFunctionInput = {
-	ansi: color,
+const options: RenderCCliDescriptionOptions = {
 	color,
 };
 
-describe(textFromDescription.name, () => {
+describe(renderCCliDescription.name, () => {
 	for (const { title, description, text: output } of data) {
 		it(title, () => {
-			expect(textFromDescription(description, input)).toBe(output);
+			expect(renderCCliDescription(description, options)).toBe(output);
 		});
 	}
 	it('throws if provided an invalid description', () => {
-		expect(() => textFromDescription(42 as any as string, input)).toThrow(
+		expect(() => renderCCliDescription(42 as any as string, options)).toThrow(
 			'Unexpected description',
 		);
 	});

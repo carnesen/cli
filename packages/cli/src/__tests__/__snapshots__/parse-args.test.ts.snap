@@ -4,4 +4,4 @@ exports[`parseArgs if throws "argument is required" with context, expect message
 
 exports[`parseArgs if throws "argument is required", expect message to match snapshot 1`] = `"<foo> : argument is required"`;
 
-exports[`parseArgs throws if parse does with a context/placeholder enhanced message 1`] = `"thrown intentionally"`;
+exports[`parseArgs throws if parse does with a context/placeholder enhanced message 1`] = `"<val> : thrown intentionally"`;

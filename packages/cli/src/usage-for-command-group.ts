@@ -3,7 +3,7 @@ import { reWrapText } from './re-wrap-text';
 import { usageSubcommandRowsFactory } from './usage-subcommand-rows';
 import { TwoColumnTable } from './two-column-table';
 import { UsageOptions } from './usage-options';
-import { textFromDescription } from './c-cli-description';
+import { renderCCliDescription } from './c-cli-description';
 
 export function usageForCommandGroup(
 	{
@@ -12,14 +12,11 @@ export function usageForCommandGroup(
 	}: { current: CCliCommandGroup; parents: CCliCommandGroup[] },
 	{ indentation, color, columns }: UsageOptions,
 ): string[] {
-	const commandPath = [...parents, current]
-		.map(({ options: { name } }) => name)
-		.join(' ');
+	const commandPath = [...parents, current].map(({ name }) => name).join(' ');
 	const lines: string[] = [];
 	lines.push(`Usage: ${commandPath ? `${commandPath} ` : ''}<subcommand> ...`);
 	lines.push('');
-	const description = textFromDescription(current.options.description, {
-		ansi: color,
+	const description = renderCCliDescription(current.description, {
 		color,
 	});
 	const descriptionLines = reWrapText(description, {
@@ -35,7 +32,6 @@ export function usageForCommandGroup(
 	lines.push('');
 
 	const subcommandRows = usageSubcommandRowsFactory(current, {
-		ansi: color,
 		color,
 	});
 

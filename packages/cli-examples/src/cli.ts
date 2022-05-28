@@ -8,10 +8,10 @@
  * The @carnesen/cli-examples Node.js executable CLI
  */
 
-import { Cli } from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 import { rootCommandGroup } from './index';
 
-const cli = Cli(rootCommandGroup);
+const cli = c.cli(rootCommandGroup);
 
 // The idiomatic Node.js expression `module === require.main` determines whether
 // this module is the one being run directly as `node <module file>` or if this

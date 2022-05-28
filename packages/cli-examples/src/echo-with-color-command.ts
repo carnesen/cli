@@ -1,10 +1,8 @@
 import {
-	CliCommand,
-	CliStringArrayArgGroup,
-	CliColor,
-	CliArgGroup,
-	CliFlagArgGroup,
-	CliTerseError,
+	c,
+	CCliFlagArgGroup,
+	CCliDescriptionFunctionInput,
+	CCliTerseError,
 } from '@carnesen/cli';
 
 // This command uses
@@ -17,7 +15,7 @@ type ColorMethodName = typeof COLOR_METHOD_NAMES[number];
 const NAMED_ARG_GROUPS_AS_ANY: any = {};
 
 for (const methodName of COLOR_METHOD_NAMES) {
-	NAMED_ARG_GROUPS_AS_ANY[methodName] = CliFlagArgGroup({
+	NAMED_ARG_GROUPS_AS_ANY[methodName] = c.flag({
 		description({ color }) {
 			return `Decorate the text ${color[methodName](methodName)}`;
 		},
@@ -25,22 +23,22 @@ for (const methodName of COLOR_METHOD_NAMES) {
 }
 
 const NAMED_ARG_GROUPS: {
-	[K in ColorMethodName]: CliArgGroup<boolean, false>;
+	[K in ColorMethodName]: CCliFlagArgGroup;
 } = NAMED_ARG_GROUPS_AS_ANY;
 
 /**
  * Print to the terminal like `echo` optionally with ANSI text decoration
  */
-export const echoWithColorCommand = CliCommand({
+export const echoWithColorCommand = c.command({
 	name: 'echo-with-color',
-	description({ color }) {
-		return `Print to the terminal with ${colorWordMarkFactory(color)}`;
+	description(input) {
+		return `Print to the terminal with ${colorWordMarkFactory(input)}`;
 	},
-	positionalArgGroup: CliStringArrayArgGroup({
+	positionalArgGroup: c.stringArray({
 		required: true,
 	}),
 	namedArgGroups: NAMED_ARG_GROUPS,
-	action({ positionalValue: messages, namedValues, ansi }) {
+	action({ positionalValue: messages, namedValues, color }) {
 		// In addition to the parsed argument values, the action also receives a
 		// `ansi` object for decorating text sent to the terminal. By default, the
 		// `ansi` methods will wrap the provided text in ANSI escape codes
@@ -56,19 +54,21 @@ export const echoWithColorCommand = CliCommand({
 			.filter(([_name, value]) => value)
 			.map(([name]) => name);
 		if (methodNames.length > 1) {
-			throw new CliTerseError(
+			throw new CCliTerseError(
 				`Flags --${methodNames[0]} and --${methodNames[1]} are mutually exclusive`,
 			);
 		}
 		if (methodNames.length === 1) {
-			text = ansi[methodNames[0]](text);
+			text = color[methodNames[0]](text);
 		}
 		return text;
 	},
 });
 
-export function colorWordMarkFactory(ansi: CliColor): string {
-	return `${ansi.bold('c')}${ansi.green('o')}${ansi.blue('l')}${ansi.red(
+export function colorWordMarkFactory({
+	color,
+}: CCliDescriptionFunctionInput): string {
+	return `${color.bold('c')}${color.green('o')}${color.blue('l')}${color.red(
 		'o',
 	)}r`;
 }

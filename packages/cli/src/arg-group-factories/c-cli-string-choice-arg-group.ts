@@ -1,9 +1,9 @@
 import {
-	CCliAbstractArgGroup,
+	CCliArgGroup,
 	CCliArgGroupOptions,
 	CCliParseArgs,
-} from '../c-cli-abstract-arg-group';
-import { textFromDescription } from '../c-cli-description';
+} from '../c-cli-arg-group';
+import { renderCCliDescription } from '../c-cli-description';
 import { CCliUsageError } from '../c-cli-usage-error';
 
 export type CCliAnyStringChoices = string[] | readonly string[];
@@ -36,7 +36,7 @@ export type CCliStringChoiceArgGroupValue<
 export class CCliStringChoiceArgGroup<
 	Required extends boolean,
 	Choices extends CCliAnyStringChoices,
-> extends CCliAbstractArgGroup<
+> extends CCliArgGroup<
 	CCliStringChoiceArgGroupValue<Required, Choices>,
 	Required
 > {
@@ -95,7 +95,7 @@ export class CCliStringChoiceArgGroup<
 			placeholder: '<value>',
 			...options,
 			description(input) {
-				let text = textFromDescription(options.description, input);
+				let text = renderCCliDescription(options.description, input);
 				if (text.length > 0) {
 					text += '\n\n';
 				}

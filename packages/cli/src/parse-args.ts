@@ -1,5 +1,5 @@
 import { CCliUsageError } from './c-cli-usage-error';
-import { CCliAbstractArgGroup } from './c-cli-abstract-arg-group';
+import { CCliArgGroup } from './c-cli-arg-group';
 
 /**
  * Calls the parse method of an ArgGroup
@@ -10,15 +10,15 @@ import { CCliAbstractArgGroup } from './c-cli-abstract-arg-group';
  * @returns The result of parse
  */
 export async function parseArgs(
-	argGroup: CCliAbstractArgGroup,
+	argGroup: CCliArgGroup,
 	args: string[] | undefined,
 	separator: string | undefined,
 ): Promise<any> {
-	const fullContext = [separator, argGroup.options.placeholder]
+	const fullContext = [separator, argGroup.placeholder]
 		.filter((str) => Boolean(str))
 		.join(' ');
 	const prefix = fullContext ? `${fullContext} : ` : '';
-	if (argGroup.options.required && (!args || args.length === 0)) {
+	if (argGroup.required && (!args || args.length === 0)) {
 		throw new CCliUsageError(`${prefix}argument is required`);
 	}
 	try {

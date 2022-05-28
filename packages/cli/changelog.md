@@ -2,7 +2,26 @@
 
 ## Upcoming
 
-- Deprecation: Use `CliOptions` instead of `ICliOptions`
+This is a significant release though most of the changes are internal. We refactor all the **@carnesen/cli** abstractions as `class`-based implementations. Earlier implementations of this library favored a pattern of factory functions producing a plain object. We branded these new abstractions using a new namespace/branding convention `CCli`, a shortening of **@carnesen/cli**, instead of simply `Cli`. This was done partly just to make the names more distinctive and consistent with the new `c` namespace object described below, but also it facilitates backwards compatibility. For example, the `CliCommand` name was previously exported as an ordinary function returning a plain object. In this release we refactor that feature as a `class` `CCliCommand` preserving backward compatibility by exporting `CliCommand` as a reference to the `CCliCommand.create` static method.
+
+
+### Features
+
+The 
+
+### Deprecations
+
+### Breaking changes
+
+In practice in the typical use cases, none of these changes should be breaking ones. Some of them may apply if you're using advanced **@carnesen/cli** features or relying on implementation details.
+
+- `Cli` properties: The options (`description` etc) passed into the factory are no longer merged into the resulting object as top-level properties.
+
+- Type re-naming: Previously this package exported types using a naming convention where type aliases were prefixed with `T` (e.g. `TCliDescriptionFunction`) and interfaces were prefixed with `I` (e.g. `ICliCommand`). Since then the authors have realized that there's not a substantive difference between interfaces and type aliases so it's kinda silly to factor in that distinction so prominently in the naming convention. We've also since embraced use of `class`es preferentially over plain-object types and factories. All the types exported by this package have been renamed. This is only a breaking change if you were explicitly importing the types, which wouldn't typically be the case. The simplest way to know whether you're affected by this change would be to upgrade to the new release and run you TypeScript compile step. It will identify any places where you're using a type that no longer exists. In most cases the new type will have the same name as the old type but without the `T` or `I` prefix and with `CCli` in place of `Cli`. For example `ICliCommand` --> `CCliCommand`.
+
+- Custom argument group types: Previously one could define a new custom argument group type by implementing the `ICliArgGroup` interface. In the new architecture, a custom argument group type is implemented by extending `CCliAbstractArgGroup`. For examples, see the built-in argument group types e.g. `CCliStringArgGroup`.
+
+
 
 ## carnesen-cli-0.7.1 (2022-05-10)
 
