@@ -1,4 +1,7 @@
 import { CCliRoot } from './c-cli-tree';
+// This import isn't used directly but it's used by an {@link} directive
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { CCliCommandGroup } from './c-cli-command-group';
 import { CCliConsoleLogger } from './c-cli-console-logger';
 import { cCliColorFactory } from './c-cli-color-factory';
 import { navigateCCliTree } from './navigate-cli-tree';
@@ -14,22 +17,20 @@ import { CCliCommand } from './c-cli-command';
 import { CCliColor } from './c-cli-color';
 import { CCliLogger } from './c-cli-logger';
 
-/** Options for creating a **@carnesen/cli** CLI */
+/** Options for creating a {@link CCli} */
 export type CCliOptions = {
 	/** Enable/disable ANSI text color decoration
 	 * @default process.stdout.isTTY && process.stderr.isTTY */
 	ansi?: boolean;
 
-	/** Text coloring methods. Takes precedence over the `ansi` option
-	 * @default CliDefaultColor */
+	/** Text coloring methods. Takes precedence over the `ansi` option if
+	 * provided. If not provided, a {@link CCliColor} instance will be created
+	 * using {@link cCliColorFactory} with the {@link CCliOptions.ansi} option */
 	color?: CCliColor;
 
 	/** Number of terminal columns
 	 * @default process.stdout.columns || 100 */
 	columns?: number;
-
-	/** @deprecated Use `logger` instead */
-	console?: CCliLogger;
 
 	/** Called after the command has completed. Defaults to `process.exit` */
 	done?: CCliProcess['exit'];
@@ -42,14 +43,12 @@ export type CCliOptions = {
 	logger?: CCliLogger;
 };
 
-/** Main class implementing the **@carnesen/cli** command-line interface (CLI)
- * framework */
+/** A **@carnesen/cli** command-line interface (CLI) */
 export class CCli {
 	private readonly color =
 		this.options.color ?? cCliColorFactory(this.options.ansi);
 
-	private readonly logger =
-		this.options.logger ?? this.options.console ?? CCliConsoleLogger.create();
+	private readonly logger = this.options.logger ?? CCliConsoleLogger.create();
 
 	protected constructor(
 		private readonly root: CCliRoot,
@@ -133,9 +132,7 @@ export class CCli {
 			}
 
 			const result = await command.action({
-				ansi: this.color,
 				color: this.color,
-				console: this.logger,
 				doubleDashValue,
 				namedValues,
 				positionalValue,
@@ -152,7 +149,8 @@ export class CCli {
 		}
 	}
 
-	/** Run the command-line interface, console.log the result, and exit
+	/** Run the command-line interface, console.log the result, and
+	 * `process.exit`
 	 * @param args Command-line arguments to be parsed and passed into the
 	 * command action. Defaults to `process.argv.slice(2)` in Node.js.
 	 * @returns A promise resolving to the command's exit code */
@@ -184,6 +182,11 @@ export class CCli {
 	}
 
 	/** Split a command line into args and call this `Cli`'s `run` method
+	 *
+	 * This method is used to implement the pseudo-shell on the
+	 * [**@carnesen/cli** website](https://cli.carnesen.com/) and will form the
+	 * basis of a [future REPL
+	 * feature](https://github.com/carnesen/cli/issues/73)
 	 * @param line A command line
 	 * @returns A promise resolving to the command's exit code */
 	public async runLine(line = ''): Promise<number> {
@@ -255,8 +258,9 @@ export class CCli {
 		}
 	}
 
-	/** Factory for creating a **@carnesen/cli** command-line interface (CLI)
-	 * @param root The "root" command or (most often) command group for the CLI
+	/** Factory for {@link CCli}s
+	 * @param root The "root" of this CLI's command tree. See also
+	 * {@link CCliCommandGroup}.
 	 * @param options Advanced options for configuring the CLI */
 	public static create(root: CCliRoot, options: CCliOptions = {}): CCli {
 		return new CCli(root, options);

@@ -5,13 +5,13 @@ import { CCliJsonArgGroup } from '../c-cli-json-arg-group';
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
-const required = true;
+const optional = false;
 
 const argGroup = CCliJsonArgGroup.create({
 	description,
 	hidden,
 	placeholder,
-	required,
+	optional,
 });
 
 describe(CCliJsonArgGroup.name, () => {
@@ -42,7 +42,7 @@ describe(CCliJsonArgGroup.name, () => {
 		expect(argGroup.description).toBe(description);
 		expect(argGroup.hidden).toBe(hidden);
 		expect(argGroup.placeholder).toBe(placeholder);
-		expect(argGroup.required).toBe(required);
+		expect(argGroup.optional).toBe(optional);
 	});
 
 	it('config is optional', () => {

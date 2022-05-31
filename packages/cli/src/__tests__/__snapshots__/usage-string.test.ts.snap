@@ -11,7 +11,7 @@ echo"
 `;
 
 exports[`usageFactory Creates a usage string for a command without a parent 1`] = `
-"Usage: echo [<word>] [<named args>] -- <str>
+"Usage: echo <word> <named args> [-- <str>]
 
 Positional arguments:
 
@@ -19,7 +19,7 @@ Positional arguments:
 
 Named arguments:
 
-[--message <str>] : A string message please
+--message <str> : A string message please
 
 \\"Double dash\\" arguments:
 
@@ -27,7 +27,7 @@ Named arguments:
 `;
 
 exports[`usageFactory Creates a usage string for a command without a parent command group 1`] = `
-"Usage: cli echo [<word>] [<named args>] -- <str>
+"Usage: cli echo <word> <named args> [-- <str>]
 
 Positional arguments:
 
@@ -35,7 +35,7 @@ Positional arguments:
 
 Named arguments:
 
-[--message <str>] : A string message please
+--message <str> : A string message please
 
 \\"Double dash\\" arguments:
 

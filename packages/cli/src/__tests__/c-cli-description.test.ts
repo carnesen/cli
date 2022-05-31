@@ -30,8 +30,8 @@ const data: {
 	},
 	{
 		title: 'Runs the function injecting the correct ansi',
-		description({ color: ansi }) {
-			return ansi.red('foo');
+		description(input) {
+			return input.color.red('foo');
 		},
 		text: 'bar',
 	},

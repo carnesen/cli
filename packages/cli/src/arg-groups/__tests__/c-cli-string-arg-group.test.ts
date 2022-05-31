@@ -1,26 +1,26 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CCliUsageError } from '../../c-cli-usage-error';
-import { CCliNumberArgGroup } from '../c-cli-number-arg-group';
+import { CCliStringArgGroup } from '../c-cli-string-arg-group';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
-const required = false;
+const optional = true;
 
-const argGroup = CCliNumberArgGroup.create({
-	required,
+const argGroup = CCliStringArgGroup.create({
+	optional,
 	description,
 	hidden,
 	placeholder,
 });
 
-describe(CCliNumberArgGroup.name, () => {
+describe(CCliStringArgGroup.name, () => {
 	it('returns `undefined` if args is `undefined` and no defaultValue has been provided', () => {
 		expect(argGroup.parse(undefined)).toBe(undefined);
 	});
 
 	it('parse returns the zeroth element of args', () => {
-		expect(argGroup.parse(['1'])).toBe(1);
+		expect(argGroup.parse(['1'])).toBe('1');
 	});
 
 	it('throws UsageError "expected just one" if args has more than one element', async () => {
@@ -41,10 +41,10 @@ describe(CCliNumberArgGroup.name, () => {
 		expect(argGroup.description).toBe(description);
 		expect(argGroup.hidden).toBe(hidden);
 		expect(argGroup.placeholder).toBe(placeholder);
-		expect(argGroup.required).toBe(required);
+		expect(argGroup.optional).toBe(optional);
 	});
 
-	it('config is not required', () => {
-		CCliNumberArgGroup.create();
+	it('config is not optional', () => {
+		CCliStringArgGroup.create();
 	});
 });

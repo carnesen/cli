@@ -1,22 +1,22 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CCliUsageError } from '../../c-cli-usage-error';
-import { CCliStringArrayArgGroup } from '../c-cli-string-array-arg-group';
+import { CCliNumberArrayArgGroup } from '../c-cli-number-array-arg-group';
 
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
-const required = false;
+const optional = true;
 
-const argGroup = CCliStringArrayArgGroup.create({
+const argGroup = CCliNumberArrayArgGroup.create({
 	description,
 	hidden,
 	placeholder,
-	required,
+	optional,
 });
 
-describe(CCliStringArrayArgGroup.name, () => {
+describe(CCliNumberArrayArgGroup.name, () => {
 	it('parse returns is args converted to numbers', () => {
-		expect(argGroup.parse(['0', '1', '2'])).toEqual(['0', '1', '2']);
+		expect(argGroup.parse(['0', '1', '2'])).toEqual([0, 1, 2]);
 	});
 
 	it('parse returns `undefined` if args is', () => {
@@ -34,10 +34,14 @@ describe(CCliStringArrayArgGroup.name, () => {
 		expect(argGroup.description).toBe(description);
 		expect(argGroup.hidden).toBe(hidden);
 		expect(argGroup.placeholder).toBe(placeholder);
-		expect(argGroup.required).toBe(required);
+		expect(argGroup.optional).toBe(optional);
 	});
 
-	it('config is not required', () => {
-		CCliStringArrayArgGroup.create();
+	it('config is optional', () => {
+		CCliNumberArrayArgGroup.create();
+	});
+
+	it('has a _suggest method always returning []', () => {
+		expect(argGroup._suggest([])).toEqual([]);
 	});
 });

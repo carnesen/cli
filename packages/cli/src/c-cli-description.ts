@@ -8,11 +8,7 @@ export type RenderCCliDescriptionOptions = {
 };
 
 /** Type of a command description when it's a function */
-export type CCliDescriptionFunction = (input: {
-	/** @deprecated Use `color` instead */
-	ansi: CCliColor;
-	color: CCliColor;
-}) => string;
+export type CCliDescriptionFunction = (input: { color: CCliColor }) => string;
 
 export type CCliDescription = undefined | string | CCliDescriptionFunction;
 
@@ -33,7 +29,7 @@ export function renderCCliDescription(
 		}
 		case 'function': {
 			const color = options.color ?? cCliColorFactory();
-			text = description({ ansi: color, color });
+			text = description({ color });
 			break;
 		}
 		default: {

@@ -1,6 +1,6 @@
 import { runAndCatchSync } from '@carnesen/run-and-catch';
 import { usageFactory } from '../usage-string';
-import { CCliStringArgGroup } from '../arg-group-factories/c-cli-string-arg-group';
+import { CCliStringArgGroup } from '../arg-groups/c-cli-string-arg-group';
 import { CCliCommand } from '../c-cli-command';
 import { CCliTree } from '../c-cli-tree';
 import { UsageOptions } from '../usage-options';
@@ -18,7 +18,7 @@ const positionalArgGroup = CCliStringArgGroup.create({
 });
 const doubleDashArgGroup = CCliStringArgGroup.create({
 	description: 'Another word',
-	required: true,
+	optional: true,
 });
 
 const current = CCliCommand.create({

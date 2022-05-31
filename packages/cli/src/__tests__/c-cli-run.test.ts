@@ -4,7 +4,7 @@ import { CCliUsageError } from '../c-cli-usage-error';
 import { CCliTerseError } from '../c-cli-terse-error';
 import { getGlobalProcess } from '../c-cli-process';
 import { CCli, CCliOptions } from '../c-cli';
-import { CCliStringArgGroup } from '../arg-group-factories/c-cli-string-arg-group';
+import { CCliStringArgGroup } from '../arg-groups/c-cli-string-arg-group';
 
 async function runMocked(action: () => any, options: CCliOptions = {}) {
 	const mockOptions = {

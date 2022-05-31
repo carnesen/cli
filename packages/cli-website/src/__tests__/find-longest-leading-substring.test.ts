@@ -1,4 +1,4 @@
-import { LongestLeadingSubstring } from '../longest-leading-substring';
+import { findLongestLeadingSubstring } from '../find-longest-leading-substring';
 
 const data: {
 	items: string[];
@@ -24,10 +24,10 @@ const data: {
 	},
 ];
 
-describe(LongestLeadingSubstring.name, () => {
+describe(findLongestLeadingSubstring.name, () => {
 	for (const { items, champion, expectedOutput } of data) {
 		it(`${JSON.stringify(items)}=>${expectedOutput}`, () => {
-			const output = LongestLeadingSubstring(items, champion);
+			const output = findLongestLeadingSubstring(items, champion);
 			expect(output).toBe(expectedOutput);
 		});
 	}

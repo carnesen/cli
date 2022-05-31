@@ -1,9 +1,9 @@
-import { CliCommandGroup } from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 import { echoCommand } from './echo-command';
 import { echoHiddenCommand } from './echo-hidden-command';
 import { echoPizzaCommand } from './echo-pizza-command';
 
-export const hiddenCommandGroup = CliCommandGroup({
+export const hiddenCommandGroup = c.commandGroup({
 	name: 'hidden-command-group',
 	description: `
 		This is a command group that has hidden=true. It does not show up
@@ -12,7 +12,7 @@ export const hiddenCommandGroup = CliCommandGroup({
 	subcommands: [echoCommand],
 });
 
-export const nonHiddenCommandGroup = CliCommandGroup({
+export const nonHiddenCommandGroup = c.commandGroup({
 	name: 'normal-command-group',
 	description: `
     This is a normal non-hidden command group that shows up in
@@ -20,7 +20,7 @@ export const nonHiddenCommandGroup = CliCommandGroup({
 	subcommands: [echoCommand],
 });
 
-export const hidingCommandGroup = CliCommandGroup({
+export const hidingCommandGroup = c.commandGroup({
 	name: 'hiding',
 	description: `
 		This command group demonstrates the use of the "hidden" flag for commands,

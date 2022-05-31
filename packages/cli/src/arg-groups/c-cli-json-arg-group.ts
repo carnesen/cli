@@ -6,25 +6,22 @@ import {
 import { CCliUsageError } from '../c-cli-usage-error';
 
 /** Options for {@link CCliJsonArgGroup} */
-export type CCliJsonArgGroupOptions = CCliArgGroupOptions;
+export type CCliJsonArgGroupOptions = CCliArgGroupOptions<boolean>;
 
-/** `any`-valued command-line interface argument group that `JSON.parse`'s
+export type CCliJsonArgGroupValue = any;
+
+/** `any`-valued command-line argument group that `JSON.parse`'s
  *
- * @example
- * Suppose our CLI's positionalArgGroup is a CliJsonArgGroup. Here's how that
- * behaves:
+ * For example, suppose our CLI has a `CCliJsonArgGroup` for its
+ * `positionalArgGroup`. Here's how that behaves:
  * ```plaintext
  * $ cli '{"foo":true}' // named value receives object `{ foo: true }`
  * $ cli                // usage error
  * $ cli '""' '""'      // usage error
  * $ cli foo            // error parsing JSON
- * ```
- * @throws {@link CCliUsageError} */
-
-export type CCliJsonArgGroupValue = any;
-
+ * ``` */
 export class CCliJsonArgGroup extends CCliArgGroup<CCliJsonArgGroupValue> {
-	public parse(args: CCliParseArgs): CCliJsonArgGroupValue {
+	public parse(args: CCliParseArgs<boolean>): CCliJsonArgGroupValue {
 		if (!args) {
 			return undefined;
 		}
@@ -37,6 +34,7 @@ export class CCliJsonArgGroup extends CCliArgGroup<CCliJsonArgGroupValue> {
 		}
 	}
 
+	/** {@link CCliJsonArgGroup} factory function */
 	public static create(
 		options: CCliJsonArgGroupOptions = {},
 	): CCliJsonArgGroup {

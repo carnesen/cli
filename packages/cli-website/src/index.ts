@@ -2,11 +2,11 @@ import { Terminal, ITerminalOptions } from 'xterm';
 import 'xterm/css/xterm.css';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
+import { CCliAnsiColor } from '@carnesen/cli';
 import { INITIAL_HISTORY, rootCommandGroup } from './root-command-group';
 import './browser-console-cli'; // Defines `window.cli`
 import './multiply-console-cli'; // Defines `window.multiply`
 import { CliRepl } from './cli-repl';
-import { bold } from './util';
 
 /**
  * Create a new Xterm.js terminal and hook it up to the examples CliRepl
@@ -52,10 +52,11 @@ async function loadTerminalApplication() {
 	const submitParam = urlParams.get('submit');
 	const submit = submitParam === 'true';
 
+	const color = CCliAnsiColor.create();
 	const repl = new CliRepl({
 		history: INITIAL_HISTORY,
 		description: `
-		This is a special terminal that runs ${bold(
+		This is a special terminal that runs ${color.bold(
 			'@carnesen/cli',
 		)} examples in your browser.
 

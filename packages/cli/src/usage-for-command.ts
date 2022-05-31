@@ -49,10 +49,10 @@ export function usageForCommand(
 	}
 
 	if (positionalArgGroup && !positionalArgGroup.hidden) {
-		if (positionalArgGroup.required) {
-			firstLine += ` ${positionalArgGroup.placeholder}`;
-		} else {
+		if (positionalArgGroup.optional) {
 			firstLine += ` ${wrapInSquareBrackets(positionalArgGroup.placeholder)}`;
+		} else {
+			firstLine += ` ${positionalArgGroup.placeholder}`;
 		}
 		const positionalArgGroupDescriptionText = renderCCliDescription(
 			positionalArgGroup.description,
@@ -75,10 +75,10 @@ export function usageForCommand(
 			([_, argGroup]) => !argGroup.hidden,
 		);
 		if (namedArgGroupEntries.length > 0) {
-			const namedArgGroupsNotRequired = namedArgGroupEntries.every(
-				([_, argGroup]) => !argGroup.required,
+			const namedArgGroupsAllOptional = namedArgGroupEntries.every(
+				([_, argGroup]) => argGroup.optional,
 			);
-			firstLine += namedArgGroupsNotRequired
+			firstLine += namedArgGroupsAllOptional
 				? ' [<named args>]'
 				: ' <named args>';
 			lines.push('Named arguments:');
@@ -93,7 +93,7 @@ export function usageForCommand(
 					if (argGroup.placeholder) {
 						cell0 += ` ${argGroup.placeholder}`;
 					}
-					if (!argGroup.required) {
+					if (argGroup.optional) {
 						cell0 = wrapInSquareBrackets(cell0);
 					}
 					return [cell0, argGroupDescriptionText];
@@ -106,10 +106,10 @@ export function usageForCommand(
 	}
 
 	if (doubleDashArgGroup && !doubleDashArgGroup.hidden) {
-		const { placeholder, required } = doubleDashArgGroup;
+		const { placeholder, optional } = doubleDashArgGroup;
 		const fullPlaceholder = `-- ${placeholder}`;
 		firstLine += ` ${
-			required ? fullPlaceholder : wrapInSquareBrackets(fullPlaceholder)
+			optional ? wrapInSquareBrackets(fullPlaceholder) : fullPlaceholder
 		}`;
 		lines.push('"Double dash" arguments:');
 		lines.push('');

@@ -6,8 +6,8 @@ export const DUMMY_ARG_GROUP_THROWN_INTENTIONALLY = 'thrown intentionally';
 export const DUMMY_ARG_GROUP_THROW = 'throw';
 export const DUMMY_ARG_GROUP_THROW_NON_TRUTHY = 'throw-non-truthy';
 
-export class DummyOptionalArgGroup extends CCliArgGroup<string, false> {
-	public parse(args: CCliParseArgs<false>): string {
+export class DummyOptionalArgGroup extends CCliArgGroup<string, true> {
+	public parse(args: CCliParseArgs<true>): string {
 		if (typeof args === 'undefined') {
 			return DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED;
 		}
@@ -29,20 +29,20 @@ export class DummyOptionalArgGroup extends CCliArgGroup<string, false> {
 	}
 
 	public static create(): DummyOptionalArgGroup {
-		return new DummyOptionalArgGroup({ required: false });
+		return new DummyOptionalArgGroup({ optional: true });
 	}
 }
 
-export const dummyArgGroup = DummyOptionalArgGroup.create();
+export const dummyOptionalArgGroup = DummyOptionalArgGroup.create();
 
-export class DummyRequiredArgGroup extends CCliArgGroup<string, true> {
+export class DummyNonOptionalArgGroup extends CCliArgGroup<string, false> {
 	public parse(args: string[]): string {
-		return dummyArgGroup.parse(args);
+		return dummyOptionalArgGroup.parse(args);
 	}
 
-	public static create(): DummyRequiredArgGroup {
-		return new DummyRequiredArgGroup({ required: true, placeholder: '<foo>' });
+	public static create(): DummyNonOptionalArgGroup {
+		return new DummyNonOptionalArgGroup({ placeholder: '<foo>' });
 	}
 }
 
-export const dummyRequiredArgGroup = DummyRequiredArgGroup.create();
+export const dummyNonOptionalArgGroup = DummyNonOptionalArgGroup.create();

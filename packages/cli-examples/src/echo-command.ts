@@ -1,31 +1,20 @@
-import {
-	CliCommand,
-	CliStringArrayArgGroup,
-	CliFlagArgGroup,
-} from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 
 /** A CliCommand that prints to the terminal like the `echo` shell command */
-export const echoCommand = CliCommand({
+export const echoCommand = c.command({
 	name: 'echo',
 	description: 'Prints the provided arguments to the terminal',
-	positionalArgGroup: CliStringArrayArgGroup({
-		required: true,
-	}),
+	positionalArgGroup: c.stringArray(),
 	namedArgGroups: {
-		stderr: CliFlagArgGroup({
+		stderr: c.flag({
 			description: 'Print to stderr instead of stdout',
 		}),
 	},
 	action({ positionalValue: messages, namedValues: { stderr }, logger }) {
 		// In addition to the parsed argument values, the action also receives a
-		// `console` object for writing to the terminal. By default, the injected
-		// `console` just delegates to the global one, and you can always just use
-		// that directly if you find it convenient. We prefer to always either
-		// return a value, which gets console.logged too, or use the injected
-		// `console` because:
-		// - Our linter complains if we reference the global `console`
-		// - Our commands run in exotic places like the @carnesen/cli online
-		//   examples that use a non-default `console`
+		// `logger` object for writing to the terminal. By default, the injected
+		// `logger` just delegates to the global `console` object, and you can
+		// always just use that directly if you find it convenient.
 		const text = messages.join(' ');
 		if (stderr) {
 			logger.error(text);

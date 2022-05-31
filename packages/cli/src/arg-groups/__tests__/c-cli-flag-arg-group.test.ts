@@ -8,12 +8,12 @@ const hidden = true;
 const argGroup = CCliFlagArgGroup.create({ description, hidden });
 
 describe(CCliFlagArgGroup.name, () => {
-	it('always has "required" set to false', () => {
-		expect(argGroup.required).toBe(false);
+	it('always has "optional" set to true', () => {
+		expect(argGroup.optional).toBe(true);
 	});
 
-	it('parse returns false if args is undefined', () => {
-		expect(argGroup.parse(undefined)).toBe(false);
+	it('parse returns undefined if args is undefined', () => {
+		expect(argGroup.parse(undefined)).toBe(undefined);
 	});
 
 	it('parse returns true if args is an empty array', () => {

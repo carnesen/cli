@@ -1,8 +1,13 @@
-import { ValueFromCCliArgGroup, CCliArgGroup } from './c-cli-arg-group';
+import {
+	InferParsedValueFromCCliArgGroup,
+	CCliArgGroup,
+} from './c-cli-arg-group';
 import { CCliLogger } from './c-cli-logger';
 import { CCliColor } from './c-cli-color';
 import { CCliDescription } from './c-cli-description';
 
+/** Type of the `input` argument injected into injected into
+ * {@link CCliCommandOptions.action} */
 export type CCliCommandActionInput<
 	PositionalArgGroup extends CCliArgGroup,
 	NamedArgGroups extends {
@@ -10,17 +15,15 @@ export type CCliCommandActionInput<
 	},
 	DoubleDashArgGroup extends CCliArgGroup,
 > = {
-	/** @deprecated Use `color` instead */
-	ansi: CCliColor;
 	color: CCliColor;
-	/** @deprecated Use `logger` instead */
-	console: CCliLogger;
-	doubleDashValue: ValueFromCCliArgGroup<DoubleDashArgGroup>;
+	doubleDashValue: InferParsedValueFromCCliArgGroup<DoubleDashArgGroup>;
 	logger: CCliLogger;
 	namedValues: {
-		[K in keyof NamedArgGroups]: ValueFromCCliArgGroup<NamedArgGroups[K]>;
+		[K in keyof NamedArgGroups]: InferParsedValueFromCCliArgGroup<
+			NamedArgGroups[K]
+		>;
 	};
-	positionalValue: ValueFromCCliArgGroup<PositionalArgGroup>;
+	positionalValue: InferParsedValueFromCCliArgGroup<PositionalArgGroup>;
 };
 
 /** Options for creating a **@carnesen/cli** command */

@@ -1,7 +1,7 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
 import { CCliCommand } from '../c-cli-command';
 import {
-	dummyArgGroup,
+	dummyOptionalArgGroup,
 	DUMMY_ARG_GROUP_UNDEFINED_WAS_PASSED,
 } from '../dummy-arg-groups';
 import { CCliUsageError } from '../c-cli-usage-error';
@@ -16,7 +16,7 @@ const commandWithNoArguments = CCliCommand.create({
 const commandWithNamedArgGroups = CCliCommand.create({
 	name: 'command-with-named-args',
 	namedArgGroups: {
-		foo: dummyArgGroup,
+		foo: dummyOptionalArgGroup,
 	},
 	action(...args) {
 		return args;
@@ -25,7 +25,7 @@ const commandWithNamedArgGroups = CCliCommand.create({
 
 const commandWithPositionalArgGroup = CCliCommand.create({
 	name: 'command-with-positional-args',
-	positionalArgGroup: dummyArgGroup,
+	positionalArgGroup: dummyOptionalArgGroup,
 	action(...args) {
 		return args;
 	},
@@ -33,7 +33,7 @@ const commandWithPositionalArgGroup = CCliCommand.create({
 
 const commandWithDoubleDashArgGroup = CCliCommand.create({
 	name: 'command-with-double-dash-arg-group',
-	doubleDashArgGroup: dummyArgGroup,
+	doubleDashArgGroup: dummyOptionalArgGroup,
 	action(...args) {
 		return args;
 	},
@@ -104,7 +104,7 @@ describe(CCli.prototype.api.name, () => {
 			...positionalArgs,
 		]);
 		expect(result[0].positionalValue).toEqual(
-			dummyArgGroup.parse(positionalArgs),
+			dummyOptionalArgGroup.parse(positionalArgs),
 		);
 	});
 
@@ -112,7 +112,7 @@ describe(CCli.prototype.api.name, () => {
 		const namedArgs = ['--foo', 'bar'];
 		const result = await cliApi([commandWithNamedArgGroups.name, ...namedArgs]);
 		expect(result[0].namedValues).toEqual({
-			foo: dummyArgGroup.parse(['bar']),
+			foo: dummyOptionalArgGroup.parse(['bar']),
 		});
 	});
 

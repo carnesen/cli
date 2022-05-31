@@ -1,17 +1,18 @@
 import { CCliDescription } from './c-cli-description';
 import { CCliUsageError } from './c-cli-usage-error';
+import { CCliConditionalValue } from './c-cli-conditional-value';
 
-/**
- * Defines the type of the args passed to an {@link CCliArgGroup.parse}
- * @param Required If `false` `undefined`, `undefined` */
-export type CCliParseArgs<Required extends boolean = boolean> =
-	Required extends true ? string[] : string[] | undefined;
+/** Defines the type of the args passed to an {@link CCliArgGroup.parse} */
+export type CCliParseArgs<Optional extends boolean> = CCliConditionalValue<
+	string[],
+	Optional
+>;
 
 /** Options for creating an argument group, a group of adjacent command-line
  * arguments
- * @param Required If `true`, the type of `args` passed to
+ * @typeParam Optional If `true`, the type of `args` passed to
  * {@link CCliArgGroupOptions.parse} does not include `undefined`. */
-export type CCliArgGroupOptions<Required extends boolean = boolean> = {
+export type CCliArgGroupOptions<Optional extends boolean> = {
 	/** A text description of this argument group. Paragraphs are re-wrapped when
 	 * printed to the terminal so don't worry about whitespace. */
 	description?: CCliDescription;
@@ -25,27 +26,28 @@ export type CCliArgGroupOptions<Required extends boolean = boolean> = {
 	 * e.g. `"<email>"` */
 	placeholder?: string;
 
-	/** If `true`, throw a {@link CCliUsageError} if no argument is provided for
-	 * this group */
-	required?: Required;
+	/** Unless `true`, a {@link CCliUsageError} thrown if no argument is provided
+	 * for this argument group */
+	optional?: Optional;
 };
 
-export type ValueFromCCliArgGroup<ArgGroup> = ArgGroup extends CCliArgGroup<
-	infer Value
->
-	? Value
-	: never;
+export type InferParsedValueFromCCliArgGroup<ArgGroup> =
+	ArgGroup extends CCliArgGroup<infer Value, true>
+		? Value | undefined
+		: ArgGroup extends CCliArgGroup<infer Value>
+		? NonNullable<Value>
+		: never;
 
 /** A group of adjacent command-line arguments
- * @param Value Type of the value returned by {@link CCliArgGroupOptions.parse}
- * @param Required If `true`, the type of `args` passed to
- * {@link CCliArgGroup.parse} does not include `undefined`. */
+ * @typeParam Value Type of the value returned by {@link CCliArgGroup.parse}
+ * @typeParam Optional If `true`, the type of `args` passed to
+ * {@link CCliArgGroup.parse} includes `undefined`. */
 export abstract class CCliArgGroup<
 	Value = unknown,
-	Required extends boolean = boolean,
+	Optional extends boolean = boolean,
 > {
 	protected constructor(
-		protected readonly options: CCliArgGroupOptions<Required>,
+		protected readonly options: CCliArgGroupOptions<Optional>,
 	) {
 		this.parse = this.parse.bind(this);
 	}
@@ -62,14 +64,17 @@ export abstract class CCliArgGroup<
 		return this.options.placeholder ?? '<val>';
 	}
 
-	public get required(): Required | undefined {
-		return this.options.required;
+	public get optional(): boolean {
+		return Boolean(this.options.optional);
 	}
 
 	/** Function that parses a well-typed value from string arguments */
-	public abstract parse(args: CCliParseArgs<Required>): Value;
+	public abstract parse(
+		args: CCliParseArgs<Optional>,
+	): CCliConditionalValue<Value, Optional>;
 
-	/** Experimental support for autocompletion. Implemented by subclass. */
+	/** Experimental support for autocompletion. Optionally implemented by
+	 * subclass. */
 	public _suggest(_args: string[], _search?: string): string[] {
 		return [];
 	}

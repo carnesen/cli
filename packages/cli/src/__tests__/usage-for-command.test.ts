@@ -1,10 +1,9 @@
 import { CCliCommand } from '../c-cli-command';
 import { usageForCommand } from '../usage-for-command';
 import { cCliColorFactory } from '../c-cli-color-factory';
-import { CCliStringArgGroup } from '../arg-group-factories/c-cli-string-arg-group';
+import { CCliStringArgGroup } from '../arg-groups/c-cli-string-arg-group';
 
 const argGroup = CCliStringArgGroup.create({
-	required: true,
 	placeholder: '<p>',
 });
 

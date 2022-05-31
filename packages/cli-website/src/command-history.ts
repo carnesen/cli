@@ -1,6 +1,4 @@
-/**
- * State machine for command history in a [[`CliPseudoShell`]]
- */
+/** State machine for command history */
 export class CommandHistory {
 	private history: string[] = [];
 

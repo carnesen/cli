@@ -3,10 +3,8 @@ import { CCliColor } from './c-cli-color';
 /** Unicode "escape" character */
 const ESC = '\u001b';
 
-/**
- * Implements the {@link CCliColor} interface by wrapping the provided text in
- * ANSI escape sequences interpreted and rendered appropriately by the terminal
- * emulator */
+/** Implements the {@link CCliColor} interface by wrapping the provided text in
+ * [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code) */
 export class CCliAnsiColor implements CCliColor {
 	protected constructor() {}
 

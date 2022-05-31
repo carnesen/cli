@@ -1,7 +1,7 @@
-import { Cli } from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 import { demoDoubleDashArgumentsCommand } from '../demo-double-dash-arguments-command';
 
-const demoDoubleDashArguments = Cli(demoDoubleDashArgumentsCommand);
+const demoDoubleDashArguments = c.cli(demoDoubleDashArgumentsCommand);
 
 describe(demoDoubleDashArgumentsCommand.name, () => {
 	it("doesn't interpret --foo after -- as a named argument separator", async () => {

@@ -5,15 +5,17 @@ import {
 } from '../c-cli-arg-group';
 import { renderCCliDescription } from '../c-cli-description';
 import { CCliUsageError } from '../c-cli-usage-error';
+import { CCliConditionalValue } from '../c-cli-conditional-value';
 
 export type CCliAnyStringChoices = string[] | readonly string[];
 
-/** Options for {@link CliStringChoiceArgGroup}
- * @param Choices Type of the "choices" option */
+/** Options for a {@link CCliStringChoiceArgGroup}
+ * @typeParam If true, a value need not be provided
+ * @typeParam Choices Type of the "choices" option */
 export type CCliStringChoiceArgGroupOptions<
-	Required extends boolean,
+	Optional extends boolean,
 	Choices extends CCliAnyStringChoices,
-> = CCliArgGroupOptions<Required> & {
+> = CCliArgGroupOptions<Optional> & {
 	/** Choices for this argument. For strict typing do e.g.
 	 * ```
 	 * choices: ['foo', 'bar'] as const
@@ -26,29 +28,27 @@ function choicesToString(choices: CCliAnyStringChoices): string {
 }
 
 export type CCliStringChoiceArgGroupValue<
-	Required extends boolean,
+	Optional extends boolean,
 	Choices extends CCliAnyStringChoices,
-> = Required extends true ? Choices[number] : Choices[number] | undefined;
+> = CCliConditionalValue<Choices[number], Optional>;
 
-/** A factory for command argument groups whose value is one of the choices
- * provided */
-
+/** Command-line argument group whose value is one of the choices provided */
 export class CCliStringChoiceArgGroup<
-	Required extends boolean,
+	Optional extends boolean,
 	Choices extends CCliAnyStringChoices,
 > extends CCliArgGroup<
-	CCliStringChoiceArgGroupValue<Required, Choices>,
-	Required
+	CCliStringChoiceArgGroupValue<Optional, Choices>,
+	Optional
 > {
 	protected constructor(
-		public readonly options: CCliStringChoiceArgGroupOptions<Required, Choices>,
+		public readonly options: CCliStringChoiceArgGroupOptions<Optional, Choices>,
 	) {
 		super(options);
 	}
 
 	public parse(
-		args: CCliParseArgs<Required>,
-	): CCliStringChoiceArgGroupValue<Required, Choices> {
+		args: CCliParseArgs<Optional>,
+	): CCliStringChoiceArgGroupValue<Optional, Choices> {
 		if (!args) {
 			return this.undefinedAsValue();
 		}
@@ -83,15 +83,16 @@ export class CCliStringChoiceArgGroup<
 		return this.options.choices as string[];
 	}
 
+	/** {@link CCliStringChoiceArgGroup} factory function */
 	public static create<
-		Required extends boolean,
+		Optional extends boolean,
 		Choices extends CCliAnyStringChoices,
 	>(
-		options: CCliStringChoiceArgGroupOptions<Required, Choices>,
-	): CCliStringChoiceArgGroup<Required, Choices> {
+		options: CCliStringChoiceArgGroupOptions<Optional, Choices>,
+	): CCliStringChoiceArgGroup<Optional, Choices> {
 		const valuesString = choicesToString(options.choices);
 
-		return new CCliStringChoiceArgGroup<Required, Choices>({
+		return new CCliStringChoiceArgGroup<Optional, Choices>({
 			placeholder: '<value>',
 			...options,
 			description(input) {

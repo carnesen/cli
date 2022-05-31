@@ -5,14 +5,14 @@ import { CCliStringChoiceArgGroup } from '../c-cli-string-choice-arg-group';
 const description = 'foo bar baz';
 const hidden = true;
 const placeholder = '<special>';
-const required = false;
+const optional = true;
 
 const argGroup = CCliStringChoiceArgGroup.create({
 	choices: ['foo', 'bar'] as const,
 	description,
 	hidden,
 	placeholder,
-	required,
+	optional,
 });
 
 describe(CCliStringChoiceArgGroup.name, () => {
@@ -44,7 +44,7 @@ describe(CCliStringChoiceArgGroup.name, () => {
 	it('attaches config properties', () => {
 		expect(argGroup.hidden).toBe(hidden);
 		expect(argGroup.placeholder).toBe(placeholder);
-		expect(argGroup.required).toBe(required);
+		expect(argGroup.optional).toBe(optional);
 	});
 
 	it('has experimental _suggest api', async () => {

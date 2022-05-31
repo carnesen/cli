@@ -1,5 +1,5 @@
 import { CCliCommand } from '../c-cli-command';
-import { CCliStringArgGroup } from '../arg-group-factories/c-cli-string-arg-group';
+import { CCliStringArgGroup } from '../arg-groups/c-cli-string-arg-group';
 import { CCli, CCliOptions } from '../c-cli';
 
 describe(CCli.prototype.runLine.name, () => {

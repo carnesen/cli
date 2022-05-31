@@ -1,10 +1,10 @@
 import { Terminal } from 'xterm';
 import {
-	Cli,
-	ICliCommandGroup,
-	ICliCommand,
-	CliCommandGroup,
-	ICliOptions,
+	c,
+	CCliCommandGroup,
+	CCliOptions,
+	CCliSubcommand,
+	CCliAnsiColor,
 } from '@carnesen/cli';
 
 import {
@@ -17,7 +17,6 @@ import {
 	UP_ARROW_KEY,
 } from './constants';
 import { CommandHistory } from './command-history';
-import { green, bold } from './util';
 import { HistoryCommand } from './history-command';
 import { autocomplete } from './autocomplete';
 import { CommandLine } from './command-line';
@@ -26,9 +25,9 @@ const inspect = require('util-inspect');
 
 const INDENTATION = '    ';
 
-export interface ICliReplOptions {
+export interface CliReplOptions {
 	/** [[`ICliCommandGroup`]] and/or [[`ICliCommand`]]s underneath this command group */
-	subcommands: (ICliCommandGroup | ICliCommand<any, any, any>)[];
+	subcommands: CCliSubcommand[];
 	/** An XTerm.js Terminal to run the REPL in */
 	terminal: Terminal;
 	/** A short description of this command group for command-line usage */
@@ -43,7 +42,9 @@ export interface ICliReplOptions {
 
 type KeyEvent = { key: string; domEvent: KeyboardEvent };
 
-const PS1 = `${green('$')} `;
+const color = CCliAnsiColor.create();
+
+const PS1 = `${color.green('$')} `;
 
 export class CliRepl {
 	private readonly terminal: Terminal;
@@ -58,7 +59,7 @@ export class CliRepl {
 
 	private submit: boolean;
 
-	private readonly root: ICliCommandGroup;
+	private readonly root: CCliCommandGroup;
 
 	public constructor({
 		description,
@@ -67,12 +68,12 @@ export class CliRepl {
 		history,
 		line,
 		submit,
-	}: ICliReplOptions) {
+	}: CliReplOptions) {
 		this.terminal = terminal;
 		this.commandHistory = new CommandHistory(history, line);
 		this.commandLine = new CommandLine(this.commandHistory.current());
 		this.submit = submit || false;
-		this.root = CliCommandGroup({
+		this.root = c.commandGroup({
 			description,
 			name: '',
 			subcommands: [...subcommands, HistoryCommand(this.commandHistory)],
@@ -87,7 +88,9 @@ export class CliRepl {
 		this.terminal.focus();
 
 		if (!this.submit) {
-			this.consoleLog(`Welcome! Hit ${bold('"Enter"')} to get started ...`);
+			this.consoleLog(
+				`Welcome! Hit ${color.bold('"Enter"')} to get started ...`,
+			);
 		}
 
 		this.prompt();
@@ -196,8 +199,8 @@ export class CliRepl {
 			this.prompt();
 			return;
 		}
-		const options: ICliOptions = {
-			console: {
+		const options: CCliOptions = {
+			logger: {
 				error: (..._args: any[]) => {
 					this.consoleError(_args[0]);
 				},
@@ -208,7 +211,7 @@ export class CliRepl {
 			columns: this.terminal.cols,
 		};
 		this.runningCommand = true;
-		Cli(this.root, options)
+		c.cli(this.root, options)
 			.run(args)
 			.then(() => {
 				this.commandLine.reset();

@@ -3,7 +3,7 @@
  * @param items The strings to search
  * @param champion The current longest leading substring
  */
-export function LongestLeadingSubstring(
+export function findLongestLeadingSubstring(
 	items: string[],
 	champion = '',
 ): string {
@@ -18,5 +18,5 @@ export function LongestLeadingSubstring(
 			return champion;
 		}
 	}
-	return LongestLeadingSubstring(items, contender);
+	return findLongestLeadingSubstring(items, contender);
 }

@@ -1,7 +1,7 @@
 import {
 	c,
 	CCliFlagArgGroup,
-	CCliDescriptionFunctionInput,
+	RenderCCliDescriptionOptions as CCliDescriptionFunctionInput,
 	CCliTerseError,
 } from '@carnesen/cli';
 
@@ -34,9 +34,7 @@ export const echoWithColorCommand = c.command({
 	description(input) {
 		return `Print to the terminal with ${colorWordMarkFactory(input)}`;
 	},
-	positionalArgGroup: c.stringArray({
-		required: true,
-	}),
+	positionalArgGroup: c.stringArray(),
 	namedArgGroups: NAMED_ARG_GROUPS,
 	action({ positionalValue: messages, namedValues, color }) {
 		// In addition to the parsed argument values, the action also receives a
@@ -45,7 +43,7 @@ export const echoWithColorCommand = c.command({
 		// https://en.wikipedia.org/wiki/ANSI_escape_code when the terminal
 		// is fully interactive (both stdout and stderr are a TTY).
 		let text = messages.join(' ');
-		const namedValueEntries: [ColorMethodName, boolean][] =
+		const namedValueEntries: [ColorMethodName, boolean | undefined][] =
 			COLOR_METHOD_NAMES.map((methodName) => [
 				methodName,
 				namedValues[methodName],
