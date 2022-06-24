@@ -19,7 +19,9 @@ module.exports = {
 		],
 	},
 	devServer: {
-		contentBase: './dist',
+		static: {
+			directory: path.join(__dirname, 'dist'),
+		},
 	},
 	plugins: [
 		new HtmlWebpackPlugin({

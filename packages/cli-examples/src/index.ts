@@ -3,7 +3,7 @@
  */
 
 export { advancedCommandGroup } from './advanced-command-group';
-export { ansiEchoCommand } from './ansi-echo-command';
+export { echoWithColorCommand as ansiEchoCommand } from './echo-with-color-command';
 export { demoDoubleDashArgumentsCommand } from './demo-double-dash-arguments-command';
 export { echoCommand } from './echo-command';
 export { echoHiddenCommand } from './echo-hidden-command';

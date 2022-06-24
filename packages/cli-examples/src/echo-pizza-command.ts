@@ -1,8 +1,4 @@
-import {
-	CliFlagArgGroup,
-	CliCommand,
-	CliStringArrayArgGroup,
-} from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 
 const PIZZA_MESSAGE = `
        _              
@@ -15,9 +11,9 @@ __ __  _ __________ _
 |_|                   
 `;
 
-export const echoPizzaCommand = CliCommand({
+export const echoPizzaCommand = c.command({
 	name: 'echo-pizza',
-	positionalArgGroup: CliStringArrayArgGroup(),
+	positionalArgGroup: c.stringArray(),
 	description: `
 		Same as echo but with a hidden flag --pizza
 
@@ -26,7 +22,7 @@ export const echoPizzaCommand = CliCommand({
 		experimental features, anything that you don't want to expose as part of the
 		command's public API.`,
 	namedArgGroups: {
-		pizza: CliFlagArgGroup({ hidden: true }),
+		pizza: c.flag({ hidden: true }),
 	},
 	action({ positionalValue: messages, namedValues: { pizza } }) {
 		let text = messages ? messages.join(' ') : '';

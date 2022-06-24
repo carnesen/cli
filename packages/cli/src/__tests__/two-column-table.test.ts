@@ -1,7 +1,7 @@
-import { TwoColumnTable, TTwoColumnTableRow } from '../two-column-table';
+import { TwoColumnTable, TwoColumnTableRow } from '../two-column-table';
 
 type Datum = {
-	rows: TTwoColumnTableRow[];
+	rows: TwoColumnTableRow[];
 	indentation?: string;
 	expectedResult: string[];
 };

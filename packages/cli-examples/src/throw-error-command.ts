@@ -1,26 +1,18 @@
-import {
-	CliCommand,
-	CliStringChoiceArgGroup,
-	CliStringArgGroup,
-	CliUsageError,
-	CliTerseError,
-	CliNumberArgGroup,
-} from '@carnesen/cli';
+import { c, CCliTerseError, CCliUsageError } from '@carnesen/cli';
 
 /**
  * A CliCommand for demonstrating how errors are displayed
  * */
-export const throwErrorCommand = CliCommand({
+export const throwErrorCommand = c.command({
 	name: 'throw-error',
 	description: "Throw an error to see how they're displayed",
 	namedArgGroups: {
-		message: CliStringArgGroup({
+		message: c.string({
 			description: 'A message',
-			required: true,
 		}),
-		kind: CliStringChoiceArgGroup({
-			choices: ['normal' as const, 'terse' as const, 'usage' as const],
-			required: false,
+		kind: c.stringChoice({
+			choices: ['terse', 'usage'] as const,
+			optional: true,
 			description: `
 			Throw a normal Error (default), a UsageError, or a TerseError
 			
@@ -34,8 +26,9 @@ export const throwErrorCommand = CliCommand({
 			usage or stack trace.
 			`,
 		}),
-		exitCode: CliNumberArgGroup({
+		exitCode: c.number({
 			description: 'Numeric status code to exit with',
+			optional: true,
 		}),
 	},
 	action({ namedValues: { message, kind, exitCode } }) {
@@ -43,14 +36,13 @@ export const throwErrorCommand = CliCommand({
 		let error: any;
 		switch (kind) {
 			case 'usage': {
-				error = new CliUsageError(message);
+				error = new CCliUsageError(message);
 				break;
 			}
 			case 'terse': {
-				error = new CliTerseError(message);
+				error = new CCliTerseError(message);
 				break;
 			}
-			case 'normal':
 			default: {
 				error = new Error(message);
 			}

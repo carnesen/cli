@@ -1,11 +1,9 @@
-import { CliCommand, CliStringArrayArgGroup, CliWordMark } from '@carnesen/cli';
+import { c, CCliWordMark } from '@carnesen/cli';
 
-/**
- * A CliCommand that demonstrates "double dash" arguments
- */
-export const demoDoubleDashArgumentsCommand = CliCommand({
+/** A **@carnesen/cli** command that demonstrates "double dash" arguments */
+export const demoDoubleDashArgumentsCommand = c.command({
 	name: 'demo-double-dash-arguments',
-	description({ ansi }) {
+	description(input) {
 		return `
 		Demonstrate usage of double-dash arguments
 
@@ -15,7 +13,7 @@ export const demoDoubleDashArgumentsCommand = CliCommand({
 
 		kubectl exec POD -- COMMAND [args...] [options]
 
-		In a ${CliWordMark({ ansi })} CLI, 
+		In a ${CCliWordMark(input)} CLI, 
 		all command-line arguments after a lone --
 		are passed into the command's doubleDashArgGroup. Specifically, after 
 		-- things like --name aren't interpreted as argument group separators. 
@@ -23,8 +21,7 @@ export const demoDoubleDashArgumentsCommand = CliCommand({
 		command like "do -- git --version".
 	`;
 	},
-	doubleDashArgGroup: CliStringArrayArgGroup({
-		required: true,
+	doubleDashArgGroup: c.stringArray({
 		placeholder: '<command> [<arguments>]',
 	}),
 	action({ doubleDashValue: args }) {

@@ -1,23 +1,24 @@
-import { ICliCommandGroup } from './cli-command-group';
+import { CCliCommandGroup } from './c-cli-command-group';
 import { reWrapText } from './re-wrap-text';
-import { UsageSubcommandRows } from './usage-subcommand-rows';
+import { usageSubcommandRowsFactory } from './usage-subcommand-rows';
 import { TwoColumnTable } from './two-column-table';
-import { IUsageOptions } from './usage-options';
-import { DescriptionText } from './cli-description';
-import { CliAnsi } from './cli-ansi';
+import { UsageOptions } from './usage-options';
+import { renderCCliDescription } from './c-cli-description';
 
-export function UsageForCommandGroup(
+export function usageForCommandGroup(
 	{
 		current,
 		parents,
-	}: { current: ICliCommandGroup; parents: ICliCommandGroup[] },
-	{ indentation, ansi, columns }: IUsageOptions,
+	}: { current: CCliCommandGroup; parents: CCliCommandGroup[] },
+	{ indentation, color, columns }: UsageOptions,
 ): string[] {
 	const commandPath = [...parents, current].map(({ name }) => name).join(' ');
 	const lines: string[] = [];
 	lines.push(`Usage: ${commandPath ? `${commandPath} ` : ''}<subcommand> ...`);
 	lines.push('');
-	const description = DescriptionText(current.description, { ansi });
+	const description = renderCCliDescription(current.description, {
+		color,
+	});
 	const descriptionLines = reWrapText(description, {
 		columns,
 		indentation,
@@ -30,7 +31,9 @@ export function UsageForCommandGroup(
 	lines.push('Subcommands:');
 	lines.push('');
 
-	const subcommandRows = UsageSubcommandRows(current, { ansi: CliAnsi() });
+	const subcommandRows = usageSubcommandRowsFactory(current, {
+		color,
+	});
 
 	lines.push(
 		...TwoColumnTable(subcommandRows, {

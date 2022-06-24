@@ -1,9 +1,7 @@
-import { CliCommand, CliStringArrayArgGroup } from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 
-/**
- * A "hidden" CliCommand that otherwise behaves like the normal "echo" command
- */
-export const echoHiddenCommand = CliCommand({
+/** A "hidden" CliCommand that otherwise behaves like the normal "echo" command */
+export const echoHiddenCommand = c.command({
 	name: 'echo-hidden',
 	description: `
 		Same as echo but with hidden=true
@@ -14,9 +12,7 @@ export const echoHiddenCommand = CliCommand({
 		know about it.
 	`,
 	hidden: true,
-	positionalArgGroup: CliStringArrayArgGroup({
-		required: true,
-	}),
+	positionalArgGroup: c.stringArray(),
 	action({ positionalValue: messages }) {
 		return messages.join(' ');
 	},

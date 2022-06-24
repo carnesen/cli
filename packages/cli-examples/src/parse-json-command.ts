@@ -1,9 +1,9 @@
-import { CliCommand, CliJsonArgGroup } from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 
 /**
  * A command for parsing JSON
  */
-export const parseJsonCommand = CliCommand({
+export const parseJsonCommand = c.command({
 	name: 'parse-json',
 	description: `
 		Parse JSON and print the result
@@ -28,9 +28,7 @@ export const parseJsonCommand = CliCommand({
 		to serialize your JavaScript object into a beautiful string representation
 		with ANSI colors and highlighting suitable for writing to a terminal.
 		`,
-	positionalArgGroup: CliJsonArgGroup({
-		required: true,
-	}),
+	positionalArgGroup: c.json(),
 	action({ positionalValue: parsed }) {
 		return parsed;
 	},

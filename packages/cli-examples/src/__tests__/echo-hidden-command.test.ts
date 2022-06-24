@@ -1,18 +1,18 @@
-import { Cli, CliCommandGroup, ICliOptions } from '@carnesen/cli';
+import { c, CCliOptions } from '@carnesen/cli';
 
 import { echoHiddenCommand } from '../echo-hidden-command';
 
 describe(echoHiddenCommand.name, () => {
 	it('behaves like normal echo', async () => {
-		const echoAsHidden = Cli(echoHiddenCommand);
+		const echoAsHidden = c.cli(echoHiddenCommand);
 		expect(await echoAsHidden.api(['foo'])).toBe('foo');
 	});
 
 	it('only shows up in usage if specifically requested via --help', async () => {
 		let sawHiddenCommandNameInUsage = false;
-		const options: ICliOptions = {
+		const options: CCliOptions = {
 			done() {},
-			console: {
+			logger: {
 				error(arg) {
 					if (typeof arg === 'string' && arg.includes(echoHiddenCommand.name)) {
 						sawHiddenCommandNameInUsage = true;
@@ -21,11 +21,11 @@ describe(echoHiddenCommand.name, () => {
 				log() {},
 			},
 		};
-		const root = CliCommandGroup({
+		const root = c.commandGroup({
 			name: '',
 			subcommands: [echoHiddenCommand],
 		});
-		const cli = Cli(root, options);
+		const cli = c.cli(root, options);
 		await cli.run(['--help']);
 		expect(sawHiddenCommandNameInUsage).toBe(false);
 

@@ -1,4 +1,4 @@
-import { CliUsageError } from './cli-usage-error';
+import { CCliUsageError } from './c-cli-usage-error';
 
 export function wrapInSquareBrackets(str: string): string {
 	return `[${str}]`;
@@ -10,7 +10,7 @@ export function convertToNumber(rawValue: string): number {
 		value = Number(rawValue);
 	}
 	if (Number.isNaN(value)) {
-		throw new CliUsageError(`"${rawValue}" is not a number`);
+		throw new CCliUsageError(`"${rawValue}" is not a number`);
 	}
 	return value;
 }

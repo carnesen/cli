@@ -1,19 +1,19 @@
 import { wrapInSquareBrackets } from './util';
 import { reWrapText } from './re-wrap-text';
-import { TwoColumnTable, TTwoColumnTableRow } from './two-column-table';
+import { TwoColumnTable, TwoColumnTableRow } from './two-column-table';
 import {
-	DescriptionText,
-	ICliDescriptionFunctionInput,
-} from './cli-description';
-import { ICliLeaf } from './cli-tree';
-import { IUsageOptions } from './usage-options';
+	renderCCliDescription,
+	RenderCCliDescriptionOptions,
+} from './c-cli-description';
+import { CCliLeaf } from './c-cli-tree';
+import { UsageOptions } from './usage-options';
 
-export function UsageForCommand(
-	leaf: ICliLeaf,
-	options: IUsageOptions,
+export function usageForCommand(
+	leaf: CCliLeaf,
+	options: UsageOptions,
 ): string[] {
 	const { current, parents } = leaf;
-	const { columns, indentation, ansi } = options;
+	const { columns, indentation, color } = options;
 	const {
 		positionalArgGroup,
 		namedArgGroups,
@@ -27,8 +27,8 @@ export function UsageForCommand(
 	let firstLine = `Usage: ${commandPathString}`;
 	const lines: string[] = [];
 
-	const descriptionInput: ICliDescriptionFunctionInput = { ansi };
-	const commandDescriptionText: string = DescriptionText(
+	const descriptionInput: RenderCCliDescriptionOptions = { color };
+	const commandDescriptionText: string = renderCCliDescription(
 		description,
 		descriptionInput,
 	);
@@ -49,12 +49,12 @@ export function UsageForCommand(
 	}
 
 	if (positionalArgGroup && !positionalArgGroup.hidden) {
-		if (positionalArgGroup.required) {
-			firstLine += ` ${positionalArgGroup.placeholder}`;
-		} else {
+		if (positionalArgGroup.optional) {
 			firstLine += ` ${wrapInSquareBrackets(positionalArgGroup.placeholder)}`;
+		} else {
+			firstLine += ` ${positionalArgGroup.placeholder}`;
 		}
-		const positionalArgGroupDescriptionText = DescriptionText(
+		const positionalArgGroupDescriptionText = renderCCliDescription(
 			positionalArgGroup.description,
 			descriptionInput,
 		);
@@ -75,17 +75,17 @@ export function UsageForCommand(
 			([_, argGroup]) => !argGroup.hidden,
 		);
 		if (namedArgGroupEntries.length > 0) {
-			const namedArgGroupsNotRequired = namedArgGroupEntries.every(
-				([_, argGroup]) => !argGroup.required,
+			const namedArgGroupsAllOptional = namedArgGroupEntries.every(
+				([_, argGroup]) => argGroup.optional,
 			);
-			firstLine += namedArgGroupsNotRequired
+			firstLine += namedArgGroupsAllOptional
 				? ' [<named args>]'
 				: ' <named args>';
 			lines.push('Named arguments:');
 			lines.push('');
-			const rows: TTwoColumnTableRow[] = namedArgGroupEntries.map(
+			const rows: TwoColumnTableRow[] = namedArgGroupEntries.map(
 				([name, argGroup]) => {
-					const argGroupDescriptionText = DescriptionText(
+					const argGroupDescriptionText = renderCCliDescription(
 						argGroup.description,
 						descriptionInput,
 					);
@@ -93,7 +93,7 @@ export function UsageForCommand(
 					if (argGroup.placeholder) {
 						cell0 += ` ${argGroup.placeholder}`;
 					}
-					if (!argGroup.required) {
+					if (argGroup.optional) {
 						cell0 = wrapInSquareBrackets(cell0);
 					}
 					return [cell0, argGroupDescriptionText];
@@ -106,10 +106,10 @@ export function UsageForCommand(
 	}
 
 	if (doubleDashArgGroup && !doubleDashArgGroup.hidden) {
-		const { placeholder, required } = doubleDashArgGroup;
+		const { placeholder, optional } = doubleDashArgGroup;
 		const fullPlaceholder = `-- ${placeholder}`;
 		firstLine += ` ${
-			required ? fullPlaceholder : wrapInSquareBrackets(fullPlaceholder)
+			optional ? wrapInSquareBrackets(fullPlaceholder) : fullPlaceholder
 		}`;
 		lines.push('"Double dash" arguments:');
 		lines.push('');
@@ -118,7 +118,10 @@ export function UsageForCommand(
 				[
 					[
 						placeholder,
-						DescriptionText(doubleDashArgGroup.description, descriptionInput),
+						renderCCliDescription(
+							doubleDashArgGroup.description,
+							descriptionInput,
+						),
 					],
 				],
 				twoColumnTableOptions,
