@@ -1,7 +1,7 @@
-import { ICliAnsi } from './cli-ansi';
+import { CCliColor } from './c-cli-color';
 
-export interface IUsageOptions {
-	ansi: ICliAnsi;
+export interface UsageOptions {
+	color: CCliColor;
 	columns: number;
 	indentation: string;
 }

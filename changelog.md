@@ -2,6 +2,44 @@
 
 ## Upcoming
 
+This is a significant release with breaking changes. It refactors all the **@carnesen/cli** abstractions as TypeScript/ECMAScript `class`es. Earlier implementations of this library favored a pattern of factory functions producing a plain object. We adopt a new namespace/branding convention "CCli" for the new `class`es. Compared to the old namespace (just "Cli"), the extra "C" (for "carnesen"!) makes the exported symbols more distinctive and easily auto-imported in your IDE. For most use cases however you won't need to use the "CCli" symbols because this release provides a new convenient API for defining CLI's, the `c` namespace object. For example:
+
+Old API:
+```TypeScript
+import { CliCommand, CliStringArgGroup } from "@carnesen/cli";
+
+const root = CliCommand({
+   name: "curl",
+   positionalArgGroup: CliStringArgGroup({
+      placeholder: "<url>",
+   }),
+   action({ positionalValue: url }) {
+      // Implementation goes here...
+   }
+});
+```
+
+New API:
+```TypeScript
+import { c } from "@carnesen/cli";
+
+const root = c.command({
+   name: "curl",
+   positionalArgGroup: c.string({
+      placeholder: "<url>",
+   }),
+   action({ positionalValue: url }) {
+      // Implementation goes here...
+   }
+});
+```
+
+Upgrading from older versions is pretty straightforward. As in the example above, it's mostly a matter of replacing the old factory functions with the new ones e.g. `CliCommand` --> `c.command`. Install the new **@carnesen/cli** package, fix any TypeScript type errors, and you should be good to go.
+
+Besides the new CCli naming scheme, there are a few other breaking changes in this release. Previously we injected a logging object called `console` into command `action` function. We've since adopted a lint rule that forbids us from shadowing the global `console`. In this release we adopt a more sensible name `logger` for the injected logging object, by default still a thin wrapper around the global `console`. While we were at it, we also renamed the `ansi` injection `color`.
+
+Besides the breaking refactoring, this release also has a few new features. The previously internal-only `CCliLogger` classes are now supported as official exports, same for the `CCliColor` classes.
+
 ## carnesen-cli-0.7.1 (2022-05-10)
 
 - Breaking: Drop official support for Node.js 12

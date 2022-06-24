@@ -1,23 +1,22 @@
 import { reWrapText } from './re-wrap-text';
 
 /** [cell0, description] */
-export type TTwoColumnTableRow = [string, string | undefined];
+export type TwoColumnTableRow = [string, string | undefined];
 
 const SEPARATOR = ' : ';
 
-export interface ITwoColumnTableOptions {
+export interface TwoColumnTableOptions {
 	indentation?: string;
 	columns?: number;
 	maxParagraphs?: number;
 }
-/**
- * Generate the lines for a two-column table
+/** Generate the lines for a two-column table
  * @param rows
- * @param options An [[`ITwoColumnTableOptions`]] object
+ * @param options An {@link TwoColumnTableOptions} object
  */
 export function TwoColumnTable(
-	rows: TTwoColumnTableRow[],
-	options: ITwoColumnTableOptions = {},
+	rows: TwoColumnTableRow[],
+	options: TwoColumnTableOptions = {},
 ): string[] {
 	const { columns = +Infinity, indentation = '', maxParagraphs } = options;
 

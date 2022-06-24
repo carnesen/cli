@@ -1,14 +1,13 @@
-import { CliCommand } from '../cli-command';
-import { UsageForCommand } from '../usage-for-command';
-import { CliAnsi } from '../cli-ansi';
-import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
+import { CCliCommand } from '../c-cli-command';
+import { usageForCommand } from '../usage-for-command';
+import { cCliColorFactory } from '../c-cli-color-factory';
+import { CCliStringArgGroup } from '../arg-groups/c-cli-string-arg-group';
 
-const argGroup = CliStringArgGroup({
-	required: true,
+const argGroup = CCliStringArgGroup.create({
 	placeholder: '<p>',
 });
 
-const command = CliCommand({
+const command = CCliCommand.create({
 	name: 'list',
 	positionalArgGroup: argGroup,
 	namedArgGroups: {
@@ -19,12 +18,12 @@ const command = CliCommand({
 	description: 'La da dee',
 });
 
-describe(UsageForCommand.name, () => {
+describe(usageForCommand.name, () => {
 	it('Generates a usage string for a command', () => {
 		const indentation = '   ';
-		const lines = UsageForCommand(
+		const lines = usageForCommand(
 			{ current: command as any, parents: [] },
-			{ columns: 100, indentation, ansi: CliAnsi() },
+			{ columns: 100, indentation, color: cCliColorFactory() },
 		);
 		expect(lines.length).toBe(15);
 		expect(lines[0]).toMatch(`-- ${argGroup.placeholder}`);

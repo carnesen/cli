@@ -1,0 +1,17 @@
+{
+	"version": "0.2",
+	"ignorePaths": [],
+	"dictionaryDefinitions": [],
+	"dictionaries": [],
+	"words": [
+		"ccli",
+		"cli",
+		"cli's",
+		"clis",
+		"subcommand",
+		"subcommands",
+		"typedoc"
+	],
+	"ignoreWords": [],
+	"import": []
+}

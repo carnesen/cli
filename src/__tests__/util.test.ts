@@ -1,6 +1,6 @@
 import { runAndCatchSync } from '@carnesen/run-and-catch';
+import { CCliUsageError } from '../c-cli-usage-error';
 import { convertToNumber } from '../util';
-import { CLI_USAGE_ERROR } from '../cli-usage-error';
 
 describe(convertToNumber.name, () => {
 	it('converts the provided string to a number', () => {
@@ -8,14 +8,14 @@ describe(convertToNumber.name, () => {
 	});
 
 	it('throws a usage error if a non-numeric string value is passed', () => {
-		const ex = runAndCatchSync(convertToNumber, 'foo');
-		expect(ex.code).toBe(CLI_USAGE_ERROR);
-		expect(ex.message).toMatch('not a number');
+		const exception = runAndCatchSync(convertToNumber, 'foo');
+		expect(exception).toBeInstanceOf(CCliUsageError);
+		expect(exception.message).toMatch('not a number');
 	});
 
 	it('throws a usage error if an empty string is passed', () => {
-		const ex = runAndCatchSync(convertToNumber, '');
-		expect(ex.code).toBe(CLI_USAGE_ERROR);
-		expect(ex.message).toMatch('not a number');
+		const exception = runAndCatchSync(convertToNumber, '');
+		expect(exception).toBeInstanceOf(CCliUsageError);
+		expect(exception.message).toMatch('not a number');
 	});
 });
