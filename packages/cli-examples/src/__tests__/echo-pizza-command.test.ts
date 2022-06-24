@@ -1,7 +1,7 @@
-import { Cli } from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 import { echoPizzaCommand } from '../echo-pizza-command';
 
-const cli = Cli(echoPizzaCommand);
+const cli = c.cli(echoPizzaCommand);
 
 describe(echoPizzaCommand.name, () => {
 	it('normally just echos', async () => {

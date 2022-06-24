@@ -2,9 +2,11 @@
 
 ## Upcoming
 
+- Internal: Upgrade to Webpack 5
+
 ## carnesen-cli-website-2022.5.0 (2022-05-10)
 
-
+- Upgrade @carnesen/cli-examples
 
 ## carnesen-cli-website-2022.2.1 (2022-02-26)
 

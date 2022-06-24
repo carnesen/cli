@@ -1,32 +1,36 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
-import { UsageSubcommandRows } from '../usage-subcommand-rows';
-import { CliCommandGroup } from '../cli-command-group';
-import { CliCommand } from '../cli-command';
-import { CliAnsi } from '../cli-ansi';
-import { ICliDescriptionFunctionInput } from '../cli-description';
+import { usageSubcommandRowsFactory } from '../usage-subcommand-rows';
+import { CCliCommand } from '../c-cli-command';
+import { cCliColorFactory } from '../c-cli-color-factory';
+import { RenderCCliDescriptionOptions } from '../c-cli-description';
+import { CCliCommandGroup } from '../c-cli-command-group';
 
-const command = CliCommand({
+const command = CCliCommand.create({
 	name: 'list',
 	action() {},
 	description: 'La da dee',
 });
 
-const hiddenCommand = CliCommand({
+const hiddenCommand = CCliCommand.create({
 	name: 'foo',
 	hidden: true,
 	action() {},
 });
 
-const commandGroup = CliCommandGroup({
+const commandGroup = CCliCommandGroup.create({
 	name: 'users',
 	subcommands: [command, hiddenCommand],
 });
-const root = CliCommandGroup({ name: 'cloud', subcommands: [commandGroup] });
-const options: ICliDescriptionFunctionInput = { ansi: CliAnsi() };
+const root = CCliCommandGroup.create({
+	name: 'cloud',
+	subcommands: [commandGroup],
+});
+const color = cCliColorFactory();
+const input: RenderCCliDescriptionOptions = { color };
 
-describe(UsageSubcommandRows.name, () => {
+describe(usageSubcommandRowsFactory.name, () => {
 	it('lists all commands underneath the provided command group, recursive', () => {
-		const rows = UsageSubcommandRows(root, options);
+		const rows = usageSubcommandRowsFactory(root, input);
 		// This also verifies that hidden commands do not show up
 		expect(rows.length).toBe(1);
 		const [name, description] = rows[0];
@@ -34,11 +38,9 @@ describe(UsageSubcommandRows.name, () => {
 		expect(description).toBe(command.description);
 	});
 	it('throws "Unexpected kind" on bad object', async () => {
-		const exception = await runAndCatch(
-			UsageSubcommandRows,
-			{} as any,
-			options,
+		const exception = await runAndCatch(() =>
+			usageSubcommandRowsFactory({ options: {} } as any, input),
 		);
-		expect(exception.message).toBe('Unexpected kind');
+		expect(exception.message).toMatch('Expected instance');
 	});
 });

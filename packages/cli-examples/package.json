@@ -11,15 +11,19 @@
 		"node": ">=14.0.0"
 	},
 	"scripts": {
-		"build": "rm -rf lib/ && tsc --project tsconfig.json",
-		"build:watch": "npm run build -- --watch",
+		"build": "tsc --project tsconfig.json",
+		"build:clean": "rm -rf lib/ && npm run build",
+		"build:watch": "npm run build:clean -- --watch",
 		"cli": "node lib/cli",
 		"dev": "ts-node src/cli",
 		"lint": "eslint --ext .ts src/",
 		"lint:fix": "npm run lint -- --fix",
 		"release": "carnesen-dev release --semverBump",
-		"test": "npm run lint && npm run unit-test && npm run build && node lib/cli echo ok && ts-node src/multiply 2 3 4 && npm pack",
-		"unit-test": "jest src"
+		"test": "npm run lint && npm run unit-test && npm run build:clean && node lib/cli echo ok && ts-node src/multiply 2 3 4 && npm pack",
+		"type-check": "npm run build -- --noEmit",
+		"type-check:watch": "npm run type-check -- --watch",
+		"unit-test": "jest src",
+		"unit-test:watch": "npm run unit-test -- --watch"
 	},
 	"dependencies": {
 		"@carnesen/cli": "0.7.1"
@@ -54,7 +58,7 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/carnesen/cli.git",
-		"directory": "examples"
+		"directory": "packages/cli-examples"
 	},
 	"bugs": {
 		"url": "https://github.com/carnesen/cli/issues"

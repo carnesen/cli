@@ -33,14 +33,15 @@ cd ..
 
 cd cli-website
 npm link
-npm link @carnesen/cli
-npm link @carnesen/cli-examples
+# Linking multiple packages at once is not documented but it works
+# https://stackoverflow.com/a/69491736/2793540
+npm link @carnesen/cli @carnesen/cli-examples
+npm link 
 npm run build
 cd ..
 
 cd cli-website-server
 npm link
-npm link @carnesen/cli-docs
-npm link @carnesen/cli-website
+npm link @carnesen/cli-docs @carnesen/cli-website
 npm run build
 cd ..

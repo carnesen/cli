@@ -1,84 +1,131 @@
-/**
- * This module is the main entrypoint for the **@carnesen/cli** package
- */
+/** This module is the main entrypoint for the **@carnesen/cli** package */
 
+// The `c` namespace module has convenience methods for creating a command-line
+// interface with just a single import from this package.
+import * as c from './c';
+export { c };
+
+//
 // Command factory
-export {
-	CliCommand,
-	ICliCommand,
-	ICliCommandOptions,
-	CLI_COMMAND,
-} from './cli-command';
+//
+export { CCliCommand, CCliCommandOptions } from './c-cli-command';
 
-// Command-line interface (CLI) factory
-export { Cli } from './cli';
-export { ICli, ICliOptions } from './cli-options';
-
+//
 // Command group factory
+//
 export {
-	CliCommandGroup,
-	ICliCommandGroup,
-	ICliCommandGroupOptions,
-	CLI_COMMAND_GROUP,
-} from './cli-command-group';
+	CCliCommandGroup,
+	CCliCommandGroupOptions,
+	CCliSubcommand,
+} from './c-cli-command-group';
 
+//
+// Command-line interface (CLI) factory
+//
+export { CCli, CCliOptions } from './c-cli';
+
+//
 // Argument group factories
+//
+// boolean flag
 export {
-	CliFlagArgGroup,
-	ICliFlagArgGroupOptions,
-} from './arg-group-factories/cli-flag-arg-group';
-export {
-	CliJsonArgGroup,
-	ICliJsonArgGroupOptions,
-} from './arg-group-factories/cli-json-arg-group';
-export {
-	CliNumberArgGroup,
-	ICliNumberArgGroupOptions,
-} from './arg-group-factories/cli-number-arg-group';
-export {
-	CliNumberArrayArgGroup,
-	ICliNumberArrayArgGroupOptions,
-} from './arg-group-factories/cli-number-array-arg-group';
-export {
-	CliStringChoiceArgGroup,
-	ICliStringChoiceArgGroupOptions,
-} from './arg-group-factories/cli-string-choice-arg-group';
-export {
-	CliStringArgGroup,
-	ICliStringArgGroupOptions,
-} from './arg-group-factories/cli-string-arg-group';
-export {
-	CliStringArrayArgGroup,
-	ICliStringArrayArgGroupOptions,
-} from './arg-group-factories/cli-string-array-arg-group';
+	CCliFlagArgGroup,
+	CCliFlagArgGroupOptions,
+} from './arg-groups/c-cli-flag-arg-group';
 
-// The rest of the exports are advanced features
+// JSON
+export {
+	CCliJsonArgGroup,
+	CCliJsonArgGroupOptions,
+} from './arg-groups/c-cli-json-arg-group';
 
+// number
+export {
+	CCliNumberArgGroup,
+	CCliNumberArgGroupOptions,
+} from './arg-groups/c-cli-number-arg-group';
+
+// number array
+export {
+	CCliNumberArrayArgGroup,
+	CCliNumberArrayArgGroupOptions,
+} from './arg-groups/c-cli-number-array-arg-group';
+
+// string
+export {
+	CCliStringArgGroup,
+	CCliStringArgGroupOptions,
+} from './arg-groups/c-cli-string-arg-group';
+
+// string array
+export {
+	CCliStringArrayArgGroup,
+	CCliStringArrayArgGroupOptions,
+} from './arg-groups/c-cli-string-array-arg-group';
+
+// string choice (literal union)
+export {
+	CCliStringChoiceArgGroup,
+	CCliStringChoiceArgGroupOptions,
+} from './arg-groups/c-cli-string-choice-arg-group';
+
+//
+// The rest of the exports in this module support "advanced" features
+//
+
+//
 // Description functions
+//
+import {
+	renderCCliDescription,
+	RenderCCliDescriptionOptions,
+	CCliDescriptionFunction,
+} from './c-cli-description';
+
 export {
-	TCliDescription,
-	TCliDescriptionFunction,
-	ICliDescriptionFunctionInput,
-} from './cli-description';
+	renderCCliDescription,
+	RenderCCliDescriptionOptions,
+	CCliDescriptionFunction,
+};
 
-// Isomorphic console interface
-export { ICliConsole } from './cli-console';
+//
+// Logging
+//
+export { CCliLogger } from './c-cli-logger';
+export { CCliNoopLogger } from './c-cli-noop-logger';
+export { CCliConsoleLogger } from './c-cli-console-logger';
 
-// Isomorphic process interface
-export { ICliProcess } from './cli-process';
+//
+// Isomorphic type mimicking the Node.js global `process`
+//
+export { CCliProcess } from './c-cli-process';
 
+//
 // Text decoration
-export { ICliAnsi, CliAnsi } from './cli-ansi';
+//
+export { CCliAnsiColor } from './c-cli-ansi-color';
+export { CCliColor } from './c-cli-color';
+export { CCliNoopColor } from './c-cli-noop-color';
+export { cCliColorFactory } from './c-cli-color-factory';
 
+//
 // Error constructors
-export { CliTerseError, CLI_TERSE_ERROR } from './cli-terse-error';
-export { CliUsageError, CLI_USAGE_ERROR } from './cli-usage-error';
+//
+export { CCliTerseError } from './c-cli-terse-error';
+export { CCliUsageError } from './c-cli-usage-error';
 
-// Custom ArgGroup
-export { ICliArgGroup, TCliArgGroupArgs } from './cli-arg-group';
+//
+// Custom argument group
+//
+export {
+	CCliArgGroup,
+	CCliArgGroupOptions,
+	CCliParseArgs,
+} from './c-cli-arg-group';
 
-// Command tree
-export { TCliRoot, ICliTree, ICliLeaf } from './cli-tree';
-
-// Branding
-export { CliWordMark } from './cli-word-mark';
+//
+// FOR INTERNAL USE ONLY
+//
+export { navigateCCliTree, NavigateCCliTreeResult } from './navigate-cli-tree';
+export { CCliWordMark } from './c-cli-word-mark';
+export { CCliRoot, CCliTree, CCliLeaf } from './c-cli-tree';

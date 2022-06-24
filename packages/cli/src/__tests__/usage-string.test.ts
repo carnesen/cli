@@ -1,27 +1,27 @@
 import { runAndCatchSync } from '@carnesen/run-and-catch';
-import { UsageString } from '../usage-string';
-import { CliCommandGroup } from '../cli-command-group';
-import { CliStringArgGroup } from '../arg-group-factories/cli-string-arg-group';
-import { CliCommand } from '../cli-command';
-import { ICliTree } from '../cli-tree';
-import { IUsageOptions } from '../usage-options';
-import { CliAnsi } from '../cli-ansi';
+import { usageFactory } from '../usage-string';
+import { CCliStringArgGroup } from '../arg-groups/c-cli-string-arg-group';
+import { CCliCommand } from '../c-cli-command';
+import { CCliTree } from '../c-cli-tree';
+import { UsageOptions } from '../usage-options';
+import { cCliColorFactory } from '../c-cli-color-factory';
+import { CCliCommandGroup } from '../c-cli-command-group';
 
 const DESCRIPTION = 'A string message please';
 
-const messageArgGroup = CliStringArgGroup({
+const messageArgGroup = CCliStringArgGroup.create({
 	description: DESCRIPTION,
 });
-const positionalArgGroup = CliStringArgGroup({
+const positionalArgGroup = CCliStringArgGroup.create({
 	description: 'A word',
 	placeholder: '<word>',
 });
-const doubleDashArgGroup = CliStringArgGroup({
+const doubleDashArgGroup = CCliStringArgGroup.create({
 	description: 'Another word',
-	required: true,
+	optional: true,
 });
 
-const current = CliCommand({
+const current = CCliCommand.create({
 	name: 'echo',
 	positionalArgGroup,
 	namedArgGroups: {
@@ -33,21 +33,21 @@ const current = CliCommand({
 	},
 });
 
-const commandGroup = CliCommandGroup({
+const commandGroup = CCliCommandGroup.create({
 	name: 'cli',
 	description: 'This is a CLI',
 	subcommands: [current],
 });
 
-const options: IUsageOptions = {
-	ansi: CliAnsi(),
+const options: UsageOptions = {
+	color: cCliColorFactory(),
 	columns: 100,
 	indentation: '',
 };
 
-describe(UsageString.name, () => {
+describe(usageFactory.name, () => {
 	it('Creates a usage string for a command group', () => {
-		const usageString = UsageString(
+		const usageString = usageFactory(
 			{ current: commandGroup, parents: [] },
 			options,
 		);
@@ -55,9 +55,9 @@ describe(UsageString.name, () => {
 	});
 
 	it('Creates a usage string for a command without a parent', () => {
-		const usageString = UsageString(
+		const usageString = usageFactory(
 			{
-				current: current as ICliTree['current'],
+				current: current as CCliTree['current'],
 				parents: [],
 			},
 			options,
@@ -67,9 +67,9 @@ describe(UsageString.name, () => {
 	});
 
 	it('Creates a usage string for a command without a parent command group', () => {
-		const usageString = UsageString(
+		const usageString = usageFactory(
 			{
-				current: current as ICliTree['current'],
+				current: current as CCliTree['current'],
 				parents: [commandGroup],
 			},
 			options,
@@ -78,8 +78,8 @@ describe(UsageString.name, () => {
 	});
 
 	it('Does not write usage for named argGroups if there are none', () => {
-		const fooCommand = CliCommand({ name: 'foo', action() {} });
-		const usageString = UsageString(
+		const fooCommand = CCliCommand.create({ name: 'foo', action() {} });
+		const usageString = usageFactory(
 			{ current: fooCommand, parents: [] },
 			options,
 		);
@@ -88,7 +88,7 @@ describe(UsageString.name, () => {
 
 	it('Throws "unexpected kind" if passed an object of unknown kind', () => {
 		const exception = runAndCatchSync(
-			UsageString,
+			usageFactory,
 			{ current: {} } as any,
 			{} as any,
 		);

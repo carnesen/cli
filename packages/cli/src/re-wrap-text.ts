@@ -15,7 +15,7 @@ export interface IHardWrapTextOptions {
  * - Condense too-short lines within a paragraph
  * - Condense redundant paragraph separators
  * @param text The text
- * @param options An [[`IHardWrapTextOptions`]] object
+ * @param options An {@link IHardWrapTextOptions} object
  * @returns An array of wrapped lines with empty-line paragraph separators
  */
 export function reWrapText(

@@ -1,51 +1,46 @@
-import {
-	CliCommandGroup,
-	CliCommand,
-	CliStringChoiceArgGroup,
-	CliStringArgGroup,
-} from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 import { autocomplete } from '../autocomplete';
 
-const oneOfArgGroup = CliStringChoiceArgGroup({
+const oneOfArgGroup = c.stringChoice({
 	choices: ['foo', 'bar', 'baz'],
+	optional: true,
 });
 
-const command = CliCommand({
+const command = c.command({
 	name: 'command',
 	positionalArgGroup: oneOfArgGroup,
 	namedArgGroups: {
 		name: oneOfArgGroup,
-		str: CliStringArgGroup(),
+		str: c.string(),
 	},
 	doubleDashArgGroup: oneOfArgGroup,
 	action() {},
 });
 
-const emptyCommand = CliCommand({
+const emptyCommand = c.command({
 	name: 'empty',
 	action() {},
 });
 
-const requiredPositionalArgGroupCommand = CliCommand({
+const requiredPositionalArgGroupCommand = c.command({
 	name: 'required-positional-arg-group-command',
 	action() {},
-	positionalArgGroup: CliStringChoiceArgGroup({
+	positionalArgGroup: c.stringChoice({
 		choices: ['foo', 'bar'],
-		required: true,
 	}),
 	doubleDashArgGroup: oneOfArgGroup,
 });
 
-const commandGroup0 = CliCommandGroup({
+const commandGroup0 = c.commandGroup({
 	name: 'group-0',
 	subcommands: [command],
 });
-const commandGroup1 = CliCommandGroup({
+const commandGroup1 = c.commandGroup({
 	name: 'group-1',
 	subcommands: [commandGroup0, command],
 });
 
-const root = CliCommandGroup({
+const root = c.commandGroup({
 	name: 'root',
 	subcommands: [
 		commandGroup0,

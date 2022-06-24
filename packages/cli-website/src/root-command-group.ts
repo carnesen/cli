@@ -1,4 +1,4 @@
-import { CliCommandGroup } from '@carnesen/cli';
+import { c, CCliWordMark } from '@carnesen/cli';
 import {
 	advancedCommandGroup,
 	multiplyCommand,
@@ -11,15 +11,17 @@ import {
 
 import { showCommand } from './show-command';
 import { docsCommand } from './docs-command';
-import { bold } from './util';
 
 /**
  * Root of the @carnesen/cli website examples CLI
  */
-export const rootCommandGroup = CliCommandGroup({
+export const rootCommandGroup = c.commandGroup({
 	name: 'cli',
-	description: `
-		This is ${bold('@carnesen/cli')} examples running in your browser console.`,
+	description(input) {
+		return `This is ${CCliWordMark(
+			input,
+		)} examples running in your browser console.`;
+	},
 	subcommands: [
 		docsCommand,
 		echoCommand as any,

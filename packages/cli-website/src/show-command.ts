@@ -6,7 +6,7 @@ import {
 	parseJsonCommand,
 	ansiEchoCommand,
 } from '@carnesen/cli-examples';
-import { CliCommand, CliStringChoiceArgGroup } from '@carnesen/cli';
+import { c } from '@carnesen/cli';
 
 import { docsCommand } from './docs-command';
 
@@ -16,10 +16,10 @@ const SHOW_COMMAND_NAME = 'show';
 /**
  * A command for showing the source code of other commands
  */
-export const showCommand = CliCommand({
+export const showCommand = c.command({
 	name: SHOW_COMMAND_NAME,
 	description: 'Show the source code of a command',
-	positionalArgGroup: CliStringChoiceArgGroup({
+	positionalArgGroup: c.stringChoice({
 		choices: [
 			'.',
 			docsCommand.name,
@@ -33,7 +33,6 @@ export const showCommand = CliCommand({
 			throwErrorCommand.name,
 		],
 		placeholder: '<command>',
-		required: true,
 	}),
 	action({ positionalValue: name }) {
 		let url: string;

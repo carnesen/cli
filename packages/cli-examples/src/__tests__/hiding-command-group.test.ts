@@ -1,4 +1,4 @@
-import { Cli, ICliOptions } from '@carnesen/cli';
+import { c, CCliOptions } from '@carnesen/cli';
 import {
 	hidingCommandGroup,
 	hiddenCommandGroup,
@@ -9,7 +9,7 @@ import { echoHiddenCommand } from '../echo-hidden-command';
 
 describe(hidingCommandGroup.name, () => {
 	it(`has a hidden command ${echoHiddenCommand.name}`, async () => {
-		const cli = Cli(hidingCommandGroup);
+		const cli = c.cli(hidingCommandGroup);
 		expect(await cli.api([echoHiddenCommand.name, 'foo'])).toBe('foo');
 	});
 
@@ -17,9 +17,9 @@ describe(hidingCommandGroup.name, () => {
 		let sawHiddenCommandGroupEcho = false;
 		let sawNonHiddenCommandGroupEcho = false;
 		let sawHiddenCommandGroupSubcommands = false;
-		const options: ICliOptions = {
+		const options: CCliOptions = {
 			done() {},
-			console: {
+			logger: {
 				error(arg) {
 					if (typeof arg === 'string') {
 						if (
@@ -41,7 +41,7 @@ describe(hidingCommandGroup.name, () => {
 			},
 		};
 
-		const cli = Cli(hidingCommandGroup, options);
+		const cli = c.cli(hidingCommandGroup, options);
 		await cli.run(['--help']);
 		expect(sawHiddenCommandGroupEcho).toBe(false);
 		expect(sawHiddenCommandGroupSubcommands).toBe(false);
