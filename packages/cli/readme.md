@@ -33,6 +33,13 @@ Questions, bugs, feature requests? Please [file an issue](https://github.com/car
 - [Online documentation](https://cli.carnesen.com/docs)
 - [Example project](https://github.com/carnesen/cli/tree/master/examples)
 
+## Previous versions
+
+Previous versions of the software are available [on GitHub](https://github.com/carnesen/cli/releases) and the [npm registry](https://www.npmjs.com/package/@carnesen/cli). Previous versions of the online documentation are available on the [Internet Archive](https://web.archive.org/web/*/https://cli.carnesen.com/docs/latest):
+
+- [0.7.1](https://web.archive.org/web/20220524200134/https://cli.carnesen.com/docs/latest/)
+- [0.6.0](https://web.archive.org/web/20220320093309/https://cli.carnesen.com/docs/latest/)
+
 ## License
 
 [MIT](https://en.wikipedia.org/wiki/MIT_License) © [Chris Arnesen](https://www.carnesen.com)
