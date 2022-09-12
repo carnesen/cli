@@ -2,6 +2,10 @@
 
 ## Upcoming
 
+## carnesen-cli-examples-0.8.1 (2022-09-11)
+
+
+
 ## carnesen-cli-examples-0.8.0 (2022-09-11)
 
 
