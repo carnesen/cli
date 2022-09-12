@@ -41,6 +41,18 @@
 		"ts-node": "10.7.0",
 		"typescript": "4.6.4"
 	},
+	"files": [
+		"lib",
+		"src",
+		".eslintrc.json",
+		".npmrc",
+		"changelog.md",
+		"jest.config.js",
+		"license.md",
+		"package.json",
+		"readme.md",
+		"tsconfig.json"
+	],
 	"keywords": [
 		"typescript",
 		"nodejs",

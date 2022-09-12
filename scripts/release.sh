@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script calls "npm publish" on each of the packages in this monorepo and
-# updates the internal dependecies accordingly.
+# updates the internal dependencies accordingly.
 
 set -eo pipefail # exit on error
 
