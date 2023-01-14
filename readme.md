@@ -20,7 +20,9 @@ and is known to work with Node.js 12+ and all modern web browsers.
 
 - **Hidden commands** Add "hidden=true" to any argument/command/group, and we'll hide it in the automatic usage docs. We use this feature for easter eggs and internal-only/beta commands.
 
-- **Automatic autocomplete** (Coming soon!): [Autocomplete](https://en.wikipedia.org/wiki/Autocomplete) supercharges a CLI. We've implemented automatic autocomplete in [the live examples](https://cli.carnesen.com) and plan to [add this as a feature to the core library](https://github.com/carnesen/cli/issues/32) in a future release.
+- **Automatic autocomplete** (Coming some day!): [Autocomplete](https://en.wikipedia.org/wiki/Autocomplete) supercharges a CLI. We've implemented automatic autocomplete in [the live examples](https://cli.carnesen.com) and plan to [add this as a feature to the core library](https://github.com/carnesen/cli/issues/32) in a future release.
+
+- **REPL** (Coming some day!): The [live examples](https://cli.carnesen.com) are [implemented](https://github.com/carnesen/cli/blob/30b431a4505e0bd2a28e4db9dfd4e50ba5a935b0/packages/cli-website/src/cli-repl.ts) as custom [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop). In a future release we'll lift that code into the framework to make it just as easy to build a REPL as it is to build a CLI.
 
 ## Stability
 

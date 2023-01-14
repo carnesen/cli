@@ -4,7 +4,7 @@ import {
 	CCliParseArgs,
 } from '../c-cli-arg-group';
 import { CCliConditionalValue } from '../c-cli-conditional-value';
-import { convertToNumber } from '../util';
+import { convertToNumber } from '../convert-to-number';
 
 /** Options for {@link CCliNumberArrayArgGroup} a.k.a `ccli.numberArray` */
 export type CCliNumberArrayArgGroupOptions<Optional extends boolean = boolean> =

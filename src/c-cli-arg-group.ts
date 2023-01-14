@@ -38,9 +38,10 @@ export type InferParsedValueFromCCliArgGroup<ArgGroup> =
 		? NonNullable<Value>
 		: never;
 
-/** A group of adjacent command-line arguments
- * @typeParam Value Type of the value returned by {@link CCliArgGroup.parse}
- * @typeParam Optional If `true`, the type of `args` passed to
+/** A group of consecutive command-line arguments parsed together into a single
+ * well-typed value
+ * @param Value Type of the value returned by {@link CCliArgGroup.parse}
+ * @param Optional If `true`, the type of `args` passed to
  * {@link CCliArgGroup.parse} includes `undefined`. */
 export abstract class CCliArgGroup<
 	Value = unknown,

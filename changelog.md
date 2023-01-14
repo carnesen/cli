@@ -2,11 +2,9 @@
 
 ## Upcoming
 
+- Feature: Add arg group factories `c.bigint` and `c.bigintArray`
+
 ## carnesen-cli-0.8.1 (2022-09-11)
-
-
-
-## carnesen-cli-0.8.0 (2022-09-11)
 
 This is a significant release with breaking changes. It refactors all the **@carnesen/cli** abstractions as TypeScript/ECMAScript `class`es. Earlier implementations of this library favored a pattern of factory functions producing a plain object. We adopt a new namespace/branding convention "CCli" for the new `class`es. Compared to the old namespace (just "Cli"), the extra "C" (for "carnesen"!) makes the exported symbols more distinctive and easily auto-imported in your IDE. For most use cases however you won't need to use the "CCli" symbols because this release provides a new convenient API for defining CLI's, the `c` namespace object. For example:
 

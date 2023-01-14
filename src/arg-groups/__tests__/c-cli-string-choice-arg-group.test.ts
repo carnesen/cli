@@ -1,8 +1,10 @@
 import { runAndCatch } from '@carnesen/run-and-catch';
+import { renderCCliDescription } from '../../c-cli-description';
+import { CCliNoopColor } from '../../c-cli-noop-color';
 import { CCliUsageError } from '../../c-cli-usage-error';
 import { CCliStringChoiceArgGroup } from '../c-cli-string-choice-arg-group';
 
-const description = 'foo bar baz';
+const description = 'my special string choice';
 const hidden = true;
 const placeholder = '<special>';
 const optional = true;
@@ -50,5 +52,14 @@ describe(CCliStringChoiceArgGroup.name, () => {
 	it('has experimental _suggest api', async () => {
 		expect(await argGroup._suggest!([])).toEqual(['foo', 'bar']);
 		expect(await argGroup._suggest!(['foo'])).toEqual([]);
+	});
+
+	it('includes the choices in the rendered arg group description', () => {
+		const rendered = renderCCliDescription(argGroup.description, {
+			color: CCliNoopColor.create(),
+		});
+
+		expect(rendered).toMatch('Choices');
+		expect(rendered).toMatch('foo');
 	});
 });
