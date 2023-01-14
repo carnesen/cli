@@ -1,7 +1,7 @@
 {
 	"name": "@carnesen/cli",
 	"description": "A command-line interface framework for Node.js and web browser",
-	"version": "0.8.1",
+	"version": "0.9.0",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"engines": {
