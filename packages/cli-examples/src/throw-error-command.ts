@@ -1,7 +1,7 @@
 import { c, CCliTerseError, CCliUsageError } from '@carnesen/cli';
 
 /**
- * A CliCommand for demonstrating how errors are displayed
+ * CLI command for demonstrating how errors are displayed
  * */
 export const throwErrorCommand = c.command({
 	name: 'throw-error',

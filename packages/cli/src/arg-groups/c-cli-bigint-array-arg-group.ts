@@ -4,17 +4,17 @@ import {
 	CCliParseArgs,
 } from '../c-cli-arg-group';
 import { CCliConditionalValue } from '../c-cli-conditional-value';
-import { convertToNumber } from '../convert-to-number';
+import { convertToBigint } from '../convert-to-bigint';
 
-/** Options for {@link CCliNumberArrayArgGroup} a.k.a `ccli.numberArray` */
-export type CCliNumberArrayArgGroupOptions<Optional extends boolean = boolean> =
+/** Options for {@link CCliBigintArrayArgGroup} a.k.a `ccli.bigintArray` */
+export type CCliBigintArrayArgGroupOptions<Optional extends boolean = boolean> =
 	CCliArgGroupOptions<Optional>;
 
 export type CCliNumberArrayArgGroupValue<Optional extends boolean> =
-	CCliConditionalValue<number[], Optional>;
+	CCliConditionalValue<bigint[], Optional>;
 
 /** `number[]`-valued argument group */
-export class CCliNumberArrayArgGroup<
+export class CCliBigintArrayArgGroup<
 	Optional extends boolean,
 > extends CCliArgGroup<CCliNumberArrayArgGroupValue<Optional>, Optional> {
 	public parse(
@@ -26,15 +26,15 @@ export class CCliNumberArrayArgGroup<
 
 		this.assertOneOrMoreArgs(args);
 
-		return args.map(convertToNumber);
+		return args.map(convertToBigint);
 	}
 
-	/** {@link CCliNumberArrayArgGroup} factory function */
+	/** {@link CCliBigintArrayArgGroup} factory function */
 	public static create<Optional extends boolean>(
-		options: CCliNumberArrayArgGroupOptions<Optional> = {},
-	): CCliNumberArrayArgGroup<Optional> {
-		return new CCliNumberArrayArgGroup<Optional>({
-			placeholder: '<num0> [...]',
+		options: CCliBigintArrayArgGroupOptions<Optional> = {},
+	): CCliBigintArrayArgGroup<Optional> {
+		return new CCliBigintArrayArgGroup<Optional>({
+			placeholder: '<integer0> [...]',
 			...options,
 		});
 	}

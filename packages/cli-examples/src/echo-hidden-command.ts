@@ -1,6 +1,6 @@
 import { c } from '@carnesen/cli';
 
-/** A "hidden" CliCommand that otherwise behaves like the normal "echo" command */
+/** A "hidden" CLI command that otherwise behaves like the normal "echo" */
 export const echoHiddenCommand = c.command({
 	name: 'echo-hidden',
 	description: `

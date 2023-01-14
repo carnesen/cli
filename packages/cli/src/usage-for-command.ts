@@ -1,4 +1,4 @@
-import { wrapInSquareBrackets } from './util';
+import { wrapInSquareBrackets } from './wrap-in-square-brackets';
 import { reWrapText } from './re-wrap-text';
 import { TwoColumnTable, TwoColumnTableRow } from './two-column-table';
 import {

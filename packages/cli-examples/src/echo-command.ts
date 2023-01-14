@@ -1,6 +1,6 @@
 import { c } from '@carnesen/cli';
 
-/** A CliCommand that prints to the terminal like the `echo` shell command */
+/** A CLI command that prints to the terminal like the `echo` shell command */
 export const echoCommand = c.command({
 	name: 'echo',
 	description: 'Prints the provided arguments to the terminal',

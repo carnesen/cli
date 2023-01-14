@@ -3,8 +3,7 @@ import {
 	CCliArgGroupOptions,
 	CCliParseArgs,
 } from '../c-cli-arg-group';
-import { convertToNumber } from '../util';
-import { CCliUsageError } from '../c-cli-usage-error';
+import { convertToNumber } from '../convert-to-number';
 import { CCliConditionalValue } from '../c-cli-conditional-value';
 
 /** Options for {@link CCliNumberArgGroup} */
@@ -27,9 +26,6 @@ export class CCliNumberArgGroup<Optional extends boolean> extends CCliArgGroup<
 		}
 
 		this.assertSingleArg(args);
-		if (args.length === 0) {
-			throw new CCliUsageError(`Expected a ${this.options.placeholder}`);
-		}
 
 		return convertToNumber(args[0]);
 	}

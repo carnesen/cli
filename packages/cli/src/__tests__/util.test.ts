@@ -1,6 +1,6 @@
 import { runAndCatchSync } from '@carnesen/run-and-catch';
 import { CCliUsageError } from '../c-cli-usage-error';
-import { convertToNumber } from '../util';
+import { convertToNumber } from '../convert-to-number';
 
 describe(convertToNumber.name, () => {
 	it('converts the provided string to a number', () => {
