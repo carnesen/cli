@@ -19,7 +19,7 @@
 		"lint": "eslint --ext .ts src/",
 		"lint:fix": "npm run lint -- --fix",
 		"release": "carnesen-dev release --semverBump",
-		"test": "npm run lint && npm run unit-test && npm run build:clean && node lib/cli echo ok && ts-node src/multiply 2 3 4 && npm pack",
+		"test": "npm run lint && npm run unit-test && npm run build:clean && node lib/cli echo ok && ts-node src/multiply-command 2 3 4 && npm pack",
 		"type-check": "npm run build -- --noEmit",
 		"type-check:watch": "npm run type-check -- --watch",
 		"unit-test": "jest src",

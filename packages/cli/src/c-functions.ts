@@ -1,6 +1,8 @@
 /** The exports of this module are exported in the main index as the `c`
  * namespace object */
 
+import { CCliBigintArgGroup } from './arg-groups/c-cli-bigint-arg-group';
+import { CCliBigintArrayArgGroup } from './arg-groups/c-cli-bigint-array-arg-group';
 import { CCliFlagArgGroup } from './arg-groups/c-cli-flag-arg-group';
 import { CCliJsonArgGroup } from './arg-groups/c-cli-json-arg-group';
 import { CCliNumberArgGroup } from './arg-groups/c-cli-number-arg-group';
@@ -24,6 +26,12 @@ export const commandGroup = CCliCommandGroup.create;
 //
 // Argument group factories
 //
+
+/** {@link CCliBigintArgGroup} factory function ({@link CCliBigintArgGroup.create}) */
+export const bigint = CCliBigintArgGroup.create;
+
+/** {@link CCliBigintArrayArgGroup} factory function ({@link CCliBigintArrayArgGroup.create}) */
+export const bigintArray = CCliBigintArrayArgGroup.create;
 
 /** {@link CCliFlagArgGroup} factory function ({@link CCliFlagArgGroup.create}) */
 export const flag = CCliFlagArgGroup.create;

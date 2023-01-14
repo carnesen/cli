@@ -1,7 +1,7 @@
 /** This module is the main entrypoint for the **@carnesen/cli** package */
 
 // The `c` namespace object is a compact, convenient API
-export * as c from './c';
+export * from './c-namespace';
 
 // The full API
 export * from './c-cli-command';
