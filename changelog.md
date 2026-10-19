@@ -58,7 +58,7 @@ Besides the breaking refactoring, this release also has a few new features. The 
 
 ## carnesen-cli-0.6.0 (2022-02-26)
 
-- Fix: CliStringChoicesArgGroup factory should allow readonly string array choices [#193](https://github.com/carnesen/cli/issues/193)
+- Fix: CliStringChoicesArgGroup factory should allow readonly string array choices [#193](https://web.archive.org/web/20220320085609/https://github.com/carnesen/cli/issues/193)
 
 - Internal: Update dependencies. Use @carnesen/dev to release.
 
@@ -66,7 +66,7 @@ Besides the breaking refactoring, this release also has a few new features. The 
 
 ### Fixes
 
-- Unexpected handling of exception with numeric "code" property (https://github.com/carnesen/cli/issues/166)
+- Unexpected handling of exception with numeric "code" property (https://web.archive.org/web/20220320085609/https://github.com/carnesen/cli/issues/166)
 
 ## 0.5.0 - 2020-09-12
 
@@ -74,12 +74,12 @@ Besides the breaking refactoring, this release also has a few new features. The 
 
 We completely overhauled the API in this release with the goal of making it as easy as possible to understand and use, but also with an eye on achieving 100% backwards compatibility by 1.0.
 
-A user of v0.3 would scarcely recognize this library's public API, but they'd be in luck because now it's 100% documented both in the source code and online. If you were an early adopter of **@carnesen/cli**, thank you! We'd be happy to help you upgrade to 0.5, just [file an issue on this project's repository on GitHub](https://github.com/carnesen/cli/issues/new) asking for assistance.
+A user of v0.3 would scarcely recognize this library's public API, but they'd be in luck because now it's 100% documented both in the source code and online. If you were an early adopter of **@carnesen/cli**, thank you! We'd be happy to help you upgrade to 0.5, just [file an issue on this project's repository on GitHub](https://github.com/carnesen/ccli/issues/new) asking for assistance.
 
 ### Features
 
 - Browser compatibility: We've removed all runtime dependencies on third-party packages and Node.js-specific global variables like `process`, nor do we depend on `@types/node` (except internally for unit tests) nor the `DOM` TypeScript lib.
-- API docs built from source using TypeDoc, published as the npm package `@carnesen/cli-docs` and on the web at [https://cli.carnesen.com/docs](https://cli.carnesen.com/docs)
+- API docs built from source using TypeDoc, published as the npm package `@carnesen/cli-docs` and on the web at [cli.carnesen.com/docs](https://web.archive.org/web/20240805103349/https://cli.carnesen.com/docs/latest/)
 - Fold the argument/branch/command description text to fit the user's terminal in command-line usage
 - Built-in ANSI text decoration in `description` and `action`
 

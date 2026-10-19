@@ -184,9 +184,9 @@ export class CCli {
 	/** Split a command line into args and call this `Cli`'s `run` method
 	 *
 	 * This method is used to implement the pseudo-shell on the
-	 * [**@carnesen/cli** website](https://cli.carnesen.com/) and will form the
+	 * [**@carnesen/cli** website](https://web.archive.org/web/20240603163500/https://cli.carnesen.com/) and will form the
 	 * basis of a [future REPL
-	 * feature](https://github.com/carnesen/cli/issues/73)
+	 * feature](https://web.archive.org/web/20220320085730/https://github.com/carnesen/cli/issues/73)
 	 * @param line A command line
 	 * @returns A promise resolving to the command's exit code */
 	public async runLine(line = ''): Promise<number> {

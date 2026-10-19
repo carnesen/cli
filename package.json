@@ -63,6 +63,6 @@
 	"bugs": {
 		"url": "https://github.com/carnesen/ccli/issues"
 	},
-	"homepage": "https://cli.carnesen.com",
+	"homepage": "https://github.com/carnesen/ccli#readme",
 	"license": "MIT"
 }

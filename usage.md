@@ -47,7 +47,7 @@ The only Node.js-specific code is the `if (require.main === module)` block. To i
 Here's that CLI in a JavaScript console:
 <p><img width="400" src="images/multiply-browser-console.jpg" alt="Multiply CLI in a web browser console"></p>
 
-The resolved value of `0` means the command finished successfully. A non-zero exit code means an error occurred. Try it you yourself at [cli.carnesen.com](https://cli.carnesen.com)! Here's how to open the console in [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Opening_the_Web_Console) and [Google Chrome](https://stackoverflow.com/a/66434/2793540).
+The resolved value of `0` means the command finished successfully. A non-zero exit code means an error occurred. Try it yourself in the [archived online examples](https://web.archive.org/web/20240603163500/https://cli.carnesen.com/)! Here's how to open the console in [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Opening_the_Web_Console) and [Google Chrome](https://stackoverflow.com/a/66434/2793540).
 
 ## Structure
 
