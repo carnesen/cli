@@ -20,7 +20,3 @@ if [ "${SEMVER_BUMP}" = "" ]; then
 fi
 
 carnesen-dev release --semverBump "${SEMVER_BUMP}"
-
-# "carnesen-dev release" runs the build again which writes the package.json in
-# the docs directory. So we don't need to do another version bump.
-carnesen-dev release docs --semverBump none

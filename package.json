@@ -8,15 +8,11 @@
 		"node": ">=14.0.0"
 	},
 	"scripts": {
-		"build": "npm run build-lib && npm run build-docs",
-		"build-lib": "rm -rf lib/ && tsc",
-		"build-lib:watch": "tsc --watch",
-		"build-docs": "./scripts/build-docs.sh",
-		"build-docs:watch": "./scripts/build-docs.sh --watch",
+		"build": "rm -rf lib/ && tsc",
+		"build:watch": "tsc --watch",
 		"lint": "eslint --ext .ts src/",
 		"lint:fix": "npm run lint -- --fix",
 		"release": "./scripts/release.sh",
-		"serve-docs": "browser-sync docs",
 		"test": "./scripts/test.sh",
 		"type-check": "tsc --noEmit",
 		"unit-test": "jest src",
@@ -28,14 +24,11 @@
 		"@carnesen/tsconfig": "0.5.0",
 		"@types/jest": "27.5.0",
 		"@types/node": "17.0.32",
-		"browser-sync": "2.27.9",
 		"eslint": "8.15.0",
 		"eslint-config-carnesen": "11.0.0",
 		"jest": "28.1.0",
-		"nodemon": "2.0.16",
 		"ts-jest": "28.0.2",
 		"ts-node": "10.7.0",
-		"typedoc": "0.17.0-3",
 		"typescript": "4.6.4"
 	},
 	"files": [
@@ -65,11 +58,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/carnesen/cli.git",
-		"directory": "packages/cli"
+		"url": "https://github.com/carnesen/ccli.git"
 	},
 	"bugs": {
-		"url": "https://github.com/carnesen/cli/issues"
+		"url": "https://github.com/carnesen/ccli/issues"
 	},
 	"homepage": "https://cli.carnesen.com",
 	"license": "MIT"
