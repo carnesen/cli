@@ -2,7 +2,7 @@
 
 A command-line interface (CLI) framework for Node.js and web browser
 
-[![build status badge](https://github.com/carnesen/ccli/actions/workflows/test.yml/badge.svg)](https://github.com/carnesen/ccli/actions/workflows/test.yml) [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://www.npmjs.com/package/@carnesen/cli) [![github stars badge](https://img.shields.io/github/stars/carnesen/ccli)](https://github.com/carnesen/ccli)
+[![build status badge](https://github.com/carnesen/cli/actions/workflows/test.yml/badge.svg)](https://github.com/carnesen/cli/actions/workflows/test.yml) [![npm version badge](https://badge.fury.io/js/%40carnesen%2Fcli.svg)](https://www.npmjs.com/package/@carnesen/cli) [![github stars badge](https://img.shields.io/github/stars/carnesen/cli)](https://github.com/carnesen/cli)
 
 The **@carnesen/cli** package includes runtime JavaScript files (ES2019 +
 CommonJS) and TypeScript type declarations (3.7+). It has _no_ npm dependencies
@@ -32,14 +32,14 @@ This library has over 99% line test coverage and heavy usage by its authors but 
 
 ## More information
 
-Questions, bugs, feature requests? Please [file an issue](https://github.com/carnesen/ccli/issues/new) or [submit a pull request](https://github.com/carnesen/ccli/compare) on [this project's repository on GitHub](https://github.com/carnesen/ccli#readme), and check out our:
+Questions, bugs, feature requests? Please [file an issue](https://github.com/carnesen/cli/issues/new) or [submit a pull request](https://github.com/carnesen/cli/compare) on [this project's repository on GitHub](https://github.com/carnesen/cli#readme), and check out our:
 - [Interactive examples](https://web.archive.org/web/20240603163500/https://cli.carnesen.com/)
 - [Online documentation](https://web.archive.org/web/20240805103349/https://cli.carnesen.com/docs/latest/)
 - [Example project](https://web.archive.org/web/20220523231901/https://github.com/carnesen/cli/tree/master/packages/cli-examples)
 
 ## Previous versions
 
-Previous versions of the software are available [on GitHub](https://github.com/carnesen/ccli/tags) and the [npm registry](https://www.npmjs.com/package/@carnesen/cli). The website is no longer online, but its documentation is preserved on the [Internet Archive](https://web.archive.org/web/*/https://cli.carnesen.com/docs/latest):
+Previous versions of the software are available [on GitHub](https://github.com/carnesen/cli/tags) and the [npm registry](https://www.npmjs.com/package/@carnesen/cli). The website is no longer online, but its documentation is preserved on the [Internet Archive](https://web.archive.org/web/*/https://cli.carnesen.com/docs/latest):
 
 - [0.9.0](https://web.archive.org/web/20240805103349/https://cli.carnesen.com/docs/latest/)
 - [0.7.1](https://web.archive.org/web/20220524200134/https://cli.carnesen.com/docs/latest/)

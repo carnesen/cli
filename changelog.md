@@ -74,7 +74,7 @@ Besides the breaking refactoring, this release also has a few new features. The 
 
 We completely overhauled the API in this release with the goal of making it as easy as possible to understand and use, but also with an eye on achieving 100% backwards compatibility by 1.0.
 
-A user of v0.3 would scarcely recognize this library's public API, but they'd be in luck because now it's 100% documented both in the source code and online. If you were an early adopter of **@carnesen/cli**, thank you! We'd be happy to help you upgrade to 0.5, just [file an issue on this project's repository on GitHub](https://github.com/carnesen/ccli/issues/new) asking for assistance.
+A user of v0.3 would scarcely recognize this library's public API, but they'd be in luck because now it's 100% documented both in the source code and online. If you were an early adopter of **@carnesen/cli**, thank you! We'd be happy to help you upgrade to 0.5, just [file an issue on this project's repository on GitHub](https://github.com/carnesen/cli/issues/new) asking for assistance.
 
 ### Features
 
