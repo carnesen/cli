@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+- Feature: Add `integer`, `min`, and `max` options to `c.number` and `c.numberArray`. A value that violates an option throws a `CCliUsageError`, and `integer: true` changes the default placeholder to `<int>` (`<int0> [...]` for `c.numberArray`)
+
 ## carnesen-cli-0.9.0 (2023-01-14)
 
 - Feature: Add arg group factories `c.bigint` and `c.bigintArray`

@@ -106,6 +106,7 @@ export const rootCommandGroup = c.commandGroup({
 ### Argument group
 
 An _argument group_ declares a collection of zero or more consecutive command-line arguments parsed together as a single well-typed value. In the example "multiply 1 2 3", the `c.numberArray` arg group receives strings from the command-line `["1", "2", "3"]` and parses a `number[]` value `[1, 2, 3]`. Argument groups require at least one argument unless they're configured with `optional: true` in which case zero arguments is OK and the parsed value type includes `| undefined`. The `@carnesen/cli` package provides argument group factories for many parsed value types (`bigint`, `bigint[]`, `boolean`, `number`, `number[]`, `string`, `string[]`, `unknown` (JSON)), but you can also define your own custom argument group types by extending `CCliArgGroup`.
+ The `c.number` and `c.numberArray` arg groups accept `integer: true` to reject non-integers and `min` and `max` to set inclusive bounds, e.g. `c.number({ integer: true, min: 1, max: 65535 })`.
 
 ### Positional arguments
 
