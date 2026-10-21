@@ -4,11 +4,11 @@ import {
 	CCliParseArgs,
 } from '../c-cli-arg-group';
 import { CCliConditionalValue } from '../c-cli-conditional-value';
-import { convertToNumber } from '../convert-to-number';
+import { CCliNumberConstraints, convertToNumber } from '../convert-to-number';
 
 /** Options for {@link CCliNumberArrayArgGroup} a.k.a `ccli.numberArray` */
 export type CCliNumberArrayArgGroupOptions<Optional extends boolean = boolean> =
-	CCliArgGroupOptions<Optional>;
+	CCliArgGroupOptions<Optional> & CCliNumberConstraints;
 
 export type CCliNumberArrayArgGroupValue<Optional extends boolean> =
 	CCliConditionalValue<number[], Optional>;
@@ -17,6 +17,12 @@ export type CCliNumberArrayArgGroupValue<Optional extends boolean> =
 export class CCliNumberArrayArgGroup<
 	Optional extends boolean,
 > extends CCliArgGroup<CCliNumberArrayArgGroupValue<Optional>, Optional> {
+	protected constructor(
+		protected readonly numberOptions: CCliNumberArrayArgGroupOptions<Optional>,
+	) {
+		super(numberOptions);
+	}
+
 	public parse(
 		args: CCliParseArgs<Optional>,
 	): CCliNumberArrayArgGroupValue<Optional> {
@@ -26,7 +32,8 @@ export class CCliNumberArrayArgGroup<
 
 		this.assertOneOrMoreArgs(args);
 
-		return args.map(convertToNumber);
+		const { integer, min, max } = this.numberOptions;
+		return args.map((arg) => convertToNumber(arg, { integer, min, max }));
 	}
 
 	/** {@link CCliNumberArrayArgGroup} factory function */
@@ -34,7 +41,7 @@ export class CCliNumberArrayArgGroup<
 		options: CCliNumberArrayArgGroupOptions<Optional> = {},
 	): CCliNumberArrayArgGroup<Optional> {
 		return new CCliNumberArrayArgGroup<Optional>({
-			placeholder: '<num0> [...]',
+			placeholder: options.integer ? '<int0> [...]' : '<num0> [...]',
 			...options,
 		});
 	}

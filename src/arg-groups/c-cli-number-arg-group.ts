@@ -3,12 +3,12 @@ import {
 	CCliArgGroupOptions,
 	CCliParseArgs,
 } from '../c-cli-arg-group';
-import { convertToNumber } from '../convert-to-number';
+import { CCliNumberConstraints, convertToNumber } from '../convert-to-number';
 import { CCliConditionalValue } from '../c-cli-conditional-value';
 
 /** Options for {@link CCliNumberArgGroup} */
 export type CCliNumberArgGroupOptions<Optional extends boolean> =
-	CCliArgGroupOptions<Optional>;
+	CCliArgGroupOptions<Optional> & CCliNumberConstraints;
 
 export type CCliNumberArgGroupValue<Optional extends boolean> =
 	CCliConditionalValue<number, Optional>;
@@ -18,6 +18,12 @@ export class CCliNumberArgGroup<Optional extends boolean> extends CCliArgGroup<
 	CCliNumberArgGroupValue<Optional>,
 	Optional
 > {
+	protected constructor(
+		protected readonly numberOptions: CCliNumberArgGroupOptions<Optional>,
+	) {
+		super(numberOptions);
+	}
+
 	public parse(
 		args: CCliParseArgs<Optional>,
 	): CCliNumberArgGroupValue<Optional> {
@@ -27,7 +33,8 @@ export class CCliNumberArgGroup<Optional extends boolean> extends CCliArgGroup<
 
 		this.assertSingleArg(args);
 
-		return convertToNumber(args[0]);
+		const { integer, min, max } = this.numberOptions;
+		return convertToNumber(args[0], { integer, min, max });
 	}
 
 	/** {@link CCliNumberArgGroup} factory function */
@@ -35,7 +42,7 @@ export class CCliNumberArgGroup<Optional extends boolean> extends CCliArgGroup<
 		options: CCliNumberArgGroupOptions<Optional> = {},
 	): CCliNumberArgGroup<Optional> {
 		return new CCliNumberArgGroup<Optional>({
-			placeholder: '<num>',
+			placeholder: options.integer ? '<int>' : '<num>',
 			...options,
 		});
 	}
